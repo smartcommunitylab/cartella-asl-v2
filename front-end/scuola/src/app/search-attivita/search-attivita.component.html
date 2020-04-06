@@ -1,0 +1,161 @@
+<div class="card mb-3 list-container md-margin  sub-navbar-content-below">
+    <div class="card-body">
+
+                <div class="row m-3">
+                    <div class="col-md-2 detail-label">Competenze:</div>
+                    <div class="col-md-8 filter-data">
+                        <ng-container *ngIf="filtro.competenze.length!=0">
+                            <div class="badge badge-pill badge-light" *ngFor="let competenza of selectedCompetenze">
+                                <div class="v-center competenza-info-btn">
+                                    <button class="btn btn-flat v-center " (click)="openDetailCompetenza(competenza, $event)">
+                                        <i class="material-icons">info_outline</i>
+                                    </button>
+                                </div>
+                                <div class="badge-description">
+                                    {{competenza.titolo}}
+                                </div>
+                                <div class="v-center close-btn">
+                                    <button class="btn btn-flat v-center" (click)="removeCompetenza(competenza)">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="filtro.competenze.length==0">
+                            Nessuna competenza da ricercare
+                        </ng-container>
+
+                        <button type="button" class="btn btn-flat add-comp d-inline-flex" *ngIf="!ricercaSemplice" (click)="addCompetenze()">
+                            <i class="material-icons">add_circle</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row m-3">
+                    <div class="col-md-2 detail-label">Tipologia:</div>
+                    <div class="col-md-8 filter-data">
+                        <select class="custom-select form-control" style="width: 250px;" [(ngModel)]="filtro.tipologia">
+                            <option value="">Tutti</option>
+                            <option [value]="tipologia.id" *ngFor="let tipologia of tipologieAttivita">{{tipologia.titolo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row m-3">
+                    <div class="col-md-2 detail-label">Titolo:</div>
+                    <div class="col-md-4 filter-data" >
+                        <input type="text" class="form-control" style="width: 250px;" [(ngModel)]="filtro.titolo">                        
+                    </div>
+                </div>
+        <div class="row m-3" [hidden]="ricercaSemplice">
+                <label class="col col-md-1 detail-label search-label" for="dataInizio">Data inizio:</label>
+                <div class="col col-md-2">
+                    <dp-date-picker class="date-pick" [(ngModel)]="filtro.fromDate" [config]="datePickerConfig" theme="dp-material" id="dataInizio"></dp-date-picker>
+                </div>
+                <label class="col col-md-1"></label>
+
+                <label class="col col-md-1  detail-label search-label" for="dataFine">Data fine:</label>
+                <div class="col col-md-2">
+                    <dp-date-picker class="date-pick" [(ngModel)]="filtro.toDate" [config]="datePickerConfig" theme="dp-material" id="dataFine"></dp-date-picker>
+                </div>
+        </div>
+        <div class="row m-3" [hidden]="ricercaSemplice">
+            <div class="col col-md-1">
+                <label class="detail-label search-label">Indirizzo:</label>
+            </div>
+            <div class="col col-md-2">
+                <div>
+                    <input type="text" class="form-control" placeholder="Indirizzo" (input)="getItems($event)" [(ngModel)]="location">
+                </div>
+                <div class="autocompletion-list" *ngIf="showList">
+                    <div *ngFor="let item of items">
+                        <button type="button" class="btn btn-secondary btn-search" (click)="selectPlace(item)">
+                            {{ item.name }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-1">
+                <button type="button" class="btn btn-flat v-center" (click)="chooseAddress()">
+                    <i class="material-icons">place</i>
+                </button>
+            </div>
+            <label class="col col-md-2 detail-label search-label">Raggio (Km):</label>
+            <div class="col col-md-2">
+                <div>
+                    <input type="number" class="form-control raggio" placeholder="Distanza" [(ngModel)]="filtro.distance">
+                </div>
+            </div>
+        </div>
+        <div class="row m-3">
+            <div class="col col-md-2 m-3">
+                <button type="button" *ngIf="ricercaSemplice" class="btn btn-secondary v-center" (click)="ricercaChange()">
+                    <i class="material-icons">keyboard_arrow_down</i> Ricerca avanzata
+                </button>
+                <button type="button" *ngIf="!ricercaSemplice" class="btn btn-secondary v-center" (click)="ricercaChange()">
+                    <i class="material-icons">keyboard_arrow_up</i> Ricerca semplice
+                </button>
+            </div>
+            <div class="col col-md-2  m-3">
+                <button class="btn btn-primary v-center" (click)="search(1)">
+                    <i class="material-icons">search</i> Avvia ricerca</button>
+            </div>
+            <div class="col col-md-5"></div>
+            <div class="col col-md-2  m-3">
+                <label class="detail-label">Ordinamento</label>
+                <select [(ngModel)]="filtro.order" (change)="onSelectChange($event)">
+                    <option value="titolo">Titolo</option>
+                    <option value="tipologia">Tipologia</option>
+                    <option value="dataInizio">Periodo</option>
+                </select>
+            </div>
+        </div>
+        <hr>
+        <div *ngIf="listaOpportunita && listaOpportunita.length>0">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Titolo</th>
+                        <th>Tipologia</th>
+                        <th>Periodo</th>
+                        <th>Ore</th>
+                        <th>Competenze</th>
+                        <th>Singola/Gruppo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let opportunita of listaOpportunita">
+                        <td class="verticalMiddle">{{opportunita.titolo}}</td>
+                        <td class="verticalMiddle">{{opportunita.tipoTitle}}</td>
+                        <td class="verticalMiddle">Dal {{opportunita.dataInizio| date:'d-M-yyyy'}} al {{opportunita.dataFine| date:'d-M-yyyy'}}</td>
+                        <td class="verticalMiddle">{{opportunita.ore}}</td>
+                        <td class="verticalMiddle">{{opportunita.matchCompetenze}} su {{opportunita.competenze.length}}</td>
+                        <td class="verticalMiddle">
+                            <span *ngIf="opportunita.individuale">Singola</span>
+                            <span *ngIf="!opportunita.individuale">Gruppo</span>
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                <div class="btn-group text-right" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary btn-action" (click)="openDetailOpportunita(opportunita)">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Dettagli
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-action v-center" (click)="openAddOpportunita(opportunita)">
+                                        <i class="material-icons">add</i> {{action}}
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!listaOpportunita || listaOpportunita.length==0" class="empty-list">
+            Nessun elemento trovato
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="home-container">
+
+  <div class="blu-row row">
+    <div class="nav-logo">
+      <img src="assets/images/logo_trasparente.png">
+    </div>
+  </div>
+
+  <div class="page-body" [ngClass]="{'border-selected': loginSelected, 'border-error': errMsg != '' }">
+
+    <div class="page-body-center">
+      <img src="assets/images/provinciaTN.png" class="">
+
+    </div>
+    <p class="text-center heading-1">Benvenuto nel portale Alternanza Scuola Lavoro della Provincia di Trento</p>
+    <p class="text-center heading-2">Seleziona il tuo profilo prima di effettuare l’accesso</p>
+    <ul style="list-style: none">
+      <li *ngFor="let option of options">
+        <label class="customradio">
+          <input [disabled]="option.disabled" type="radio" [value]="option" [(ngModel)]="actualOption" (change)="onChange(option)">
+          <span class="option-1">{{option.name}}</span>
+          <span class="checkmark"></span>
+        </label>
+      </li>
+    </ul>
+    <div class="text-center">
+      <button type="button" class="btn btn-lg" 
+      [ngClass]="{'btn-primary': loginSelected, 'btn-secondary':!loginSelected }"
+      (click)="login()">&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    </div>
+    <br>
+    <div class="text-center error-font" [innerHTML]="errMsg"></div>
+    <br>
+
+  </div>
+
+</div>
+
+<cm-footer class="page-footer"></cm-footer>

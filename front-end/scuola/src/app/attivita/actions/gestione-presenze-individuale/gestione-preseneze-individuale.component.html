@@ -1,0 +1,123 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+  <div class="row" *ngIf="attivita">
+    <div class="col-6 v-center">
+      <span class="modifyTitleStyle m-left">{{attivita.titolo}}</span>
+    </div>
+    <div class="col-6">
+      <span class="float-right m-right mTop">
+        <button type="button" class="btn btn-danger btn-xs btn-icon py-1 pr-2 btnAnnulla" placement="bottom"
+          ngbTooltip="Annulla associazioni" (click)="cancel()">
+          <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                </svg>
+            </span>
+          </span>
+        </button>
+        &nbsp;&nbsp;
+        <button *ngIf="!isArchivio" class="btn btn-success btn-xs btn-icon py-1 pr-2 btnCreate" placement="bottom" ngbTooltip="{{toolTipSave}}"
+          (click)="savePresenze()">
+          <span class="row btnCreateText">
+            <span class="col-8">Valida presenze&nbsp;</span>
+            <span class="col-4">
+              <svg class="icon icon-white icon-sm m-right36">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <hr class="hr modifyHr" />
+  <div class="row m-subNav">
+    <div class="col-8">
+        <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+    </div>
+    <div class="col-4 shadowDetails">
+      <span class="float-right mRight">
+        <button *ngIf="!isArchivio" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia"
+          placement="bottom" ngbTooltip="Archivia definitivamente l’attività" (click)="archivia()">
+          <span class="row btnModificationText">
+            <span class="col-8 leftItem">Archivia</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-box"></use>
+                </svg>
+            </span>                       
+          </span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <br>
+  <div class="row" *ngIf="attivita">
+    <span class="col-4 m-left pTop">
+      <label class="dateTitle">Data inizio</label>&nbsp;
+      <div #calendarStart class="col-sm-3 m-left" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
+        <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig" theme="dp-material" id="dataInizio" required>
+        </dp-date-picker>  
+        <div class="invalid-feedback" [class.d-block]="!date.dataInizio">
+          Data inizio richiesta.
+        </div>
+        <div class="invalid-feedback" [class.d-block]="date.dataInizio < limitMin || date.dataInizio > limitMax">
+          Data inizio fuori del periodo della attività
+        </div>
+      </div>  
+    </span>
+    <span class="col-4 pTop">
+      <label class="dateTitle">Data fine</label>&nbsp;
+      <div #calendarEnd class="col-sm-3" [class.has-danger]="!date.dataFine || date.dataFine > limitMax || date.dataFine < limitMin">
+        <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataFine" [config]="datePickerConfig" theme="dp-material" id="dataFine" required>
+        </dp-date-picker>
+        <div class="invalid-feedback" [class.d-block]="!date.dataFine">
+          Data fine richiesta.
+        </div>
+        <div class="invalid-feedback" [class.d-block]="date.dataFine > limitMax || date.dataFine < limitMin">
+          Data fine Data fuori del periodo della attività.
+        </div>
+      </div>
+    </span>
+    <span class="col-4">
+      <div *ngIf="report" class="float-right callNote default">
+        <span class="row"><span class="font-weight-bold">Da validare: </span>&nbsp;{{report.giornateDaValidare}} giorni</span>
+        <span class="row"><span class="font-weight-bold">Validate: </span>&nbsp;{{report.giornateValidate}} giorni</span>
+        <span class="row"><span class="font-weight-bold">Inizio attività: </span>&nbsp;{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+        <span class="row"><span class="font-weight-bold">Fine attività: </span>&nbsp;{{report.dataFine  | date:'dd/MM/yyyy'}}</span>
+        <span class="row"><span class="font-weight-bold">Ore validate: </span>&nbsp;{{report.oreValidate}}/{{report.oreTotali}}</span>
+      </div>
+    </span>
+  </div>
+  <div class="row m-16" *ngIf="attivita && presenze.length > 0">
+    <table class="table">
+      <thead>
+        <tr class="thTitle center default">
+          <th width="15%">Data</th>
+          <th width="10%">Ore</th>
+          <th width="75%">Diario di bordo</th>
+        </tr>
+      </thead>
+      <tbody class="modify-table-body">
+        <tr *ngFor="let event of presenze; let index = index">
+          <td class="custom_tr">
+            <label>
+              <span>{{event.giornata.valueOf()| date:'dd-MM-yy'}} </span>  
+              <span> ({{event.giornata.valueOf()| date:'EEE'}})</span>
+            </label>
+          </td>
+          <td class="custom_tr">
+            <input [disabled]="isArchivio" type="number" min="0" max="12" class="form-control custom_tr" [(ngModel)]="event.oreSvolte" (ngModelChange)="edit(event)"
+              [ngStyle]="(event.verificata) ? { 'color': 'black' } : { 'color': 'red' }"  #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{event.toolTipOra}}" (mouseenter)="showTipOra($event, event);"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" onpaste="return false">
+          </td>
+          <td class="custom_tr">
+            <textarea [disabled]="isArchivio" class="form-control custom_select" [(ngModel)]="event.attivitaSvolta"
+              (ngModelChange)="edit(event)"
+              [ngStyle]="(event.verificata) ? { 'color': 'black' } : { 'color': 'red' }"></textarea>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

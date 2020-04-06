@@ -1,0 +1,69 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="mb-3">
+            <button class="btn btn-success v-center ml-auto mr-3" [routerLink]="['detail']">
+                <i class="material-icons">add</i> Nuovo utente
+            </button>
+        </div>
+        <h2>Ricerca utente:</h2>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="cf">Codice Fiscale</label>
+                    <input type="text" class="form-control" id="cf" placeholder="Ricerca tramite codice fiscale" [(ngModel)]="filtro.cf" (keyup.enter)="searchUser()">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="nomeutente">Nome utente</label>
+                    <input type="text" class="form-control" id="nomeutente" placeholder="Ricerca tramite nome utente" [(ngModel)]="filtro.nome"
+                        (keyup.enter)="searchUser()">
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="searchUser()">
+                <i class="material-icons">search</i> Ricerca
+            </button>
+        </div>
+        <div class="table list-group hidden-sm-down">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Codice fiscale</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let utente of utenti">
+                        <td class="align-self-center custom_tr">{{utente.name}} {{utente.surname}}</td>
+                        <td class="align-self-center custom_tr">{{utente.cf}}</td>
+                        <td class="align-self-center custom_tr">{{utente.email}}</td>
+                        <td>
+                            <div class="pull-right">
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-secondary btn-action" [routerLink]="['detail', utente.id]" [queryParams]="{roleback: filtro.role}">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Vedi
+                                    </a>
+                                </div>
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-danger btn-action v-center" (click)="deleteUser(utente.id)">
+                                        <i class="material-icons">delete</i> Elimina
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)" #cmPagination></cm-pagination>
+        </div>
+    </div>
+</div>

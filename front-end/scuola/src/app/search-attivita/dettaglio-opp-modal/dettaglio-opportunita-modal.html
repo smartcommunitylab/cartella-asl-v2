@@ -1,0 +1,158 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <div class="ml-5">{{opportunita.titolo}}</div>
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="ml-5">
+        <div class="row" *ngIf="opportunita.titolo">
+            <div class="col col-md-3">
+                Titolo:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.titolo}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.descrizione">
+            <div class="col col-md-3">
+                Descrizione:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.descrizione}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.dataInizio">
+            <div class="col col-md-3 ">
+                Data inizio:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.dataInizio| date: 'dd-MM-yyyy'}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.dataFine">
+            <div class="col col-md-3">
+                Data fine:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.dataFine| date: 'dd-MM-yyyy'}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.ore">
+            <div class="col col-md-3">
+                Ore:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.ore}}
+            </div>
+        </div>
+        <div class="row" *ngIf="oppTipologiaObj">
+            <div class="col col-md-3">
+                Tipologia:
+            </div>
+            <div class="col col-md-9">
+                {{oppTipologiaObj.titolo}}
+            </div>
+        </div>
+        <div *ngIf="opportunita.tipologia>5">
+            <div class="row" *ngIf="opportunita.azienda">
+                <div class="col col-md-3">
+                    Azienda:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.azienda.nome}}
+                </div>
+            </div>
+            <div class="row" *ngIf="istituto">
+                <div class="col col-md-3">
+                    Gestita da: 
+                </div>
+                <div class="col col-md-9">
+                    {{istituto}}
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.azienda && opportunita.azienda.referentiAzienda.length >0">
+                <div class="col col-md-3">
+                    Referenti:
+                </div>
+                <div class="col col-md-9">
+                    <span *ngFor="let referente of opportunita.azienda.referentiAzienda">{{referente.nome}}</span>
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.descrizione">
+                <div class="col col-md-3">
+                    Descrizione:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.descrizione}}
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.prerequisiti">
+                <div class="col col-md-3">
+                    Prerequisiti:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.prerequisiti}}
+                </div>
+            </div>
+            <!-- <div class="card" *ngFor="let competenza of opportunita.competenze" [ngStyle]="{ 'background-color': getCompetenzaColor(competenza)}">
+            <h3 class="card-header">{{competenza.profilo}}</h3>
+            <div class="card-body"> {{competenza.titolo}}
+            </div>
+        </div> -->
+        </div>
+        <div class="row" *ngIf="opportunita.referenteFormazione">
+            <div class="col col-md-3">
+                Referente formazione:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.referenteFormazione}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.postiDisponibili">
+            <div class="col col-md-3">
+                Posti disponibili:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.postiDisponibili}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.postiRimanenti">
+            <div class="col col-md-3">
+                Posti rimanenti:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.postiRimanenti}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 mt-5">
+                Competenze:
+            </div>
+            <ul>
+                <div *ngIf="opportunita.competenze && opportunita.competenze.length>0">
+                    <div class="row" *ngFor="let competenza of opportunita.competenze">
+                        <div class="col col-md-9 pull-right">
+                            <li>
+                                <div>{{competenza.profilo}}
+                                    <b> {{getCompetenzaString(competenza)}}</b>
+                                </div>
+                                <div>{{competenza.titolo}}</div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" *ngIf="!opportunita.competenze || opportunita.competenze.length==0">
+                    <div class="col col-md-9 pull-right">
+                        <div>Non ci sono competenze associate</div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">Chiudi</button>
+</div>

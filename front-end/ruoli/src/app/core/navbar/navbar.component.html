@@ -1,0 +1,74 @@
+<div class="navbar-header-top row p-5 hidden-md-down" #navbarHeaderTop>
+    <div class="media ml-8">
+        <a class="navbar-brand" routerLink="/home">
+            <img src="assets/images/logo_alternanza.png" alt="logo" />
+        </a>
+        <div class="media-content">
+            <h1>Alternanza scuola lavoro</h1>
+            <h2>Ruoli</h2>
+        </div>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark row" #navbar>
+    <div class="navbar-header col-2 hidden-md-down">
+        <a class="navbar-brand navbar-brand-small" routerLink="/home">
+            <img src="assets/images/logo_alternanza_intero.png" alt="logo" />
+            <span class="app-title">Ruoli</span>
+        </a>
+    </div>
+    <div class="navbar-header hidden-lg-up ml-4">
+        <button class="navbar-toggler d-inline" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" data-target="#navbarColor01" aria-controls="navbarColor01"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand d-inline" routerLink="/home">
+            <img src="assets/images/logo_alternanza_intero.png" alt="logo" />
+            <span class="app-title">Ruoli</span>
+        </a>  
+    </div>
+    <div class="navbar-menu collapse navbar-collapse col-10">
+        <ul class="navbar-nav nav-pills navBarPadding">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/home">Home</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: ''}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.all">Tutti</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'STUDENTE'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.studenti">Studenti</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'LEGALE_RAPPRESENTANTE_AZIENDA'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.legali_rappresentati_azienda">Legale rappresentante azienda</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'REFERENTE_AZIENDA'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.referenti_azienda">Referenti azienda</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'DIRIGENTE_SCOLASTICO'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.dirigenti_scolastici">Dirigenti scolastici</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'FUNZIONE_STRUMENTALE'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.funzione_strumentale">Funzione strumentale</a>
+            </li>
+        </ul>
+        <button class="navbar-profile v-center" (click)="profileDropdownVisible = !profileDropdownVisible">
+            <div class="navbar-profile-icon"><i class="material-icons">account_circle</i></div>
+            <div class="navbar-profile-text" *ngIf="profile">{{profile.name}} {{profile.surname}}</div>
+        </button>
+        <div class="navbar-profile-dropdown card" [hidden]="!profileDropdownVisible">
+            <div class="card-body" *ngIf="profile">
+                <h2>{{profile.name}} {{profile.surname}} - {{profile.cf}}</h2>
+                <button class="btn btn-secondary v-center" (click)="logout()"><i class="material-icons">lock</i> Logout</button>
+            </div>
+        </div>
+    </div>
+    <div class="navbar-menu collapse navbar-collapse navbar-menu-mobile" [ngbCollapse]="isCollapsed">
+        <ul class="navbar-nav nav-pills navBarPadding">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/home">Home</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/utenti">Utenti</a>
+            </li>
+        </ul>
+    </div>
+</nav>

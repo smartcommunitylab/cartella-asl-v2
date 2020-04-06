@@ -1,0 +1,56 @@
+.navbar-profile {
+    margin-left: auto;
+}
+.navbar-profile > * {
+    display: inline;
+}
+.navbar-profile {
+    background-color: transparent;
+    border: none;
+}
+.navbar-profile-icon i {
+    font-size: 42px;
+    color: #F5F5F5;
+}
+.navbar-profile-text {
+    color: #F5F5F5;
+    margin-left: 8px;
+}
+.navbar-menu {
+    margin: 0px;
+}
+.navbar-menu .navbar-nav {
+    margin-top: 18px;
+		text-transform: uppercase;
+}
+.navbar-header {
+    margin-top: 0px;
+}
+.navbar-header .navbar-brand img {
+    max-height: 45px;
+    margin-right: 8px;
+}
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.navbar-profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 16px;
+    width: 300px;
+}
+.navbar-profile-dropdown button {
+    margin-left: auto;
+}
+.navbar-header-top {
+    z-index: 1000;
+    background-color: #0059b3;
+}
+.navbar-header-top h1 {
+    color: #fff;
+    font-size: 3em;
+}
+.navbar-header-top h2 {
+    color: #fff;
+    font-size: 1.5em;
+}

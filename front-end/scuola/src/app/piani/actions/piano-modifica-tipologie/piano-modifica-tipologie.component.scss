@@ -1,0 +1,133 @@
+
+.list-container{
+    margin-top: 40px;
+
+    >.row {
+        margin: 0px;
+    }
+
+    .card-body {
+        >.row {
+            align-items: center;
+            .filter-data {
+                span {
+                    position: absolute;
+                    right: 20px;
+                    bottom: 0px;
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            span {
+                margin: 4px;
+            }
+        }
+        .activeBtn{
+            background-color: #0066CC;
+        }
+        .inactivebtn{
+            background-color: #D1D6DB;
+        }
+        .titleBody{
+            text-align: left;
+            font-family: Titillium Web;
+            font-weight: Bold !important;
+            font-size: 25px !important;
+            letter-spacing: 0;
+            color: #707070;
+            opacity: 1;
+            margin-top: 36px;
+            margin-bottom: 56px;
+        }
+        .btnAdd{
+            margin-top: 36px;
+        }
+        .tableName{
+            text-align: left;
+            font-family: Titillium Web;
+            font-size: 24px;
+            font-weight: Bold;
+            letter-spacing: 0;
+            color: #707070;
+            opacity: 1;
+        }
+        .mBottom{
+            margin-bottom: 36px;
+        }
+        .tableHeader{
+            text-align: left;
+            font-family: Titillium Web;
+            font-size: 23px;
+            font-weight: 600;
+            letter-spacing: 0;
+            color: #707070;
+            opacity: 1;
+        }
+        .tableMargin{
+            margin: 0px 16px;
+        }
+        .tableTotal{
+            text-align: left;
+            font-family: Titillium Web;
+            font-size: 24px;
+            font-weight: Bold;
+            letter-spacing: 0;
+            color: #393939;
+            opacity: 1;
+        }
+        .tableTotalBG{
+            background-color: #DBDBDB;
+        }
+        .table-fixed thead {
+            width: 100%;
+        }
+        .table-fixed tbody {
+            min-height: 1000px;
+            overflow-y: auto;
+            width: 100%;
+        }
+        .table-fixed thead, .table-fixed tbody, .table-fixed tr, .table-fixed td, .table-fixed th {
+            display: block;
+        }
+        .table-fixed tbody td, .table-fixed thead > tr> th {
+            float: left;
+            padding: 16px 6px 4px 6px;
+            min-height: 75px;
+            // border-bottom-width: 1px;
+        }
+    }
+
+    .list-group {
+        margin-top: 20px;
+        .row {
+            align-items: center;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            font-size: 20px;
+        }
+    }
+
+    .menu-content {
+        border-bottom: 10px solid #3DBBD2;
+    }
+
+    .middle-table {
+        position: relative;
+        max-width: 50%;        
+        left: 20%;
+    }
+
+    .title{
+        text-align: left;
+        letter-spacing: 0;
+        color: #5A6772;
+        opacity: 1;
+        font-size: larger;
+        font-weight: bold;
+    }
+}

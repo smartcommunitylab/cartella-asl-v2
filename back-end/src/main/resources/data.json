@@ -1,0 +1,96 @@
+{
+	"tipologiaAzienda": [{
+		"id": 6,
+		"titolo": "Visita aziendale"
+	},
+	{
+		"id": 7,
+		"titolo": "Tirocinio Curriculare"
+	},
+	{
+		"id": 8,
+		"titolo": "Commessa esterna"
+	},
+	{
+		"id": 9,
+		"titolo": "Attività sportiva"
+	},
+	{
+		"id": 10,
+		"titolo": "Tirocinio estivo retribuito"
+	},
+	{
+		"id": 11,
+		"titolo": "Lavoro retribuito"
+	},
+	{
+		"id": 12,
+		"titolo": "Volontariato"
+	}],
+	"tipologiaInterna": [{
+		"id": 1,
+		"titolo": "Testimonianza"
+	},
+	{
+		"id": 2,
+		"titolo": "Formazione"
+	},
+	{
+		"id": 3,
+		"titolo": "Elaborazione Esperienza / Project work"
+	},
+	{
+		"id": 4,
+		"titolo": "Anno all'estero"
+	},
+	{
+		"id": 5,
+		"titolo": "Impresa formativa simulata / Cooperativa formativa scolastica"
+	}],
+	"statoAttivita": [{
+		"id": 1,
+		"titolo": "In corso"
+	},
+	{
+		"id": 0,
+		"titolo": "Programmato"
+	},
+	{
+		"id": -1,
+		"titolo": "Fermato"
+	},
+	{
+		"id": 2,
+		"titolo": "Completato"
+	}],
+	"Valutazione": [{
+		"id": 10,
+		"titolo": "Ottimo",
+		"selected": false
+	},
+	{
+		"id": 9,
+		"titolo": "Eccellente",
+		"selected": false
+	},
+	{
+		"id": 8,
+		"titolo": "Bravo",
+		"selected": false
+	},
+	{
+		"id": 7,
+		"titolo": "Discreto",
+		"selected": false
+	},
+	{
+		"id": 6,
+		"titolo": "Sufficiente",
+		"selected": false
+	},
+	{
+		"id": 5,
+		"titolo": "Non Sufficient",
+		"selected": false
+	}]
+}

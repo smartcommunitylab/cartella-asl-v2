@@ -1,0 +1,62 @@
+<!-- <div class="card mb-3 list-container md-margin">
+  <div class="card-header">
+    <div class="card-title">{{titolo}}</div>
+  </div>
+  <div class="card-body"> -->
+
+<div class="center">
+  <button type="button" (click)="viewDatechanged(true)" *ngIf="todayIsBetween()" class="btn btn-outline-secondary oggi" mwlCalendarToday
+    [(viewDate)]="viewDate">OGGI</button>
+  <button [disabled]="backArrowDisabled" locale="it" (click)="viewDatechanged(true)" [view]="view" [(viewDate)]="viewDate"
+    mwlCalendarPreviousView class="btn btn-round btn-primary">
+    <i class="material-icons">keyboard_arrow_left</i>
+  </button>
+  &nbsp;&nbsp;{{titleWeek}}&nbsp;&nbsp;
+  <button [disabled]="frontArrowDisabled" locale="it" (click)="viewDatechanged(true)" [view]="view" [(viewDate)]="viewDate"
+    mwlCalendarNextView class="btn btn-round btn-primary">
+    <i class="material-icons">keyboard_arrow_right</i>
+  </button>
+</div>
+<div class="center">
+  <label class="month">{{ viewDate | localizedDate: 'LLLL yyyy' | capitalize }}</label>
+</div>
+
+<div class="mt-3">
+  <table class="table table-bordered">
+
+    <thead>
+      <tr class="h4 center color">
+        <th width="10%">Data</th>
+        <th width="80%">Nota</th>
+        <th width="10%">Ore</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of eventWindow; let index = index">
+        <td class="custom_tr">
+          <label>{{event.data | localizedDate: 'EEE d' | capitalize}} </label>
+        </td>
+        <td class="custom_tr">
+          <textarea class="form-control custom_select" [(ngModel)]="event.attivitaSvolta" (ngModelChange)="edit(event)"
+          [ngStyle]="(event.verificata) ? { 'color': 'green' } : { 'color': 'black' }"></textarea>
+        </td>
+        <td class="custom_tr">
+          <input type="number" min="0" class="form-control custom_tr" (ngModelChange)="edit(event,$event)" [ngModel]="getPresenzaStudente(event)"
+          [ngStyle]="(event.verificata) ? { 'color': 'green' } : { 'color': 'black' }">
+        </td>
+        <!-- 
+            <td class="custom_tr">
+              <input #cb [disabled]="!event.isModifiedState" type="checkbox" class="no-shadow" [(ngModel)]="event.verificata" (ngModelChange)="confirm(cb, event)">
+            </td> -->
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+<div class="row justify-content-center mt-3">
+  <button class="btn btn-success v-center" (click)="savePresences()">
+    <i class="material-icons">save</i> Valida presenze
+  </button>
+</div>
+<!-- </div>
+</div> -->

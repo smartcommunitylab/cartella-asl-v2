@@ -1,0 +1,48 @@
+<div class="mb-3 list-container md-margin">      
+    <div class="center">
+        <button type="button" class="btn btn-round btn-primary oggi" (click)="viewDatechanged()" *ngIf="todayIsBetween()" mwlCalendarToday [(viewDate)]="viewDate">OGGI</button>
+        <button class="btn btn-round btn-primary" [disabled]="backArrowDisabled" locale="it" (click)="viewDatechanged()" [view]="view" [(viewDate)]="viewDate" mwlCalendarPreviousView>
+            <i class="material-icons">keyboard_arrow_left</i>
+        </button>
+        <span class="ml-3 mr-3">
+            {{titleWeek}}
+        </span>
+        <button class="btn btn-round btn-primary" [disabled]="frontArrowDisabled" locale="it" (click)="viewDatechanged()" [view]="view" [(viewDate)]="viewDate" mwlCalendarNextView>
+            <i class="material-icons">keyboard_arrow_right</i>
+        </button>
+    </div>
+    <div class="center">
+        <label class="month">{{ viewDate | date: 'LLLL yyyy' | capitalize }}</label>
+    </div>    
+    <div>
+        <table class="table table-bordered">    
+            <thead>
+                <tr class="h4 center color">
+                    <th width="10%">Data</th>
+                    <th width="80%" *ngIf="tipologiaEsperienza.diarioDiBordo">Nota</th>
+                    <th width="10%">Presenza</th>
+                </tr>
+            </thead>    
+            <tbody>
+                <tr *ngFor="let event of eventWindow; let index = index">
+                    <td class="custom_tr">
+                        <label>{{event.giornata | date: 'EEE d' | capitalize}} </label>
+                    </td>
+                    <td class="custom_tr" *ngIf="tipologiaEsperienza.diarioDiBordo">
+                        <textarea class="form-control custom_select" [(ngModel)]="event.attivitaSvolta" (ngModelChange)="edit(event)" [disabled]="event.verificata"
+                        [ngStyle]="(event.verificata) ? { 'color': 'green' } : { 'color': 'black' }"></textarea>
+                    </td>
+                    <td class="custom_tr">
+                        <input type="number" min="0" class="form-control text-center no-shadow" (ngModelChange)="edit(event,$event)" [ngModel]="getPresenzaStudente(event)" [disabled]="event.verificata"
+                        [ngStyle]="(event.verificata) ? { 'color': 'green' } : { 'color': 'black' }">
+                    </td>
+                </tr>
+            </tbody>    
+        </table>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-success v-center" (click)="savePresenze()">
+                <i class="material-icons">save</i> Salva presenze
+            </button>
+        </div>
+    </div>
+</div>

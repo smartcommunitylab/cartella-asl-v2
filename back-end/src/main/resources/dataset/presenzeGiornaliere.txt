@@ -1,0 +1,84 @@
+[
+	{
+		"id": 1,
+		"attivitaSvolta": "internship 8h daily STIFENOE",
+		"esperienzaSvoltaId": 1,
+		"giornata": 1526248800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 2,
+		"attivitaSvolta": "internship 8h daily STIFENOE",
+		"esperienzaSvoltaId": 1,
+		"giornata": 1526335200000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 3,
+		"attivitaSvolta": "internship 8h daily STIFENOE",
+		"esperienzaSvoltaId": 1,
+		"giornata": 1526421600000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+		{
+		"id": 1,
+		"attivitaSvolta": "internship 8h daily MORKU",
+		"esperienzaSvoltaId": 2,
+		"giornata": 1526248800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 2,
+		"attivitaSvolta": "internship 8h daily MORKU",
+		"esperienzaSvoltaId": 2,
+		"giornata": 1526335200000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 3,
+		"attivitaSvolta": "internship 8h daily MORKU",
+		"esperienzaSvoltaId": 2,
+		"giornata": 1526421600000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 1,
+		"attivitaSvolta": "internship 8h daily BINIDITTE",
+		"esperienzaSvoltaId": 3,
+		"giornata": 1526248800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 2,
+		"attivitaSvolta": "internship 8h daily BINIDITTE",
+		"esperienzaSvoltaId": 3,
+		"giornata": 1526335200000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	},
+	{
+		"id": 3,
+		"attivitaSvolta": "internship 8h daily BINIDITTE",
+		"esperienzaSvoltaId": 3,
+		"giornata": 1526421600000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"oreSvolte": 8,
+		"verificata": 1
+	}
+]
+	

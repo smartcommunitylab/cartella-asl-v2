@@ -1,0 +1,7 @@
+
+<div [innerHTML]="termsFile | safeHtml"></div>
+
+<div *ngIf="!accepted" style="text-align:center;">
+    <div class="button button-calm" (click)="acceptPrivacy()">Accetto</div>
+    <div class="button" (click)="refusePrivacy()">Rifiuto</div>
+</div>

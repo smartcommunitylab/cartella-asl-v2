@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white">ATTENZIONE</h4>    
+    </div>    
+</div>
+<div class="modal-body text-center">
+    <p>Attenzione: la cancellazione dell’attività comporterà la perdita di tutte le informazioni ad essa associate</p>
+    <div class="font-weight-bold">QUESTA AZIONE NON É REVERSIBILE</div>
+    <br>
+    <div>Sei sicuro di voler cancellare l’attività {{attivita.titolo}}?</div>    
+</div>
+<br>
+<div class="text-center">
+    <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
+        <span class="row">
+            <span class="btn-txt v-center">Annulla</span>&nbsp;
+            <span>
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                </svg>
+            </span>
+        </span>        
+    </button>&nbsp;
+    <button class="btn btn-flat btn-secondary" (click)="delete()">
+        <span class="row">
+            <span class="btn-txt v-center">Cancella</span>&nbsp;
+            <span>
+                <i class="material-icons">delete</i>
+            </span>
+        </span>
+
+    </button>
+</div>
+<br>

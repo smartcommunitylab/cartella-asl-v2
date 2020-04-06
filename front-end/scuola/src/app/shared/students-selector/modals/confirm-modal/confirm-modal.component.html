@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <div class="row v-center">
+      <svg class="icon icon-white icon-lg">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+      </svg>&nbsp;&nbsp;
+      <h4 class="text-white">ATTENZIONE</h4>    
+  </div>    
+</div>
+<div class="modal-body text-center">
+  <p>Attenzione: {{ popupText }}</p>
+  <div *ngIf="showBody" class="font-weight-bold">QUESTA AZIONE NON É REVERSIBILE</div>
+  <br>
+  <div *ngIf="showBody" >Sei sicuro di voler rimouvere?</div>    
+</div>
+<br>
+<div *ngIf="showBody" class="text-center">
+  <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
+      <span class="row">
+          <span class="btn-txt v-center">Annulla</span>&nbsp;
+          <span>
+              <svg class="icon icon-white icon-sm">
+                  <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+              </svg>
+          </span>
+      </span>        
+  </button>&nbsp;
+  <button class="btn btn-flat btn-secondary" (click)="ok()">
+      <span class="row">
+          <span class="btn-txt v-center">Cancella</span>&nbsp;
+          <span>
+              <i class="material-icons">delete</i>
+          </span>
+      </span>
+  </button>
+</div>
+<div *ngIf="!showBody" class="text-center">
+    <button class="btn btn-flat btn-secondary" (click)="activeModal.close('Close click')">
+        <span class="row">
+            <span class="btn-txt v-center">Ok</span>&nbsp;
+            <!-- <span>
+                <i class="material-icons">delete</i>
+            </span> -->
+        </span>
+    </button>
+  </div>
+<br>

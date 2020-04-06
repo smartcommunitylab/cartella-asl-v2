@@ -1,0 +1,54 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title v-center">
+            <span class="modalTitleStyle">Modifica competenza</span>
+        </div>
+        <div class="row v-center float-right">
+            <button type="button" class="btn btn-danger btn-icon btn-xs modalButtonStyle" placement="bottom"  ngbTooltip="Annulla la creazione" (click)="activeModal.close('Close click')">
+                <span class="row modalButtonTextStyle">
+                    <span class="v-center">Annulla&nbsp;</span>&nbsp;
+                    <span>
+                        <i class="material-icons">close</i>
+                    </span>
+                </span>
+            </button>
+            <button class="btn btn-success btn-icon btn-xs modalButtonStyle" placement="bottom"  ngbTooltip="Crea una nuova attività" (click)="edit()">
+                <span class="row modalButtonTextStyle">
+                    <span class="v-center">Salva&nbsp;</span>&nbsp;
+                    <span>
+                        <i class="material-icons">save</i>
+                    </span>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-body">
+
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+
+        <span class="row v-center modal-title modalSubject">Dati competenza</span>
+
+        <div class="row v-center form-group">
+            <div class="col-6" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                <input type="text" class="form-control" [(ngModel)]="competenza.titolo" id="definizione" #definizioneInput="ngModel"
+                     required>
+                    <label for="definizione">Nome competenza</label>
+                <div class="invalid-feedback"
+                    [class.d-block]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                    Campo necessario.</div>
+            </div>
+        </div>
+        <div class="row v-center form-group">
+            <div class="col-6" [class.has-danger]="livelloEQFInput.invalid && (livelloEQFInput.dirty || livelloEQFInput.touched || forceErrorDisplay)">
+                <input type="text" class="form-control" [(ngModel)]="competenza.livelloEQF" id="livelloEQF" #livelloEQFInput="ngModel"
+                     required>
+                    <label for="livelloEQF">Livello EQF</label>
+                <div class="invalid-feedback"
+                    [class.d-block]="livelloEQFInput.invalid && (livelloEQFInput.dirty || livelloEQFInput.touched || forceErrorDisplay)">
+                    Campo necessario.</div>
+            </div>
+
+        </div>
+
+    </div>

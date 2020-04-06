@@ -1,0 +1,20 @@
+<div class="container root-container">
+  <div class="row">
+    <div class="col-lg-2 hidden-md-down navigation-menu-left card">
+      <h2>Gestisci attività</h2>
+      <ul class="navigation-left">   
+          <li class="nav-item btn-secondary" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active">
+              <a class="nav-link" routerLink="./">Lista attività</a>
+          </li>
+          <li class="nav-item btn-secondary nav-item-guide" routerLinkActive="active">
+              <a class="nav-link v-center" routerLink="./guide">
+                <!--<i class="material-icons">book</i>-->Guida
+              </a>
+          </li>
+      </ul>
+    </div>
+    <div class="col-lg-10 navigation-content-right pr-sm-0">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

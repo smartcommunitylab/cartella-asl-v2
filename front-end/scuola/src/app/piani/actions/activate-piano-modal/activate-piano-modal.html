@@ -1,0 +1,48 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white">ATTENZIONE</h4>    
+    </div>    
+</div>
+<div *ngIf="!piano.pianoCorrelato" class="modal-body text-center">
+    <p>Stai per attivare il piano {{piano.titolo}} sul corso {{piano.corsoDiStudio}}</p>
+    <br>
+    <div class="font-weight-bold">Se procedi con l’attivazione, {{piano.titolo}} servirà come riferimento per mostrare i progressi svolti dagli studenti nel percorso triennale di alternanza scuola lavoro.</div>
+    <br>
+    <div>Procedere con l’attivazione di {{piano.titolo}} per il corso {{piano.corsoDiStudio}}?</div>    
+</div>
+<div *ngIf="piano.pianoCorrelato" class="modal-body text-center">
+    <p>Esiste già un piano attivo sul corso “{{piano.corsoDiStudio}}”, il piano “{{piano.pianoCorrelato.titolo}}”.</p>
+    <br>
+    <p>Se procedi con l’attivazione, “{{piano.titolo}}” sostituirà “{{piano.pianoCorrelato.titolo}}” all'inizio del prossimo anno scolastico divenendo attivo per tutte le nuove terze e le classi che le seguiranno.</p> 
+    <p>Le quarte e le quinte, invece, concluderanno il loro percorso con il piano “{{piano.titolo}}”.</p> 
+    <br>
+    <p>Procedere con l’attivazione di “{{piano.titolo}}” per il corso “{{piano.corsoDiStudio}}”?</p>
+</div>
+<br>
+<div class="text-center">
+    <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
+        <span class="row">
+            <span class="btn-txt v-center">Annulla</span>&nbsp;
+            <span>
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                </svg>
+            </span>
+        </span>        
+    </button>&nbsp;
+    <button class="btn btn-success btn-secondary" (click)="activate()">
+        <span class="row">
+            <span class="btn-txt v-center">Attiva</span>&nbsp;
+            <span>
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
+                </svg>
+            </span>
+        </span>
+
+    </button>
+</div>
+<br>

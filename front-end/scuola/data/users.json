@@ -1,0 +1,45 @@
+[
+	{
+		"roles": [
+			"STUDENTE",
+			"DIRIGENTE_SCOLASTICO",
+			"REFERENTE_AZIENDA"
+		],
+		"cf": "199999",
+		"email": "fleorati@fbk.eu",
+		"name": "Francessco",
+		"surname": "Leorati",
+		"studentiId": ["8a285c89-4d67-4cb9-83e9-e7d6fa16c4c3"],
+		"aziendeId": ["00307dae-6c80-4730-b6f4-99951c85ca46"],
+		"istitutiId": ["19a46a53-8e10-4cd0-a7d0-fb2da217d1be"]
+	},
+	{
+		"roles": [
+			"STUDENTE",
+			"DIRIGENTE_SCOLASTICO",
+			"REFERENTE_AZIENDA"
+		],
+		"cf": "299999",
+		"email": "gbaldessari@fbk.eu",
+		"name": "Guido",
+		"surname": "Baldessari",
+		"studentiId": ["8a285c89-4d67-4cb9-83e9-e7d6fa16c4c3"],
+		"aziendeId": ["00307dae-6c80-4730-b6f4-99951c85ca46"],
+		"istitutiId": ["19a46a53-8e10-4cd0-a7d0-fb2da217d1be"]
+	},
+	{
+		"roles": [
+			"STUDENTE",
+			"DIRIGENTE_SCOLASTICO",
+			"REFERENTE_AZIENDA"
+		],
+		"cf": "399999",
+		"email": "khurshid@fbk.eu",
+		"name": "Nawaz",
+		"surname": "Khurshid",
+		"studentiId": ["8a285c89-4d67-4cb9-83e9-e7d6fa16c4c3"],
+		"aziendeId": ["00307dae-6c80-4730-b6f4-99951c85ca46"],
+		"istitutiId": ["19a46a53-8e10-4cd0-a7d0-fb2da217d1be"]
+	}
+
+]

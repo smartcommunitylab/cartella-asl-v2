@@ -1,0 +1,59 @@
+.profilo-title {
+    font-weight: bold;
+}
+.profilo-description {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.competenza-info-btn {
+    margin: auto;
+}
+.badge.badge-pill {
+    position: relative;
+    height: 36px;
+    font-size: 12px;
+    line-height: 30px;
+    margin: 8px;
+    width: 370px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.badge.badge-pill .close-btn {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 36px;
+}
+.badge.badge-pill .competenza-info-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 36px;
+}
+.badge.badge-pill .badge-description {
+    margin-left: 30px;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.list-group-item.disabled {
+    background-color: #EEEEEE;
+}
+
+.center {
+    text-align: center;
+}
+.competenze-counter {
+    height: 30px;
+    width: 30px;
+    border-radius: 30px;
+    background-color: #EEE;
+    text-align: center;
+}
+.competenze-list {
+    max-height: 155px;
+    overflow-y: auto;
+}

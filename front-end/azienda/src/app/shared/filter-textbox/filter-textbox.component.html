@@ -1,0 +1,11 @@
+<!-- <form>
+        Filter:
+        <input type="text" name="filter"
+            [(ngModel)]="model.filter" 
+            (keyup)="filterChanged($event)"  />
+</form> -->
+<form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="text" name="filter" placeholder="Filter"  [(ngModel)]="model.filter" 
+        (keyup)="filterChanged($event)">
+        <!-- <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button> -->
+      </form>

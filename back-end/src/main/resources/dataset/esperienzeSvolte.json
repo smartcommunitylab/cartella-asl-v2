@@ -1,0 +1,156 @@
+[
+	{
+		"id": 1,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3AO",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "LURINE",
+		"registrazioneId": "0005b929-125b-4fff-8860-6bb1fb3204e7",
+		"stato": "incompiuta",
+		"studenteId": "2f705c69-e777-41c2-af65-f82dac65cef8"
+	},
+	{
+		"id": 2,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3AO",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "REFFEILLE",
+		"registrazioneId": "00091ff2-4ac5-423c-b5d1-12a26875755a",
+		"stato": "incompiuta",
+		"studenteId": "b0e94bb7-1269-4469-adcf-df7bd9f2751a"
+	},
+	{
+		"id": 3,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "FRENCISCE",
+		"registrazioneId": "000b3682-2757-47f6-b332-3db718cf1338",
+		"stato": "incompiuta",
+		"studenteId": "945326a7-9ed0-4a93-9988-ef9c60d8d7ca"
+	},
+	{
+		"id": 4,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "LEARE",
+		"registrazioneId": "000b4e2b-96b5-46a4-9413-7bf299a14493",
+		"stato": "incompiuta",
+		"studenteId": "8fd2edc0-bdfb-40e5-8369-60a186349f7d"
+	},
+	{
+		"id": 5,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "VIRUNOCE",
+		"registrazioneId": "000c63c4-39dc-4df2-a6b4-3db31e33674b",
+		"stato": "incompiuta",
+		"studenteId": "82087d75-cf43-4322-b285-a1629b055c28"
+	},
+	{
+		"id": 6,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "ILOE",
+		"registrazioneId": "0020c612-4da0-49ff-82f4-5eeacddd4d3f",
+		"stato": "incompiuta",
+		"studenteId": "58501dda-58c0-4d36-87e7-75c434a15753"
+	},
+	{
+		"id": 7,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "GOURGOE",
+		"registrazioneId": "0021d787-c5e3-4c8f-b5c1-94a6c1506a49",
+		"stato": "incompiuta",
+		"studenteId": "c08e078a-de3a-410c-96c7-27ac4a3e4906"
+	},
+	{
+		"id": 8,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "ELISSOE",
+		"registrazioneId": "002b53b8-e297-4fa9-866e-29c94b1d1299",
+		"stato": "incompiuta",
+		"studenteId": "99659ee7-106c-4900-a185-206dbeeb3a54"
+	},
+	{
+		"id": 9,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "MIGY",
+		"registrazioneId": "00306b89-3a24-403b-9678-4337ebeeff8b",
+		"stato": "incompiuta",
+		"studenteId": "3645872d-db22-440c-b226-d4613ab4555e"
+	},
+	{
+		"id": 10,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "MOCHILI",
+		"registrazioneId": "003d9651-bbe8-4898-bdf1-642355e29748",
+		"stato": "incompiuta",
+		"studenteId": "3b8489ac-913a-4b7a-b0c3-85aae8c0f361"
+	},
+	{
+		"id": 11,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "STIFENOE",
+		"registrazioneId": "0045204f-3042-4029-8eb2-9bc7dbb7164e",
+		"stato": "incompiuta",
+		"studenteId": "39581c06-2dcb-40df-bc31-1275d150304e"
+	},
+	{
+		"id": 12,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "IGZUN",
+		"registrazioneId": "004b1b3c-6a59-43bb-a065-d947538120e4",
+		"stato": "incompiuta",
+		"studenteId": "38c62c91-57ba-4eea-9830-7e7619838ccf"
+	},
+	{
+		"id": 13,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "BINIDITTE",
+		"registrazioneId": "00524f1e-668c-4d76-ad52-758430215999",
+		"stato": "da_definire",
+		"studenteId": "0af4ef61-db7e-4975-9e1e-518bbda76421"
+	},
+	{
+		"id": 14,
+		"attivitaAlternanzaId": 1,
+		"classeStudente": "3A0",
+		"codiceMiur": "TNTD00301L",
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"nominativoStudente": "MORKU",
+		"registrazioneId": "0053b2f2-8663-4552-9f14-cd592d4db7a6",
+		"stato": "completata",
+		"studenteId": "30a4c013-1012-41f4-a867-bba9c9a94653"
+	}
+]

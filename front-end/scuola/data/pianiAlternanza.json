@@ -1,0 +1,67 @@
+[
+	{
+		"id": 1,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test piano",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "attivo",
+		"titolo": "P1"
+	},
+	{
+		"id": 2,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "attivo",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 3,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 4,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 5,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	}
+]

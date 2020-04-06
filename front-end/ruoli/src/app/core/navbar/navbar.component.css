@@ -1,0 +1,79 @@
+nav.bg-dark {
+    background-color: #fff!important;
+    border-bottom: 10px solid #7AAF40;
+}
+.navbar-profile {
+    margin-left: auto;
+}
+.navbar-profile > * {
+    display: inline;
+}
+.navbar-profile {
+    background-color: transparent;
+    border: none;
+}
+.navbar-profile-icon i {
+    font-size: 42px;
+    color: #4D4D4D;
+}
+.navbar-profile-text {
+    color: #4D4D4D;
+    margin-left: 8px;
+}
+.navbar-menu .navbar-nav {
+    margin-top: 0px;
+    text-transform: uppercase;
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: #4D4D4D;
+}
+.navbar-dark .navbar-nav .nav-item.active .nav-link {
+    color: #000000;
+}
+
+.nav-item .nav-link {
+    height: 51px;
+    line-height: 51px;
+}
+.nav-item:hover {
+    font-weight: bold;
+}
+.nav-item.active {
+    font-weight: bold;
+    background-color: #7AAF40;
+}
+
+.navbar-menu {
+    margin: 0px;
+}
+.navbar-header {
+    margin-top: 0px;
+}
+.navbar-header .navbar-brand img {
+    max-height: 45px;
+    margin-right: 8px;
+}
+.navbar {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.navbar-profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 16px;
+    width: 300px;
+}
+.navbar-profile-dropdown button {
+    margin-left: auto;
+}
+.navbar-header-top {
+    z-index: 1000;
+    background-color: #99C567;
+}
+.navbar-header-top h1 {
+    color: #4D4D4D;
+    font-size: 3em;
+}
+.navbar-header-top h2 {
+    color: #4D4D4D;
+    font-size: 1.5em;
+}

@@ -1,0 +1,69 @@
+<div *ngIf="esperienzaSvolta" class="card md-margin">
+
+
+  <div class="card-header">
+    <div class="card-title">Dettaglio attivita</div>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <label class="col-sm-4 detail-label">Titolo</label>
+      <div class="col-sm-8" *ngIf="esperienzaSvolta.attivitaAlternanza.individuale">{{ esperienzaSvolta.studente.name | capitalize }}{{ esperienzaSvolta.studente.surname | capitalize }}</div>
+      <div class="col-sm-8" *ngIf="!esperienzaSvolta.attivitaAlternanza.individuale">{{ esperienzaSvolta.attivitaAlternanza.classe | capitalize }}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-4 detail-label">Istituto</label>
+      <div class="col-sm-8">{{esperienzaSvolta.attivitaAlternanza.istituto}}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-4 detail-label">Tipologia</label>
+      <div class="col-sm-8">{{ getTipo(esperienzaSvolta.attivitaAlternanza.tipologia) }}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-4 detail-label">Periodo</label>
+      <div class="col-sm-8">{{esperienzaSvolta.attivitaAlternanza.dataInizio | date: 'dd/MM/yyyy'}} - {{esperienzaSvolta.attivitaAlternanza.dataFine
+        | date: 'dd/MM/yyyy'}}</div>
+    </div>
+    <!-- <div class="row">
+      <label class="col-sm-4 detail-label">Referente Formazione</label>
+      <div *ngIf="esperienzaSvolta.attivitaAlternanza.corsoInterno" class="col-sm-8">{{esperienzaSvolta.attivitaAlternanza.corsoInterno.referenteFormazione}}</div>
+    </div> -->
+    <div class="row">
+      <label class="col-sm-4 detail-label">Referente Azienda</label>
+      <div *ngIf="esperienzaSvolta.attivitaAlternanza.opportunita" class="col-sm-8">{{esperienzaSvolta.attivitaAlternanza.opportunita.referente}}</div>
+    </div>
+    <div class="row">
+      <label class="col-sm-4 detail-label">Note Azienda:</label>
+      <div class="col-sm-8">{{esperienzaSvolta.noteAzienda}}</div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="esperienzaSvolta && esperienzaSvolta.attivitaAlternanza && esperienzaSvolta.attivitaAlternanza.opportunita.competenze && esperienzaSvolta.attivitaAlternanza.opportunita.competenze.length" class="card md-margin">
+  <div class="card-header">
+    <div class="card-title">
+      Competenze associate
+    </div>
+  </div>
+  <div class="card-body">
+
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let competenza of esperienzaSvolta.attivitaAlternanza.opportunita.competenze">
+        <div class="row">
+          <div class="col-11">
+            <h2 class="competenza-title">{{competenza.titolo}}</h2>
+            <div class="profilo-description">{{competenza.profilo}}</div>
+          </div>
+          <div class="col-1 v-center">
+            <button class="btn btn-flat" (click)="openDetailCompetenza(competenza, $event)">
+              <i class="material-icons">info_outline</i>
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+
+  </div>
+</div>

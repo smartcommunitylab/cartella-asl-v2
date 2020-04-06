@@ -1,0 +1,177 @@
+<sub-navbar [titolo]="navTitle" [breadcrumbItems]="breadcrumbItems" (customActionCallback)="navigateBack($event)">
+</sub-navbar>
+<div class="sub-navbar-content-below">
+    <div class="md-margin mx-auto" style="max-width: 1200px;">
+        <div class="mb-5" *ngIf="user">
+            <h3 class="section-header">Informazioni personali</h3>
+            <div class="mx-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group" [class.has-danger]="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched)">
+                            <label for="nome">Nome</label>
+                            <input type="text" class="form-control" id="nome" placeholder="Inserisci nome" [(ngModel)]="user.name" #nomeInput="ngModel"
+                                required>
+                            <div class="invalid-feedback" [class.d-block]="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched || forceInvalidFeedback)">
+                                Nome richiesto
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group" [class.has-danger]="surnameInput.invalid && (surnameInput.dirty || surnameInput.touched)">
+                            <label for="cognome">Cognome</label>
+                            <input type="text" class="form-control" id="cognome" placeholder="Inserisci cognome" [(ngModel)]="user.surname" #surnameInput="ngModel"
+                                required>
+                            <div class="invalid-feedback" [class.d-block]="surnameInput.invalid && (surnameInput.dirty || surnameInput.touched || forceInvalidFeedback)">
+                                Cognome richiesto
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group" [class.has-danger]="cfInput.invalid && (cfInput.dirty || cfInput.touched)">
+                            <label for="cf">Codice fiscale</label>
+                            <input type="text" class="form-control" id="cf" placeholder="Inserisci codice fiscale" [(ngModel)]="user.cf" #cfInput="ngModel"
+                                required>
+                            <div class="invalid-feedback" [class.d-block]="cfInput.invalid && (cfInput.dirty || cfInput.touched || forceInvalidFeedback)">
+                                Codice fiscale richiesto
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <div class="form-group" [class.has-danger]="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Inserisci email" [(ngModel)]="user.email" #emailInput="ngModel"
+                                required>
+                            <div class="invalid-feedback" [class.d-block]="emailInput.invalid && (emailInput.dirty || emailInput.touched || forceInvalidFeedback)">
+                                Email richiesta
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Inserisci username" [(ngModel)]="user.username">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-success v-center ml-auto mr-3" (click)="saveUser()">
+                        <i class="material-icons">save</i>Salva
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 mt-5" *ngIf="user">
+            <h3 class="section-header">Ruoli</h3>
+            <div class="mx-4">
+                <div>
+                    <button class="btn btn-secondary v-center ml-auto mr-3" (click)="addRole()" [disabled]="isNewUser">
+                        <i class="material-icons">add</i> Aggiungi ruolo
+                    </button>
+                </div>
+                <div *ngIf="isNewUser" class="text-center">
+                    Salva l'utente che stai creando per poi aggiungere il ruolo.
+                </div>
+                <div *ngIf="isRolePresent('ADMIN') && this.permissionService.getMyPermissions()?.addRole.admin">
+                    <h2 class="d-flex-inline">ADMIN
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('ADMIN')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                </div>
+                <div *ngIf="isRolePresent('DIRIGENTE_SCOLASTICO') && this.permissionService.getMyPermissions()?.addRole.dirigenti_scolastici">
+                    <h2 class="d-flex-inline">Dirigente scolastico:
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('DIRIGENTE_SCOLASTICO')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let istitutoId of objectKeys(user.istituti)">
+                            <div>
+                                <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('DIRIGENTE_SCOLASTICO', istitutoId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.istituti[istitutoId].name}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isRolePresent('FUNZIONE_STRUMENTALE') && this.permissionService.getMyPermissions()?.addRole.funzione_strumentale">
+                    <h2 class="d-flex-inline">Funzione strumentale:
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('FUNZIONE_STRUMENTALE')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let istitutoId of objectKeys(user.istituti)">
+                            <div>
+                                <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('FUNZIONE_STRUMENTALE', istitutoId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.istituti[istitutoId].name}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isRolePresent('LEGALE_RAPPRESENTANTE_AZIENDA') && this.permissionService.getMyPermissions()?.addRole.legali_rappresentati_azienda">
+                    <h2 class="d-flex-inline">Legale rappresentante azienda:
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('LEGALE_RAPPRESENTANTE_AZIENDA')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let aziendaId of objectKeys(user.aziende)">
+                            <div>
+                                <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('LEGALE_RAPPRESENTANTE_AZIENDA', aziendaId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.aziende[aziendaId].nome}}</div>
+                            <div>{{user.aziende[aziendaId].partita_iva}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isRolePresent('REFERENTE_AZIENDA') && this.permissionService.getMyPermissions()?.addRole.referenti_azienda">
+                    <h2 class="d-flex-inline">Referente azienda:
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('REFERENTE_AZIENDA')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let aziendaId of objectKeys(user.aziende)">
+                            <div>
+                                <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('REFERENTE_AZIENDA', aziendaId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.aziende[aziendaId].nome}}</div>
+                            <div>{{user.aziende[aziendaId].partita_iva}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="isRolePresent('STUDENTE') && this.permissionService.getMyPermissions()?.addRole.studenti">
+                    <h2 class="d-flex-inline">Studente:
+                        <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('STUDENTE')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let studenteId of objectKeys(user.studenti)">
+                            <div>
+                                <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('STUDENTE', studenteId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.studenti[studenteId].name}} {{user.studenti[studenteId].surname}}</div>
+                            <div>{{user.studenti[studenteId].cf}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

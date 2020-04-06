@@ -1,0 +1,94 @@
+<div class="card mb-3 list-container md-margin">
+    <h3 class="card-header">
+        Offerte
+    </h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col page-filters m-5">
+                <div class="v-center-inline mr-3">
+                    <span class="mr-2">
+                        Titolo:
+                    </span>
+                    <input type="text" placeholder="Cerca..." class="form-control search-input" [(ngModel)]="filterText">
+                </div>
+                <!-- <div class="col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-8 right">
+                            <input type="text" placeholder="Filtra" [(ngModel)]="filterText">
+                            <i class="material-icons middle" (click)="filterChanged()">search</i>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="order_position initial">Ordinamente</div>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="custom_select" [(ngModel)]="order" (change)="onSelectChange($event)">
+                                <option value="a-z">A-Z</option>
+                                <option value="z-a">Z-A</option>
+                                <option value="primo">Primo</option>
+                                <option value="recente">Recente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> -->
+
+                <button class="btn btn-secondary v-center-inline" (click)="filterChanged()">
+                    <i class="material-icons">search</i> Avvia ricerca
+                </button>
+            </div>
+            <div class="float-right v-center-inline m-4">
+                <button class="btn btn-secondary v-center" [routerLink]="['/oppurtunita/list/edit',0]">
+                    <i class="material-icons">add</i> Aggiungi offerta
+                </button>
+            </div>
+        </div>
+
+        <div *ngIf="filteredOffers.length" class="table list-group">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Titolo</th>
+                        <th>Tipologia</th>
+                        <th>Periodo</th>
+                        <th>Ore</th>
+                        <th>Posti</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let offer of filteredOffers;">
+                        <td class="custom_tr">
+                            {{ offer.titolo }}
+                        </td>
+                        <td class="custom_tr">{{ getTitolo(offer.tipologia) }}</td>
+                        <td class="custom_tr">Dal {{ offer.dataInizio | date: 'dd/MM/yyyy'}} al {{ offer.dataFine | date: 'dd/MM/yyyy'}}</td>
+                        <td class="custom_tr">{{ offer.ore }}</td>
+                        <td class="custom_tr">{{ offer.postiRimanenti }} / {{ offer.postiDisponibili }}</td>
+                        <td>
+                            <div class="pull-right">
+                                <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary btn-action" [routerLink]="['details',offer.id]">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;Vedi
+                                    </button>
+                                    <button type="button" class="btn btn-secondary btn-action v-center" [routerLink]="['edit',offer.id]">
+                                        <i class="material-icons">mode_edit</i> Modifica
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-action v-center" (click)="openDelete(offer)">
+                                        <i class="material-icons">delete</i> Cancella
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-center">
+            <label *ngIf="!filteredOffers.length" class="font-14 font-weight-bold">Nessuna offerta trovata</label>
+        </div>
+        <div class="text-center">
+            <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+        </div>
+
+    </div>
+</div>

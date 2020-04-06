@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h4 class="modal-title">
+    <div class="ml-5">{{competenza.profilo}}</div>
+  </h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="ml-5">
+    <h2>{{competenza.titolo}}</h2>
+    <div class="conoscenze-section">
+      <h3>Conoscenze:</h3>
+      <ul>
+        <li *ngFor="let conoscenza of competenza.conoscenze">{{conoscenza}}</li>
+      </ul>
+    </div>
+    <div class="abilita-section">
+      <h3>Abilità:</h3>
+      <ul>
+        <li *ngFor="let abilita of competenza.abilita">{{abilita}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">Chiudi</button>
+</div>

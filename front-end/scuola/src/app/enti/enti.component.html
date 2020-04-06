@@ -1,0 +1,85 @@
+
+<div class="mb-3 list-container md-margin">
+    <div class="row">
+        <div class="col-2">
+            <div class="row v-center">
+                <span class="title">Lista enti</span>&nbsp;&nbsp;
+                <span (click)="menuContentShow()">
+                    <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                    </svg>
+                    <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+                </span>                
+            </div>
+        </div>
+        <div class="col-10">
+            <button class="btn btn-success btn-icon float-right m-right" (click)="openCreate()">
+                <span class="row">
+                    <span class="btn-txt" placement="bottom"  ngbTooltip="Crea un nuovo piano">Aggiungi ente</span>&nbsp;
+                    <span>
+                        <svg class="icon icon-white icon-sm">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-4 v-center-inline">
+            <div class="form-group center-formGroup">
+                <input type="text" id="cercaPiani" class="form-control search-input"
+                    [(ngModel)]="filtro" (keyup.enter)="cerca()">
+                <label for="cercaPiani" >Cerca ente o partita IVA</label>
+            </div>
+            <it-button class="v-center-inline" (click)="cerca()">
+                <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+            </it-button>
+        </div>
+    </div>
+    <br />
+    <div class="table list-group" *ngIf="enti && enti.length">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Partita IVA</th>
+                    <th>Ente</th>
+                    <th>Indirizzo</th>
+                    <th>Telefono</th>
+                    <th>Mail</th>
+                 </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ente of enti" (click)="openDetail(ente)"> <!---->
+                    <td class="align-middle pointer">{{ente.partita_iva}}</td>
+                    <td class="align-middle pointer">{{ente.nome}}</td>
+                    <td class="align-middle pointer">{{ente.address}}</td>
+                    <td class="align-middle pointer">{{ente.phone }}</td>
+                    <td class="align-middle pointer">{{ente.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!enti?.length" class="font-14 text-center font-weight-bold">
+        <span *ngIf="filtro">Nessun ente corrispondende al filtro impostato</span>
+        <span *ngIf="!filtro">Nessun ente, creane uno tramite l'apposito pulsante</span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 text-center">
+         <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+            #cmPagination></cm-pagination>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+[{
+	"nome": "ABC Srl",
+	"Convenzione": {
+		"ConvenzionePAT": {
+			
+		},
+		"ConvenzioneIstituto": {
+			
+		}
+	},
+	"referentiAzienda": [{
+		"nome": "Paolo Smith",
+		"imageLink": ""
+	},
+	{
+		"nome": "Marco Francesco",
+		"imageLink": ""
+	},
+	{
+		"nome": "Davide Gabriele",
+		"imageLink": ""
+	}]
+}]

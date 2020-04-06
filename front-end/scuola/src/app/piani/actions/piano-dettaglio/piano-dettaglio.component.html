@@ -1,0 +1,261 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row m-left" *ngIf="piano">
+        <div class="col-6 v-center">
+            <span class="modifyTitleStyle">Piano alternanza {{piano.corsoDiStudio}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+        <div class="col-6">
+            <span class="float-right m-right">
+                <button *ngIf="piano.stato=='bozza'" class="btn btn-secondary btn-xs btn-icon btnDelete" placement="bottom"  ngbTooltip="Elimina definitivamente questo piano" (click)="deletePiano()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Elimina piano</span>
+                        <span class="col-2">
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;
+                <button *ngIf="piano.stato=='attivo' || piano.stato=='in_scadenza' || piano.stato=='in_attesa'" class="btn btn-primary btn-sm btn-icon btnDuplica" placement="bottom"  ngbTooltip="Crea una copia di questo piano" (click)="duplicaPiano()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Duplica</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-copy"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;
+                <button *ngIf="piano.stato=='bozza'" class="btn btn-success btn-xs btn-icon btnCreate"  placement="bottom"  ngbTooltip="Premi qui per attivare il piano." (click)="attivaPiano()">
+                    <span class="row btnCreateText">
+                        <span class="col-8 v-center">Attiva piano</span>
+                        <span class="col-4">
+                            <svg class="icon icon-white icon-sm m-right36">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;
+                <button *ngIf="piano.stato=='in_attesa'" class="btn btn-warning btn-xs btn-icon btnClose" placement="bottom" ngbTooltip="Annulla l’attivazione di questo piano" (click)="deAttivaPiano()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Annulla attivazione</span>
+                        <span class="col-2">
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                            </svg>
+                        </span>                       
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <div class="card-body" *ngIf="piano">
+        <div class="title">
+            Dati Piano <br/>
+            <button class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati del piano" (click)="updateDatiPiano()">
+                Modifica dati piano&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+        </div>
+        <br>
+
+        <div class="middle-div">
+            <div class="row">
+                <label class="col-sm-4 detail-label">Titolo:</label>
+                <div class="col-sm-8">{{piano.titolo}}</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Stato:</label>
+                <div class="col-sm-8">{{getStatoNome(piano.stato)}}</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Corso studi:</label>
+                <div class="col-sm-8">{{ getCorsoDiStudioString(piano.corsoDiStudio) }}</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Anni riferimento:</label>
+                <div class="col-sm-8">{{piano.periodo}}</div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Monte ore 3º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreTerzoAnno}}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Monte ore 4º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreQuartoAnno}}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Monte ore 5º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreQuintoAnno}}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Ore totali:</label>
+                <div class="col-sm-8">
+                    {{piano.oreTerzoAnno + piano.oreQuartoAnno + piano.oreQuintoAnno}}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4 detail-label">Note:</label>
+                <div class="col-sm-8">{{ piano.note }}</div>
+            </div>
+        </div>
+        <br>
+        <div class="title">
+            Documenti allegati<br />
+            <label class="btn btn-primary v-center-inline btn-icon"  placement="right"  ngbTooltip="Aggiungi allegato">
+                Carica file&nbsp;&nbsp;&nbsp;
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
+                </svg>
+                <input #fileInput type="file" hidden (click)="fileInput.value = null" value="" (change)="uploadDocument($event)">
+            </label>
+            <div>
+                <div class="v-center" *ngIf="documenti">
+                    <ul>
+                        <li *ngFor="let doc of documenti">
+                            <a [href]="doc.url" download="{{doc.nomeFile}}">
+                                <i class="material-icons">insert_drive_file</i>
+                                {{doc.nomeFile}}
+                            </a>
+                            &nbsp;&nbsp;
+                            <i class="material-icons pointer" (click)="deleteDoc(doc)">delete</i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="title">
+            Tipologie Attività<br/>
+            <button class="btn btn-primary v-center-inline" placement="right"  ngbTooltip="Aggiungi, modifica o rimuovi tipologie di attività" (click)="updateTipologiePiano()">
+                Modifica tipologie attività&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+        </div>
+        <div *ngIf="pianoTipologie[3] || pianoTipologie[4] || pianoTipologie[5]">
+            <div class="table list-group">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>3º anno</th>
+                            <th>4º anno</th>
+                            <th>5º anno</th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <div class="row">
+                                    <div class="col-10">Tipologia</div>
+                                    <div class="col-1">Ore</div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="row">
+                                    <div class="col-10">Tipologia</div>
+                                    <div class="col-1">Ore</div>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="row">
+                                    <div class="col-10">Tipologia</div>
+                                    <div class="col-1">Ore</div>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop -->
+                        <tr>
+                            <td>
+                                <div class="row" *ngFor="let pianoTipology of painoTipologieTerza">
+                                    <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
+                                    <div class="col-1">{{pianoTipology.monteOre}}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row" *ngFor="let pianoTipology of painoTipologieQuarto">
+                                    <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
+                                    <div class="col-1">{{pianoTipology.monteOre}}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row" *ngFor="let pianoTipology of painoTipologieQuinto">
+                                    <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
+                                    <div class="col-1">{{pianoTipology.monteOre}}</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Total-->
+                            <tr>
+                                <th>
+                                    <div class="row">
+                                        <div class="col-10">Tot</div>
+                                        <div class="col-1">{{totale[3]}}</div>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col-10">Tot</div>
+                                        <div class="col-1">{{totale[4]}}</div>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="row">
+                                        <div class="col-10">Tot</div>
+                                        <div class="col-1">{{totale[5]}}</div>
+                                    </div>
+                                </th>
+                            </tr>                            
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="title">
+            Competenze associate<br/>
+            <button class="btn btn-primary v-center-inline" placement="right"  ngbTooltip="Aggiungi, modifica o rimuovi competenze associate" (click)="updateCompetenzePiano()">
+                Modifica competenze&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+        </div>
+        <div *ngIf="pianoCompetenze[0]">
+            <div class="table list-group">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Creato da</th>
+                            <th>Definizione</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let competenza of pianoCompetenze">
+                            <td>{{competenza.ownerName}}</td>
+                            <td>{{competenza.titolo}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

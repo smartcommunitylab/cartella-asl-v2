@@ -1,0 +1,58 @@
+<div class="navbar-header-top row p-5 hidden-md-down" #navbarHeaderTop>
+    <div class="media ml-8">
+        <a class="navbar-brand" routerLink="/home">
+            <img src="assets/images/logo_asl.png" alt="logo" />
+        </a>
+        <div class="media-content">
+            <h1>Alternanza scuola lavoro</h1>
+        </div>
+    </div>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark row" #navbar>
+    <div class="navbar-header col-2 hidden-md-down">
+        <a class="navbar-brand" routerLink="/home">
+            <img src="assets/images/logo_asl.png" alt="logo" />
+        </a>
+    </div>
+    <div class="navbar-header hidden-lg-up ml-4">
+        <button class="navbar-toggler d-inline" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed"
+            data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand d-inline" routerLink="/home">
+            <img src="assets/images/logo_asl.png" alt="logo" />
+        </a>
+    </div>
+    <div class="navbar-menu collapse navbar-collapse col-10">
+        <ul class="navbar-nav nav-pills navBarPadding">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/home">Benvenuti</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','scuola']">Scuola</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','azienda']">Azienda</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','studente']">Studente</a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-menu collapse navbar-collapse navbar-menu-mobile" [ngbCollapse]="isCollapsed">
+        <ul class="navbar-nav nav-pills navBarPadding">
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/home">Benvenuti</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','scuola']">Scuola</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','azienda']">Azienda</a>
+            </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/home/login','studente']">Studente</a>
+            </li>
+        </ul>
+    </div>
+</nav>

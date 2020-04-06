@@ -1,0 +1,203 @@
+<div class="container" *ngIf="offer">
+  <sub-navbar [titolo]="navTitle" [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+
+  <div class="sub-navbar-content-below">
+    <div class="card md-margin mx-auto" style="max-width: 1200px;">
+
+      <div class="card-header">{{operationText}} Offerta</div>
+
+      <div class="modal-body">
+
+        <div class="card-body">
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="titolo">Titolo</label>
+            <div class="col-sm-8" [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
+              <input type="text" class="form-control" [(ngModel)]="offer.titolo" id="titolo" #titoloInput="ngModel" required>
+              <div class="invalid-feedback" [class.d-block]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
+                Titolo richiesto.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="descrizione">Descrizione</label>
+            <div class="col-sm-8">
+              <textarea class="span6" class="form-control" cols="50" rows="3" [(ngModel)]="offer.descrizione" name="descrizione" id="descrizione"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="tipologia">Tipologia</label>
+            <div class="col-sm-8" [class.has-danger]="tipologiaInput.invalid && (tipologiaInput.dirty || tipologiaInput.touched || forceErrorDisplay)">
+              <select class="custom_select form-control" [(ngModel)]="offer.tipologia" name="tipologia" id="tipologia" #tipologiaInput="ngModel"
+                required>
+                <option *ngFor="let tipo of tipologiaAzienda" [ngValue]="tipo.id">{{tipo.titolo}}</option>
+              </select>
+              <div class="invalid-feedback" [class.d-block]="tipologiaInput.invalid && (tipologiaInput.dirty || tipologiaInput.touched || forceErrorDisplay)">
+                Tipologia richiesta.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="dataInizio">Data inizio</label>
+            <div class="col-sm-8">
+              <dp-date-picker [(ngModel)]="offer.start" [config]="datePickerConfig" theme="dp-material" id="dataInizio"></dp-date-picker>
+              <div class="invalid-feedback" [class.d-block]="!offer.start">
+                Data inizio richiesta.
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="dataFine">Data fine</label>
+            <div class="col-sm-8">
+              <dp-date-picker [(ngModel)]="offer.end" [config]="datePickerConfig" theme="dp-material" id="dataFine"></dp-date-picker>
+              <div class="invalid-feedback" [class.d-block]="!offer.end">
+                Data fine richiesta.
+              </div>
+              <div class="invalid-feedback" [class.d-block]="offer.end < offer.start">
+                Data fine deve essere posteriore a data inizio.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="oraInizio">Ora inizio:</label>
+            <div class="col-sm-8">
+              <ngb-timepicker [(ngModel)]="oraInizio" id="oraInizio" [minuteStep]="minuteStep"></ngb-timepicker>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="oraFine">Ora fine:</label>
+            <div class="col-sm-8">
+              <ngb-timepicker [(ngModel)]="oraFine" id="oraFine" [minuteStep]="minuteStep"></ngb-timepicker>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="ore">Ore</label>
+            <div class="col-sm-8" [class.has-danger]="oreTotaliInput.invalid && (oreTotaliInput.dirty || oreTotaliInput.touched || forceErrorDisplay)">
+              <input type="number" min="1" class="form-control" [(ngModel)]="offer.ore" id="ore" #oreTotaliInput="ngModel" required>
+              <div class="invalid-feedback" [class.d-block]="oreTotaliInput.invalid && (oreTotaliInput.dirty || oreTotaliInput.touched || forceErrorDisplay)">
+                Ore totali richieste.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="postiDisponibili">Posti disponibili</label>
+            <div class="col-sm-8" [class.has-danger]="postiDisponibiliInput.invalid && (postiDisponibiliInput.dirty || postiDisponibiliInput.touched || forceErrorDisplay)">
+              <input type="number" min="1" class="form-control" [(ngModel)]="offer.postiDisponibili" id="postiDisponibili" #postiDisponibiliInput="ngModel"
+                required>
+              <div class="invalid-feedback" [class.d-block]="postiDisponibiliInput.invalid && (postiDisponibiliInput.dirty || postiDisponibiliInput.touched || forceErrorDisplay)">
+                Posti disponibili richiesti.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label">Posti Rimanenti</label>
+            <div class="col-sm-8">
+              <label>{{ offer.postiRimanenti }}</label>
+             </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-4">
+              <label class="detail-label" for="referente">Tutor esterno</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="offer.referente" id="referente" #referenteInput="ngModel" required>
+              <div class="invalid-feedback" [class.d-block]="referenteInput.invalid && (referenteInput.dirty || referenteInput.touched || forceErrorDisplay)">
+                Tutor esterno richiesto.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-4">
+              <label class="detail-label" for="referenteCF">Codice Fiscale (Tutor esterno)</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" [(ngModel)]="offer.referenteCF" id="referenteCF">
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="prerequisiti">Prerequisiti</label>
+            <div class="col-sm-8">
+              <textarea name="prerequisiti" id="prerequisiti" class="form-control" [(ngModel)]="offer.prerequisiti" cols="50" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="col-sm-4 detail-label" for="indirizzo">Posizione</label>
+            <div class="col-sm-8">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div id="map" style="height:300px;width:100%;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              Cerca per indirizzo:
+              <input type="text" [(ngModel)]="indirizzo" class="form-control" (input)="getItems($event)" id="indirizzo">
+              <div class="list-group autocompletion-list " *ngIf="showAddressesList">
+                <a class="list-group-item list-group-item-action" *ngFor="let item of addressesItems" (click)="selectPlace(item)">
+                  {{ item.name }}
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center md-margin">
+            <button type="button" class="btn btn-danger v-center m-5" (click)="cancel($event)">
+              <i class="material-icons">cancel</i>&nbsp;Annulla</button>
+            <button type="button" class="btn btn-success v-center m-5" (click)="submit($event)">
+              <i class="material-icons">save</i>&nbsp;Salva offerta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- COMPETENZE -->
+    <div class="card md-margin mx-auto" style="max-width: 1200px;">
+      <div class="card-header">
+        <div class="card-title">
+          Competenze associate
+        </div>
+      </div>
+      <div class="card-body">
+        <p style="text-align:center;color:#303F9F">
+          <b>Salva l'offerta per aggiungere e eliminare competenze</b>
+        </p>
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let competenza of savedCompetenze">
+            <div class="row">
+
+              <div class="col-10">
+                <div class="competenza-title">{{competenza.titolo}}</div>
+                <div class="profilo-description">{{competenza.profilo}}</div>
+              </div>
+
+              <div class="col-2">
+                <div class="btn-group pull-right">
+                  <button class="btn btn-flat" (click)="openDetailCompetenza(competenza, $event)">
+                    <i class="material-icons">info_outline</i>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+</div>

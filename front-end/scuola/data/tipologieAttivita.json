@@ -1,0 +1,29 @@
+[
+	{
+		"id": 1,
+		"annoRiferimento": 3,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"monteOre": 50,
+		"pianoAlternanzaId": 1,
+		"tipologia": 2,		
+		"titolo": "PATTIV"
+	},
+	{
+		"id": 2,
+		"annoRiferimento": 3,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"monteOre": 150,
+		"pianoAlternanzaId": 2,
+		"tipologia": 2,
+		"titolo": "ATTIV-PIANO 2019-20"
+	},
+	{
+		"id": 3,
+		"annoRiferimento": 3,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"monteOre": 8,
+		"pianoAlternanzaId": 3,
+		"tipologia": 6,
+		"titolo": "VA 2019-20"
+	}
+]

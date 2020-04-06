@@ -1,0 +1,91 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row" *ngIf="competenza">
+        <div class="col-6 v-center">
+            <span class="modifyTitleStyle">{{ (competenza.titolo.length>80)? (competenza.titolo | slice:0:80)+'...':(competenza.titolo) }}</span>&nbsp;&nbsp;
+            <!-- <span (click)="menuContentShow()" class="pointer">
+                <svg class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+            </span>  -->
+        </div>
+        <div class="col-6">
+            <span class="float-right">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" [routerLink]="['../../']" placement="bottom"  ngbTooltip="Annulla le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-success btn-icon btn-xs btnSave" (click)="saveEdit()" placement="bottom"  ngbTooltip="Salva le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
+                        </span>
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline modifyShowContent">
+        <div class="col-11">
+            <span>
+                <svg class="icon icon-sm icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+                &nbsp;&nbsp;{{menuContent}}
+            </span>
+        </div>
+        <div class="col-1"><svg class="icon float-right icon-primary pointer" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    
+
+    <div class="card-body modify-card-body" *ngIf="competenza">
+        <span class="row v-center modal-title modalSubject">Dati competenza</span>
+
+        <div class="row v-center form-group">
+            <div class="col-6" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                <input type="text" class="form-control" [(ngModel)]="competenza.titolo" id="definizione" #definizioneInput="ngModel"
+                     required>
+                    <label for="definizione" class="active">Nome competenza</label>
+                <div class="invalid-feedback"
+                    [class.d-block]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                    Campo necessario.</div>
+            </div>
+        </div>
+        <div class="row v-center form-group">
+            <!-- <div class="col-6" [class.has-danger]="livelloEQFInput.invalid && (livelloEQFInput.dirty || livelloEQFInput.touched || forceErrorDisplay)">
+                <input type="text" class="form-control" [(ngModel)]="competenza.livelloEQF" id="livelloEQF" #livelloEQFInput="ngModel"
+                     required>
+                    <label for="livelloEQF" class="active">Livello EQF</label>
+                <div class="invalid-feedback"
+                    [class.d-block]="livelloEQFInput.invalid && (livelloEQFInput.dirty || livelloEQFInput.touched || forceErrorDisplay)">
+                    Campo necessario.</div>
+            </div> -->
+            <div class="col-sm-6" [class.has-danger]="livelloEQFInput.invalid && (livelloEQFInput.dirty || livelloEQFInput.touched || forceErrorDisplay)">
+                <label for="livelloEQF" class="active">Livello EQF</label>
+                <select class="custom-select form-control pointer"  [(ngModel)]="competenza.livelloEQF" id="livelloEQF"
+                    #livelloEQFInput="ngModel" (change)="onChange($event.target.value)" required placement="bottom"  ngbTooltip="Quadro Europeo delle Qualifiche">
+                    <!-- <option selected="selected" value="livelloEQF">Livello EQF</option> -->
+                    <option [value]="eqf" *ngFor="let eqf of arrEQF">{{eqf}}</option>
+                </select>
+                <div class="invalid-feedback"
+                [class.d-block]="livelloEQFInput.value==='livelloEQF' && forceErrorDisplay">
+                    Campo necessario.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>

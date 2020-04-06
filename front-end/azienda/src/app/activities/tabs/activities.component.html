@@ -1,0 +1,17 @@
+<div class="container">
+    <!-- <ngb-tabset #L1Tabs (tabChange)="beforeChange($event)">
+        <ngb-tab id="1" title="In corso">
+            <ng-template ngbTabContent>
+                <incorso-tabs-component></incorso-tabs-component>
+            </ng-template>            
+        </ngb-tab>
+        <ngb-tab id="2" title="Prossima">
+            <ng-template ngbTabContent>
+                <prossima-tabs-component></prossima-tabs-component>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset> -->
+    <div *ngIf="showIndividuale; then thenBlock else elseBlock"> ... </div> 
+    <ng-template #thenBlock><activities-incorso-individuali></activities-incorso-individuali></ng-template>
+    <ng-template #elseBlock><activities-incorso-gruppi></activities-incorso-gruppi></ng-template>    
+</div>

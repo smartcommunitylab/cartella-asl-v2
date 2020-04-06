@@ -1,0 +1,123 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title">
+            <span>Archiviazione attività: <span class="titleName">{{titolo}}</span> </span>
+        </div>
+        <div class="row v-center float-right">
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" placement="bottom" ngbTooltip="Annulla"
+                (click)="activeModal.close('Close click')">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Annulla</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-warning btn-icon btn-xs btnArchivia" placement="bottom"
+                ngbTooltip="Archivia definitivamente l’attività" (click)="confirm()">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Archivia</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-box"></use>
+                        </svg>
+                    </span>                       
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body" style="overflow: scroll; height: 900px; width: inherit">
+        <div class="row">
+            <div class="col-1"><span class="v-line"></span></div>
+            <div class="col-11 help-text">
+                <div class="row v-center text-orange">
+                    <svg class="icon icon-bg">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+                    </svg>&nbsp;&nbsp;
+                    <span class="title">ATTENZIONE</span>
+                </div>
+                <div class="row">
+                    <p>Hai scelto di archiviare questa attività: ricordati che una volta archiviate, le attività non sono più
+                        modificabili.</p><br />
+                    <p>Con l’archiviazione i dati di tutti gli studenti che hanno completato le ore assegnate saranno trasmesse
+                        in automatico al sistema centrale,<b> rendendo l’attività ufficialmente parte del loro percorso ASL, e
+                            valida ai fini dell’esame di stato.</b></p><br />
+                    <p>Se segni come <b>“VALIDA”</b> l’attività di uno studente, <b>TUTTE</b> le ore validate saranno trasmesse
+                        al sistema centrale.</p><br />
+                    <p>Se segni come <b>“ANNULLATA”</b> l’attività di uno studente, <b>NESSUNA</b> delle ore, validate o meno,
+                        sarà comunicata al sistema centrale. Di fatto, sarà come se lo studente non avesse mai svolto questa
+                        attività</p>
+                    <br />
+                    <br />
+                    
+                </div>
+            </div>
+        </div>
+        <div class="row message-row">
+            <span *ngIf="(esperienze.length > 1) && (nrStudentiNonCompletato > 0)">
+                <span class="message-row-text">
+                    {{nrStudentiNonCompletato}} studenti
+                    non hanno completato al 75% l’attività: per ciascuno, scegli se archiviare l’attività come VALIDA,
+                    preservando le ore svolte, o ANNULLATA
+                </span>
+            </span>
+        </div>
+        
+        <div class="table list-group" *ngIf="esperienze && esperienze.length">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Classe</th>
+                        <th>Ore validate</th>
+                        <th></th>
+                        <th>Stato</th>
+                        <th>Ore trasmesse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let esp of esperienze; let i=index" class="{{esperienze[i].valida?'validRow':'canceledRow'}}">
+                        <!-- Nome -->
+                        <td>
+                            {{esperienze[i].nominativoStudente}}
+                        </td>
+                        <!-- Classe -->
+                        <td>
+                            {{esperienze[i].classeStudente}}
+                        </td>
+                        <!-- Ore validate -->
+                        <td>
+                            {{esperienze[i].oreValidate}}/{{esperienze[i].oreAttivita}} ({{esperienze[i].percentage}} %)
+                        </td>
+                        <!-- checkbox -->
+                        <td>
+                            <div class="float-left" #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{esperienze[i].toolTipRiga}}"
+                                (mouseenter)="showTipRiga($event, esperienze[i]);">
+                                <it-toggle [(ngModel)]="esperienze[i].valida" (change)="onFilterChange(esperienze[i])"></it-toggle>
+                            </div>
+                        </td>
+                        <!-- Stato -->
+                        <td>
+                            <span class="stato-text">{{esperienze[i].valida?'VALIDA':'ANNULLATA'}}</span>
+                        </td>
+                        <!-- Ore trasmesse -->
+                        <td>
+                            <span *ngIf="esperienze[i].valida" placement="bottom"
+                            ngbTooltip="Ore dell’attività comunicate al MIUR valide ai fini dell’esame di stato">
+                                {{esperienze[i].oreValidate}}
+                            </span>
+                            <span *ngIf="!esperienze[i].valida"> 0 </span>
+                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="!esperienze?.length" class="font-14 text-center font-weight-bold">
+            <span>Nessun esperienza trovata</span>
+        </div>
+    </div>
+</div>

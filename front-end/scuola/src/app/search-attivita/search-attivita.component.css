@@ -1,0 +1,58 @@
+.autocompletion-list {
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+}
+
+.badge.badge-pill {
+    position: relative;
+    height: 36px;
+    font-size: 12px;
+    line-height: 30px;
+    margin: 8px;
+    width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.badge.badge-pill .close-btn {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    height: 36px;
+}
+.badge.badge-pill .competenza-info-btn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 36px;
+}
+.badge.badge-pill .badge-description {
+    margin-left: 30px;
+    max-width: 330px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.add-comp{
+    font-size: 22px!important;
+}
+
+.date-pick{
+position: relative;
+}
+.date-pick-icon{
+    position: absolute;
+    right: 0px
+}
+.search-label{
+    line-height: 36px;
+}
+.btn-search {
+border-radius: unset;
+width: 200px;
+}
+.raggio{
+    position: relative;
+    left: -100px;
+}

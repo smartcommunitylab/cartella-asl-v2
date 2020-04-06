@@ -1,0 +1,16 @@
+.home-tiles .card-header {
+    text-align: center;
+}
+.home-tiles .tile-icon {
+    text-align: center;
+    font-size: 72px;
+    width: 100%
+}
+.home-tiles .tile-btn-container {
+    width: 100%;
+    text-align: center;
+}
+
+.home-tiles .card-body {
+    text-align: justify;
+}

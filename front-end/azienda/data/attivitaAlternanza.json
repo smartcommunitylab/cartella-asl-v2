@@ -1,0 +1,295 @@
+[
+	{
+		"annoScolastico": "2017-18",
+		"annoCorso": 3,
+		"interna": false,
+		"tipologia": 7,
+		"individuale": true,
+		"titolo": "StageL-s2",
+		"ore": 18,
+		"dataInizio": 1515970800000,
+		"dataFine": 1516316400000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "3B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO",
+		"corsoId": "26df2d18-1a6e-4a7a-a84b-fa9d83e37a5b",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Feb01-Feb28.pdf"
+			},
+			{
+				"id": 2,
+				"nome": "Feb01-Feb28.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2019-20",
+		"annoCorso": 4,
+		"interna": false,
+		"tipologia": 7,
+		"individuale": true,
+		"titolo": "StageH-s1",
+		"ore": 18,
+		"dataInizio": 1519858800000,
+		"dataFine": 1527804000000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "4B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO",
+		"corsoId": "26df2d18-1a6e-4a7a-a84b-fa9d83e37a5b",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Feb01-Feb28.pdf"
+			},
+			{
+				"id": 2,
+				"nome": "Feb01-Feb28.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2019-20",
+		"annoCorso": 5,
+		"interna": false,
+		"tipologia": 8,
+		"individuale": true,
+		"titolo": "Sviluppatore-sMin1",
+		"ore": 18,
+		"dataInizio": 1519858800000,
+		"dataFine": 1527804000000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "5B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO",
+		"corsoId": "26df2d18-1a6e-4a7a-a84b-fa9d83e37a5b",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Feb01-Feb28.pdf"
+			},
+			{
+				"id": 2,
+				"nome": "Feb01-Feb28.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2017-18",
+		"annoCorso": 3,
+		"interna": false,
+		"tipologia": 8,
+		"individuale": false,
+		"titolo": "Sviluppatore-s1",
+		"ore": 18,
+		"dataInizio": 1519858800000,
+		"dataFine": 1527804000000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "3B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO",
+		"corsoId": "26df2d18-1a6e-4a7a-a84b-fa9d83e37a5b",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Feb01-Feb28.pdf"
+			},
+			{
+				"id": 2,
+				"nome": "Feb01-Feb28.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2018-19",
+		"annoCorso": 4,
+		"interna": false,
+		"tipologia": 6,
+		"individuale": false,
+		"titolo": "Visitafeb-s2",
+		"ore": 18,
+		"dataInizio": 1519513200000,
+		"dataFine": 1519513200000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "4B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO OPZIONE SCIENZE APPLICATE",
+		"corsoId": "37edcb9a-139d-48aa-8d68-ee349df49d68",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Feb01-Feb28.pdf"
+			},
+			{
+				"id": 2,
+				"nome": "Feb01-Feb28.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2019-20",
+		"annoCorso": 5,
+		"interna": false,
+		"tipologia": 9,
+		"individuale": true,
+		"titolo": "Calcio-s2",
+		"ore": 18,
+		"dataInizio": 1519923600000,
+		"dataFine": 1532164417052,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "5B",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO OPZIONE SCIENZE APPLICATE",
+		"corsoId": "37edcb9a-139d-48aa-8d68-ee349df49d68",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Mar01-Mar01.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	},
+	{
+		"annoScolastico": "2018-19",
+		"annoCorso": 3,
+		"interna": false,
+		"tipologia": 10,
+		"individuale": true,
+		"titolo": "SummerValleyStage-s0",
+		"ore": 18,
+		"dataInizio": 1528495200000,
+		"dataFine": 1533765600000,
+		"oreInizio": "4",
+		"OraFine": "22",
+		"classe": "3C",
+		"istituto": "LICEO SCIENTIFICO 'L. Da Vinci' - TRENTO",
+		"istitutoId": "fdef62ac-63bf-4da8-9385-f33d7ee645ec",
+		"corso": "LICEO SCIENTIFICO OPZIONE SCIENZE APPLICATE",
+		"corsoId": "37edcb9a-139d-48aa-8d68-ee349df49d68",
+		"documento": [
+			{
+				"id": 1,
+				"nome": "Jun09-Aug09.pdf"
+			}
+		],
+		"presenzeContoInterno": {
+			
+		},
+		"schedaValutazioneStudente": {
+			
+		},
+		"schedaValutazioneAzienda": {
+			
+		},
+		"diarioDiBordo": {
+			
+		},
+		"reportValutazione": {
+			
+		}
+	}
+]

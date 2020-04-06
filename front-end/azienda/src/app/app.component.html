@@ -1,0 +1,12 @@
+<main class="container" [class.sticky-header]="isSticky">
+    <cm-navbar [hidden]="hide"  #topNavbar></cm-navbar>
+    <router-outlet [hidden]="hide"></router-outlet>
+    <cm-footer [hidden]="hide" ></cm-footer>
+    <cm-growler position="center-center" timeout="5000"></cm-growler>
+    <cm-modal></cm-modal>
+    <cm-overlay delay="300">
+        <svg class="material-spinner" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10" />
+        </svg>&nbsp;&nbsp;&nbsp;Caricamento...
+    </cm-overlay>
+</main>

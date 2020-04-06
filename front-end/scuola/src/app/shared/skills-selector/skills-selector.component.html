@@ -1,0 +1,159 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below">
+    <!-- <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+            <span class="float-right">
+                <button class="btn btn-success btn-icon btn-xs" (click)="addCompetenze()" placement="bottom"  ngbTooltip="Salva le modifiche">
+                    <span class="row v-center">
+                        <span class="btn-txt v-center">Salva&nbsp;</span>&nbsp;
+                        <span>
+                            <i class="material-icons">save</i>
+                        </span>
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <br> -->
+    <div class="row">
+        <div class="col-6 card broderRight">
+            <div class="card-body p0">
+                <div class="row v-center">
+                    <div class="col-4">
+                        <label class="complementary-3-color-a6 font-weight-bold" >Competenze associabili: {{totalRecords}}</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-6 input-group">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaCompetenzaTxt" class="form-control search-input"
+                                [(ngModel)]="searchCompetenzaTxt" (keyup.enter)="searchCompetenza()">
+                            <label for="cercaCompetenzaTxt" >Cerca competenza da associare</label>
+                        </div>
+                        <button class="btn btn-icon v-center-inline" (click)="searchCompetenza()">
+                            <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="minWidth">Creato da:</th>
+                            <th>Definizione</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let competenza of competenze" [class.disabled]="competenza.disabled">
+                            <td class="align-middle">{{competenza.ownerName}}</td>
+                            <td class="align-middle">{{competenza.titolo}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-primary iconPrimaryColor icon-sm pointer" *ngIf="!competenza.disabled" (click)="toggleCompetenza(competenza)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- <div class="row">
+                    <th class=col-2>Creato da:</th>
+                    <th class=col-8>Definizione</th>
+                    <th class=col-2></th>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action" *ngFor="let competenza of competenze"
+                        [class.disabled]="competenza.disabled">
+                        <div class="row">
+                            <div class="col-2 v-center competenza-info-btn">
+                                {{competenza.ownerName}}
+                            </div>
+                            <div class="col-8">
+                                <div class="profilo-title">{{competenza.titolo}}</div>
+                            </div>
+                            <div class="col-2">
+                                <svg class="float-right icon icon-sm" *ngIf="!competenza.disabled" (click)="toggleCompetenza(competenza)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </li>
+                </ul> -->
+                <div class="row empty-list" *ngIf="!competenze || competenze.length==0">
+                    <div class="col">
+                        Nessuna competenza trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+        </div>
+
+        <div class="card col-6 broderLeft">
+            <div class="card-body p0">
+                <div class="row v-center">
+                    <div class="col-4">
+                        <label class="primary-color font-weight-bold">Competenze associate: {{attachedCompetenze.length}}</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-6 input-group">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaCompetenzaAssociateTxt" class="form-control search-input"
+                                [(ngModel)]="searchCompetenzaAssociateTxt" (keyup.enter)="searchCompetenzaAssociate()">
+                            <label for="cercaCompetenzaAssociateTxt" >Cerca competenza associate</label>
+                        </div>
+                        <button class="btn btn-icon v-center-inline" (click)="searchCompetenzaAssociate()">
+                            <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+                        </button>
+                    </div>                  
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="minWidth">Creato da:</th>
+                            <th>Definizione</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let competenza of competenzeAssociateWindow">
+                            <td class="align-middle">{{competenza.ownerName}}</td>
+                            <td class="align-middle">{{competenza.titolo}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-danger iconDangerColor icon-sm pointer" (click)="deleteCompetenza(competenza)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- <div class="row">
+                    <th class=col-2>Creato da:</th>
+                    <th class=col-8>Definizione</th>
+                    <th class=col-2></th>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action" *ngFor="let competenza of competenzeAssociateWindow">
+                        <div class="row">
+                            <div class="col-2 v-center competenza-info-btn">
+                                {{competenza.ownerName}}
+                            </div>
+                            <div class="col-8">
+                                <div class="profilo-title">{{competenza.titolo}}</div>
+                            </div>
+                            <div class="col-2">
+                                <svg class="float-right icon icon-sm" (click)="deleteCompetenza(competenza)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-minus-circle"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </li>
+                </ul> -->
+                <div class="row empty-list" *ngIf="!competenzeAssociateWindow || competenzeAssociateWindow.length==0">
+                    <div class="col">
+                        Nessuna competenza trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" #cmPaginationAssociate [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
+        </div>
+
+    </div>
+</div>

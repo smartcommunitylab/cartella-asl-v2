@@ -1,0 +1,34 @@
+C1/Comprendere frasi e paragrafi scritti in documenti relativi al lavoro
+C2/Fare piena attenzione a quello che altri stanno dicendo, soffermandosi per capirne i punti essenziali, ponendo domande al momento opportuno ed evitando interruzioni inappropriate
+C3/Comunicare efficacemente per iscritto ed in modo appropriato rispetto alle esigenze dei destinatari. 
+C4/Parlare ad altri per comunicare informazioni in modo efficace
+C5/Usare la matematica per risolvere dei problemi. 
+C6/Applicare regole e metodi scientifici per risolvere problemi. 
+C7/Usare la logica e il ragionamento per individuare i punti di forza e di debolezza di soluzioni, conclusioni o approcci alternativi ai problemi.
+C8/Comprendere le implicazioni di nuove informazioni per la soluzione di problemi presenti, futuri e per i processi decisionali
+C9/Selezionare ed utilizzare metodi e procedure formative appropriate per apprendere o insegnare ad apprendere. 
+C10/Monitorare e valutare le prestazioni lavorative personali, di altre persone o di organizzazioni per migliorarle o correggerle
+C11/Comprendere le reazioni degli altri e il perch&egrave; reagiscano in determinati modi. 
+C12/Coordinare le proprie azioni a quelle degli altri.
+C13/Persuadere gli altri a cambiare opinioni o comportamenti
+C14/Discutere e trattare con gli altri per trovare un accordo e cercare di ricomporre opinioni diverse. 
+C15/Insegnare ad altri come fare determinate cose
+C16/Cercare in modo attivo soluzioni per soddisfare le esigenze degli altri
+C17/Identificare problemi complessi e raccogliere le informazioni utili a valutare possibili opzioni e trovare soluzioni.
+C18/Analizzare le caratteristiche e i requisiti di strumenti, servizi o prodotti necessari alla realizzazione di un progetto.
+C19/Produrre o adattare attrezzature e tecnologie per far fronte ai bisogni degli utenti
+C20/Individuare gli strumenti necessari per lo svolgimento di un lavoro. 
+C21/Installare attrezzature, macchine, cavi o programmi applicando le specifiche tecniche
+C22/Scrivere programmi per computer per vari scopi
+C23/Condurre test ed ispezioni su prodotti, servizi o processi per valutarne la qualit&agrave; o le prestazioni.
+C24/Controllare misure di livello, quadranti o altri indicatori per assicurarsi del corretto funzionamento di una macchin/C25/Controllare le operazioni e l'attivit&agrave; di attrezzature e sistemi.
+C26/Effettuare manutenzioni ordinarie sulle attrezzature e definire quando e che tipo di manutenzione &egrave; necessaria 
+C27/Determinare le cause di errori di funzionamento e decidere cosa fare per risolverli
+C28/Riparare macchinari o sistemi usando le attrezzature opportune
+C29/Determinare come dovrebbe funzionare un ‚Äúsistema‚Äù (ovvero macchine, fabbriche, organizzazioni, ambienti) e come cambiamenti ambientali, operativi o di situazione possano influire sui suoi risultati
+C30/Identificare misure o indicatori delle prestazioni di un sistema (ovvero macchine, fabbriche, organizzazioni, ambienti) e le azioni necessarie per migliorarle o correggerle in relazione agli obiettivi del sistema stesso
+C31/Valutare i costi e i benefici di possibili azioni per scegliere la pi&ugrave; opportuna. 
+C32/Gestire il proprio tempo e quello altrui. 
+C33/Determinare quanto denaro sia necessario spendere per fare un lavoro e contabilizzare le spese
+C34/Ottenere ed occuparsi dell'uso appropriato di attrezzature, strumenti e materiali necessari a svolgere un lavoro
+C35/Motivare, far crescere e dirigere il personale e individuare il personale pi&ugrave; adatto ad un lavoro 

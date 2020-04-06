@@ -1,0 +1,56 @@
+[{
+	"stato": 1,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": false,
+	"diarioDiBordo" : {
+	}
+},
+{
+	"stato": -1,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": false,
+	"diarioDiBordo" : {
+	}	
+},
+{
+	"stato": 1,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": false,
+	"diarioDiBordo" : {
+	}	
+},
+{
+	"stato": 2,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": true,
+	"diarioDiBordo" : {
+	}	
+},
+{
+	"stato": 1,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": true,
+	"diarioDiBordo" : {
+	}	
+},
+{
+	"stato": 0,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": true,
+	"diarioDiBordo" : {
+	}	
+},
+{
+	"stato": 0,
+	"noteStudente": "compiti per il Giovedi'",
+	"noteAzienda": "fornire badge",
+	"completato": true,
+	"diarioDiBordo" : {
+	}	
+}]

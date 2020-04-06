@@ -1,0 +1,14 @@
+<div class="container">
+    <ngb-tabset #subTabsStorica (tabChange)="beforeChange($event)">
+        <ngb-tab id="tab-individuali" title="Attivita Individuali">
+            <ng-template ngbTabContent>
+                <activity-history-individuali></activity-history-individuali>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-gruppi" title="Attivita Gruppi">
+            <ng-template ngbTabContent>
+                <activity-history-gruppi></activity-history-gruppi>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>

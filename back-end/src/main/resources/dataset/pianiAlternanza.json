@@ -1,0 +1,67 @@
+[
+	{
+		"id": 1,
+		"corsoDiStudio": "INFORMATICA",
+		"corsoDiStudioId": "ba8680b0-d695-466d-9e68-b4d68e809024",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test piano",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "attivo",
+		"titolo": "P1"
+	},
+	{
+		"id": 2,
+		"corsoDiStudio": "ELETTROTECNICA",
+		"corsoDiStudioId": "7d72c1ed-20eb-4e00-9e49-0ffd93aa57e9",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "attivo",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 3,
+		"corsoDiStudio": "BIENNIO SETTORE TECNOLOGICO",
+		"corsoDiStudioId": "21d31fa8-93b0-4edc-bee4-5ed981726ea4",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 4,
+		"corsoDiStudio": "MECCANICA E MECCATRONICA",
+		"corsoDiStudioId": "6fa42450-8b00-4cef-b625-aa9115156ed9",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	},
+	{
+		"id": 5,
+		"corsoDiStudio": "TELECOMUNICAZIONI",
+		"corsoDiStudioId": "1bac90bc-086c-4f52-a515-b57078ab1211",
+		"dataAttivazione": 1557784800000,
+		"istitutoId": "dfb9bf97-a1c8-4ef7-a734-5c193e70b9e3",
+		"note": "test plan for 2019-20",
+		"oreQuartoAnno": 0,
+		"oreQuintoAnno": 0,
+		"oreTerzoAnno": 0,
+		"stato": "bozza",
+		"titolo": "2019-20"
+	}
+]

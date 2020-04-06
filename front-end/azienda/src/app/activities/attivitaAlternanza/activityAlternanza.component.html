@@ -1,0 +1,83 @@
+<sub-navbar [titolo]="navTitle" [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+<div class="card md-margin">
+    <div class="card-header">
+        <div class="card-title">Dettaglio attività e presenze</div>
+    </div>
+    <div class="card-body" *ngIf="attivitaAlternanza">
+        <div class="row">
+            <label class="col-sm-4 detail-label">Titolo</label>
+            <div class="col-sm-8">{{ attivitaAlternanza.titolo| capitalize }}</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 detail-label">Istituto</label>
+            <div class="col-sm-8">{{attivitaAlternanza.istituto}}</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 detail-label">Tipologia</label>
+            <div class="col-sm-8">{{ getTipo(attivitaAlternanza.tipologia) }}</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 detail-label">Periodo</label>
+            <div class="col-sm-8">{{attivitaAlternanza.dataInizio | date: 'dd/MM/yyyy'}} - {{attivitaAlternanza.dataFine | date: 'dd/MM/yyyy'}}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 detail-label">Anno Scolastico</label>
+            <div class="col-sm-8">{{attivitaAlternanza.annoScolastico}}</div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4 detail-label">Anno Corso</label>
+            <div class="col-sm-8">{{attivitaAlternanza.annoCorso}}</div>
+        </div>
+
+
+        <div class="mb-3 mt-4">
+            <h2>Presenze giornaliere per singolo studente</h2>
+        </div>
+        <div class="list-group" *ngIf="studenti">
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col-2 v-center">
+                        <label>
+                            Ore predefinite:
+                            <input type="number" min="0" class="form-control text-center w-50 d-inline" [disabled]="isArchivio" oninput="this.value = Math.abs(this.value)"
+                                [(ngModel)]="defaultHour">
+                        </label>
+                    </div>
+                    <div class="col-1 v-center">
+                        <button class="btn btn-primary btn-round ml-auto" [disabled]="!isDaysBackAvailable()" (click)="navigateDaysBack()">
+                            <i class="material-icons">keyboard_arrow_left</i>
+                        </button>
+                    </div>
+                    <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of calendar; let i=index">
+                        <button [disabled]="isArchivio || !isDayBetween(giornata)" class="btn btn-primary ml-auto" (click)="setDefaultHourToAllStudents(i)">
+                            Usa {{defaultHour}} ore</button>
+                        <div>{{giornata.valueOf()| date:'dd/MM/yyyy'}}</div>
+                    </div>
+                    <div class="col-1 v-center">
+                        <button class="btn btn-primary btn-round ml-auto" [disabled]="!isDaysForwardAvailable()" (click)="navigateDaysForward()">
+                            <i class="material-icons">keyboard_arrow_right</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item list-group-item-action" *ngFor="let studenteId of studentiIds; let i = index">
+                <div class="row">
+                    <div class="col-3">
+                        {{studenti[studenteId].nome}} - {{studenti[studenteId].classe}}
+                    </div>
+                    <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of presenzaStudenti[studenteId]">
+                        <input type="number" class="form-control text-center w-100" min="0" oninput="this.value = Math.abs(this.value)" [disabled]="isArchivio || !isDayBetween(giornata.data)"
+                            [(ngModel)]="giornata.oreSvolte" />
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <button class="btn btn-success v-center" [disabled]="isArchivio" (click)="savePresences()">
+                <i class="material-icons">save</i> Valida presenze
+            </button>
+        </div>
+    </div>
+</div>

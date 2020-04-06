@@ -1,0 +1,23 @@
+.add-btn-menu {
+    position: relative;
+}
+.add-btn-menu > .card {
+    position: absolute;
+    top: 40px;
+    left: 16px;
+    min-width: 150px;
+    display: none;
+}
+.add-btn-menu:hover > .card {
+    display: block;
+}
+
+.ruolo-box {
+    background-color: #ececec;
+    box-shadow: #757575 0px 0px 4px;
+    width: 350px;
+    min-height: 150px;
+    margin: 12px;
+    padding: 12px;
+    border-radius: 6px;
+}

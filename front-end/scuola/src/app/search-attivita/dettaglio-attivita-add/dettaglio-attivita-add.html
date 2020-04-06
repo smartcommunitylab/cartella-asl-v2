@@ -1,0 +1,206 @@
+<div class="modal-header">
+    <h4 class="modal-title">
+        <div class="ml-5">{{opportunita.titolo}}</div>
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="ml-5">
+        <h1>Informazioni modificabili</h1>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Titolo:
+            </div>
+            <div class="col col-md-9">
+                <input type="text" class="form-control" [(ngModel)]="titolo">            
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Data inizio:
+            </div>
+            <div class="col col-md-9">
+                <dp-date-picker [(ngModel)]="dataInizio" [config]="datePickerConfig" theme="dp-material" id="dataInizio"></dp-date-picker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Data fine:
+            </div>
+            <div class="col col-md-9">
+                <dp-date-picker [(ngModel)]="dataFine" [config]="datePickerConfig" theme="dp-material" id="dataFine"></dp-date-picker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Ore totali:
+            </div>
+            <div class="col col-md-9">
+                <input type="number" min="0" class="form-control" [(ngModel)]="oreTotali">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Tutor scolastico: 
+            </div>
+            <div class="col col-md-9">
+                <input type="text" class="form-control" [(ngModel)]="referenteFormazione"  id="referente" #referenteInput="ngModel" required>
+                <div class="invalid-feedback" [class.d-block]="referenteInput.invalid && (referenteInput.dirty || referenteInput.touched || forceErrorDisplay)">
+                    Referente richiesto.
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-3 font-weight-bold">
+                Codice Fiscale (Tutor scolastico): 
+            </div>
+            <div class="col col-md-9">
+                <input type="text" class="form-control" [(ngModel)]="referenteFormazioneCF">
+            </div>
+        </div>
+        <h1 class="mt-5">Informazioni aggiuntive</h1>
+        <div class="row" *ngIf="opportunita.descrizione">
+            <div class="col col-md-3">
+                Descrizione:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.descrizione}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.ore">
+            <div class="col col-md-3">
+                Ore:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.ore}}
+            </div>
+        </div>
+        <div class="row" *ngIf="oppTipologiaObj">
+            <div class="col col-md-3">
+                Tipologia:
+            </div>
+            <div class="col col-md-9">
+                {{oppTipologiaObj.titolo}}
+            </div>
+        </div>
+        <div *ngIf="opportunita.tipologia>5">
+            <div class="row" *ngIf="opportunita.azienda">
+                <div class="col col-md-3">
+                    Azienda:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.azienda.nome}}
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.azienda && opportunita.azienda.referentiAzienda.length >0">
+                <div class="col col-md-3">
+                    Referenti:
+                </div>
+                <div class="col col-md-9">
+                    <span *ngFor="let referente of opportunita.azienda.referentiAzienda">{{referente.nome}}</span>
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.descrizione">
+                <div class="col col-md-3">
+                    Descrizione:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.descrizione}}
+                </div>
+            </div>
+            <div class="row" *ngIf="opportunita.prerequisiti">
+                <div class="col col-md-3">
+                    Prerequisiti:
+                </div>
+                <div class="col col-md-9">
+                    {{opportunita.prerequisiti}}
+                </div>
+            </div>
+            <!-- <div class="card" *ngFor="let competenza of opportunita.competenze" [ngStyle]="{ 'background-color': getCompetenzaColor(competenza)}">
+                        <h3 class="card-header">{{competenza.profilo}}</h3>
+                        <div class="card-body"> {{competenza.titolo}}
+                        </div>
+                    </div> -->
+        </div>
+        <!-- <div class="row" *ngIf="opportunita.referenteFormazione">
+            <div class="col col-md-3">
+                Referente formazione:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.referenteFormazione}}
+            </div>
+        </div> -->
+        <div class="row" *ngIf="opportunita.postiDisponibili">
+            <div class="col col-md-3">
+                Posti disponibili:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.postiDisponibili}}
+            </div>
+        </div>
+        <div class="row" *ngIf="opportunita.postiRimanenti">
+            <div class="col col-md-3">
+                Posti rimanenti:
+            </div>
+            <div class="col col-md-9">
+                {{opportunita.postiRimanenti}}
+            </div>
+        </div>
+        <div class="row">
+            <!-- <div class="col col-md-3 mt-5">
+                Competenze:
+            </div> -->
+            <div class="col col-md-2 m-3">
+                <button type="button" *ngIf="!competenzeToggle" class="btn btn-secondary v-center" (click)="toggleChange()">
+                    <i class="material-icons">keyboard_arrow_down</i> Apri competenze
+                </button>
+                <button type="button" *ngIf="competenzeToggle" class="btn btn-secondary v-center" (click)="toggleChange()">
+                    <i class="material-icons">keyboard_arrow_up</i> Chiudi competenze
+                </button>
+            </div>
+            <div style="overflow: scroll; height: 200px; width: 99%" *ngIf="competenzeToggle">
+                <div *ngIf="competenzeAttivita.length>0">
+                    <div style="text-align: center; font-weight: bold">-- Competenze attivita --</div>
+                    <div class="row" *ngFor="let competenza of competenzeAttivita">
+                        <div class="col col-md-9 pull-right">
+                            <div>
+                                <input type="checkbox" checked style="float:left" (click)="competenzaChange(competenza)">
+                                <button style="float:left" class="btn btn-flat v-center " (click)="openDetailCompetenza(competenza, $event)">
+                                    <i class="material-icons">info_outline</i>
+                                </button>
+                                <div style="font-weight: bold">{{competenza.profilo}}</div>
+                            </div>
+                            <div>{{competenza.titolo}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="competenzePiano.length>0">
+                    <div style="text-align: center; font-weight: bold">-- Competenze piano --</div>
+                    <div class="row" *ngFor="let competenza of competenzePiano">
+                        <div class="col col-md-9 pull-right">
+                            <div>
+                                <input type="checkbox" style="float:left" (click)="competenzaChange(competenza)">
+                                <button style="float:left" class="btn btn-flat v-center " (click)="openDetailCompetenza(competenza, $event)">
+                                    <i class="material-icons">info_outline</i>
+                                </button>
+                                <div style="font-weight: bold">{{competenza.profilo}}</div>
+                            </div>
+                            <div>{{competenza.titolo}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="row" *ngIf="(competenzePiano.length+competenzeAttvita.length)==0">
+                    <div class="col col-md-9 pull-right">
+                        <div>Non ci sono sono competenze associate</div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">Chiudi</button>
+    <button type="button" class="btn btn-flat btn-success" (click)="add()">Aggiungi</button>
+</div>

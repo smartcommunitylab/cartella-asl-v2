@@ -1,0 +1,13 @@
+<div class="modal-header">
+    <h4 class="modal-title">Eliminare ruolo?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Sei sicuro di voler eliminare tutti i ruoli di {{roleName}}?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">Annulla</button>
+    <button type="button" class="btn btn-flat btn-danger" (click)="delete()">Elimina ruoli</button>
+  </div>

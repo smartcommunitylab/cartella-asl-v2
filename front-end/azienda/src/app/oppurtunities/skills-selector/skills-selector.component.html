@@ -1,0 +1,75 @@
+<div class="container">
+
+    <sub-navbar [titolo]="navTitle" [breadcrumbItems]="breadcrumbItems"></sub-navbar>   
+
+    <div class="sub-navbar-content-below mx-auto" style="max-width: 1200px;">
+        <div class="clearfix skills-selected-fixed-bar" #competenzeFixedTopBar [ngStyle]="{'width.px': competenzeSelector.offsetWidth + 16*2 }">
+            <div class="clearfix" >
+                <button class="btn btn-secondary v-center pull-right" (click)="addCompetenze()">
+                        <i class="material-icons">add</i> Aggiungi competenze ad offerta</button>
+                <h1>Offerta: {{attivita?.titolo}}</h1>
+                <h2 class="d-inline">Competenze da aggiungere: </h2><div class="competenze-counter d-inline-block">{{selectedNewCompetenze.length}}</div>
+            </div>
+            <div class="competenze-list">
+                <div class="badge badge-pill badge-light" *ngFor="let competenza of selectedNewCompetenze; let last = last" [attr.ready]="last ? false : true">
+                    <div class="v-center competenza-info-btn">
+                        <!--<button class="btn btn-flat v-center" (click)="openDetailCompetenza(competenza, $event)">
+                            <i class="material-icons">info_outline</i>
+                        </button>-->
+                    </div>
+                    <div class="badge-description">
+                        {{competenza.titolo}}
+                    </div>
+                    <div class="v-center close-btn">
+                        <button class="btn btn-flat v-center" (click)="toggleCompetenza(competenza, $event)">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row md-margin" #competenzeSelector [ngStyle]="{'top.px': competenzeFixedTopBar.offsetHeight + 16, 'margin-bottom.px': competenzeFixedTopBar.offsetHeight + 16 }">
+            <div class="card w-100">
+                <div class="card-header">Seleziona competenze</div>
+                <div class="card-body">
+                    <div class="input-group search-container">
+                        <input class="form-control" placeholder="Cerca competenza..." [(ngModel)]="searchCompetenzaTxt" type="text" (keyup.enter)="searchCompetenza(searchCompetenzaTxt)">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" (click)="searchCompetenza(searchCompetenzaTxt)">
+                                <i class="glyphicon glyphicon-search"></i> Cerca</button>
+                        </div>
+                    </div>
+                    <ul class="list-group">
+                        <li class=" list-group-item list-group-item-action" *ngFor="let competenza of competenze" [class.disabled]="competenza.disabled"
+                            (click)="toggleCompetenza(competenza)">
+                            <div class="row">
+                                <div class="col-1 v-center competenza-info-btn">
+                                    <input [ngModel]="competenza.selected" type="checkbox" [disabled]='competenza.disabled' />
+                                    <button class="btn btn-flat" (click)="openDetailCompetenza(competenza, $event)">
+                                        <i class="material-icons">info_outline</i>
+                                    </button>
+                                </div>
+                                <div class="col-11">
+                                    <div class="profilo-title">{{competenza.titolo}}</div>
+                                    <div class="profilo-description">{{competenza.profilo}}</div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row empty-list" *ngIf="!competenze || competenze.length==0">
+                    <div class="col">
+                        Nessuna competenza trovata con il filtro selezionato
+                    </div>
+                </div>
+                <div class="center">
+                    <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

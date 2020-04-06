@@ -1,0 +1,113 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row" *ngIf="competenza">
+        <div class="col-6 v-center">
+            <span class="modifyTitleStyle m-left">{{ (competenza.titolo.length>80)? (competenza.titolo | slice:0:80)+'...':(competenza.titolo) }}</span>&nbsp;&nbsp;
+            <!-- <span (click)="menuContentShow()" class="pointer">
+                <svg class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+            </span> -->
+        </div>
+        <div class="col-6">
+            <span class="float-right m-right">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" [routerLink]="['../../']" placement="bottom"  ngbTooltip="Annulla tutte le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-success btn-icon btn-xs btnSave" (click)="save()" placement="bottom"  ngbTooltip="Salva le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
+                        </span>
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline modifyShowContent">
+        <div class="col-11">
+            <span>
+                <svg class="icon icon-sm icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+                &nbsp;&nbsp;{{menuContent}}
+            </span>
+        </div>
+        <div class="col-1"><svg class="icon float-right icon-primary pointer" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+
+    <div class="card-body modify-card-body" *ngIf="competenza">
+        <span class="row v-center modal-title modalSubject">Conoscenze associate</span>
+        <br>
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+        <div class="row v-center form-group">
+            <div class="col-12"
+                [class.has-danger]="conoscenzaInput.invalid && (conoscenzaInput.dirty || conoscenzaInput.touched || forceErrorDisplay)">
+                <input type="text" class="form-control" [(ngModel)]="conoscenza" id="conoscenza" #conoscenzaInput="ngModel" 
+                    required>
+                    <label for="conoscenza" >Inserisci nuova conoscenza</label>
+                <div class="invalid-feedback"
+                    [class.d-block]="conoscenzaInput.invalid && (conoscenzaInput.dirty || conoscenzaInput.touched || forceErrorDisplay)">
+                    <span *ngIf='conoscenza'>Campo necessario.</span>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-4">
+                <button *ngIf="conoscenza" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Aggiungi nuova conoscenza alla competenza" placement="right" (click)="addNewConoscenza()">
+                    Aggiungi conoscenza&nbsp;&nbsp;&nbsp;
+                    <svg class="icon icon-white icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use></svg>
+                </button>
+                <button *ngIf="!conoscenza" class="btn btn-primary disabled v-center-inline auto" placement="bottom"  ngbTooltip="Aggiungi nuova conoscenza alla competenza" placement="right">
+                    Aggiungi conoscenza&nbsp;&nbsp;&nbsp;
+                    <svg class="icon icon-white icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use></svg>
+                </button>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+        </div>
+        
+        <div class="row"><span class="v-center modal-title modifySubTitleStyle m-left6">Definizione</span></div>
+        <div class="table list-group">
+            <table class="table table-striped table-hover">
+                <!-- <thead>
+                    <tr>
+                        <th> <span class="modifySubTitleStyle">Definizione</span></th>
+                    </tr>
+                </thead> -->
+                <tbody>
+                    <!-- Loop -->
+                    <tr *ngFor="let conoscenza of listConoscenze">
+                        <td class="p-left0">
+                            <div class="row">
+                                <div class="col-11">{{conoscenza}}</div>
+                                <div class="col-1">
+                                    <span class="float-right" ngbTooltip="Rimuovi conoscenza dalla competenza" placement="left">
+                                        <svg class="icon icon-sm icon-danger float-right pointer" (click)="removeConoscenza(conoscenza)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                        </svg>
+                                    </span>
+                                </div>                                
+                            </div>
+                        </td>
+                    </tr>                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>

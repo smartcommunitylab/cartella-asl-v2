@@ -1,0 +1,17 @@
+[ {
+  "id" : "76fe561c-985d-45c8-b79f-08d03156801e",
+  "nome" : "VITICOLTURA ED ENOLOGIA",
+  "istitutoId" : "6246e755-cd2b-423a-82fc-6c13ef238052",
+  "annoScolastico" : "2017-18",
+  "extId" : "2773659",
+  "origin" : "INFOTNISTRUZIONE",
+  "oreAlternanza" : 400
+}, {
+  "id" : "df9e43ef-1472-4d14-a242-42337f3b6e78",
+  "nome" : "GESTIONE DELL'AMBIENTE E DEL TERRITORIO",
+  "istitutoId" : "6246e755-cd2b-423a-82fc-6c13ef238052",
+  "annoScolastico" : "2017-18",
+  "extId" : "2773656",
+  "origin" : "INFOTNISTRUZIONE",
+  "oreAlternanza" : 400
+} ]

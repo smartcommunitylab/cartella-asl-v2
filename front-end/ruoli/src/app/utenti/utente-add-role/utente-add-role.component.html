@@ -1,0 +1,150 @@
+<div class="modal-header">
+    <h4 class="modal-title">Aggiungi ruolo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div>Scegli una tipologia di ruolo:</div>
+    <div class="ml-4">
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.dirigenti_scolastici">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="DIRIGENTE_SCOLASTICO" (change)="onRuoloSelect()"> Dirigente scolastico
+        </label>
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.funzione_strumentale">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="FUNZIONE_STRUMENTALE" (change)="onRuoloSelect()"> Funzione strumentale
+        </label>
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.legali_rappresentati_azienda">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="LEGALE_RAPPRESENTANTE_AZIENDA" (change)="onRuoloSelect()"> Legale rappresentante azienda
+        </label>
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.referenti_azienda">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="REFERENTE_AZIENDA" (change)="onRuoloSelect()"> Referente azienda
+        </label>
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.studenti">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="STUDENTE" (change)="onRuoloSelect()"> Studente
+        </label>
+        <label class="d-block" *ngIf="permissionService.getMyPermissions().addRole.admin">
+            <input class="align-middle" type="radio" [(ngModel)]="roleId" value="ADMIN" (change)="onRuoloSelect()"> Admin
+        </label>
+    </div>
+    <div class="p-4">
+
+        <div class="mb-3 mt-5" *ngIf="roleId == 'DIRIGENTE_SCOLASTICO' || roleId == 'FUNZIONE_STRUMENTALE'">
+            <h2>Ricerca istituto:</h2>
+            <div class="row" *ngIf="!usingProfileIds">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nomeistituto">Nome istituto</label>
+                        <input type="text" class="form-control" id="nomeistituto" placeholder="Ricerca tramite nome istituto" [(ngModel)]="filter.istituto.text"
+                            (keyup.enter)="searchIstituti()">
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div *ngIf="!usingProfileIds">
+                <button class="btn btn-secondary v-center ml-auto mr-3" (click)="searchIstituti()">
+                    <i class="material-icons">search</i> Ricerca
+                </button>
+            </div>
+            <div class="mt-3">
+                <div class="list-group">
+                    <div class="list-group-item list-group-item-action" *ngFor="let istituto of istitutiResult.list" [ngClass]="{'active': istitutiResult.selectedIstituto == istituto}"
+                        (click)="istitutiResult.selectedIstituto = istituto">{{istituto.name}}</div>
+                </div>
+                <div class="text-center mt-1">
+                    <cm-pagination [totalItems]="istitutiResult.totalRecords" [pageSize]="pageSize" (pageChanged)="getIstitutiPage($event)" #istitutiPagination></cm-pagination>
+                </div>
+            </div>
+            <div class="mt-3">
+                <h2>Istituto selezionato:</h2>
+                <div>
+                    <span *ngIf="istitutiResult.selectedIstituto">{{istitutiResult.selectedIstituto.name}}</span>
+                    <span *ngIf="!istitutiResult.selectedIstituto">Nessuno</span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 mt-5" *ngIf="roleId == 'REFERENTE_AZIENDA' || roleId == 'LEGALE_RAPPRESENTANTE_AZIENDA'">
+            <h2>Ricerca azienda:</h2>
+            <div class="row" *ngIf="!usingProfileIds">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="partitaiva">Partita IVA</label>
+                        <input type="text" class="form-control" id="partitaiva" placeholder="Ricerca tramite partita IVA" [(ngModel)]="filter.azienda.pIva"
+                            (keyup.enter)="searchAziende()">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nomeazienda">Nome azienda</label>
+                        <input type="text" class="form-control" id="nomeazienda" placeholder="Ricerca tramite nome azienda" [(ngModel)]="filter.azienda.text"
+                            (keyup.enter)="searchAziende()">
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!usingProfileIds">
+                <button class="btn btn-secondary v-center ml-auto mr-3" (click)="searchAziende()">
+                    <i class="material-icons">search</i> Ricerca
+                </button>
+            </div>
+            <div class="mt-3">
+                <div class="list-group">
+                    <div class="list-group-item list-group-item-action" *ngFor="let azienda of aziendeResult.list" [ngClass]="{'active': aziendeResult.selectedAzienda == azienda}"
+                        (click)="aziendeResult.selectedAzienda = azienda">{{azienda.nome}} - {{azienda.partita_iva}}</div>
+                </div>
+                <div class="text-center mt-1">
+                    <cm-pagination [totalItems]="aziendeResult.totalRecords" [pageSize]="pageSize" (pageChanged)="getAziendePage($event)" #aziendePagination></cm-pagination>
+                </div>
+            </div>
+            <div class="mt-3">
+                <h2>Azienda selezionata:</h2>
+                <div>
+                    <span *ngIf="aziendeResult.selectedAzienda">{{aziendeResult.selectedAzienda.nome}} - {{aziendeResult.selectedAzienda.partita_iva}}</span>
+                    <span *ngIf="!aziendeResult.selectedAzienda">Nessuno</span>
+                </div>
+            </div>
+        </div>
+        <div class=" mb-3 mt-5" *ngIf="roleId == 'STUDENTE'">
+            <h2>Ricerca studente:</h2>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nomestudente">Codice fiscale</label>
+                        <input type="text" class="form-control" id="nomestudente" placeholder="Ricerca tramite codice fiscale" [(ngModel)]="filter.studente.cf"
+                            (keyup.enter)="searchStudenti()">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="nomestudente">Nome studente</label>
+                        <input type="text" class="form-control" id="nomestudente" placeholder="Ricerca tramite nome studente" [(ngModel)]="filter.studente.text"
+                            (keyup.enter)="searchStudenti()">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-secondary v-center ml-auto mr-3" (click)="searchStudenti()">
+                    <i class="material-icons">search</i> Ricerca
+                </button>
+            </div>
+            <div class="mt-3">
+                <div class="list-group">
+                    <div class="list-group-item list-group-item-action" *ngFor="let studente of studentiResult.list" [ngClass]="{'active': studentiResult.selectedStudente == studente}"
+                        (click)="studentiResult.selectedStudente = studente">{{studente.name}} {{studente.surname}} - {{studente.cf}}</div>
+                </div>
+                <div class="text-center mt-1">
+                    <cm-pagination [totalItems]="studentiResult.totalRecords" [pageSize]="pageSize" (pageChanged)="getStudentiPage($event)" #studentiPagination></cm-pagination>
+                </div>
+            </div>
+            <div class="mt-3">
+                <h2>Studente selezionato:</h2>
+                <div>
+                    <span *ngIf="studentiResult.selectedStudente">{{studentiResult.selectedStudente.name}} {{studentiResult.selectedStudente.surname}} - {{studentiResult.selectedStudente.cf}}</span>
+                    <span *ngIf="!studentiResult.selectedStudente">Nessuno</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">Annulla</button>
+    <button type="button" class="btn btn-flat btn-success" [disabled]="addDisabled()" (click)="addRole()">Aggiungi</button>
+</div>

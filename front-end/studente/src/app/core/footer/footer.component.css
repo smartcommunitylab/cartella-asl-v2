@@ -1,0 +1,14 @@
+.footer {
+    position: relative;
+    background-color: #4D4D4D;
+    z-index: 999;
+    color: white;
+    margin-top: 58px; /*Necessary because .sub-navbar-content-below moves content 58px down */
+}
+.footer .footer-images img {
+    max-height: 80px;
+}
+.footer .footer-content a {
+    color: white;
+    text-decoration: underline;
+}
