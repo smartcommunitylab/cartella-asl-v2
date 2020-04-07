@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -161,10 +162,13 @@ public class AziendaManager extends DataEntityManager {
 	}
 	
 	public Azienda getAzienda(String id) {
-		if(Utils.isEmpty(id)) {
-			return null;
+		if(Utils.isNotEmpty(id)) {
+			Optional<Azienda> optional = aziendaRepository.findById(id);
+			if(optional.isPresent()) {
+				return optional.get();
+			}
 		}
-		return aziendaRepository.getOne(id);
+		return null;
 	}
 	
 	public Azienda deleteAzienda(String id) throws BadRequestException {

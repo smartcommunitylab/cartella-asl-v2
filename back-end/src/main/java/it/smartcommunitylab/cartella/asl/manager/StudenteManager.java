@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,13 +111,14 @@ public class StudenteManager extends DataEntityManager {
 		Registration r = (Registration) sr[1];
 		s.setClassroom(r.getClassroom());
 		s.setAnnoCorso(Integer.valueOf(r.getClassroom().substring(0, 1)));
+		s.setAnnoScolastico(r.getSchoolYear());
 		s.setIstitutoId(r.getInstituteId());
 		CorsoDiStudioBean corsoBean = new CorsoDiStudioBean(r.getCourseId(), r.getCourse());
 		s.setCorsoDiStudio(corsoBean);
 		return s;
 	}
 
-	public Page<ReportStudenteRicerca> findStudentiRicecaPaged(String istitutoId, String annoScolastico, String corsoId,
+	public Page<ReportStudenteRicerca> findStudentiRicercaPaged(String istitutoId, String annoScolastico, String corsoId,
 			String text, Pageable pageRequest) {
 		Page<Studente> studentsProfiles = findStudentiPaged(istitutoId, corsoId, annoScolastico, text, pageRequest);
 
@@ -215,6 +217,20 @@ public class StudenteManager extends DataEntityManager {
 		Page<ReportStudenteRicerca> pagedstudentsRicerca = new PageImpl<>(studentsRicerca, pageRequest,
 				studentsProfiles.getTotalElements());
 		return pagedstudentsRicerca;
+	}
+	
+	public List<ReportDettaglioStudente> getReportDettaglioStudente(String istitutoId, String annoScolastico, 
+			String corsoId, String classe) {
+		List<ReportDettaglioStudente> studentsRicerca = new ArrayList<>();
+		Pageable pageRequest = PageRequest.of(0, 100);
+		Page<Studente> studentsProfiles = findStudentiPaged(istitutoId, corsoId, annoScolastico, classe, pageRequest);
+		studentsProfiles.forEach(s -> {
+			if(classe.equalsIgnoreCase(s.getClassroom())) {
+				ReportDettaglioStudente studenteReport = getReportDettaglioStudente(istitutoId, s.getId());
+				studentsRicerca.add(studenteReport);				
+			}
+		});		
+		return studentsRicerca;
 	}
 
 	private Optional<PianoAlternanza> pianoForClassrom(String istitutoId, String corsoDiStudioId, String classroom,

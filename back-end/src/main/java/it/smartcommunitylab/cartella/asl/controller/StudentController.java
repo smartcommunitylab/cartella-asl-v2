@@ -71,7 +71,7 @@ public class StudentController implements AslController {
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Page<ReportStudenteRicerca> page = studentManager.findStudentiRicecaPaged(istitutoId, annoScolastico, corsoId, 
+		Page<ReportStudenteRicerca> page = studentManager.findStudentiRicercaPaged(istitutoId, annoScolastico, corsoId, 
 				text, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getStudentsByIstitute:%s / %s", istitutoId, annoScolastico));

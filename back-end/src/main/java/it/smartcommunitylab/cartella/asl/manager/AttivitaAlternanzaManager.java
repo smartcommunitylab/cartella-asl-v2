@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -84,7 +85,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	
 	public AttivitaAlternanza getAttivitaAlternanza(Long id) {
 		if(id != null) {
-			return attivitaAlternanzaRepository.getOne(id);
+			Optional<AttivitaAlternanza> optional = attivitaAlternanzaRepository.findById(id);
+			if(optional.isPresent()) {
+				return optional.get();
+			}
 		}
 		return null;
 	}
@@ -489,7 +493,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		fillReportEsperienzaStudenteWithPresenze(studenteId, reportMap);
 		return reportList;
 	}
-
+	
 	public Page<ReportEsperienzaStudente> getReportEsperienzaStudente(String studenteId, Pageable pageRequest) {
 		String qEsperienze = "SELECT aa,es FROM AttivitaAlternanza aa, EsperienzaSvolta es"
 				+ " WHERE es.attivitaAlternanzaId=aa.id AND es.studenteId=(:studenteId)"

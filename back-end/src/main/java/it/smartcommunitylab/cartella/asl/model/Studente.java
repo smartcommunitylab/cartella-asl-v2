@@ -25,6 +25,8 @@ public class Studente implements Comparable<Studente> {
 	@Transient
 	private int annoCorso;
 	@Transient
+	private String annoScolastico;
+	@Transient
 	private String istitutoId;
 
     @Transient
@@ -111,5 +113,13 @@ public class Studente implements Comparable<Studente> {
     public void setCorsoDiStudio(CorsoDiStudioBean corsoDiStudio) {
         this.corsoDiStudio = corsoDiStudio;
     }
+
+		public String getAnnoScolastico() {
+			return annoScolastico;
+		}
+
+		public void setAnnoScolastico(String annoScolastico) {
+			this.annoScolastico = annoScolastico;
+		}
 
 }
