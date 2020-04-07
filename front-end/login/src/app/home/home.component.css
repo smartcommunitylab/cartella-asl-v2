@@ -123,19 +123,49 @@
 .blu-row {
     background: #0066CC 0% 0% no-repeat padding-box;
     opacity: 1;
-    max-height: 80px;
+    min-height: 96px;
 }
-
+.blu-row-logo{
+    width: 98px !important;
+    height: 83px !important;
+    margin: 6px 6px 6px 16px;
+}
+.blu-row-text{
+    text-align: left;
+    font-family: Titillium Web;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+.m-top-logo-text{
+    margin-top: 20px;
+}
+.option-row-logo{
+    width: 141px;
+    height: 103px;
+}
+.m-top-body{
+    margin-top: 55px;
+}
+.m-top-body100{
+    margin-top: 138px;
+}
 .page-body {
     position: relative;
     top: 50px;
     /* height: 490px; */
-    width: 1100px;
+    /* width: 1100px; */
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 90%;
+    border-radius: 12px;
     margin: 0 auto;
     background: #FAFDFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 3px 6px #00000029;
     opacity: 1;
-    padding: 20px
+    padding: 26px
 }
 
 .page-body-center {
@@ -158,7 +188,7 @@
 }
 
 .heading-1 {
-    font: Bold 35px/59px Titillium Web;
+    font: Bold 30px/59px Titillium Web;
     letter-spacing: 2.22px;
     color: #707070;
     opacity: 1;
@@ -166,7 +196,7 @@
 
 .heading-2 {
     text-align: center;
-    font: normal 20px/42px Titillium Web;
+    font: normal 25px/42px Titillium Web;
     letter-spacing: 1.39px;
     color: #707070;
     opacity: 1;

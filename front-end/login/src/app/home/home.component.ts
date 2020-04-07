@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   type: string = '';
   errMsg: string = '';
   actualOption;
-  options = [{ "id": 1, "name": "Scuola", "prefix": "asl-scuola-v2", "disabled": false }, { "id": 2, "name": "Studente", "prefix": "asl-studente-v2", "disabled": false }, { "id": 3, "name": "Organizzazione Ospitante", "prefix": "asl-azienda-v2", "disabled": true }];
+  options = [{ "id": 1, "name": "Scuola", "prefix": "asl-scuola-v2", "disabled": false }, { "id": 2, "name": "Studente", "prefix": "asl-studente-v2", "disabled": false }, { "id": 3, "name": "Ente Ospitante", "prefix": "asl-azienda-v2", "disabled": true }];
 
   constructor(
     private router: Router,
