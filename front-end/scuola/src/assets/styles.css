@@ -14320,6 +14320,9 @@ hr {
 .mTop{
   margin-top: 6px !important;
 }
+.mBottom16{
+  margin-bottom: 16px;
+}
 .mRight{
   margin-right: 6px !important;
 }
@@ -14401,6 +14404,16 @@ div.dp-input-container> input.dp-picker-input{
   border-radius: 5px;
   margin-bottom: -30px;
   color: #707070;
+  background-color: #FAFDFF !important;
+}
+.callNoteGruppo{
+  padding: 12px 16px;
+  position: relative;
+  max-width: 60ch;
+  border: 3px solid #7FB2E5;
+  border-radius: 5px;
+  color: #707070;
+  background-color: #FAFDFF !important;
 }
 .shadowDetails{
   box-shadow: 0px 5px 2px -2px #00000029 !important;

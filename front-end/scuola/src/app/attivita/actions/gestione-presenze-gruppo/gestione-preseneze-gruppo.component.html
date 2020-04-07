@@ -1,10 +1,10 @@
-<div class=" mb-3 list-container md-margin sub-navbar-content-below">
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
   <div class="row" *ngIf="attivita">
-    <div class="col-6">
-      <span class="title">{{attivita.titolo}}</span>
+    <div class="col-6 v-center">
+      <span class="modifyTitleStyle">{{attivita.titolo}}</span>
     </div>
     <div class="col-6">
-      <span class="float-right">
+      <span class="float-right m-right mTop">
         <button type="button" class="btn btn-danger btn-xs btn-icon py-1 pr-2 btnAnnulla" placement="bottom"
           ngbTooltip="Annulla associazioni" (click)="cancel()">
           <span class="row btnModificationText">
@@ -29,7 +29,16 @@
             </span>
           </span>
         </button>
-        &nbsp;&nbsp;
+      </span>
+    </div>
+  </div>
+  <hr class="hr modifyHr" />
+  <div class="row m-subNav">
+    <div class="col-8">
+        <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+    </div>
+    <div class="col-4 shadowDetails">
+      <span class="float-right mRight">
         <button *ngIf="!isArchivio" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia"
           placement="bottom" ngbTooltip="Archivia definitivamente l’attività" (click)="archivia()">
           <span class="row btnModificationText">
@@ -44,36 +53,118 @@
       </span>
     </div>
   </div>
-  <hr class="hr" />
-  <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
   <br>
-  <div class="row" *ngIf="attivita">
-    <span class="col-4">
-      <label class="title">Data inizio</label>&nbsp;
-      <div #calendarStart class="col-sm-3" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
-        <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig"
-          theme="dp-material" id="dataInizio" required></dp-date-picker>
-        <div class="invalid-feedback" [class.d-block]="!date.dataInizio">
-          Data inizio richiesta.
-        </div>
-        <div class="invalid-feedback" [class.d-block]="date.dataInizio < limitMin || date.dataInizio > limitMax">
-          Data inizio fuori del periodo della attività
-        </div>
-      </div>
-    </span>
-    <span class="col-4"></span>
-    <span class="col-4">
-      <div *ngIf="report" class="float-right callout note default">
-        <span class="row"><span class="font-weight-bold">Da validare: </span>&nbsp;{{report.giornateDaValidare}} giornate</span>
-        <span class="row"><span class="font-weight-bold">Validate: </span>&nbsp;{{report.giornateValidate}} giornate</span>
-        <span class="row"><span class="font-weight-bold">Inizio attività: </span>&nbsp;{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
-        <span class="row"><span class="font-weight-bold">Fine attività: </span>&nbsp;{{report.dataFine | date:'dd/MM/yyyy'}}</span>
-        <span class="row"><span class="font-weight-bold">Studenti con ore da validare: </span>&nbsp;{{report.studentiDaValidare}}</span>
-      </div>
-    </span>
+  
+  <div class="row m-16 pTop" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
+    <div class="col-12" *ngIf="studenti">
+      <table class="table">
+        <thead>
+          <tr class="center default">
+            <th width="15%">
+              <div class="row mBottom16">
+                <span class="col-12">
+                  <label class="titleDate">Seleziona data</label>&nbsp;
+                  <div #calendarStart class="col-sm-12 m-left" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
+                    <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig"
+                      theme="dp-material" id="dataInizio" required></dp-date-picker>
+                    <div class="invalid-feedback" [class.d-block]="!date.dataInizio">
+                      Seleziona data richiesta.
+                    </div>
+                    <div class="invalid-feedback" [class.d-block]="date.dataInizio < limitMin || date.dataInizio > limitMax">
+                      Seleziona data fuori del periodo della attività
+                    </div>
+                  </div>
+                </span>
+              </div>
+              <div class="row">
+                <span class="col-12 thStyle">Nome</span>
+              </div>
+            </th>
+            <th width="7%"><span class="thStyle">Classe</span></th>
+            <th width="58%">
+              <div class="row">
+                <div class="col-1 v-center">
+                  <button class="btn" [disabled]="!isDaysBackAvailable()" (click)="navigateDaysBack()">
+                    <svg class="icon icon-primary icon-bg">
+                      <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-left-triangle"></use>
+                    </svg>
+                  </button>
+                </div>
+                <div class="col-1 p-0 m-auto text-center default" *ngFor="let giornata of calendar; let i=index">
+                  <span *ngIf="isDayBetween(giornata)" >
+                    {{giornata.valueOf()| date:'dd-MM-yyyy'}} <br> {{giornata.valueOf()| date:'EEE'}}
+                  </span>
+                  <span *ngIf="!isDayBetween(giornata)" class="inactiveDate">
+                    {{giornata.valueOf()| date:'dd-MM-yyyy'}} <br> {{giornata.valueOf()| date:'EEE'}}
+                  </span>
+                </div>
+                <div class="col-1 v-center">
+                  <button class="btn" [disabled]="!isDaysForwardAvailable()" (click)="navigateDaysForward()">
+                    <svg class="icon icon-primary icon-bg">
+                      <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-triangle"></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-1"></div>
+                <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of calendar; let i=index">
+                  <span *ngIf="isDayBetween(giornata)">
+                    <button type="button" [disabled]="isArchivio || !isDayBetween(giornata)" class="btn btn-outline-primary btnSize"
+                    (click)="setDefaultHourToAllStudents(i)">{{defaultHour}} ore</button>
+                  </span>
+                  <span *ngIf="!isDayBetween(giornata)">
+                    <button type="button" [disabled]="isArchivio || !isDayBetween(giornata)" class="btn btn-outline-primary inactiveBtn btnSize"
+                    (click)="setDefaultHourToAllStudents(i)">{{defaultHour}} ore</button>
+                  </span>
+                </div>
+                <div class="col-1"></div>
+              </div>
+            </th>
+            <th width="20%">
+              <div *ngIf="report" class="float-right callNoteGruppo default noteFont">
+                <span class="row"><span class="font-weight-bold">Da validare: </span>&nbsp;{{report.giornateDaValidare}} giornate</span>
+                <span class="row"><span class="font-weight-bold">Validate: </span>&nbsp;{{report.giornateValidate}} giornate</span>
+                <span class="row"><span class="font-weight-bold">Inizio attività: </span>&nbsp;{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+                <span class="row"><span class="font-weight-bold">Fine attività: </span>&nbsp;{{report.dataFine | date:'dd/MM/yyyy'}}</span>
+                <span class="row"><span class="font-weight-bold">Studenti con ore da validare: </span>&nbsp;{{report.studentiDaValidare}}</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="modify-table-body">
+          <tr *ngFor="let studenteId of studentiIds; let i = index">
+            <td>
+              <div class="default tdData" #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studenti[studenteId].toolTipRiga}}" (mouseenter)="showTipRiga($event, studenti[studenteId]);" >
+                {{studenti[studenteId].nominativoStudente}}
+              </div>
+            </td>
+            <td>
+              <div class="default tdData" #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studenti[studenteId].toolTipRiga}}" (mouseenter)="showTipRiga($event, studenti[studenteId]);" >
+                {{studenti[studenteId].classeStudente}}
+              </div>
+            </td>
+            <td>
+              <div class="row">
+                <div class="col-1"></div>
+                <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of presenzaStudenti[studenteId]">
+                  <input type="number" class="form-control text-center w-100 tdData" min="0" max="12"
+                    oninput="this.value = Math.abs(this.value)" [disabled]="isArchivio || !isDayBetween(giornata.giornata)"
+                    [(ngModel)]="giornata.oreSvolte"
+                    [ngStyle]="(giornata.verificata) ? { 'color': '#435a70' } : { 'color': 'red' }"
+                    (ngModelChange)="edit(giornata)" />
+                </div>
+                <div class="col-1"></div>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div class="row" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
-    <div class="col">
+  <!-- <div class="row" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
+    <div class="col-9">
       <div class="list-group" *ngIf="studenti">
         <div class="list-group-item">
           <div class="row">
@@ -128,4 +219,5 @@
         </div>
       </div>
     </div>
-  </div>
+    <div class="col-3"></div>
+  </div> -->
