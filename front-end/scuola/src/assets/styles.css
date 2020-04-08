@@ -14386,7 +14386,7 @@ hr {
   max-height: 32px;
 }
 div.dp-input-container> input.dp-picker-input{
-  width: 95%;
+  width: 100%;
 }
 .form-group label{
   background-color: transparent;
