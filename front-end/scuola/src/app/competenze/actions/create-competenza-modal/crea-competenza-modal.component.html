@@ -1,22 +1,25 @@
 <div class="modal-cartella">
     <div class="modal-header">
         <div class="row modal-title v-center">
-            <span class="modalTitleStyle">Crea nuova competenza</span>
+            <span class="modalHeaderText m-top22">crea nuova competenza</span>
         </div>
         <div class="row v-center float-right">
-            <button type="button" class="btn btn-danger btn-icon btn-xs modalButtonStyle" placement="bottom"  ngbTooltip="Annulla creazione competenza" (click)="activeModal.close('Close click')">
-                <span class="row modalButtonTextStyle">
-                    <span class="v-center">Annulla&nbsp;</span>&nbsp;
-                    <span>
-                        <i class="material-icons">close</i>
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"  ngbTooltip="Annulla creazione competenza" (click)="activeModal.close('Close click')">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Annulla</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                        </svg>
                     </span>
                 </span>
             </button>
-            <button class="btn btn-success btn-icon btn-xs modalButtonStyle" placement="bottom"  ngbTooltip="{{(definizione && livelloEQF)? 'Crea nuova competenza' : 'Inserisci i dati necessari'}}" (click)="create()">
-                <span class="row modalButtonTextStyle">
-                    <span class="v-center">Crea competenza&nbsp;</span>&nbsp;
-                    <span>
-                        <i class="material-icons">save</i>
+            &nbsp;&nbsp;
+            <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"  ngbTooltip="{{(definizione && livelloEQF)? 'Crea nuova competenza' : 'Inserisci i dati necessari'}}" (click)="create()">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Salva</span>
+                    <span class="col-4 rightItem">
+                        <i class="material-icons btnModificationIcon">save</i>
                     </span>
                 </span>
             </button>
@@ -27,7 +30,7 @@
 
         <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
 
-        <span class="row v-center modal-title modalSubject">Dati competenza</span>
+        <span class="row v-center modal-title modalBodyHeaderText">Dati competenza</span>
 
         <div class="row v-center form-group">
             <div class="col-4" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
