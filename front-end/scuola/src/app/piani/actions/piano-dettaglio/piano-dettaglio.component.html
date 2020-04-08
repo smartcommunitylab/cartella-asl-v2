@@ -1,7 +1,7 @@
 <div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
     <div class="row m-left" *ngIf="piano">
         <div class="col-6 v-center">
-            <span class="modifyTitleStyle">Piano alternanza {{piano.corsoDiStudio}}</span>&nbsp;&nbsp;
+            <span class="modifyTitleStyle m-left2">Piano alternanza {{piano.corsoDiStudio}}</span>&nbsp;&nbsp;
             <span (click)="menuContentShow()" class="pointer">
                 <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
@@ -11,7 +11,7 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="piano.stato=='bozza'" class="btn btn-secondary btn-xs btn-icon btnDelete" placement="bottom"  ngbTooltip="Elimina definitivamente questo piano" (click)="deletePiano()">
+                <button *ngIf="piano.stato=='bozza'" class="btn btn-secondary btn-xs btn-icon btnDelete mLeft12" placement="bottom"  ngbTooltip="Elimina definitivamente questo piano" (click)="deletePiano()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Elimina piano</span>
                         <span class="col-2">
@@ -21,8 +21,8 @@
                         </span>
                     </span>
                 </button>
-                &nbsp;
-                <button *ngIf="piano.stato=='attivo' || piano.stato=='in_scadenza' || piano.stato=='in_attesa'" class="btn btn-primary btn-sm btn-icon btnDuplica" placement="bottom"  ngbTooltip="Crea una copia di questo piano" (click)="duplicaPiano()">
+                
+                <button *ngIf="piano.stato=='attivo' || piano.stato=='in_scadenza' || piano.stato=='in_attesa'" class="btn btn-primary btn-sm btn-icon btnDuplica mLeft12" placement="bottom"  ngbTooltip="Crea una copia di questo piano" (click)="duplicaPiano()">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Duplica</span>
                         <span class="col-4 rightItem">
@@ -32,8 +32,8 @@
                         </span>
                     </span>
                 </button>
-                &nbsp;
-                <button *ngIf="piano.stato=='bozza'" class="btn btn-success btn-xs btn-icon btnCreate"  placement="bottom"  ngbTooltip="Premi qui per attivare il piano." (click)="attivaPiano()">
+                
+                <button *ngIf="piano.stato=='bozza'" class="btn btn-success btn-xs btn-icon btnCreate mLeft12"  placement="bottom"  ngbTooltip="Premi qui per attivare il piano." (click)="attivaPiano()">
                     <span class="row btnCreateText">
                         <span class="col-8 v-center">Attiva piano</span>
                         <span class="col-4">
@@ -43,8 +43,8 @@
                         </span>
                     </span>
                 </button>
-                &nbsp;
-                <button *ngIf="piano.stato=='in_attesa'" class="btn btn-warning btn-xs btn-icon btnClose" placement="bottom" ngbTooltip="Annulla l’attivazione di questo piano" (click)="deAttivaPiano()">
+                
+                <button *ngIf="piano.stato=='in_attesa'" class="btn btn-warning btn-xs btn-icon btnClose mLeft12" placement="bottom" ngbTooltip="Annulla l’attivazione di questo piano" (click)="deAttivaPiano()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Annulla attivazione</span>
                         <span class="col-2">
