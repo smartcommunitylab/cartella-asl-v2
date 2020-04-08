@@ -1,23 +1,25 @@
 <div class="modal-cartella">
     <div class="modal-header">
         <div class="row modal-title">
-            <span>Crea nuova attività</span>
+            <span class="modalHeaderText">crea nuova attività</span>
         </div>
         <div class="row v-center float-right">
-            <button type="button" class="btn btn-danger btn-icon btn-xs" placement="bottom"  ngbTooltip="Annulla la creazione"  (click)="activeModal.close('Close click')">
-                <span class="row">
-                    <span class="v-center">Annulla&nbsp;</span>&nbsp;
-                    <span>
-                        <i class="material-icons">close</i>
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"  ngbTooltip="Annulla la creazione"  (click)="activeModal.close('Close click')">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Annulla</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                        </svg>
                     </span>
                 </span>
             </button>
             &nbsp;&nbsp;
-            <button class="btn btn-success btn-icon btn-xs" placement="bottom"  ngbTooltip="Crea una nuova attività" (click)="create()">
-                <span class="row">
-                    <span class="v-center">Salva&nbsp;</span>&nbsp;
-                    <span>
-                        <i class="material-icons">save</i>
+            <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"  ngbTooltip="Crea una nuova attività" (click)="create()">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Salva</span>
+                    <span class="col-4 rightItem">
+                        <i class="material-icons btnModificationIcon">save</i>
                     </span>
                 </span>
             </button>
@@ -28,7 +30,7 @@
 
         <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
 
-        <span class="row v-center modal-title">Dati attività</span>
+        <span class="row v-center modal-title modalBodyHeaderText">Dati attività</span>
 
         <div class="row v-center form-group">
             <div class="col-sm-4"
