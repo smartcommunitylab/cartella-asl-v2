@@ -56,8 +56,8 @@
                 </div>
             </div>
         </div>
-        <div class="row message-row">
-            <span *ngIf="(esperienze.length > 1) && (nrStudentiNonCompletato > 0)">
+        <div class="row message-row" *ngIf="(esperienze.length > 1) && (nrStudentiNonCompletato > 0)">
+            <span>
                 <span class="message-row-text">
                     {{nrStudentiNonCompletato}} studenti
                     non hanno completato al 75% l’attività: per ciascuno, scegli se archiviare l’attività come VALIDA,
