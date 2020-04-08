@@ -1,7 +1,7 @@
 
 <div class="mb-3 list-container md-margin">
     <div class="row">
-        <div class="col-2">
+        <div class="col-4">
             <div class="row v-center">
                 <span class="title">Lista enti</span>&nbsp;&nbsp;
                 <span (click)="menuContentShow()">
@@ -12,12 +12,12 @@
                 </span>                
             </div>
         </div>
-        <div class="col-10">
-            <button class="btn btn-success btn-icon float-right m-right" (click)="openCreate()">
-                <span class="row">
-                    <span class="btn-txt" placement="bottom"  ngbTooltip="Crea nuovo ente">Aggiungi ente</span>&nbsp;
-                    <span>
-                        <svg class="icon icon-white icon-sm">
+        <div class="col-8">
+            <button class="btn btn-success btn-icon float-right btnSave mTop10" (click)="openCreate()">
+                <span class="row btnCreateText">
+                    <span class="col-8 m-left12" placement="bottom"  ngbTooltip="Crea nuovo ente">Aggiungi ente</span>
+                    <span class="col-4">
+                        <svg class="icon icon-white icon-sm btnIcon m-left14">
                             <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
                         </svg>
                     </span>
