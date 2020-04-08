@@ -122,4 +122,8 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
+  hasCoordinate(): boolean {
+    return (this.ente.latitude && this.ente.longitude);
+  } 
+
 }
