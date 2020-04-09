@@ -56,6 +56,7 @@ public class ExportDataController implements AslController {
 	private void downloadCsv(ExportCsv reportCsv, HttpServletResponse response) throws IOException {
 		response.setContentType(reportCsv.getContentType());
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + reportCsv.getFilename() + "\"");
+		response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
 		response.getOutputStream().write(reportCsv.getContent().toString().getBytes(StandardCharsets.UTF_8));
 	}
 }

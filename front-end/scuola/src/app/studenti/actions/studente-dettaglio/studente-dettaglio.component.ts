@@ -147,4 +147,26 @@ export class StudenteDettaglioComponent implements OnInit {
     return this.oreValidate + '/' + this.oreTotali + 'h';
   }
 
+  getEsperienzeStudenteCsv() {
+    this.dataService.getEsperienzeStudenteCsv(this.studente).subscribe((doc) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = doc.url;
+      downloadLink.download = doc.filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);  
+    });
+  }
+
+  getEsperienzeClasseCsv() {
+    this.dataService.getEsperienzeClasseCsv(this.studente).subscribe((doc) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = doc.url;
+      downloadLink.download = doc.filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);  
+    });
+  }
+
 }

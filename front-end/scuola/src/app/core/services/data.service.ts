@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs';  // RxJS 6 syntax
 import { catchError, map, } from 'rxjs/operators';
@@ -829,6 +829,66 @@ export class DataService {
           return (res.body);
 
         }),
+        catchError(this.handleError)
+      );
+  }
+
+  /** EXPORT DATI **/
+  getEsperienzeStudenteCsv(studente: any): Observable<any> {
+    let url = this.host + '/export/csv/studente';
+    let params = new HttpParams();
+    params = params.append('istitutoId', studente.istitutoId);
+    params = params.append('studenteId', studente.id);
+    return this.http.get(
+      url,
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
+        const url = URL.createObjectURL(blob); 
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=')+1)
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
+      },
+        catchError(this.handleError)
+      );
+  }
+
+  getEsperienzeClasseCsv(studente: any): Observable<any> {
+    let url = this.host + '/export/csv/classe';
+    let params = new HttpParams();
+    params = params.append('istitutoId', studente.istitutoId);
+    params = params.append('annoScolastico', studente.annoScolastico);
+    params = params.append('corsoId', studente.corsoDiStudio.courseId);
+    params = params.append('corso', studente.corsoDiStudio.nome);
+    params = params.append('classe', studente.classroom);
+    return this.http.get(
+      url,
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
+        const url = URL.createObjectURL(blob); 
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=')+1)
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
+      },
         catchError(this.handleError)
       );
   }
