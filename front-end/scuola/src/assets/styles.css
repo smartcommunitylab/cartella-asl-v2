@@ -14334,6 +14334,9 @@ hr {
 .mTop{
   margin-top: 6px !important;
 }
+.mTop10{
+  margin-top: 10px !important;
+}
 .m-top16{
   margin-top: -16px;
 }
@@ -14358,11 +14361,17 @@ hr {
 .m-right36{
   margin-right: -36px !important;
 }
+.m-left2{
+  margin-left: -2px !important;
+}
 .m-left{
   margin-left: -6px !important;
 }
 .m-left12{
   margin-left: -12px !important;
+}
+.m-left14{
+  margin-left: -14px !important;
 }
 .m-left18{
   margin-left: -18px !important;
@@ -14373,8 +14382,14 @@ hr {
 .m-left6{
   margin-left: 6px !important;
 }
+.mLeft12{
+  margin-left: 12px !important;
+}
 .m0f{
   margin: 0px;
+}
+.mOf{
+  margin: 0px !important;
 }
 .m16{
   margin: 16px !important;

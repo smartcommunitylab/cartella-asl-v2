@@ -53,7 +53,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
   defaultHour = 8;
   isArchivio: boolean;
   toolTipSave;
-  isModifiedState: boolean;
 
   datePickerConfig = {
     locale: 'it',
@@ -82,7 +81,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
   refresh() {
     if (this.presenzaStudenti.length > 0) {
       if (this.date.dataInizio >= this.limitMin && this.date.dataInizio <= this.limitMax) {
-        this.isModifiedState = false;
         var start = moment(this.calendar[0]);
         var end = moment(this.calendar[6]);
         let pageNumber = this.paginationIndex;
@@ -132,7 +130,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.isModifiedState = false;
     this.activeRoute.params.subscribe(params => {
       let id = params['id'];
       this.paginationIndex = 0;
@@ -321,7 +318,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
     event.verificata = false;
     event.isModifiedState = true;
     this.toolTipSave = 'Valida ore studenti';
-    this.isModifiedState = true;
   }
 
   savePresences() {
@@ -377,7 +373,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
       this.optimizeCheckboxesStates();
       this.setCalendar(this.date.dataInizio);
       this.setHoursOfStudents();
-      this.isModifiedState = false;
     }
   }
 
@@ -388,7 +383,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
       this.optimizeCheckboxesStates();
       this.setCalendar(this.date.dataInizio);
       this.setHoursOfStudents();
-      this.isModifiedState = false;
     }
   }
 

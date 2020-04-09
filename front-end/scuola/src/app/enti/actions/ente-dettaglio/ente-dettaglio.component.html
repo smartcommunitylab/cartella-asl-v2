@@ -11,10 +11,10 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2" placement="bottom"  ngbTooltip="Elimina questo ente" (click)="delete()">
-                    <span class="row">
-                        <span class="btn-txt v-center">Elimina ente</span>&nbsp;
-                        <span>
+                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete" placement="bottom"  ngbTooltip="Elimina questo ente" (click)="delete()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Elimina ente</span>
+                        <span class="col-2">
                             <svg class="icon icon-white icon-sm">
                                 <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
                             </svg>
