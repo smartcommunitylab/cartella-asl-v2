@@ -33,8 +33,8 @@ public class ExportDataManager {
 				+ reportDettaglioStudente.getStudente().getCorsoDiStudio().getNome() + "_"
 				+ reportDettaglioStudente.getStudente().getAnnoScolastico() + "_"
 				+ reportDettaglioStudente.getStudente().getClassroom() + "_"
-				+ today.format(ldf);
-		StringBuffer sb = new StringBuffer("attività,dataInizio,dataFine,oreSvolte,nomeEnte,pivaEnte\n");
+				+ today.format(ldf) + ".csv";
+		StringBuffer sb = new StringBuffer("\"attività\";\"dataInizio\";\"dataFine\";oreSvolte;\"nomeEnte\";\"pivaEnte\"\n");
 		reportDettaglioStudente.getEsperienze().forEach(esp -> {
 			String attivita = "";
 			String dataInizio = "";
@@ -56,11 +56,11 @@ public class ExportDataManager {
 					}
 				}
 			}
-			sb.append("\"" + attivita.replace("\"", "\\\"") + "\",");
-			sb.append("\"" + dataInizio + "\",");
-			sb.append("\"" + dataFine + "\",");
-			sb.append(oreSvolte + ",");
-			sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\",");
+			sb.append("\"" + attivita.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + dataInizio + "\";");
+			sb.append("\"" + dataFine + "\";");
+			sb.append(oreSvolte + ";");
+			sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\";");
 			sb.append("\"" + pivaEnte + "\"\n");
 		});
 		ExportCsv exportCsv = new ExportCsv();
@@ -77,8 +77,8 @@ public class ExportDataManager {
 				istitutoId, annoScolastico, corsoId, classe);
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
 		String filename = "Resoconto_Attività_" + corso + "_" + annoScolastico + "_" + classe + "_"
-				+ today.format(ldf);
-		StringBuffer sb = new StringBuffer("cognome,nome,cf,attività,dataInizio,dataFine,oreSvolte,nomeEnte,pivaEnte\n");
+				+ today.format(ldf) + ".csv";
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"attività\";\"dataInizio\";\"dataFine\";oreSvolte;\"nomeEnte\";\"pivaEnte\"\n");
 		reportDettaglioStudenteList.forEach(report -> {
 			String cognome = report.getStudente().getSurname();
 			String nome = report.getStudente().getName();
@@ -104,14 +104,14 @@ public class ExportDataManager {
 						}
 					}
 				}
-				sb.append("\"" + cognome + "\",");
-				sb.append("\"" + nome + "\",");
-				sb.append("\"" + cf + "\",");
-				sb.append("\"" + attivita.replace("\"", "\\\"") + "\",");
-				sb.append("\"" + dataInizio + "\",");
-				sb.append("\"" + dataFine + "\",");
-				sb.append(oreSvolte + ",");
-				sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\",");
+				sb.append("\"" + cognome + "\";");
+				sb.append("\"" + nome + "\";");
+				sb.append("\"" + cf + "\";");
+				sb.append("\"" + attivita.replace("\"", "\\\"") + "\";");
+				sb.append("\"" + dataInizio + "\";");
+				sb.append("\"" + dataFine + "\";");
+				sb.append(oreSvolte + ";");
+				sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\";");
 				sb.append("\"" + pivaEnte + "\"\n");
 			});			
 		});

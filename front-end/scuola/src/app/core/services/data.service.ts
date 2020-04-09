@@ -851,7 +851,7 @@ export class DataService {
         const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
         const url = URL.createObjectURL(blob); 
         const disposition = response.headers.get('Content-Disposition')!;
-        const filename = disposition.substring(disposition.indexOf('=')+1)
+        const filename = disposition.substring(disposition.indexOf('=')+1).replace(/\\\"/g, '');
         let doc = {
           'url': url,
           'filename': filename
@@ -882,7 +882,7 @@ export class DataService {
         const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
         const url = URL.createObjectURL(blob); 
         const disposition = response.headers.get('Content-Disposition')!;
-        const filename = disposition.substring(disposition.indexOf('=')+1)
+        const filename = disposition.substring(disposition.indexOf('=')+1).replace(/\\\"/g, '');
         let doc = {
           'url': url,
           'filename': filename
