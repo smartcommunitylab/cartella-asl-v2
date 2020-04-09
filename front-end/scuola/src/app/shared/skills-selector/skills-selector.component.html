@@ -83,7 +83,7 @@
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
         </div>
 
         <div class="card col-6 broderLeft">
@@ -152,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPaginationAssociate [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
         </div>
 
     </div>
