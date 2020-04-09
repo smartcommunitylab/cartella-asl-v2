@@ -14328,7 +14328,7 @@ hr {
   padding-left: 0px !important;
 }
 .pTop{
-  padding-top: 4%;
+  padding-top: 2%;
 }
 /* all margin */
 .mTop{
@@ -14345,6 +14345,9 @@ hr {
 }
 .mBottom16{
   margin-bottom: 16px;
+}
+.mBottom22{
+  margin-bottom: 22px;
 }
 .mRight{
   margin-right: 6px !important;
@@ -14425,6 +14428,10 @@ hr {
 }
 div.dp-input-container> input.dp-picker-input{
   width: 100%;
+  font-family: Titillium Web;
+  font-size: 20px !important;
+  font-weight: bold;
+  color: #707070;
 }
 .form-group label{
   background-color: transparent;

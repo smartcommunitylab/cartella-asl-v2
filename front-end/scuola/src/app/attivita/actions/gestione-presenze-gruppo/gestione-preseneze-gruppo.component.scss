@@ -60,10 +60,15 @@
     .titleDate{
         text-align: left;
         font-family: Titillium Web;
-        font-size: 14px;
+        font-size: 20px;
         font-weight: bold;
         letter-spacing: 0px;
         color: #707070;
+    }
+    div.dp-input-container> input.dp-picker-input{
+        font-family: Titillium Web;
+        font-size: 20px !important;
+        font-weight: bold;
     }
     .noteFont{
         font-family: Titillium Web;
@@ -88,6 +93,9 @@
     }
     .tdData{
         color: #435a70;
+    }
+    .tdDataInput{
+        font-weight: bold;
     }
     .btnSize{
         min-width: 90px;

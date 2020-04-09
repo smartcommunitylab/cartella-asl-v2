@@ -54,9 +54,9 @@
   </div>
   <br>
   <div class="row" *ngIf="attivita">
-    <span class="col-4 m-left pTop">
-      <label class="dateTitle">Data inizio</label>&nbsp;
-      <div #calendarStart class="col-sm-3 m-left" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
+    <span class="col-4 pTop">
+      <label class="titleDate">Data inizio</label>&nbsp;
+      <div #calendarStart class="col-sm-4 m-left" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
         <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig" theme="dp-material" id="dataInizio" required>
         </dp-date-picker>  
         <div class="invalid-feedback" [class.d-block]="!date.dataInizio">
@@ -68,8 +68,8 @@
       </div>  
     </span>
     <span class="col-4 pTop">
-      <label class="dateTitle">Data fine</label>&nbsp;
-      <div #calendarEnd class="col-sm-3" [class.has-danger]="!date.dataFine || date.dataFine > limitMax || date.dataFine < limitMin">
+      <label class="titleDate">Data fine</label>&nbsp;
+      <div #calendarEnd class="col-sm-4 m-left" [class.has-danger]="!date.dataFine || date.dataFine > limitMax || date.dataFine < limitMin">
         <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataFine" [config]="datePickerConfig" theme="dp-material" id="dataFine" required>
         </dp-date-picker>
         <div class="invalid-feedback" [class.d-block]="!date.dataFine">
