@@ -140,7 +140,7 @@
                 <div class="v-center" *ngIf="documenti">
                     <ul>
                         <li *ngFor="let doc of documenti">
-                            <a [href]="doc.url" download="{{doc.nomeFile}}">
+                            <a [routerLink]="" (click)="downloadDoc(doc)">   
                                 <i class="material-icons">insert_drive_file</i>
                                 {{doc.nomeFile}}
                             </a>

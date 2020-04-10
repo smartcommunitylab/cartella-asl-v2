@@ -76,9 +76,6 @@ export class PianoDettaglioComponent implements OnInit {
 
         this.dataService.downloadPianoDocumenti(piano.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
 
         this.dataService.getCorsiStudio().subscribe((response) => {
@@ -212,9 +209,6 @@ export class PianoDettaglioComponent implements OnInit {
       this.dataService.uploadDocumentToRisorsa(fileInput.target.files[0], this.piano.uuid + '').subscribe((doc) => {
         this.dataService.downloadPianoDocumenti(this.piano.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
       });
     }
@@ -227,17 +221,21 @@ export class PianoDettaglioComponent implements OnInit {
       if (result == 'deleted') {
         this.dataService.downloadPianoDocumenti(this.piano.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
       }
     });
   }
 
-  // openDocument(doc) {
-  //   this.dataService.openDocument(doc);
-  // }
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);    
+    });
+  }
 
   updateDatiPiano() {
     this.router.navigate(['modifica/dati/'], { relativeTo: this.route });
