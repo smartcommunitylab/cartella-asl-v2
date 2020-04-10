@@ -66,14 +66,20 @@
     </div>
     
     <div class="col-2">
-        <button (click)="getEsperienzeStudenteCsv()">   
-            <i class="material-icons">insert_drive_file</i>
-            Dati dello studente
-        </button>
-        <button (click)="getEsperienzeClasseCsv()">   
-            <i class="material-icons">insert_drive_file</i>
-            Dati della classe
-        </button>
+        <label class="col-12 btn btn-primary v-center-inline btn-icon" (click)="getEsperienzeStudenteCsv()"
+        placement="bottom" ngbTooltip="Esporta le attività dello studente">
+            CSV dati studente&nbsp;&nbsp;&nbsp;
+            <svg class="icon icon-white icon-sm">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+            </svg>
+        </label>
+        <label class="col-12 btn btn-primary v-center-inline btn-icon" (click)="getEsperienzeClasseCsv()"
+        placement="bottom" ngbTooltip="Esporta le attività della classe">
+            CSV dati classe&nbsp;&nbsp;&nbsp;
+            <svg class="icon icon-white icon-sm">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+            </svg>
+        </label>
     </div>
      
 </div>
