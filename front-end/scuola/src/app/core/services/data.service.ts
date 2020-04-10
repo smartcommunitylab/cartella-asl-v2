@@ -270,17 +270,18 @@ export class DataService {
       ).catch(response => this.handleError);
   }
 
-  downloadDocumentBlob(doc) {
+  downloadDocumentBlob(doc): Observable<any> {
     let url = this.host + '/download/document/' + doc.uuid + '/istituto/' + this.istitutoId;
-
     return this.http.get(url,
       {
         responseType: 'arraybuffer'
       })
       .timeout(this.timeout)
-      .subscribe(data => {
-        let blob = new Blob([data], { type: doc.type });
-        doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      .map(data => {
+        const blob = new Blob([data], { type: doc.formatoDocumento });
+        const url = URL.createObjectURL(blob); 
+        return url;
+        //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
       },
         catchError(this.handleError)
       );

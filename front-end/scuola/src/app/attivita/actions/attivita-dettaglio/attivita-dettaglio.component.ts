@@ -82,9 +82,6 @@ export class AttivitaDettaglioComponent implements OnInit {
 
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
 
         this.dataService.getAttivitaTipologie().subscribe((res) => {
@@ -161,9 +158,6 @@ export class AttivitaDettaglioComponent implements OnInit {
       this.dataService.uploadDocumentToRisorsa(fileInput.target.files[0], this.attivita.uuid + '').subscribe((doc) => {
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
       });
     }
@@ -176,17 +170,21 @@ export class AttivitaDettaglioComponent implements OnInit {
       if (result == 'deleted') {
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
-          for (let doc of this.documenti) {
-            this.dataService.downloadDocumentBlob(doc);
-          }
         });
       }
     });
   }
 
-  // openDocument(doc) {
-  //   this.dataService.openDocument(doc);
-  // }
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);    
+    });
+  }
 
   gestionePresenze() {
     if (this.individuale) {
