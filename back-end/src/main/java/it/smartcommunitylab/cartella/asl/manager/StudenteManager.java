@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudioBean;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
@@ -61,6 +62,8 @@ public class StudenteManager extends DataEntityManager {
 	private PresenzaGiornalieraManager presenzaGiornalieraManager;
 	@Autowired
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
+	@Autowired
+	private CompetenzaManager competenzaManager;
 	
 	private static final String STUDENT_REGISTRATION = "SELECT r0 FROM Registration r0 WHERE r0.studentId = (:id) AND r0.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = (:id)) ";
 
@@ -311,6 +314,8 @@ public class StudenteManager extends DataEntityManager {
 		result.setStudente(studente);
 		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(istitutoId, studenteId);
 		result.getEsperienze().addAll(esperienzeStudente);
+		List<Competenza> competenze = competenzaManager.getCompetenzeByStudente(istitutoId, studenteId);
+		result.getCompetenze().addAll(competenze);
 		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(istitutoId, 
 				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
 		if(corsoStudio != null) {

@@ -3,11 +3,13 @@ package it.smartcommunitylab.cartella.asl.model.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 
 public class ReportDettaglioStudente {
 	private Studente studente;
 	private List<ReportEsperienzaStudente> esperienze = new ArrayList<>();
+	private List<Competenza> competenze = new ArrayList<>();
 	private int oreValidate;
 	private int oreTotali;
 	
@@ -34,6 +36,12 @@ public class ReportDettaglioStudente {
 	}
 	public void setOreTotali(int oreTotali) {
 		this.oreTotali = oreTotali;
+	}
+	public List<Competenza> getCompetenze() {
+		return competenze;
+	}
+	public void setCompetenze(List<Competenza> competenze) {
+		this.competenze = competenze;
 	}	
 	
 }

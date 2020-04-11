@@ -19,12 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
-import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AssociazioneCompetenze;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
-import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
-import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportCompetenzaDettaglio;
 import it.smartcommunitylab.cartella.asl.repository.AssociazioneCompetenzeRepository;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
@@ -274,6 +271,21 @@ public class CompetenzaManager extends DataEntityManager {
 
 		saved = true;
 		return saved;
+	}
+	
+	public List<Competenza> getCompetenzeByStudente(String istitutoId, String studenteId) {
+		String qEsperienze = "SELECT DISTINCT(c) FROM AssociazioneCompetenze ac, Competenza c"
+				+ " WHERE ac.competenzaId=c.id"
+				+ " AND ac.risorsaId IN ("
+				+ " SELECT aa.uuid FROM AttivitaAlternanza aa, EsperienzaSvolta es"
+				+ " WHERE es.attivitaAlternanzaId=aa.id"
+				+ " AND aa.istitutoId=(:istitutoId) AND es.studenteId=(:studenteId)"
+				+ " ) ORDER BY c.titolo ASC";
+		TypedQuery<Competenza> query = em.createQuery(qEsperienze, Competenza.class);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("studenteId", studenteId);
+		List<Competenza> competenzeList = query.getResultList();
+		return competenzeList;
 	}
 
 }
