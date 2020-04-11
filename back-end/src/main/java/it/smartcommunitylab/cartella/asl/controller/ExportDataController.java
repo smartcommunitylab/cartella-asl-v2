@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Lists;
+
+import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.ExportDataManager;
 import it.smartcommunitylab.cartella.asl.model.export.ExportCsv;
+import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 
 @RestController
 public class ExportDataController implements AslController {
@@ -22,13 +27,17 @@ public class ExportDataController implements AslController {
 	
 	@Autowired
 	private ExportDataManager exportDataManager;
-	
+	@Autowired
+	private ASLRolesValidator usersValidator;
+
 	@GetMapping("/api/export/csv/studente")
 	public void getStudenteAttivitaReportCsv(
 			@RequestParam String istitutoId,
 			@RequestParam String studenteId,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		ExportCsv reportCsv = exportDataManager.getStudenteAttivitaReportCsv(istitutoId, studenteId);
 		downloadCsv(reportCsv, response);
 		if(logger.isInfoEnabled()) {
@@ -45,6 +54,8 @@ public class ExportDataController implements AslController {
 			@RequestParam String classe,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		ExportCsv reportCsv = exportDataManager.getClasseAttivitaReportCsv(istitutoId, annoScolastico,
 				corsoId, corso, classe);
 		downloadCsv(reportCsv, response);
