@@ -178,6 +178,11 @@ public class StudenteManager extends DataEntityManager {
 						s.getCorsoDiStudio().getCourseId(), s.getClassroom(), annoScolastico);
 				pianoMap.put(key, activePianoForClassrom);
 			}
+			
+			if(activePianoForClassrom.isPresent()) {
+				studenteReport.setTitoloPiano(activePianoForClassrom.get().getTitolo());
+				studenteReport.setPianoId(activePianoForClassrom.get().getId());
+			}
 							
 			final int oreTotaliTerza = activePianoForClassrom.map(p -> p.getOreTerzoAnno()).orElse(0);
 			final int oreTotaliQuarta = activePianoForClassrom.map(p -> p.getOreQuartoAnno()).orElse(0);
@@ -206,12 +211,21 @@ public class StudenteManager extends DataEntityManager {
 					}					
 				}
 			}
+			
+			CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(istitutoId, 
+					s.getCorsoDiStudio().getCourseId(), s.getAnnoScolastico());
+			if(corsoStudio != null) {
+				studenteReport.setOreTotali(corsoStudio.getOreAlternanza());
+			}
+
 			studenteReport.getOreSvolteTerza().setHours(oreSvolteTerza);
 			studenteReport.getOreSvolteTerza().setTotal(oreTotaliTerza);
 			studenteReport.getOreSvolteQuarta().setHours(oreSvolteQuarta);
 			studenteReport.getOreSvolteQuarta().setTotal(oreTotaliQuarta);
 			studenteReport.getOreSvolteQuinta().setHours(oreSvolteQuinta);
 			studenteReport.getOreSvolteQuinta().setTotal(oreTotaliQuinta);
+			studenteReport.setOreSvolte(oreSvolteTerza + oreSvolteQuarta + oreSvolteQuinta);
+			studenteReport.setOreProgrammate(oreTotaliTerza + oreTotaliQuarta + oreTotaliQuinta);
 			studenteReport.setClasse(s.getClassroom());
 			studenteReport.setAnnoScolastico(annoScolastico);
 			studentsRicerca.add(studenteReport);

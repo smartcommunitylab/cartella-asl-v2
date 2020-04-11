@@ -9,10 +9,15 @@ public class ReportStudenteRicerca extends Report {
 
 	private String idStudente;
 	private String classe;
+	private String titoloPiano;
+	private Long pianoId;
+	private String cognomeNome;
+	private int oreSvolte;
+	
 	
     private OreSvolte oreSvolteTerza = new OreSvolte();
-    private OreSvolte oreSvolteQuarta = new OreSvolte();;
-    private OreSvolte oreSvolteQuinta = new OreSvolte();;
+    private OreSvolte oreSvolteQuarta = new OreSvolte();
+    private OreSvolte oreSvolteQuinta = new OreSvolte();
 
     public static class OreSvolte {
         private int hours = 0;
@@ -46,8 +51,6 @@ public class ReportStudenteRicerca extends Report {
         annoCorso = studente.getAnnoCorso();
         cognomeNome = studente.getSurname() + " " + studente.getName();
     }
-
-	private String cognomeNome;
 
 	public String getIdStudente() {
 		return idStudente;
@@ -101,4 +104,28 @@ public class ReportStudenteRicerca extends Report {
     public void setOreSvolteQuinta(OreSvolte oreSvolteQuinta) {
         this.oreSvolteQuinta = oreSvolteQuinta;
     }
+
+		public String getTitoloPiano() {
+			return titoloPiano;
+		}
+
+		public void setTitoloPiano(String titoloPiano) {
+			this.titoloPiano = titoloPiano;
+		}
+
+		public Long getPianoId() {
+			return pianoId;
+		}
+
+		public void setPianoId(Long pianoId) {
+			this.pianoId = pianoId;
+		}
+
+		public int getOreSvolte() {
+			return oreSvolte;
+		}
+
+		public void setOreSvolte(int oreSvolte) {
+			this.oreSvolte = oreSvolte;
+		}
 }

@@ -8587,6 +8587,14 @@ a.bg-success:focus, a.bg-success:hover, button.bg-success:focus, button.bg-succe
   background-color: #009963!important
 }
 
+.progress-bar.bg-error {
+  border-radius: 15px;
+  border-color: red;
+  border-width: 1px;
+  border-style: solid;
+  background-color: #cacacc!important;
+}
+
 .bg-info {
   background-color: #979899!important
 }

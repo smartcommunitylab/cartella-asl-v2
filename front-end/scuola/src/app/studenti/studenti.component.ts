@@ -55,26 +55,26 @@ export class StudentiComponent implements OnInit {
         this.totalRecords = response.totalElements;
         this.studenti = response.content;
         this.studenti.forEach(studente => {
-          this.dataService.getStudenteDettaglio(studente.idStudente).subscribe((res) => {
-            studente.studentOreTotali=res.oreTotali;
-            studente.studentOreValidate=res.oreValidate;
-          },
-            (err: any) => console.log(err)
-          );
-          if (studente.oreSvolteTerza.total > 0 && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total) {
-            studente.oreSvolteTerza.pgBType = 'success';
+          if(studente.pianoId) {
+            if (studente.oreSvolteTerza.total > 0 && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total) {
+              studente.oreSvolteTerza.pgBType = 'success';
+            } else {
+              studente.oreSvolteTerza.pgBType = 'warning';
+            }
+            if (studente.oreSvolteQuarta.total > 0 && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total) {
+              studente.oreSvolteQuarta.pgBType = 'success';
+            } else {
+              studente.oreSvolteQuarta.pgBType = 'warning';
+            }
+            if (studente.oreSvolteQuinta.total > 0 && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total) {
+              studente.oreSvolteQuinta.pgBType = 'success';
+            } else {
+              studente.oreSvolteQuinta.pgBType = 'warning';
+            }
           } else {
-            studente.oreSvolteTerza.pgBType = 'warning';
-          }
-          if (studente.oreSvolteQuarta.total > 0 && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total) {
-            studente.oreSvolteQuarta.pgBType = 'success';
-          } else {
-            studente.oreSvolteQuarta.pgBType = 'warning';
-          }
-          if (studente.oreSvolteQuinta.total > 0 && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total) {
-            studente.oreSvolteQuinta.pgBType = 'success';
-          } else {
-            studente.oreSvolteQuinta.pgBType = 'warning';
+            studente.oreSvolteTerza.pgBType = 'error';
+            studente.oreSvolteQuarta.pgBType = 'error';
+            studente.oreSvolteQuinta.pgBType = 'error';
           }
         });
       }
@@ -89,11 +89,15 @@ export class StudentiComponent implements OnInit {
 
   showTipRiga(ev, studente, year) {
     // console.log(ev.target.title);
-    let labelSenzaPiano = 'Attenzione: non ci sono piani associati a questo corso di studio!';
-    let lableConPiano = ' Piano triennale completo al *percentage*% (*fraction*) ore'; // (n/m ore)
-    lableConPiano = lableConPiano.replace('*percentage*', ((studente.studentOreValidate /  studente.studentOreTotali) * 100).toFixed(0) );
-    lableConPiano = lableConPiano.replace('*fraction*', studente.studentOreValidate + '/' + studente.studentOreTotali);
-    studente.toolTipRiga = lableConPiano;
+    if(studente.pianoId) {
+      let lableConPiano = ' Piano triennale completo al *percentage*% (*fraction*) ore'; // (n/m ore)
+      lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreSvolte /  studente.oreTotali) * 100).toFixed(0) );
+      lableConPiano = lableConPiano.replace('*fraction*', studente.oreSvolte + '/' + studente.oreTotali);
+      studente.toolTipRiga = lableConPiano;  
+    } else {
+      let labelSenzaPiano = 'Attenzione: non ci sono piani associati a questo corso di studio!';
+      studente.toolTipRiga = labelSenzaPiano;
+    }
     // let lableConPiano = ' Piano *YS* completo al *percentage*% (*fraction*) ore'; // (n/m ore)
     // if (studente.oreSvolteTerza && studente.oreSvolteQuarta && studente.oreSvolteQuinta) {
     //   switch (year) {
