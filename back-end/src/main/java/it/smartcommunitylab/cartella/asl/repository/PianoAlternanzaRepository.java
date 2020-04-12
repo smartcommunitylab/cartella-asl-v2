@@ -16,7 +16,7 @@ import it.smartcommunitylab.cartella.asl.model.PianoAlternanza.Stati;
 public interface PianoAlternanzaRepository extends JpaRepository<PianoAlternanza, Long> {
 
 	@Modifying
-	@Query("update PianoAlternanza pa0 set titolo=:#{#pa.titolo},corsoDiStudio=:#{#pa.corsoDiStudio},corsoDiStudioId=:#{#pa.corsoDiStudioId},oreTerzoAnno=:#{#pa.oreTerzoAnno},oreQuartoAnno=:#{#pa.oreQuartoAnno},oreQuintoAnno=:#{#pa.oreQuintoAnno},dataAttivazione=:#{#pa.dataAttivazione},note=:#{#pa.note} where id = :#{#pa.id}")
+	@Query("update PianoAlternanza pa0 set titolo=:#{#pa.titolo},corsoDiStudio=:#{#pa.corsoDiStudio},corsoDiStudioId=:#{#pa.corsoDiStudioId},oreTerzoAnno=:#{#pa.oreTerzoAnno},oreQuartoAnno=:#{#pa.oreQuartoAnno},oreQuintoAnno=:#{#pa.oreQuintoAnno},note=:#{#pa.note} where id = :#{#pa.id}")
 	public void update(@Param("pa") PianoAlternanza pa);		
 
 	public List<PianoAlternanza> findByTitoloContainingIgnoreCaseAndCorsoDiStudioIdAndIstitutoId(String titolo, String corsoDiStudioId, String istitutoId);
