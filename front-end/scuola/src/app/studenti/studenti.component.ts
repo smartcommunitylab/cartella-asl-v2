@@ -91,8 +91,8 @@ export class StudentiComponent implements OnInit {
     // console.log(ev.target.title);
     if(studente.pianoId) {
       let lableConPiano = ' Piano triennale completo al *percentage*% (*fraction*) ore'; // (n/m ore)
-      lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreSvolte /  studente.oreTotali) * 100).toFixed(0) );
-      lableConPiano = lableConPiano.replace('*fraction*', studente.oreSvolte + '/' + studente.oreTotali);
+      lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreValidate /  studente.oreTotali) * 100).toFixed(0) );
+      lableConPiano = lableConPiano.replace('*fraction*', studente.oreValidate + '/' + studente.oreTotali);
       studente.toolTipRiga = lableConPiano;  
     } else {
       let labelSenzaPiano = 'Attenzione: non ci sono piani associati a questo corso di studio!';

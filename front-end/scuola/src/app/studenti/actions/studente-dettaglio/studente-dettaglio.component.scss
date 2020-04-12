@@ -91,5 +91,15 @@
         position: relative;
         left: 25px;
     }
-      
+    
+    .piano {
+        font-weight: bold;
+        padding-left: 5px;
+   }
+
+   .nopiano {
+    font-weight: bold;
+    color: red;
+    padding-left: 5px;
+   }
 }

@@ -11,8 +11,11 @@ import { environment } from '../../../../../src/environments/environment';
 export class StudenteDettaglioComponent implements OnInit {
   oreValidate: any;
   oreTotali: any;
+  pianoId: any;
+  titoloPiano: any;
   studente;
   esperienze;
+  competenze;
   navTitle: string = "Dettaglio studente";
   tipologie;
   percentage;
@@ -45,8 +48,11 @@ export class StudenteDettaglioComponent implements OnInit {
       this.dataService.getStudenteDettaglio(id).subscribe((res) => {
         this.studente = res.studente;
         this.esperienze = res.esperienze;
+        this.competenze = res.competenze;
         this.oreValidate = res.oreValidate;
         this.oreTotali = res.oreTotali;
+        this.pianoId = res.pianoId;
+        this.titoloPiano = res.titoloPiano;
         this.percentage = ((this.oreValidate / this.oreTotali) * 100).toFixed(0);
         this.breadcrumbItems[1].title = this.studente.name + ' ' + this.studente.surname;
 

@@ -224,7 +224,7 @@ public class StudenteManager extends DataEntityManager {
 			studenteReport.getOreSvolteQuarta().setTotal(oreTotaliQuarta);
 			studenteReport.getOreSvolteQuinta().setHours(oreSvolteQuinta);
 			studenteReport.getOreSvolteQuinta().setTotal(oreTotaliQuinta);
-			studenteReport.setOreSvolte(oreSvolteTerza + oreSvolteQuarta + oreSvolteQuinta);
+			studenteReport.setOreValidate(oreSvolteTerza + oreSvolteQuarta + oreSvolteQuinta);
 			studenteReport.setOreProgrammate(oreTotaliTerza + oreTotaliQuarta + oreTotaliQuinta);
 			studenteReport.setClasse(s.getClassroom());
 			studenteReport.setAnnoScolastico(annoScolastico);
@@ -326,18 +326,59 @@ public class StudenteManager extends DataEntityManager {
 		ReportDettaglioStudente result = new ReportDettaglioStudente();
 		Studente studente = findStudente(studenteId);
 		result.setStudente(studente);
-		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(istitutoId, studenteId);
+		
+		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(istitutoId, 
+				studenteId);
 		result.getEsperienze().addAll(esperienzeStudente);
+		
 		List<Competenza> competenze = competenzaManager.getCompetenzeByStudente(istitutoId, studenteId);
 		result.getCompetenze().addAll(competenze);
+		
 		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(istitutoId, 
 				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
 		if(corsoStudio != null) {
 			result.setOreTotali(corsoStudio.getOreAlternanza());
 		}
+
+		Optional<PianoAlternanza> pianoForClassrom = pianoForClassrom(istitutoId, 
+				studente.getCorsoDiStudio().getCourseId(), studente.getClassroom(), studente.getAnnoScolastico());
+		if(pianoForClassrom.isPresent()) {
+			result.setTitoloPiano(pianoForClassrom.get().getTitolo());
+			result.setPianoId(pianoForClassrom.get().getId());
+		}
+		
+		final int oreTotaliTerza = pianoForClassrom.map(p -> p.getOreTerzoAnno()).orElse(0);
+		final int oreTotaliQuarta = pianoForClassrom.map(p -> p.getOreQuartoAnno()).orElse(0);
+		final int oreTotaliQuinta = pianoForClassrom.map(p -> p.getOreQuintoAnno()).orElse(0);
+		
+		int oreSvolteTerza = 0;
+		int oreSvolteQuarta = 0;
+		int oreSvolteQuinta = 0;
+		
 		for(ReportEsperienzaStudente report : esperienzeStudente) {
+			final String annoDiCorso = Utils.annoDiCorso(report.getClasseStudente());
+			switch (annoDiCorso) {
+			case "3":
+				oreSvolteTerza += report.getOreValidate();
+				break;
+			case "4":
+				oreSvolteQuarta += report.getOreValidate();
+				break;
+			case "5":
+				oreSvolteQuinta += report.getOreValidate();
+				break;
+			default:
+				break;
+			}
 			result.setOreValidate(result.getOreValidate() + report.getOreValidate());
 		}
+		result.getOreSvolteTerza().setHours(oreSvolteTerza);
+		result.getOreSvolteTerza().setTotal(oreTotaliTerza);
+		result.getOreSvolteQuarta().setHours(oreSvolteQuarta);
+		result.getOreSvolteQuarta().setTotal(oreTotaliQuarta);
+		result.getOreSvolteQuinta().setHours(oreSvolteQuinta);
+		result.getOreSvolteQuinta().setTotal(oreTotaliQuinta);
+		
 		return result;
 	}
 
