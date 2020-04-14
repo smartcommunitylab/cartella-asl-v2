@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PianoAlternanza } from '../../../shared/classes/PianoAlternanza.class';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'cm-piano-modifica-dati',
@@ -28,6 +29,7 @@ export class PianoModificaDatiComponent implements OnInit {
   showContent: boolean = false;
   annoRiferimento: any;
   fieldsError: string;
+  evn = environment;
   
   corsiStudio;
   @Output() editPianoListener = new EventEmitter<Object>();
@@ -38,6 +40,7 @@ export class PianoModificaDatiComponent implements OnInit {
     private activeRoute: ActivatedRoute) { }
 
   ngOnInit() {
+    this.evn.modificationFlag=true;
     this.activeRoute.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getPianoById(id).subscribe((piano: PianoAlternanza) => {
@@ -52,7 +55,9 @@ export class PianoModificaDatiComponent implements OnInit {
     })
      
   }
-
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
+  }
   update() { //update
     
     if (this.allValidated()) {

@@ -14287,6 +14287,9 @@ hr {
   margin-right: -16px;
   padding-left: 16px;
 }
+.modify-card-body-height{
+  min-height: calc(100vh - 60px);
+}
 .modify-table-body{
   background: #F0F6FC 0% 0% no-repeat padding-box;
 }

@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  globalSpinner : true
+  globalSpinner : true,
+  modificationFlag : false
 };

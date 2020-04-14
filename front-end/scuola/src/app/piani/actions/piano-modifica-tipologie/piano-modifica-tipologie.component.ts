@@ -5,6 +5,7 @@ import { DataService } from '../../../core/services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'cm-piano-modifica-tipologie',
@@ -44,6 +45,7 @@ export class PianoModificaTipologieComponent implements OnInit {
   anni = [3, 4, 5];
   menuContent = "Qui puoi modificare le tipologie di attività associate al piano. Per aggiungerne una, seleziona la tipologia, l’anno di riferimento (3° 4° o 5°) e il monte ore, quindi usa il tasto blu per associarla. Per cancellarla premi sulla “x” rossa cerchiata.";
   showContent: boolean = false;
+  evn = environment;
 
   constructor(private dataService: DataService,
     private modalService: NgbModal,
@@ -52,6 +54,7 @@ export class PianoModificaTipologieComponent implements OnInit {
     private growler: GrowlerService) { }
 
   ngOnInit() {
+    this.evn.modificationFlag=true;
     this.activeRoute.params.subscribe(params => {
       let id = params['id'];
 
@@ -78,6 +81,9 @@ export class PianoModificaTipologieComponent implements OnInit {
         (err: any) => console.log(err),
         () => console.log('get piano tipologie'));
     });
+  }
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
   }
 
   getTipologia(tipologiaId) {
