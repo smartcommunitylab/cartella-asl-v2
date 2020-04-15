@@ -231,9 +231,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 
 	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa) {
-		aa.setStato(getStato(aa));
+		AttivitaAlternanza attivita = aa.clona();
+		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
-		report.setAttivitaAlternanza(aa);
+		report.setAttivitaAlternanza(attivita);
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 		for (EsperienzaSvolta esperienza : esperienze) {

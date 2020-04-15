@@ -61,6 +61,38 @@ public class AttivitaAlternanza {
 	private Double longitude;
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataArchiviazione;	
+	
+	public AttivitaAlternanza clona() {
+		AttivitaAlternanza aa = new AttivitaAlternanza();
+		aa.setAnnoScolastico(annoScolastico);
+		aa.setDataArchiviazione(dataArchiviazione);
+		aa.setDataFine(dataFine);
+		aa.setDataInizio(dataInizio);
+		aa.setDescrizione(descrizione);
+		aa.setEnteId(enteId);
+		aa.setFormatore(formatore);
+		aa.setFormatoreCF(formatoreCF);
+		aa.setId(id);
+		aa.setIstitutoId(istitutoId);
+		aa.setLatitude(latitude);
+		aa.setLongitude(longitude);
+		aa.setLuogoSvolgimento(luogoSvolgimento);
+		aa.setNomeEnte(nomeEnte);
+		aa.setOffertaId(offertaId);
+		aa.setOraFine(oraFine);
+		aa.setOraInizio(oraInizio);
+		aa.setOre(ore);
+		aa.setReferenteEsterno(referenteEsterno);
+		aa.setReferenteEsternoCF(referenteEsternoCF);
+		aa.setReferenteScuola(referenteScuola);
+		aa.setReferenteScuolaCF(referenteScuolaCF);
+		aa.setStato(stato);
+		aa.setTipologia(tipologia);
+		aa.setTitolo(titolo);
+		aa.setTitoloOfferta(titoloOfferta);
+		aa.setUuid(uuid);
+		return aa;
+	}
 
 	public Long getId() {
 		return id;
