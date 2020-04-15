@@ -16,7 +16,7 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlternanza, Long> {
 	@Modifying
 	@Query("update AttivitaAlternanza aa0 set titolo=:#{#aa.titolo}, descrizione=:#{#aa.descrizione}, "
-			+ "stato=:#{#aa.stato}, dataInizio=:#{#aa.dataInizio}, dataFine=:#{#aa.dataFine}, oraInizio=:#{#aa.oraInizio}, "
+			+ "dataInizio=:#{#aa.dataInizio}, dataFine=:#{#aa.dataFine}, oraInizio=:#{#aa.oraInizio}, "
 			+ "oraFine=:#{#aa.oraFine}, ore=:#{#aa.ore}, offertaId=:#{#aa.offertaId}, titoloOfferta=:#{#aa.titoloOfferta}, "
 			+ "enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, referenteScuola=:#{#aa.referenteScuola}, "
 			+ "referenteScuolaCF=:#{#aa.referenteScuolaCF}, referenteEsterno=:#{#aa.referenteEsterno}, "
