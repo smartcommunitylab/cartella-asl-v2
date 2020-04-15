@@ -7,7 +7,7 @@ import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.c
 import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
 import { AttivitaCancellaModal } from '../cancella-attivita-modal/attivita-cancella-modal.component';
 import { ArchiaviazioneAttivitaModal } from '../archiaviazione-attivita-modal/archiaviazione-attivita.component';
-
+import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 registerLocaleData(localeIT);
@@ -26,6 +26,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
+    private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   attivita: AttivitaAlternanza;
@@ -223,7 +224,9 @@ export class AttivitaDettaglioComponent implements OnInit {
         modalRef.componentInstance.titolo = this.attivita.titolo;
         modalRef.componentInstance.onArchivia.subscribe((esperienze) => {
           this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
-            this.router.navigate(['../../'], { relativeTo: this.route });
+            let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
+            this.growler.growl(message, GrowlerMessageType.Success);
+            this.ngOnInit();
           })
         })
       }, (err: any) => console.log(err),

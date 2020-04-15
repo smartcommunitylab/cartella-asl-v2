@@ -417,7 +417,9 @@ export class GestionePresenzeGruppoComponent implements OnInit {
         modalRef.componentInstance.titolo = this.attivita.titolo;
         modalRef.componentInstance.onArchivia.subscribe((esperienze) => {
           this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
-            this.router.navigate(['../../'], { relativeTo: this.activeRoute });
+            let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
+            this.growler.growl(message, GrowlerMessageType.Success);
+            this.router.navigate(['../../../../'], { relativeTo: this.activeRoute });
           })
         })
       }, (err: any) => console.log(err),
