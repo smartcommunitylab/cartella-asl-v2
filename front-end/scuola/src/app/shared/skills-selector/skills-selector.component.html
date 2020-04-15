@@ -1,24 +1,9 @@
-<div class=" mb-3 list-container md-margin sub-navbar-content-below">
-    <!-- <div class="row">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <span class="float-right">
-                <button class="btn btn-success btn-icon btn-xs" (click)="addCompetenze()" placement="bottom"  ngbTooltip="Salva le modifiche">
-                    <span class="row v-center">
-                        <span class="btn-txt v-center">Salva&nbsp;</span>&nbsp;
-                        <span>
-                            <i class="material-icons">save</i>
-                        </span>
-                    </span>
-                </button>
-            </span>
-        </div>
-    </div>
-    <br> -->
+<div class="mb-3 list-container md-margin sub-navbar-content-below">
     <div class="row">
-        <div class="col-6 card broderRight">
-            <div class="card-body p0">
-                <div class="row v-center">
+        <!-- left column -->
+        <div class="col-6 card broderRight modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
                     <div class="col-4">
                         <label class="complementary-3-color-a6 font-weight-bold" >Competenze associabili: {{totalRecords}}</label>
                     </div>
@@ -35,7 +20,7 @@
                     </div>
                 </div>
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="bg-white">
                         <tr>
                             <th class="minWidth">Creato da:</th>
                             <th>Definizione</th>
@@ -54,41 +39,19 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="row">
-                    <th class=col-2>Creato da:</th>
-                    <th class=col-8>Definizione</th>
-                    <th class=col-2></th>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action" *ngFor="let competenza of competenze"
-                        [class.disabled]="competenza.disabled">
-                        <div class="row">
-                            <div class="col-2 v-center competenza-info-btn">
-                                {{competenza.ownerName}}
-                            </div>
-                            <div class="col-8">
-                                <div class="profilo-title">{{competenza.titolo}}</div>
-                            </div>
-                            <div class="col-2">
-                                <svg class="float-right icon icon-sm" *ngIf="!competenza.disabled" (click)="toggleCompetenza(competenza)">
-                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
-                                </svg>
-                            </div>
-                        </div>
-                    </li>
-                </ul> -->
                 <div class="row empty-list" *ngIf="!competenze || competenze.length==0">
                     <div class="col">
                         Nessuna competenza trovata con il filtro selezionato
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
         </div>
 
-        <div class="card col-6 broderLeft">
-            <div class="card-body p0">
-                <div class="row v-center">
+        <!-- right column -->
+        <div class="card col-6 broderLeft modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
                     <div class="col-4">
                         <label class="primary-color font-weight-bold">Competenze associate: {{attachedCompetenze.length}}</label>
                     </div>
@@ -105,7 +68,7 @@
                     </div>                  
                 </div>
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="bg-white">
                         <tr>
                             <th class="minWidth">Creato da:</th>
                             <th>Definizione</th>
@@ -124,36 +87,13 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="row">
-                    <th class=col-2>Creato da:</th>
-                    <th class=col-8>Definizione</th>
-                    <th class=col-2></th>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action" *ngFor="let competenza of competenzeAssociateWindow">
-                        <div class="row">
-                            <div class="col-2 v-center competenza-info-btn">
-                                {{competenza.ownerName}}
-                            </div>
-                            <div class="col-8">
-                                <div class="profilo-title">{{competenza.titolo}}</div>
-                            </div>
-                            <div class="col-2">
-                                <svg class="float-right icon icon-sm" (click)="deleteCompetenza(competenza)">
-                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-minus-circle"></use>
-                                </svg>
-                            </div>
-                        </div>
-                    </li>
-                </ul> -->
                 <div class="row empty-list" *ngIf="!competenzeAssociateWindow || competenzeAssociateWindow.length==0">
                     <div class="col">
                         Nessuna competenza trovata con il filtro selezionato
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
         </div>
-
     </div>
 </div>

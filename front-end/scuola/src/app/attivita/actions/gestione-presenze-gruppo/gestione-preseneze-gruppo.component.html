@@ -57,7 +57,7 @@
   
   <div class="row m-16 pTop" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
     <div class="col-12" *ngIf="studenti">
-      <table class="table">
+      <table class="table mOf">
         <thead>
           <tr class="center default">
             <th width="15%">
@@ -132,7 +132,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="modify-table-body">
+        <tbody class="modify-table-body modify-card-body-height">
           <tr *ngFor="let studenteId of studentiIds; let i = index">
             <td>
               <div class="default tdData" #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studenti[studenteId].toolTipRiga}}" (mouseenter)="showTipRiga($event, studenti[studenteId]);" >

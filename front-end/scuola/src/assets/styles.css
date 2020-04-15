@@ -14290,6 +14290,13 @@ hr {
 .modify-card-body-height{
   min-height: calc(100vh - 60px);
 }
+.modify-bgcolor{
+  background-color: #F0F6FC;
+}
+.modify-card-bgcolor{
+  background-color: #F0F6FC;
+  padding: 0;
+}
 .modify-table-body{
   background: #F0F6FC 0% 0% no-repeat padding-box;
 }

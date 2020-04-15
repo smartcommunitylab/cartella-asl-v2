@@ -4,6 +4,7 @@ import { DataService } from '../../../core/services/data.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'cm-competenza-modifica-abilita',
@@ -33,6 +34,7 @@ export class CompetenzaModificaAbilitaComponent implements OnInit {
   competenza: Competenza;
   menuContent = "Raccolta di tutte le competenze sia ministeriali che di quelle inserite dalla scuola stessa. Le competenze inserite dalla scuola sono visibili solo ad essa e non condivise con altri istituti.";
   showContent: boolean = false;
+  evn = environment;
 
   constructor(private dataService: DataService,
     private modalService: NgbModal,
@@ -41,6 +43,7 @@ export class CompetenzaModificaAbilitaComponent implements OnInit {
     private growler: GrowlerService) { }
 
   ngOnInit() {
+    this.evn.modificationFlag=true;
     this.activeRoute.params.subscribe(params => {
       let id = params['id'];
 
@@ -56,6 +59,9 @@ export class CompetenzaModificaAbilitaComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
+  }
 
   addNewAbilita() {
     if (this.allValidated()) {

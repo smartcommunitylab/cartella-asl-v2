@@ -9,6 +9,7 @@ import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growle
 import localeIT from '@angular/common/locales/it'
 import { DatePickerComponent } from 'ng2-date-picker';
 import { ArchiaviazioneAttivitaModal } from '../archiaviazione-attivita-modal/archiaviazione-attivita.component';
+import { environment } from '../../../../environments/environment';
 
 registerLocaleData(localeIT);
 
@@ -47,6 +48,7 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
   nomeStudente: any;
   toolTipSave;
   isArchivio: boolean;
+  evn = environment;
 
   datePickerConfig = {
     locale: 'it',
@@ -103,7 +105,7 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
   };
 
   ngOnInit() {
-
+    this.evn.modificationFlag=true;
     this.activeRoute.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getAttivita(id).subscribe((res) => {
@@ -145,6 +147,10 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
         }));
       });
     });
+  }
+  
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
   }
 
   initDays() {

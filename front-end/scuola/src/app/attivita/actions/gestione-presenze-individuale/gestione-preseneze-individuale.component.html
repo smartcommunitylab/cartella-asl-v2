@@ -91,7 +91,7 @@
     </span>
   </div>
   <div class="row m-16" *ngIf="attivita && presenze.length > 0">
-    <table class="table">
+    <table class="table mOf">
       <thead>
         <tr class="thTitle center default">
           <th width="15%">Data</th>
@@ -99,7 +99,7 @@
           <th width="75%">Diario di bordo</th>
         </tr>
       </thead>
-      <tbody class="modify-table-body">
+      <tbody class="modify-table-body modify-card-body-height">
         <tr *ngFor="let event of presenze; let index = index">
           <td class="custom_tr">
             <label>

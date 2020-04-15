@@ -5,6 +5,7 @@ import { ConfirmModalComponent } from './modals/confirm-modal/confirm-modal.comp
 import { Studente } from '../classes/Studente.class';
 import { DataService } from '../../core/services/data.service';
 import { GrowlerService, GrowlerMessageType } from '../../core/growler/growler.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'cm-students-selector',
@@ -30,6 +31,7 @@ export class StudentsSelectorComponent implements OnInit {
   searchStudenteAssociateNome: string;
   sentStudenti;
   attivita;
+  evn = environment;
 
   constructor(
     private dataService: DataService,
@@ -38,6 +40,7 @@ export class StudentsSelectorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.evn.modificationFlag=true;
     this.sentStudenti = this.attachedStudenti.slice(0);
 
     this.dataService.getAttivita(this.attachedId).subscribe((res) => {
@@ -50,6 +53,10 @@ export class StudentsSelectorComponent implements OnInit {
 
   ngOnChanges(changes) {
     this.mergeStudente();
+  }
+  
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
   }
 
   mergeStudente() {

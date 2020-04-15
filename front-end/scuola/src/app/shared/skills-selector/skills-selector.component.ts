@@ -4,6 +4,7 @@ import { DataService } from '../../core/services/data.service'
 import { Competenza } from '../../shared/classes/Competenza.class';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
 import { IPagedCompetenze } from '../../shared/classes/IPagedCompetenze.class';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'cm-skills-selector',
@@ -26,17 +27,23 @@ export class SkillsSelectorComponent implements OnInit {
   competenzeAssociateWindow: Competenza[];
   searchCompetenzaTxt: string;
   searchCompetenzaAssociateTxt: string;
+  evn = environment;
 
   constructor(private dataService: DataService) {
   }
 
   ngOnInit() {
+    this.evn.modificationFlag=true;
     this.getCompetenze(1);
     this.getCompetenzeAssociate(1);
   }
 
   ngOnChanges(changes) {
     this.mergeCompetenze();
+  }
+
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
   }
 
   mergeCompetenze() {

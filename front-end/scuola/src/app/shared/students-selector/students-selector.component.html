@@ -1,60 +1,14 @@
 <div class=" mb-3 list-container md-margin sub-navbar-content-below">
-<!--     
-    <div class="row">
-        <div class="col-6"></div>
-        <div class="col-6">
-            <span class="float-right">
-                <button class="btn btn-success btn-icon btn-xs" (click)="addStudenti()" placement="bottom"  ngbTooltip="Salva le modifiche">
-                    <span class="row v-center">
-                        <span class="btn-txt v-center">Salva&nbsp;</span>&nbsp;
-                        <span>
-                            <i class="material-icons">save</i>
-                        </span>
-                    </span>
-                </button>
-            </span>
-        </div>
-    </div>
-    <br> -->
     <div class="row" *ngIf="attivita">
         <span class="v-center warning-text p-3 col-6">
             <p>ATTENZIONE: la lista iscrizioni visualizzata è riferita al {{attivita.annoScolastico}}, anno dell’attività</p>
         </span>
     </div> 
-
-    <!-- <div class="p-3 row v-center">
-        <div class="col-3">
-            <label class="complementary-3-color-a6 font-weight-bold" >Studenti associabili: {{totalRecords}}</label>
-        </div>
-        <div class="col-3 input-group">
-            <div class="form-group center-formGroup">
-                <input type="text" id="cercaStudenteNome" class="form-control search-input"
-                    [(ngModel)]="searchStudenteNome" (keyup.enter)="searchStudente()">
-                <label for="cercaStudenteNome" >Cerca studente da associare</label>
-            </div>
-            <button class="btn btn-icon v-center-inline" (click)="searchStudente()">
-                <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
-            </button>
-        </div>
-        <div class="col-3">
-            <label class="primary-color font-weight-bold">Studenti associate: {{attachedStudenti.length}}</label>
-        </div>
-        <div class="col-3 input-group">
-            <div class="form-group center-formGroup">
-                <input type="text" id="cercaStudenteAssociateNome" class="form-control search-input"
-                    [(ngModel)]="searchStudenteAssociateNome" (keyup.enter)="searchStudenteAssociate()">
-                <label for="cercaStudenteAssociateNome" >Cerca studente associate</label>
-            </div>
-            <button class="btn btn-icon v-center-inline" (click)="searchStudenteAssociate()">
-                <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
-            </button>
-        </div> 
-    </div>     -->
     <div class="row" *ngIf="studenti">
        <!-- left card -->
-        <div class="col-6 card broderRight">
-            <div class="card-body p0">
-                <div class="row v-center">
+        <div class="col-6 card broderRight modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
                     <div class="col-4">
                         <label class="complementary-3-color-a6 font-weight-bold" >Studenti associabili: {{totalRecords}}</label>
                     </div>
@@ -71,7 +25,7 @@
                     </div>
                 </div>
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="bg-white">
                         <tr>
                             <th >Nome:</th>
                             <th>CF</th>
@@ -92,45 +46,19 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="row">
-                    <th class=col-5>Nome</th>
-                    <th class=col-3>CF</th>
-                    <th class=col-2>Classe</th>
-                    <th class=col-2></th>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action" *ngFor="let studente of studenti"
-                        [class.disabled]="studente.disabled">
-                        <div class="row">
-                            <div class="col-5 v-center competenza-info-btn">
-                                {{studente.nominativoStudente}}
-                            </div>
-                            <div class="col-3">
-                                <div class="profilo-title">{{studente.cfStudente}}</div>
-                            </div>
-                            <div class="col-2">
-                                <div class="profilo-title">{{studente.classeStudente}}</div>
-                            </div>
-                            <div class="col-2">
-                                <svg class="float-right icon icon-sm" *ngIf="!studente.disabled" (click)="toggleStudente(studente)">
-                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
-                                </svg>
-                            </div>
-                        </div>
-                    </li>
-                </ul> -->
                 <div class="row empty-list" *ngIf="studenti.length==0">
                     <div class="col">
                         Nessuna studente trovata con il filtro selezionato
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
         </div>
+
         <!-- right card -->
-        <div class="col-6 card broderLeft">
-            <div class="card-body p0">
-                <div class="row v-center">
+        <div class="col-6 card broderLeft modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
                     <div class="col-4">
                         <label class="primary-color font-weight-bold">Studenti associati: {{attachedStudenti.length}}</label>
                     </div>
@@ -147,7 +75,7 @@
                     </div>
                 </div>
                 <table class="table table-hover">
-                    <thead>
+                    <thead class="bg-white">
                         <tr>
                             <th >Nome:</th>
                             <th>CF</th>
@@ -168,104 +96,14 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div class="row">
-                    <th class=col-5>Nome</th>
-                    <th class=col-3>CF</th>
-                    <th class=col-2>Classe</th>
-                    <th class=col-2></th>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-action" *ngFor="let studente of studentiAssociateWindow">
-                        <div class="row">
-                            <div class="col-5 v-center competenza-info-btn">
-                                {{studente.nominativoStudente}}
-                            </div>
-                            <div class="col-3">
-                                <div class="profilo-title">{{studente.cfStudente}}</div>
-                            </div>
-                            <div class="col-2">
-                                <div class="profilo-title">{{studente.classeStudente}}</div>
-                            </div>
-                            <div class="col-2">
-                                <svg class="float-right icon icon-danger icon-sm" (click)="deleteStudente(studente)">
-                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-minus-circle"></use>
-                                </svg>
-                            </div>
-                        </div>
-                    </li>
-                </ul> -->
                 <div class="row empty-list" *ngIf="!studentiAssociateWindow || studentiAssociateWindow.length==0">
                     <div class="col">
                         Nessuna studente trovata con il filtro selezionato
                     </div>
                 </div>
             </div>
-            <cm-pagination style="text-align:center" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
         </div>
 
     </div>
 </div>
-
-<!-- 
-
-<div *ngIf="attachedStudenti" class="card mb-3 list-container md-margin sub-navbar-content-below">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-8 justify-content-start">
-                <div class="page-filters" style="padding: 10px">
-                    <div class="v-center-inline mr-3">
-                        <span class="mr-2">
-                            {{ attachedAttivitaInfoText }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4" style="text-align:right">
-                <label *ngIf="!selectAll">Seleziona tutto</label>
-                <label *ngIf="selectAll">Deseleziona tutto</label>
-                <input type="checkbox" [ngModel]="selectAll" id="selectAll" (change)="onSelectAllChange($event)" />
-            </div>
-        </div>
-        <div class="card-header">
-            <div class="row">
-                <div class="col-6">Studenti</div>
-                <div class="col-4">Ore svolte</div>
-                <div class="col-2">Completato</div>
-            </div>
-        </div>
-        <div class="card" *ngFor="let student of paged;let i = index">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-6">{{ paged[i].nome }} </div>
-                    <div class="col-4">{{ paged[i].oreSvolte }} </div>
-                    <div class="col-2">
-                        <input type="checkbox" [ngModel]="paged[i].completato"
-                            (change)="onFilterChange($event,paged[i])" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br/>
-        <div *ngIf="warningText" class="row">
-            &nbsp;&nbsp;<i class="material-icons icon" [ngStyle]="(blockCompleteOperation) ? { 'color': 'red' } : { 'color': 'orange' }" >warning</i>&nbsp;{{ warningText }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-8"></div>
-        <div class="col-4" style="text-align:right">
-            <button [disabled]="blockCompleteOperation" class="btn btn-success v-center-inline mr-3" (click)="addStudents()">
-                {{ attachedStudentButtonText }}
-            </button>
-         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 text-center">
-            <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize"
-                (pageChanged)="pageChanged($event)"></cm-pagination>
-        </div>
-    </div>
-    <div *ngIf="!paged || paged.length==0" class="empty-list">Nessun studente trovato</div>
-</div> -->
-
-
-

@@ -9,6 +9,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'cm-modifica-dettaglio',
@@ -57,6 +58,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   attivitaTipologia;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   attivitaStato: string = "";
+  evn = environment;
   breadcrumbItems = [
     {
       title: "Dettaglio attività",
@@ -92,7 +94,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.evn.modificationFlag=true;
     this.date = {
       dataInizio: moment(),
       dataFine: moment()
@@ -155,6 +157,9 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           () => console.log('getAttivitaTipologie'));
       });
     });
+  }
+  ngOnDestroy(){
+    this.evn.modificationFlag=false;
   }
 
   getTipologiaString(tipologiaId) {
