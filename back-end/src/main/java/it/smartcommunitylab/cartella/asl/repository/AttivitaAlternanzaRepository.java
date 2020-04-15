@@ -22,7 +22,7 @@ public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlte
 			+ "referenteScuolaCF=:#{#aa.referenteScuolaCF}, referenteEsterno=:#{#aa.referenteEsterno}, "
 			+ "referenteEsternoCF=:#{#aa.referenteEsternoCF}, formatore=:#{#aa.formatore}, formatoreCF=:#{#aa.formatoreCF}, "
 			+ "luogoSvolgimento=:#{#aa.luogoSvolgimento}, latitude=:#{#aa.latitude}, longitude=:#{#aa.longitude} where id = :#{#aa.id}")
-	public void update(@Param("aa") AttivitaAlternanza aa);
+	public void updateAttivitaAlternanza(@Param("aa") AttivitaAlternanza aa);
 
 	@Query("SELECT COUNT(aa) FROM AttivitaAlternanza aa WHERE aa.uuid IN (:ids)")
 	public int getCountOfAttivitaAlternanza(String[] ids);

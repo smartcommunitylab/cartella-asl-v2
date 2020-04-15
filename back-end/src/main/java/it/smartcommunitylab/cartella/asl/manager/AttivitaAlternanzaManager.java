@@ -78,7 +78,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 					esperienzaSvoltaManager.changeDateRange(esperienza, aa.getDataInizio(), aa.getDataFine());
 				}
 			}
-			attivitaAlternanzaRepository.update(aa);
+			attivitaAlternanzaRepository.updateAttivitaAlternanza(aa);
 			return aa;
 		}
 	}
