@@ -9,6 +9,22 @@
                 <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
             </span>
         </div>
+        <div class="col-6">
+            <span class="float-right m-right">
+                <button *ngIf="competenza.ownerId==dataService.istitutoId" class="btn btn-secondary btn-xs btn-icon btnDeleteCompetenza mRight" placement="bottom"
+                    ngbTooltip="Elimina competenza" (click)="deleteCompetenza()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Elimina competenza</span>
+                        <span class="col-2">
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </span>
+        </div>
+
     </div>
 
     <hr class="hr" />
@@ -24,20 +40,6 @@
     <div class="row m-subNav" *ngIf="competenza">
         <div class="col-8">
             <sub-navbar  [breadcrumbItems]="breadcrumbItems"></sub-navbar>
-        </div>
-        <div *ngIf="competenza.ownerId==dataService.istitutoId" class="col-4 shadowDetails">
-            <span class="float-right">
-                <button class="btn btn-secondary btn-xs btn-icon btnDeleteCompetenza mRight" placement="bottom"  ngbTooltip="Elimina competenza" (click)="deleteCompetenza()">
-                    <span class="row btnText">
-                        <span class="col-10 v-center">Elimina competenza</span>
-                        <span class="col-2">
-                            <svg class="icon icon-white icon-sm">
-                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
-                            </svg>
-                        </span>
-                    </span>
-                </button>
-            </span>
         </div>
     </div>
     
