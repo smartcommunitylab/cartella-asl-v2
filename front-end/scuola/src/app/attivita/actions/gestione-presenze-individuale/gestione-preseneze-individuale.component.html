@@ -53,8 +53,25 @@
     </div>
   </div>
   <br>
+  <div *ngIf="report" class="callNote default">
+    <span class="row">
+      <span class="col-2 font-weight-bold">Da validare</span>
+      <span class="col-2 font-weight-bold">Validate</span>
+      <span class="col-2 font-weight-bold">Inizio attività</span>
+      <span class="col-2 font-weight-bold">Fine attività</span>
+      <span class="col-2 font-weight-bold">Ore validate</span>
+    </span> 
+    <span class="row">
+      <span class="col-2">{{report.giornateDaValidare}} giornate</span>
+      <span class="col-2">{{report.giornateValidate}} giornate</span>
+      <span class="col-2">{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.dataFine | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.oreValidate}}/{{report.oreTotali}}</span>
+    </span>
+  </div>
+  <br>
   <div class="row" *ngIf="attivita">
-    <span class="col-4 pTop">
+    <span class="col-6 pTop">
       <label class="titleDate">Data inizio</label>&nbsp;
       <div #calendarStart class="col-sm-4 m-left" [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
         <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig" theme="dp-material" id="dataInizio" required>
@@ -67,7 +84,7 @@
         </div>
       </div>  
     </span>
-    <span class="col-4 pTop">
+    <span class="col-6 pTop">
       <label class="titleDate">Data fine</label>&nbsp;
       <div #calendarEnd class="col-sm-4 m-left" [class.has-danger]="!date.dataFine || date.dataFine > limitMax || date.dataFine < limitMin">
         <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataFine" [config]="datePickerConfig" theme="dp-material" id="dataFine" required>
@@ -80,7 +97,7 @@
         </div>
       </div>
     </span>
-    <span class="col-4">
+    <!-- <span class="col-4">
       <div *ngIf="report" class="float-right callNote default">
         <span class="row"><span class="font-weight-bold">Da validare: </span>&nbsp;{{report.giornateDaValidare}} giorni</span>
         <span class="row"><span class="font-weight-bold">Validate: </span>&nbsp;{{report.giornateValidate}} giorni</span>
@@ -88,8 +105,9 @@
         <span class="row"><span class="font-weight-bold">Fine attività: </span>&nbsp;{{report.dataFine  | date:'dd/MM/yyyy'}}</span>
         <span class="row"><span class="font-weight-bold">Ore validate: </span>&nbsp;{{report.oreValidate}}/{{report.oreTotali}}</span>
       </div>
-    </span>
+    </span> -->
   </div>
+   <br>
   <div class="row m-16" *ngIf="attivita && presenze.length > 0">
     <table class="table mOf">
       <thead>

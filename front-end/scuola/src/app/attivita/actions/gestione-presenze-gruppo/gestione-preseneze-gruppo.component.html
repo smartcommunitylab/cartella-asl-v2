@@ -54,7 +54,22 @@
     </div>
   </div>
   <br>
-  
+  <div *ngIf="report" class="callNoteGruppo default noteFont">
+    <span class="row">
+      <span class="col-2 font-weight-bold">Da validare</span>
+      <span class="col-2 font-weight-bold">Validate</span>
+      <span class="col-2 font-weight-bold">Inizio attività</span>
+      <span class="col-2 font-weight-bold">Fine attività</span>
+      <span class="col-2 font-weight-bold">Studenti con ore da validare</span>
+    </span> 
+    <span class="row">
+      <span class="col-2">{{report.giornateDaValidare}} giornate</span>
+      <span class="col-2">{{report.giornateValidate}} giornate</span>
+      <span class="col-2">{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.dataFine | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.studentiDaValidare}}</span>
+    </span>
+  </div>
   <div class="row m-16 pTop" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
     <div class="col-12" *ngIf="studenti">
       <table class="table mOf">
@@ -80,8 +95,8 @@
                 <span class="col-12 thStyle">Nome</span>
               </div>
             </th>
-            <th width="7%"><span class="thStyle">Classe</span></th>
-            <th width="58%">
+            <th><span class="thStyle">Classe</span></th>
+            <th>
               <div class="row">
                 <div class="col-1 v-center">
                   <button class="btn" [disabled]="!isDaysBackAvailable()" (click)="navigateDaysBack()">
@@ -121,15 +136,6 @@
                 <div class="col-1"></div>
               </div>
             </th>
-            <th width="20%">
-              <div *ngIf="report" class="float-right callNoteGruppo default noteFont">
-                <span class="row"><span class="font-weight-bold">Da validare: </span>&nbsp;{{report.giornateDaValidare}} giornate</span>
-                <span class="row"><span class="font-weight-bold">Validate: </span>&nbsp;{{report.giornateValidate}} giornate</span>
-                <span class="row"><span class="font-weight-bold">Inizio attività: </span>&nbsp;{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
-                <span class="row"><span class="font-weight-bold">Fine attività: </span>&nbsp;{{report.dataFine | date:'dd/MM/yyyy'}}</span>
-                <span class="row"><span class="font-weight-bold">Studenti con ore da validare: </span>&nbsp;{{report.studentiDaValidare}}</span>
-              </div>
-            </th>
           </tr>
         </thead>
         <tbody class="modify-table-body modify-card-body-height">
@@ -167,61 +173,3 @@
       </table>
     </div>
   </div>
-  <!-- <div class="row" *ngIf="attivita && (studentiIds && studentiIds.length > 0)">
-    <div class="col-9">
-      <div class="list-group" *ngIf="studenti">
-        <div class="list-group-item">
-          <div class="row">
-            <div class="col-2 v-center default">Nome</div>
-            <div class="col-1 v-center default">Classe</div>
-            <div class="col-1 v-center">
-              <button class="btn" [disabled]="!isDaysBackAvailable()" (click)="navigateDaysBack()">
-                <svg class="icon icon-primary icon-bg">
-                  <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-left-triangle"></use>
-                </svg>
-              </button>
-            </div>
-            <div class="col-1 p-0 m-auto text-center default" *ngFor="let giornata of calendar; let i=index">
-              <span>{{giornata.valueOf()| date:'dd-MM-yyyy'}} <br> {{giornata.valueOf()| date:'EEE'}}
-              </span>
-            </div>
-            <div class="col-1 v-center">
-              <button class="btn" [disabled]="!isDaysForwardAvailable()" (click)="navigateDaysForward()">
-                <svg class="icon icon-primary icon-bg">
-                  <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-triangle"></use>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-4"></div>
-            <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of calendar; let i=index">
-              <button type="button" [disabled]="isArchivio || !isDayBetween(giornata)" class="btn btn-outline-primary"
-                (click)="setDefaultHourToAllStudents(i)">{{defaultHour}} ore</button>
-            </div>
-            <div class="col-1"></div>
-          </div>
-        </div>
-        <div class="list-group-item list-group-item-action" *ngFor="let studenteId of studentiIds; let i = index">
-          <div class="row">
-            <div class="col-2 default" #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studenti[studenteId].toolTipRiga}}" (mouseenter)="showTipRiga($event, studenti[studenteId]);" >
-              {{studenti[studenteId].nominativoStudente}}
-            </div>
-            <div class="col-1 default"#tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studenti[studenteId].toolTipRiga}}" (mouseenter)="showTipRiga($event, studenti[studenteId]);" >
-              {{studenti[studenteId].classeStudente}}
-            </div>
-            <div class="col-1"></div>
-            <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of presenzaStudenti[studenteId]">
-              <input type="number" class="form-control text-center w-100" min="0" max="12"
-                oninput="this.value = Math.abs(this.value)" [disabled]="isArchivio || !isDayBetween(giornata.giornata)"
-                [(ngModel)]="giornata.oreSvolte"
-                [ngStyle]="(giornata.verificata) ? { 'color': 'black' } : { 'color': 'red' }"
-                (ngModelChange)="edit(giornata)" />
-            </div>
-            <div class="col-1"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-3"></div>
-  </div> -->
