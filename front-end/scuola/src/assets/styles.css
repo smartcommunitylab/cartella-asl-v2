@@ -14062,7 +14062,6 @@ hr {
 .p-5 {
   padding: 3rem !important;
   padding: 1rem !important;
-  /*3rem !important;*/
 }
 
 .breadcrumb {
@@ -14140,13 +14139,10 @@ hr {
 }
 
 .myCustomModalClass .modal-dialog {
-    /* max-width: 900px; */
     max-width: 85%;
 }
 
 .cancellaModalClass .modal-dialog {
-  /* top: 272px; */
-  /* left: 36px; */
   top: 33%;
   right: 2%;
   left: 2%;
@@ -14324,11 +14320,10 @@ hr {
 .modifyHr{
   border: 2.5px solid #7FB2E5;
   opacity: 1;
-  /* margin: 1em; */
+  background-color: #7FB2E5;
 }
 .modifyShowContent{
   margin: 1px !important;
-  /* width: 98% !important; */
 }
 
 /* end modify style*/
@@ -14458,11 +14453,8 @@ div.dp-input-container> input.dp-picker-input{
 /* callout note */
 .callNote{
   padding: 12px 16px;
-  /* border: 1px solid #5b6f82; */
   position: relative;
   max-width: 60ch;
-  /* margin: 1.75rem 0 1rem; */
-  /* border-radius: 8px; */
   border: 3px solid #7FB2E5;
   border-radius: 5px;
   margin-bottom: -30px;
