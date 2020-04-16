@@ -16,19 +16,22 @@
 <div class="text-center">
     <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
         <span class="row">
-            <span class="btn-txt v-center">Annulla</span>&nbsp;
-            <span>
+            <span class="col-9 btn-txt v-center">Annulla</span>
+            <span class="col-3">
                 <svg class="icon icon-white icon-sm">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
                 </svg>
             </span>
         </span>        
-    </button>&nbsp;
+    </button>&nbsp;&nbsp;
     <button class="btn btn-flat btn-secondary" (click)="delete()">
         <span class="row">
-            <span class="btn-txt v-center">Cancella</span>&nbsp;
-            <span>
-                <i class="material-icons">delete</i>
+            <span class="col-9 btn-txt v-center">Elimina</span>
+            <span class="col-3">
+                <!-- <i class="material-icons">delete</i> -->
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                </svg>
             </span>
         </span>
 
