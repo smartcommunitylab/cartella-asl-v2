@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.smartcommunitylab.cartella.asl.csv.ImportFromCsv;
 import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
-import it.smartcommunitylab.cartella.asl.manager.DataManager;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaAllineamentoManager;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
@@ -66,9 +65,6 @@ public class DevController {
 	private ImportFromCsv csvManager;
 	
 	@Autowired
-	private DataManager dataManager;
-	
-	@Autowired
 	private EsperienzaAllineamentoManager esperienzaAllineamentoManager;	
 
 	@Value("${import.dir}")
@@ -78,15 +74,6 @@ public class DevController {
 			false);
 
 	private static Log logger = LogFactory.getLog(DevController.class);
-	
-	@GetMapping("/api/data")
-	public Object getData(@RequestParam(required=false) String type) throws Exception {
-		logger.info(String.format("getData[%s]", type));
-		if (type == null || type.isEmpty()) {
-			return dataManager.getAll();
-		}
-		return dataManager.get(type);
-	}
 
     /**
      * return the string representation of anno scolastico given a date
