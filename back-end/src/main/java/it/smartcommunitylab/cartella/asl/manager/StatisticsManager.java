@@ -4,11 +4,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,17 +15,14 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
-import org.apache.commons.collections4.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
@@ -83,6 +78,8 @@ public class StatisticsManager extends DataEntityManager {
 	
 	private static final String PIANO_STUDENTE= "SELECT DISTINCT pa0 FROM PianoAlternanza pa0, AnnoAlternanza aa0, AttivitaAlternanza at0, EsperienzaSvolta es0, Studente s0 "
 			+ "WHERE s0.id = (:studenteId) AND es0.studente = s0 AND es0.attivitaAlternanza = at0 AND at0.annoAlternanza = aa0 AND aa0.id = at0.annoAlternanza.id AND aa0 MEMBER OF pa0.anniAlternanza";	
+	
+	private static final String ESPERIENZA_SVOLTA_BY_STUDENTE_ID = "SELECT DISTINCT es0 FROM EsperienzaSvolta es0 JOIN es0.attivitaAlternanza aa0 JOIN es0.studente s0 WHERE s0.id = (:studenteId)";
 	
 	@Autowired
 	private AttivitaAlternanzaRepository aaRepository;
@@ -876,7 +873,7 @@ public class StatisticsManager extends DataEntityManager {
 			paCIds.addAll(pa.getCompetenze().stream().filter(x -> ISFOL.equals(x.getOwnerId())).map(x -> x.getIdCompetenza()).collect(Collectors.toSet()));
 		} */
 		
-		TypedQuery<EsperienzaSvolta> query2 = em.createQuery(QueriesManager.ESPERIENZA_SVOLTA_BY_STUDENTE_ID, EsperienzaSvolta.class);
+		TypedQuery<EsperienzaSvolta> query2 = em.createQuery(	ESPERIENZA_SVOLTA_BY_STUDENTE_ID, EsperienzaSvolta.class);
 		
 		query2.setParameter("studenteId", studente.getId());
 		

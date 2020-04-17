@@ -1,33 +1,13 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.collect.Lists;
-
-import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
-import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.IstituzioneManager;
-import it.smartcommunitylab.cartella.asl.manager.QueriesManager;
 import it.smartcommunitylab.cartella.asl.manager.StudenteManager;
-import it.smartcommunitylab.cartella.asl.model.Istituzione;
-import it.smartcommunitylab.cartella.asl.model.Studente;
-import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
-import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 
 @RestController
 public class RegistrationController implements AslController {

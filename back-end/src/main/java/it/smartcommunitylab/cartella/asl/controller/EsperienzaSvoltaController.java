@@ -1,43 +1,18 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-
-import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
-import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
-import it.smartcommunitylab.cartella.asl.manager.QueriesManager;
-import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
-import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
-import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
-import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
-import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
 
 // TODO acl for aziende?
 @RestController
 public class EsperienzaSvoltaController implements AslController {
 
-	@Autowired
-	private QueriesManager aslManager;
 	
 	@Autowired
 	private ASLRolesValidator usersValidator;		
@@ -51,22 +26,22 @@ public class EsperienzaSvoltaController implements AslController {
 	private static Log logger = LogFactory.getLog(EsperienzaSvoltaController.class);
 
 
-	@GetMapping("/api/esperienzaSvolta")
-	public Page<EsperienzaSvolta> findEsperienzaSvoltaByAziendaId(@RequestParam(required=false) String istitutoId, @RequestParam String aziendaId, @RequestParam(required=false) Long dataInizio, @RequestParam(required=false) Long dataFine, @RequestParam(required=false) String stato, @RequestParam(required=false) String tipologia, @RequestParam(required=false) String filterText, @RequestParam(required=false) Boolean individuale, HttpServletRequest request, Pageable pageRequest) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, aziendaId), new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, aziendaId)));
-		
-		List<Integer> statoList = null;
-		List<Integer> tipologiaList = null;
-		if (stato != null) {
-			statoList = Splitter.on(",").splitToList(stato).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
-		}
-		if (tipologia != null) {
-		 tipologiaList = Splitter.on(",").splitToList(tipologia).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
-		}
-		Page<EsperienzaSvolta> result = aslManager.findEsperienzaSvoltaByIstitutoAndAziendaIds(istitutoId, aziendaId, dataInizio, dataFine, statoList, tipologiaList, filterText, individuale, pageRequest);
-		
-		return result;
-	}
+//	@GetMapping("/api/esperienzaSvolta")
+//	public Page<EsperienzaSvolta> findEsperienzaSvoltaByAziendaId(@RequestParam(required=false) String istitutoId, @RequestParam String aziendaId, @RequestParam(required=false) Long dataInizio, @RequestParam(required=false) Long dataFine, @RequestParam(required=false) String stato, @RequestParam(required=false) String tipologia, @RequestParam(required=false) String filterText, @RequestParam(required=false) Boolean individuale, HttpServletRequest request, Pageable pageRequest) throws Exception {
+//		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, aziendaId), new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, aziendaId)));
+//		
+//		List<Integer> statoList = null;
+//		List<Integer> tipologiaList = null;
+//		if (stato != null) {
+//			statoList = Splitter.on(",").splitToList(stato).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
+//		}
+//		if (tipologia != null) {
+//		 tipologiaList = Splitter.on(",").splitToList(tipologia).stream().map(x -> Integer.parseInt(x)).collect(Collectors.toList());
+//		}
+//		Page<EsperienzaSvolta> result = aslManager.findEsperienzaSvoltaByIstitutoAndAziendaIds(istitutoId, aziendaId, dataInizio, dataFine, statoList, tipologiaList, filterText, individuale, pageRequest);
+//		
+//		return result;
+//	}
 
 //	@GetMapping("/api/esperienzaSvolta/details/{id}")
 //	public EsperienzaSvolta getEsperienzaSvolta(@PathVariable long id, HttpServletRequest request) throws Exception {
