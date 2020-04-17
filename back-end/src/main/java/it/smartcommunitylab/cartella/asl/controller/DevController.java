@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +26,6 @@ import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.DataManager;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaAllineamentoManager;
-import it.smartcommunitylab.cartella.asl.manager.TipologiaTipologiaAttivitaManager;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
@@ -71,11 +69,7 @@ public class DevController {
 	private DataManager dataManager;
 	
 	@Autowired
-	private EsperienzaAllineamentoManager esperienzaAllineamentoManager;
-	
-	@Autowired
-	private TipologiaTipologiaAttivitaManager tipologiaTipologiaAttivitaManager;
-	
+	private EsperienzaAllineamentoManager esperienzaAllineamentoManager;	
 
 	@Value("${import.dir}")
 	private String importPath;
@@ -93,16 +87,6 @@ public class DevController {
 		}
 		return dataManager.get(type);
 	}
-	
-	@GetMapping("/api/tipologiaTipologiaAttivita/{id}")
-	public TipologiaTipologiaAttivita getTipologiaAttivita(@PathVariable long id) {
-		return tipologiaTipologiaAttivitaManager.getTipologiaTipologiaAttivita(id);
-	}		
-	
-	@GetMapping("/api/tipologieTipologiaAttivita")
-	public List<TipologiaTipologiaAttivita> getTipologiaAttivita() {
-		return tipologiaTipologiaAttivitaManager.getTipologieTipologiaAttivita();
-	}	
 
     /**
      * return the string representation of anno scolastico given a date
