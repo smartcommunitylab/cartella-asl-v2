@@ -27,7 +27,7 @@ import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.DataManager;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaAllineamentoManager;
-import it.smartcommunitylab.cartella.asl.manager.QueriesManager;
+import it.smartcommunitylab.cartella.asl.manager.TipologiaTipologiaAttivitaManager;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
@@ -42,9 +42,6 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @RestController
 public class DevController {
-
-	@Autowired
-	private QueriesManager aslManager;
 
 	@Autowired
 	private CompetenzaRepository cRepository;
@@ -76,6 +73,9 @@ public class DevController {
 	@Autowired
 	private EsperienzaAllineamentoManager esperienzaAllineamentoManager;
 	
+	@Autowired
+	private TipologiaTipologiaAttivitaManager tipologiaTipologiaAttivitaManager;
+	
 
 	@Value("${import.dir}")
 	private String importPath;
@@ -96,12 +96,12 @@ public class DevController {
 	
 	@GetMapping("/api/tipologiaTipologiaAttivita/{id}")
 	public TipologiaTipologiaAttivita getTipologiaAttivita(@PathVariable long id) {
-		return aslManager.getTipologiaTipologiaAttivita(id);
+		return tipologiaTipologiaAttivitaManager.getTipologiaTipologiaAttivita(id);
 	}		
 	
 	@GetMapping("/api/tipologieTipologiaAttivita")
 	public List<TipologiaTipologiaAttivita> getTipologiaAttivita() {
-		return aslManager.getTipologieTipologiaAttivita();
+		return tipologiaTipologiaAttivitaManager.getTipologieTipologiaAttivita();
 	}	
 
     /**
@@ -199,19 +199,6 @@ public class DevController {
 
 	}
 
-	@GetMapping("/admin/importJsonDB")
-	public void importJsonDB(HttpServletRequest request) throws Exception {
-		usersValidator.checkRole(request, ASLRole.ADMIN);
-		delete();
-		jsonDB.importPianiAlternanza();
-		jsonDB.importTipologieAttivita();
-		jsonDB.importAttivitaAlternanza();
-		jsonDB.importEsperienzeSvolte();
-		jsonDB.importOfferte();
-		jsonDB.importPresenzeGiornaliere();
-
-	}
-
 	@GetMapping("/admin/exportJsonDB")
 	public void exportJsonDB(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
@@ -286,10 +273,6 @@ public class DevController {
 	public void dumpInfoTNProfessoriClassi(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		apiUpdateManager.importInfoTNProfessoriClassi();
-	}
-
-	private void delete() {
-		aslManager.reset();
 	}
 
 	@GetMapping("/admin/scheduleImport")

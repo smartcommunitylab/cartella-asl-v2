@@ -19,7 +19,7 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
 @Transactional
-public class RelationshipManager extends EntitiesManager {
+public class RelationshipManager {
 	
 	@Autowired
 	private ErrorLabelManager errorLabelManager;

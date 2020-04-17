@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,18 +19,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 
-import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.PianoAlternanzaManager;
-import it.smartcommunitylab.cartella.asl.manager.QueriesManager;
-import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
-import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.TipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
@@ -45,8 +39,6 @@ public class PianoAlternanzaController implements AslController {
 	private static Log logger = LogFactory.getLog(PianoAlternanzaController.class);
 	
 	@Autowired
-	private QueriesManager aslManager;	
-	@Autowired
 	private PianoAlternanzaManager pianoAltManager;	
 	@Autowired()
 	LocalDocumentManager documentManager;	
@@ -54,11 +46,6 @@ public class PianoAlternanzaController implements AslController {
 	private ASLRolesValidator usersValidator;
 	@Autowired
 	private AuditManager auditManager;		
-	
-	@GetMapping("/api/reset")
-	public @ResponseBody void reset() throws Exception {
-		aslManager.reset();
-	}
 	
 	@GetMapping("/api/pianiAlternanza/{istitutoId}")
 	public Page<PianoAlternanza> getAllPianiIstituto(
@@ -109,7 +96,7 @@ public class PianoAlternanzaController implements AslController {
 
 	@GetMapping("/api/pianoAlternanza/{id}")
 	public PianoAlternanza getPianoAlternanza(@PathVariable long id, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPianoAlternanza(%s", id + ")"));
@@ -128,7 +115,7 @@ public class PianoAlternanzaController implements AslController {
 
 	@DeleteMapping("/api/pianoAlternanza/{pianoId}")
 	public boolean deletePianoAlternanza(@PathVariable long pianoId, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(pianoId);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(pianoId);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));	
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("deletePianoAlternanza(%s", pianoId + ")"));
@@ -141,7 +128,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@GetMapping("/api/pianoAlternanza/{id}/tipologie")
 	public Map<String, List<TipologiaAttivita>> getPianoTipologie(@PathVariable long id, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPianoTipologie(%s", id + ")"));
@@ -152,7 +139,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@PutMapping("/api/pianoAlternanza/{id}/tipologie")
 	public Boolean updateTipologieToPianoAlternanza(@PathVariable long id, @RequestBody Map<String, List<TipologiaAttivita>> saveTipos, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateTipologieToPianoAlternanza(%s", id + ")"));
@@ -168,7 +155,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@PostMapping("/api/pianoAlternanza/duplica")
 	public PianoAlternanza duplicaPianoAlternanza(@RequestBody PianoAlternanza duplicaPiano, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(duplicaPiano.getId());
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(duplicaPiano.getId());
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));			
 		
 		PianoAlternanza result = pianoAltManager.duplicaPianoAlternanza(duplicaPiano);
@@ -183,7 +170,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@GetMapping("/api/pianoAlternanza/duplica/{id}")
 	public PianoAlternanza getDuplicaPianoAlternanza(@PathVariable long id, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));			
 		
 		PianoAlternanza result = pianoAltManager.getDuplicaPianoAlternanza(id);
@@ -199,7 +186,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@PutMapping("/api/pianoAlternanza/activate/{id}")
 	public @ResponseBody PianoAlternanza activatePianoAlternanza(@PathVariable Long id, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));			
 		
 		PianoAlternanza result = pianoAltManager.activatePianoAlternanza(id);
@@ -214,7 +201,7 @@ public class PianoAlternanzaController implements AslController {
 	
 	@PutMapping("/api/pianoAlternanza/deactivate/{id}")
 	public @ResponseBody void dactivatePianoAlternanza(@PathVariable Long id, HttpServletRequest request) throws Exception {
-		String istitutoId = aslManager.findPianoAlternanzaIstitutoId(id);
+		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));			
 		
 		pianoAltManager.disactivatePianAlternanza(id);

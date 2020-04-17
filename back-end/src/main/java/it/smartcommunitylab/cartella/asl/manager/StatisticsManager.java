@@ -50,12 +50,16 @@ import it.smartcommunitylab.cartella.asl.model.statistics.POI;
 import it.smartcommunitylab.cartella.asl.model.statistics.Product;
 import it.smartcommunitylab.cartella.asl.model.statistics.Provider;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
+import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
+import it.smartcommunitylab.cartella.asl.repository.CompetenzaRepository;
+import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
+import it.smartcommunitylab.cartella.asl.util.Constants;
 
 @Repository
 @Transactional
-public class StatisticsManager extends RelationshipManager {
+public class StatisticsManager extends DataEntityManager {
 
 	private static final String ISFOL = "ISFOL";
 
@@ -82,21 +86,18 @@ public class StatisticsManager extends RelationshipManager {
 	
 	@Autowired
 	private AttivitaAlternanzaRepository aaRepository;
-	
 	@Autowired
 	private StudenteRepository sRepository;	
-	
 	@Autowired
-	protected EntityManager em;
-	
+	private OffertaRepository offertaRepository;
 	@Autowired
-	protected OffertaRepository offertaRepository;
-	
+	private StudenteRepository studenteRepository;
 	@Autowired
-	protected StudenteRepository studenteRepository;
-	
+	private CompetenzaRepository competenzaRepository;
 	@Autowired
-	CompetenzaManager competenzaManager;
+	private AziendaRepository aziendaRepository;
+	@Autowired
+	private CorsoDiStudioRepository corsoDiStudioRepository;
 
 	public List<Internship> findInternships(Integer tipologia, Long from, Long to, double[] coordinate, Integer radius, String aziendaId, String corsoId) {
 //		StringBuilder sb = new StringBuilder(OPPORTUNITA);
@@ -313,6 +314,33 @@ public class StatisticsManager extends RelationshipManager {
 		List<POI> pois = result.stream().map(x -> aziendaToPOI(x, azopp.get(x))).collect(Collectors.toList());
 
 		return pois;
+	}	
+	
+	public List<Azienda> findAziendaNear(double lat, double lon, double distance) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+	    CriteriaQuery<Azienda> cq1 = cb.createQuery(Azienda.class);
+	    Root<Azienda> azienda = cq1.from(Azienda.class);
+
+	    double t1 = distance / Math.abs(Math.cos(Math.toRadians(lat)) * Constants.KM_IN_ONE_LAT);
+	    double t2 = distance / Constants.KM_IN_ONE_LAT;
+
+	    double lonA = lon - t1;
+	    double lonB = lon + t1;
+
+	    double latA = lat - t2;
+	    double latB = lat + t2;
+	    
+	    Predicate predicate1 = cb.between(azienda.get("latitude").as(Double.class), latA, latB);
+	    Predicate predicate2 = cb.between(azienda.get("longitude").as(Double.class), lonA, lonB);
+	    Predicate predicate = cb.and(predicate1, predicate2);
+	    
+	    cq1.where(predicate);
+	    
+	    TypedQuery<Azienda> query1 = em.createQuery(cq1);
+		
+	    List<Azienda> result = query1.getResultList(); 
+		
+	    return result;
 	}	
 	
 	public Multimap<Azienda, Offerta> findAziendaOpportunita(double[] coordinate, Integer radius) {
@@ -665,7 +693,7 @@ public class StatisticsManager extends RelationshipManager {
 		Competenza competenza = null;
 		
 		if (competenzaId != null) {
-			competenza = competenzaManager.getCompetenza(competenzaId);
+			competenza = competenzaRepository.getOne(competenzaId);
 		}
 		
 		return countOpportunitaPerSkillToKPI(competenza, count);

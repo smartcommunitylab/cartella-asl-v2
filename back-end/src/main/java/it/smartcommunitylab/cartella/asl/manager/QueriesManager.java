@@ -32,6 +32,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
+import it.smartcommunitylab.cartella.asl.repository.PianoAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.util.AttivitaAlternanzaComparator;
 import it.smartcommunitylab.cartella.asl.util.Constants;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -39,7 +40,7 @@ import it.smartcommunitylab.cartella.asl.util.EsperienzeSvoltaComparator;
 
 @Repository
 @Transactional
-public class QueriesManager extends RelationshipManager {
+public class QueriesManager {
 
 	@Autowired
 	protected EntityManager em;
@@ -55,6 +56,9 @@ public class QueriesManager extends RelationshipManager {
 
 	@Autowired
 	private ErrorLabelManager errorLabelManager;
+	
+	@Autowired
+	private PianoAlternanzaRepository pianoAlternanzaRepository;
 
 	private static final String ESPERIENZA_SVOLTA_BY_ISTITUTO_AND_AZIENDA_ID = "SELECT DISTINCT es0 FROM EsperienzaSvolta es0 JOIN es0.attivitaAlternanza aa0 JOIN aa0.opportunita o0 JOIN o0.azienda az0 "
 			+ "WHERE az0.id = (:aziendaId) ";

@@ -52,6 +52,10 @@ public class PianoAlternanzaManager extends DataEntityManager {
 
 	private static final String PIANO_ALTERNANZA_BY_ISTITUTO_CORSO = "SELECT DISTINCT pa0 FROM PianoAlternanza pa0 WHERE pa0.corsoDiStudioId = (:corsoDiStudioId) AND pa0.istitutoId = (:istitutoId)";
 
+	public String findPianoAlternanzaIstitutoId(Long id) {
+		return pianoAlternanzaRepository.findPianoAlternanzaIstitutoId(id);
+	}
+
     public List<PianoAlternanza> findPianoAlternanzaAttivoForCorso(String istitutoId,
             String corsoDiStudioId) {
         StringBuilder sb = new StringBuilder(PIANO_ALTERNANZA_BY_ISTITUTO_CORSO);
