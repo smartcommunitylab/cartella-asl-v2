@@ -43,8 +43,9 @@ export class GeoService {
       var url = 'https://os.smartcommunitylab.it/core.geocoder/address?address=' + location;
       return this.http.get<any>(url, {observe: 'response'}).timeout(60000)
       .map(result => {
-        //let addresses = this.createPlaces(result["body"].response.docs);
-        return (result.body.response.docs);
+        if (result.body && result.body.response && result.body.response.docs) {
+          return (result.body.response.docs);
+        }        
       });
     }
 
