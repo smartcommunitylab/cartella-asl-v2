@@ -2,32 +2,18 @@ package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
 
-import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
+import it.smartcommunitylab.cartella.asl.model.PianoAlternanza.Stati;
 
-@Entity
-@Table(name = "piano_alternanza", 
-	indexes = { @Index(name = "istitutoId_idx", columnList = "istitutoId", unique = false) })
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class PianoAlternanza {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PianoAlternanzaBean {
 	private Long id;
 	private String uuid;
 	private String istitutoId;
@@ -48,17 +34,30 @@ public class PianoAlternanza {
 	private int oreQuintoAnno;
 	@Enumerated(EnumType.STRING)
 	private Stati stato;
-	@Transient
 	private String anni;
-	@Transient
 	private String periodo;
-	@Transient
-	private PianoAlternanzaBean pianoCorrelato; 
-
-	public static enum Stati {
-		bozza, attivo, in_scadenza, scaduto, in_attesa
-	};
-
+	
+	public PianoAlternanzaBean() {};
+	
+	public PianoAlternanzaBean(PianoAlternanza piano) {
+		this.id = piano.getId();
+		this.uuid = piano.getUuid();
+		this.istitutoId = piano.getIstitutoId();
+		this.corsoDiStudioId = piano.getCorsoDiStudioId();
+		this.corsoDiStudio = piano.getCorsoDiStudio();
+		this.titolo = piano.getTitolo();
+		this.dataAttivazione = piano.getDataAttivazione();
+		this.dataCreazione = piano.getDataCreazione();
+		this.dataDisattivazione = piano.getDataDisattivazione();
+		this.dataScadenza = piano.getDataScadenza();
+		this.note = piano.getNote();
+		this.oreTerzoAnno = piano.getOreTerzoAnno();
+		this.oreQuartoAnno = piano.getOreQuartoAnno();
+		this.oreQuintoAnno = piano.getOreQuintoAnno();
+		this.stato = piano.getStato();
+		this.anni = piano.getAnni();
+		this.periodo = piano.getPeriodo();
+	}
 	
 	public Stati getStato() {
 		return stato;
@@ -201,13 +200,4 @@ public class PianoAlternanza {
 	public void setDataScadenza(LocalDate dataScadenza) {
 		this.dataScadenza = dataScadenza;
 	}
-
-	public PianoAlternanzaBean getPianoCorrelato() {
-		return pianoCorrelato;
-	}
-
-	public void setPianoCorrelato(PianoAlternanzaBean pianoCorrelato) {
-		this.pianoCorrelato = pianoCorrelato;
-	}
-
 }

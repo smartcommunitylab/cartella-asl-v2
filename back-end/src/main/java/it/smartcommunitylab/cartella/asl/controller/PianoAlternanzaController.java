@@ -27,6 +27,7 @@ import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.PianoAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
+import it.smartcommunitylab.cartella.asl.model.PianoAlternanzaBean;
 import it.smartcommunitylab.cartella.asl.model.TipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
@@ -169,11 +170,11 @@ public class PianoAlternanzaController implements AslController {
 	}
 	
 	@GetMapping("/api/pianoAlternanza/duplica/{id}")
-	public PianoAlternanza getDuplicaPianoAlternanza(@PathVariable long id, HttpServletRequest request) throws Exception {
+	public PianoAlternanzaBean getDuplicaPianoAlternanza(@PathVariable long id, HttpServletRequest request) throws Exception {
 		String istitutoId = pianoAltManager.findPianoAlternanzaIstitutoId(id);
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));			
 		
-		PianoAlternanza result = pianoAltManager.getDuplicaPianoAlternanza(id);
+		PianoAlternanzaBean result = pianoAltManager.getDuplicaPianoAlternanza(id);
 		
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), PianoAlternanza.class, result.getId(), user, new Object(){});

@@ -25,6 +25,7 @@ import it.smartcommunitylab.cartella.asl.model.AssociazioneCompetenze;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza.Stati;
+import it.smartcommunitylab.cartella.asl.model.PianoAlternanzaBean;
 import it.smartcommunitylab.cartella.asl.model.TipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.repository.AssociazioneCompetenzeRepository;
 import it.smartcommunitylab.cartella.asl.repository.CompetenzaRepository;
@@ -205,7 +206,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 		PianoAlternanza pa = getPianoAlternanza(id);
 		if(pa != null) {
 			try {
-				PianoAlternanza duplicaPianoAlternanza = getDuplicaPianoAlternanza(id);
+				PianoAlternanzaBean duplicaPianoAlternanza = getDuplicaPianoAlternanza(id);
 				if(duplicaPianoAlternanza != null) {
 					pa.setPianoCorrelato(duplicaPianoAlternanza);
 				}
@@ -446,7 +447,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 		
 	}
 
-	public PianoAlternanza getDuplicaPianoAlternanza(long id) throws BadRequestException {
+	public PianoAlternanzaBean getDuplicaPianoAlternanza(long id) throws BadRequestException {
 		PianoAlternanza pa = getPianoAlternanza(id);
 
 		if (pa == null) {
@@ -456,7 +457,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 			List<PianoAlternanza> pianoInScadenza = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStato(
 					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.attivo);
 			if (!pianoInScadenza.isEmpty())
-				return pianoInScadenza.get(0);
+				return new PianoAlternanzaBean(pianoInScadenza.get(0));
 			else
 				return null;			
 		}
@@ -464,7 +465,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 			List<PianoAlternanza> pianoInScadenza = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
 					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.in_scadenza, pa.getDataAttivazione().minusYears(1), pa.getDataAttivazione());
 			if (!pianoInScadenza.isEmpty())
-				return pianoInScadenza.get(0);
+				return new PianoAlternanzaBean(pianoInScadenza.get(0));
 			else
 				return null;
 		}
@@ -472,7 +473,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 			List<PianoAlternanza> pianoInAttesa = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
 					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.in_attesa, pa.getDataAttivazione(), pa.getDataAttivazione().plusYears(1));
 			if (!pianoInAttesa.isEmpty())
-				return pianoInAttesa.get(0);
+				return new PianoAlternanzaBean(pianoInAttesa.get(0));
 			else 
 				return null;
 		}
