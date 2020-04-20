@@ -24,6 +24,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 
 @Entity
 @Table(name = "asluser") //, uniqueConstraints= @UniqueConstraint(columnNames={"cf", "email"}))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ASLUser {
 
 	@Id
@@ -41,7 +42,6 @@ public class ASLUser {
 	private String username;
 	
 	@Transient
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Set<ASLUserRole> roles = Sets.newHashSet();
 	
 	@Transient

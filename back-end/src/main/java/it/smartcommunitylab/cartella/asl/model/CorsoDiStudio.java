@@ -7,9 +7,12 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 //@Indexed
 @Table(name = "corso_di_studio")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CorsoDiStudio {
 
 	@Id

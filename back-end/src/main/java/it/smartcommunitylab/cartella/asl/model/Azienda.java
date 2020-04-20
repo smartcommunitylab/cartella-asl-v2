@@ -8,10 +8,13 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import it.smartcommunitylab.cartella.asl.beans.Point;
 
 @Entity
 @Table(name = "azienda")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Azienda {
 
 	@Id

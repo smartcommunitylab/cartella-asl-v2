@@ -11,12 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 
 @Entity
 @Table(name = "offerta")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Offerta {
 
 	public static enum Stati {

@@ -15,6 +15,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
@@ -22,6 +23,7 @@ import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 @Entity
 @Table(name = "piano_alternanza", 
 	indexes = { @Index(name = "istitutoId_idx", columnList = "istitutoId", unique = false) })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PianoAlternanza {
 
 	@Id

@@ -12,10 +12,13 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "esperienza_svolta", indexes = { 
 		@Index(name = "attivitaAlternanzaId_idx", columnList = "attivitaAlternanzaId", unique = false),
 		@Index(name = "studenteId_idx", columnList = "studenteId", unique = false)})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class EsperienzaSvolta {
 
 	public static enum Stati {

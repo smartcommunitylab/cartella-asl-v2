@@ -7,9 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "associazione_competenze",
 	indexes = { @Index(name = "risorsaId_idx", columnList = "risorsaId", unique = false) })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AssociazioneCompetenze {
 
 	@Id

@@ -9,8 +9,11 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "studente", indexes = { @Index(name = "cf_idx", columnList = "cf", unique = false) })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Studente implements Comparable<Studente> {
 
 	@Id

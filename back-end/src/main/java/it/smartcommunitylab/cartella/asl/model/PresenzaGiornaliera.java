@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
@@ -17,6 +18,7 @@ import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 @Table(name = "presenze_giornaliere", indexes = { 
 		@Index(name = "esperienzaSvoltaId_idx", columnList = "esperienzaSvoltaId", unique = false),
 		@Index(name = "giornata_idx", columnList = "giornata", unique = false)})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class PresenzaGiornaliera {
 
 	@Id

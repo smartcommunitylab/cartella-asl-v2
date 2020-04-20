@@ -4,9 +4,12 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 //@Indexed
 @Table(name = "corso_meta_info")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CorsoMetaInfo {
 
 	@Id
