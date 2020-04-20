@@ -11,7 +11,7 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="attivita.stato!='archiviata'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete" placement="bottom"  ngbTooltip="Elimina questa attività" (click)="delete()">
+                <button *ngIf="attivita.stato!='archiviata'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete mLeft12" placement="bottom"  ngbTooltip="Elimina questa attività" (click)="delete()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Elimina attività</span>
                         <span class="col-2">
@@ -21,8 +21,7 @@
                         </span>
                     </span>
                 </button>
-                &nbsp;
-                <button *ngIf="attivita.stato!='archiviata' && esperienze.length > 0" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia" placement="bottom" ngbTooltip="Archivia questa attività" (click)="archivia()">
+                <button *ngIf="attivita.stato!='archiviata' && esperienze.length > 0" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia mLeft12" placement="bottom" ngbTooltip="Archivia questa attività" (click)="archivia()">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Archivia</span>
                         <span class="col-4 rightItem">

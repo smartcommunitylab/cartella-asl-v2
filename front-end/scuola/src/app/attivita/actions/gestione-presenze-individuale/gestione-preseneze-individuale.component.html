@@ -5,7 +5,7 @@
     </div>
     <div class="col-6">
       <span class="float-right m-right mTop">
-        <button type="button" class="btn btn-danger btn-xs btn-icon py-1 pr-2 btnAnnulla" placement="bottom"
+        <button type="button" class="btn btn-danger btn-xs btn-icon py-1 pr-2 btnAnnulla mLeft12" placement="bottom"
           ngbTooltip="Annulla associazioni" (click)="cancel()">
           <span class="row btnModificationText">
             <span class="col-8 leftItem">Annulla</span>
@@ -16,8 +16,7 @@
             </span>
           </span>
         </button>
-        &nbsp;&nbsp;
-        <button *ngIf="!isArchivio" class="btn btn-success btn-xs btn-icon py-1 pr-2 btnCreate" placement="bottom" ngbTooltip="{{toolTipSave}}"
+        <button *ngIf="!isArchivio" class="btn btn-success btn-xs btn-icon py-1 pr-2 btnCreate mLeft12" placement="bottom" ngbTooltip="{{toolTipSave}}"
           (click)="savePresenze()">
           <span class="row btnCreateText">
             <span class="col-8">Valida presenze&nbsp;</span>
