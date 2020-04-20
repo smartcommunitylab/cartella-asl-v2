@@ -2,7 +2,6 @@ package it.smartcommunitylab.cartella.asl.security;
 
 import java.util.Map;
 
-import javax.management.relation.RoleResult;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpResponse;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,16 +50,7 @@ public class AACConnector {
 	private ObjectMapper mapper = new ObjectMapper();	
 
 	public ASLUser getASLUser(HttpServletRequest request) throws UnauthorizedException {
-		try {
-			ASLUserDetails details = (ASLUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			ASLUser user = getASLUser(details);
-			logger.info("User found in context.");
-			return user;
-		} catch(UnauthorizedException e) {
-			throw e;			
-		} catch (Exception e) {
-			logger.info("Principal not found, using token.");
-
+			//Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			AccountProfile accountProfile = getAccoutProfile(request);
 
 			ASLUser user = null;
@@ -102,8 +91,7 @@ public class AACConnector {
 			} else {
 				throw new UnauthorizedException(String.format(errorLabelManager.get("api.access.error")));
 			}
-			return user;
-		}
+			return user;			
 	}	
 	
 	private ASLUser getASLUser(String email) throws UnauthorizedException {
@@ -133,28 +121,28 @@ public class AACConnector {
 		return user;
 	}	
 	
-	private ASLUser getASLUser(ASLUserDetails details) throws UnauthorizedException {
-		String email = details.getUser().getEmail();
-		String cf = details.getUser().getCf();
-		
-		ASLUser user = null;
-		
-		if (email != null) {
-			user = userRepository.findByEmail(email);
-		} else if (cf != null) {
-			user = userRepository.findByCf(cf);
-		}
-		
-		if (user == null) {
-			throw new UnauthorizedException(String.format(errorLabelManager.get("user.notfound"), details.getUser().getName(), details.getUser().getSurname()));
-		}
-		user.setToken(details.getUser().getToken());
-		user.setExpiration(details.getUser().getExpiration());
-		user.setRefreshToken(details.getUser().getRefreshToken());
-		user.getRoles().addAll(roleRepository.findByUserId(user.getId()));
-		
-		return user;
-	}
+//	private ASLUser getASLUser(Authentication authentication) throws UnauthorizedException {
+//		String email = authentication.getName();
+//		//TODO get CF, name, surname
+//		String cf = null;
+//		String name = null;
+//		String surname = null;
+//		
+//		ASLUser user = null;
+//		
+//		if (email != null) {
+//			user = userRepository.findByEmail(email);
+//		} else if (cf != null) {
+//			user = userRepository.findByCf(cf);
+//		}
+//		
+//		if (user == null) {
+//			throw new UnauthorizedException(String.format(errorLabelManager.get("user.notfound"), name, surname));
+//		}
+//		user.getRoles().addAll(roleRepository.findByUserId(user.getId()));
+//		
+//		return user;
+//	}
 	
 	private AccountProfile getAccoutProfile(HttpServletRequest request) {
 		AccountProfile result = null;

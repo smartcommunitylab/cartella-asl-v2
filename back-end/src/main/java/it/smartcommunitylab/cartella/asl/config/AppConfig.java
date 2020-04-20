@@ -1,108 +1,65 @@
 package it.smartcommunitylab.cartella.asl.config;
 
-import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import it.smartcommunitylab.cartella.asl.security.AuthorizationManager;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /*
  * extend WebMvcConfigurerAdapter and not use annotation @EnableMvc to permit correct static
  * resources publishing and restController functionalities
  */
 @Configuration
+@EnableWebMvc
+@EnableSwagger2
 public class AppConfig implements WebMvcConfigurer {
+	
+	@Override
+  public void addCorsMappings(CorsRegistry registry) {
+      registry.addMapping("/**");
+  }
 
-	
-	@Value("${storage.local.dir}")
-	private String storageDir;			
-	
-	private static final String[] RESOURCE_LOCATIONS = {
-			"classpath:/META-INF/resources/", "classpath:/resources/",
-			"classpath:/templates/", "classpath:/public/" };
-	
 	@Override
-	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-		.allowedMethods("PUT", "DELETE", "GET", "POST", "PATCH")
-		.allowedOrigins("*");
-	}	
-	
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		if (!registry.hasMappingForPattern("/webjars/**")) {
-			registry.addResourceHandler("/webjars/**").addResourceLocations(
-					"classpath:/META-INF/resources/webjars/");
-		}
-		if (!registry.hasMappingForPattern("/**")) {
-			registry.addResourceHandler("/**").addResourceLocations(
-					RESOURCE_LOCATIONS);
-		}
-		
-        registry
-        .addResourceHandler("/files/**")
-        .addResourceLocations("file:/" + storageDir + "/");
-      
-      registry.addResourceHandler("swagger-ui.html")
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry
+			.addResourceHandler("/**")
+			.addResourceLocations("classpath:/static/");
+		registry
+    	.addResourceHandler("swagger-ui.html")
       .addResourceLocations("classpath:/META-INF/resources/");
-      registry.addResourceHandler("/webjars/**")
-      .addResourceLocations("classpath:/META-INF/resources/webjars/");    			
-		
+    registry
+    	.addResourceHandler("/webjars/**")
+      .addResourceLocations("classpath:/META-INF/resources/webjars/");
+  }
+	
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("it.smartcommunitylab.cartella.asl.controller"))
+				.paths(PathSelectors.ant("/api/**"))
+				.build()
+				.apiInfo(apiInfo());
 	}
 	
-//	@Override
-//	public void addViewControllers(ViewControllerRegistry registry) {
-//	    registry.addViewController("/asl-azienda").setViewName("redirect:/asl-azienda/");
-//	    registry.addViewController("/asl-azienda/").setViewName("asl-azienda/index");
-//	    
-//	    registry.addViewController("/asl-scuola").setViewName("redirect:/asl-scuola/");
-//	    registry.addViewController("/asl-scuola/").setViewName("asl-scuola/index");
-//	    
-//	    registry.addViewController("/asl-studente").setViewName("redirect:/asl-studente/");
-//	    registry.addViewController("/asl-studente/").setViewName("asl-studente/index");
-//
-//	    registry.addViewController("/asl-ruoli").setViewName("redirect:/asl-ruoli/");
-//	    registry.addViewController("/asl-ruoli/").setViewName("asl-ruoli/index");	    
-//	    
-//	    registry.addViewController("/asl-login").setViewName("redirect:/asl-login/");
-//	    registry.addViewController("/asl-login/").setViewName("asl-login/index");
-//	    
-//	    registry.addViewController("").setViewName("redirect:/asl-login/");
-//	    registry.addViewController("/").setViewName("redirect:/asl-login/");
-//	}
-
-    
-	@Bean
-	AuthorizationManager getAuthorizationManager() {
-		return new AuthorizationManager();
-	}    	
-	
-	@Bean
-	public OncePerRequestFilter noContentFilter() {
-		return new OncePerRequestFilter() {
-			
-			 @Override
-			    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-			        filterChain.doFilter(httpServletRequest, httpServletResponse);
-			        if (httpServletResponse.getContentType() == null ||
-			                httpServletResponse.getContentType().equals("")) {
-			            httpServletResponse.setStatus(HttpStatus.NO_CONTENT.value());
-			        }
-			    }
-		};
-	}	
+	private ApiInfo apiInfo() {
+    return new ApiInfoBuilder()
+    		.title("Cartella-ASL Project")
+    		.version("2.0")
+    		.license("Apache License Version 2.0")
+    		.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+    		.contact(new Contact("SmartCommunityLab", "https://http://www.smartcommunitylab.it/", "info@smartcommunitylab.it"))
+    		.build();
+	}  
 	
 }

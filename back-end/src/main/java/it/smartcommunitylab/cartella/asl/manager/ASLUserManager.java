@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,6 @@ import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
 import it.smartcommunitylab.cartella.asl.repository.ConsensoRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
-import it.smartcommunitylab.cartella.asl.security.ASLUserDetails;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -135,10 +133,6 @@ public class ASLUserManager extends DataEntityManager {
 	public ASLUser updateASLUserRoles(Long id, ASLRole role, String domainId) throws BadRequestException {
 		ASLUser user = userRepository.getOne(id);
 		if (user == null) {
-			ASLUserDetails details = (ASLUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			if (details != null && details.getUser() != null) {
-				throw new BadRequestException(String.format(errorLabelManager.get("user.notfound"), details.getUser().getName(), details.getUser().getSurname()));	
-			}
 			throw new BadRequestException(errorLabelManager.get("api.access.error"));
 		}
 		ASLUserRole userRole = new ASLUserRole(role, domainId, user.getId());
@@ -150,10 +144,6 @@ public class ASLUserManager extends DataEntityManager {
 	public ASLUser deleteASLUserRoles(Long id, ASLRole role, String oldId) throws BadRequestException {
 		ASLUser user = userRepository.getOne(id);
 		if (user == null) {
-			ASLUserDetails details = (ASLUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-			if (details != null && details.getUser() != null) {
-				throw new BadRequestException(String.format(errorLabelManager.get("user.notfound"), details.getUser().getName(), details.getUser().getSurname()));	
-			}
 			throw new BadRequestException(errorLabelManager.get("api.access.error"));
 		}
 		List<ASLUserRole> roles = roleRepository.findByUserId(id);
