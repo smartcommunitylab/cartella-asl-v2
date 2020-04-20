@@ -53,7 +53,7 @@ export class CreaEnteModalComponent implements OnInit {
       this.activeModal.dismiss('create')
     } else {
       this.forceErrorDisplay = true;
-      if (this.place) {
+      if (this.place && this.place.location) {
         this.forceAddressDisplay = false;
       } else {
         this.forceAddressDisplay = true;
@@ -65,7 +65,7 @@ export class CreaEnteModalComponent implements OnInit {
   allValidated() {
     return ((this.nome && this.nome != '')
       && (this.partitaIva && this.partitaIva != '')
-      && (this.place)
+      && (this.place && this.place.location)
       && (this.idTipoAzienda && this.idTipoAzienda !='' && this.idTipoAzienda != 'Tipo'));
   }
 
