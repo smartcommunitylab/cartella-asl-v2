@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -40,6 +41,7 @@ public class ASLUser {
 	private String username;
 	
 	@Transient
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Set<ASLUserRole> roles = Sets.newHashSet();
 	
 	@Transient
@@ -53,10 +55,13 @@ public class ASLUser {
 	private String refreshToken;	
 	
 	@Transient
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Map<String, Studente> studenti = Maps.newTreeMap();
 	@Transient
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Map<String, Azienda> aziende = Maps.newTreeMap();
 	@Transient
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	private Map<String, Istituzione> istituti = Maps.newTreeMap();
 	
 	public Long getId() {
