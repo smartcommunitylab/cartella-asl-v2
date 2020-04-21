@@ -55,13 +55,8 @@ export class EntiComponent implements OnInit {
 
     openCreate() {
         const modalRef = this.modalService.open(CreaEnteModalComponent, { windowClass: "myCustomModalClass" });
-        modalRef.componentInstance.newEnteListener.subscribe((ente) => {
-            this.dataService.addAzienda(ente).subscribe((res) => {
-                this.router.navigate(['../detail', res.id], { relativeTo: this.route });
-            },
-                (err: any) => console.log(err),
-                () => console.log('get piani attivi'));
-
+        modalRef.componentInstance.newEnteListener.subscribe((res) => {
+           this.router.navigate(['../detail', res.id], { relativeTo: this.route });
         });
     }
 

@@ -92,15 +92,15 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
    delete() {
-    const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
-    modalRef.componentInstance.ente = this.ente;
+     const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
+     modalRef.componentInstance.ente = this.ente;
      modalRef.componentInstance.onDelete.subscribe((res) => {
        if (res == 'deleted') {
-        this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
-          this.router.navigate(['../../'], { relativeTo: this.route });
-        })  
-      }      
-    });
+         this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
+           this.router.navigate(['../../'], { relativeTo: this.route });
+         })
+       }
+     });
   }
 
 

@@ -49,8 +49,17 @@ export class CreaEnteModalComponent implements OnInit {
         phone: this.phone,
         idTipoAzienda: this.idTipoAzienda
       }
-      this.newEnteListener.emit(ente);
-      this.activeModal.dismiss('create')
+
+      this.dataService.addAzienda(ente).subscribe((res) => {
+        ente.id = res.id;
+        this.newEnteListener.emit(ente);
+        this.activeModal.dismiss('create');
+      },
+        (err: any) => {
+          console.log(err)
+        },
+        () => console.log('add azienda'));
+      
     } else {
       this.forceErrorDisplay = true;
       if (this.place && this.place.location) {
