@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { of, Observable, TimeoutError, throwError } from 'rxjs';
 
 @Injectable()
 export class GeoService {
@@ -47,7 +47,7 @@ export class GeoService {
           return (result.body.response.docs);
         }        
       })
-      .catch(response => this.handleError(response));
+      .catch(this.handleError);
     }
 
     createPlaces = function (places){
@@ -106,8 +106,33 @@ export class GeoService {
             return name;
         }
     }
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error);
-        return Promise.reject(error);
-    }
+    private handleError(error: HttpErrorResponse) {
+      let errMsg = "Errore del server! Prova a ricaricare la pagina.";
+
+      if (error.name === 'TimeoutError') {
+        errMsg = error.message;
+      }
+      else if (error.error) {
+        if (error.error.ex) {
+          errMsg = error.error.ex;
+          // Use the following instead if using lite-server
+          //return Observable.throw(err.text() || 'backend server error');
+        } else if (typeof error.error === "string") {
+          try {
+            let errore = JSON.parse(error.error);
+            if (errore.ex) {
+              errMsg = errore.ex;
+            }
+          }
+          catch (e) {
+            console.error('server error:', errMsg);
+          }
+        }
+      }
+  
+      console.error('server error:', errMsg);
+  
+     
+      return Observable.throw(errMsg);
+     }
 }
