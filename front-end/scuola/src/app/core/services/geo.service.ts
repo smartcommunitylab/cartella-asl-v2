@@ -46,7 +46,8 @@ export class GeoService {
         if (result.body && result.body.response && result.body.response.docs) {
           return (result.body.response.docs);
         }        
-      });
+      })
+      .catch(response => this.handleError(response));
     }
 
     createPlaces = function (places){
