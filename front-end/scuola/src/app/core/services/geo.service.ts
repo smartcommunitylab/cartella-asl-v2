@@ -47,35 +47,39 @@ export class GeoService {
   }
 
   createPlaces = function (places) {
-    let geoCoderPlaces = []
-    for (var i = 0; i < places.length; i++) {
-      let temp = '';
-      if (places[i].name)
-        temp = temp + places[i].name;
-      if (places[i].street != places[i].name)
-        if (places[i].street) {
+    let geoCoderPlaces = [];
+    
+    if (places) {
+      for (var i = 0; i < places.length; i++) {
+        let temp = '';
+        if (places[i].name)
+          temp = temp + places[i].name;
+        if (places[i].street != places[i].name)
+          if (places[i].street) {
+            if (temp)
+              temp = temp + ', ';
+            temp = temp + places[i].street;
+          }
+        if (places[i].housenumber) {
           if (temp)
             temp = temp + ', ';
-          temp = temp + places[i].street;
+          temp = temp + places[i].housenumber;
         }
-      if (places[i].housenumber) {
-        if (temp)
-          temp = temp + ', ';
-        temp = temp + places[i].housenumber;
-      }
-      if (places[i].city) {
-        if (temp)
-          temp = temp + ', ';
-        temp = temp + places[i].city;
-      }
-      if (places[i].state) {
-        temp = temp + ' - ' + places[i].state;
-      }
-      geoCoderPlaces[i] = {
-        name: temp,
-        location: places[i].coordinate.split(',')
+        if (places[i].city) {
+          if (temp)
+            temp = temp + ', ';
+          temp = temp + places[i].city;
+        }
+        if (places[i].state) {
+          temp = temp + ' - ' + places[i].state;
+        }
+        geoCoderPlaces[i] = {
+          name: temp,
+          location: places[i].coordinate.split(',')
+        }
       }
     }
+
     return geoCoderPlaces;
   }
 
