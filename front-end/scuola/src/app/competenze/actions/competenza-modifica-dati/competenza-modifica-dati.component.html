@@ -54,11 +54,12 @@
         <div class="row v-center form-group">
             <div class="col-6" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="competenza.titolo" id="definizione" #definizioneInput="ngModel"
-                     required>
+                (keyup)="trimValue($event)" required>
                     <label for="definizione" class="active">Nome competenza</label>
                 <div class="invalid-feedback"
-                    [class.d-block]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
-                    Campo necessario.</div>
+                    [class.d-block]="forceErrorDisplayTitolo || definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                    Campo necessario.
+                </div>
             </div>
         </div>
         <div class="row v-center form-group">

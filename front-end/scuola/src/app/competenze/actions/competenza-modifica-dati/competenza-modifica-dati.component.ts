@@ -26,6 +26,7 @@ export class CompetenzaModificaDatiComponent implements OnInit {
   ];
 
   forceErrorDisplay: boolean;
+  forceErrorDisplayTitolo: boolean = false;
   competenza: Competenza;
   menuContent = "Raccolta di tutte le competenze sia ministeriali che di quelle inserite dalla scuola stessa. Le competenze inserite dalla scuola sono visibili solo ad essa e non condivise con altri istituti.";
   showContent: boolean = false;
@@ -66,9 +67,13 @@ export class CompetenzaModificaDatiComponent implements OnInit {
 
   allValidated() {
     return (
-      (this.competenza.titolo || this.competenza.titolo != '')
+      (this.competenza.titolo && this.competenza.titolo != '' && this.competenza.titolo.trim().length > 0)
       && (this.competenza.livelloEQF || this.competenza.livelloEQF != null)
     );
+  }
+  trimValue(event) { 
+    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    // event.target.value = event.target.value.trim(); 
   }
   onChange(eqf){
     this.competenza.livelloEQF= eqf;
