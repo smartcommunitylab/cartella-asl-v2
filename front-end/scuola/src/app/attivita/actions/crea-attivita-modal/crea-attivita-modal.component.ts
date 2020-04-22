@@ -153,26 +153,25 @@ export class CreaAttivitaModalComponent implements OnInit {
   //   )
   
 
-  searching = false;
-  searchFailed = false;
-
+  searchingAZ = false;
+  searchFailedAZ = false;
   search = (text$: Observable<string>) =>
     text$.pipe(
-      debounceTime(300),
+      debounceTime(500),
       distinctUntilChanged(),
-      tap(() => this.searching = true),
+      tap(() => this.searchingAZ = true),
       switchMap(term =>
         this.dataService.searchEnte(term).pipe(
           tap(() => {
-            this.searchFailed = false
+            this.searchFailedAZ = false
           } ),
           catchError(() => {
-            this.searchFailed = true;
+            this.searchFailedAZ = true;
             return of([]);
           }))
       ),
       tap(() => {
-        this.searching = false
+        this.searchingAZ = false
       })
     )
   

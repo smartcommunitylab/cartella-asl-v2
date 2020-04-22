@@ -17,6 +17,7 @@ import { Azienda, IPagedES, IPagedAA, EsperienzaSvolta, Valutazione, Giornate, I
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -1092,6 +1093,7 @@ export class DataService {
     //     map(response => response[1])
     //   );
 
+    environment.globalSpinner = false;
     return this.http.get<any>(url,
       {
         observe: 'response',
@@ -1100,9 +1102,13 @@ export class DataService {
       .timeout(this.timeout)
       .pipe(
         map(res => {
+         environment.globalSpinner = true; 
          return (res.body.content)
         }),
-        catchError(this.handleError)
+        catchError((err) => { 
+          environment.globalSpinner = true; 
+          return this.handleError(err);
+        })
       );   
 
   }

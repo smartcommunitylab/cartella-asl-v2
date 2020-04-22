@@ -77,6 +77,9 @@
                 </ng-template>
                 <input type="text" class="form-control" [(ngModel)]="place" value="place.name" id="address"
                     [ngbTypeahead]="getAddresses" [resultTemplate]="rtAddress" [inputFormatter]="formatterAddress">
+                    <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
+                        <span  class="sr-only">Caricamento...</span>
+                    </small>
                 <label for="address" *ngIf="address" class="active">Indirizzo</label>
                 <label for="address" *ngIf="!address">Indirizzo</label>
                 <div class="invalid-feedback" [class.d-block]="forceAddressDisplay">Campo necessario.</div>

@@ -192,9 +192,12 @@
                         <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="azienda" value="Azienda: {{attivita.nomeEnte}}" 
                         id="typeahead-basic" #definizioneInput="ngModel" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"
                         required>
-                        <label for="typeahead-basic" class="active">Azienda</label>
+                        <small *ngIf="!tipoInterna && searchingAZ" class="progress-spinner progress-spinner-active size-sm">
+                            <span class="sr-only">Caricamento...</span>
+                        </small>
+                        <label *ngIf="!tipoInterna" for="typeahead-basic" class="active">Azienda</label>
                         <div class="invalid-feedback"
-                            [class.d-block]="forceEnteDisplay || definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
+                            [class.d-block]="!tipoInterna && (forceEnteDisplay || definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay) )">
                             Campo necessario.</div>
                     </div>
                     <div class="col-2"></div>
@@ -206,7 +209,10 @@
                         </ng-template>
                         <input type="text" class="form-control" [(ngModel)]="place" value="place.name" 
                         id="luogoSvolgimento" [ngbTypeahead]="getAddresses" [resultTemplate]="rtAddress"
-                        [inputFormatter]="formatterAddress">                        
+                        [inputFormatter]="formatterAddress">
+                        <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
+                            <span  class="sr-only">Caricamento...</span>
+                        </small>                        
                         <label for="luogoSvolgimento" *ngIf="attivita.luogoSvolgimento" class="active">Indirizzo</label>
                         <label for="luogoSvolgimento" *ngIf="!attivita.luogoSvolgimento" >Indirizzo</label>
                     </div>                    

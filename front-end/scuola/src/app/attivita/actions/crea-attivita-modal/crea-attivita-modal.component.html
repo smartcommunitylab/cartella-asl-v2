@@ -109,12 +109,15 @@
             </ng-template>
             <div class="col-sm-4">
                 <input [disabled]="tipoInterna" id="typeahead-basic" placeHolder="Cerca nome ente o partita iva" type="text" class="form-control" [(ngModel)]="azienda" [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter"/>
+                <small *ngIf="!tipoInterna && searchingAZ" class="progress-spinner progress-spinner-active size-sm">
+                    <span class="sr-only">Caricamento...</span>
+                </small>
                 <div class="invalid-feedback" [class.d-block]="!tipoInterna && forceEnteDisplay">Campo necessario.</div>
             </div>
             <div class="col-sm-4"  [class.has-danger]="referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
             <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="referenteEsterno" id="referenteEsterno" #referenteEsternoInput="ngModel" placeholder="Referente esterno" required>
             <div class="invalid-feedback"
-                [class.d-block]="referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
+                [class.d-block]="!tipoInterna && referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
                 Campo necessario.</div>
         </div>        
         </div>
