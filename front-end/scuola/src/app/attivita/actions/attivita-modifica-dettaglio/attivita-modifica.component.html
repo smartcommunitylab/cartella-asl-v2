@@ -170,7 +170,7 @@
                         <label for="referenteEsterno" *ngIf="attivita.referenteEsterno" class="active">Referente esterno</label>
                         <label for="referenteEsterno" *ngIf="!attivita.referenteEsterno" >Referente esterno</label>
                         <div class="invalid-feedback"
-                            [class.d-block]="!referenteEsternoInput.value || forceReferenteEsternoErrorDisplay">
+                            [class.d-block]="!tipoInterna && (!referenteEsternoInput.value || forceReferenteEsternoErrorDisplay)">
                             Campo necessario.</div>
                     
                     </div>
