@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -26,6 +27,7 @@ public class PresenzaGiornaliera {
 	private Long id;
 	private String istitutoId;
 	private Long esperienzaSvoltaId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate giornata;
 	private String attivitaSvolta;

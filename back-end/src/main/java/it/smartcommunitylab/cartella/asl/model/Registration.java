@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
@@ -22,6 +23,7 @@ public class Registration {
 	private String id;
 	private String origin;
 	private String extId;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate creationDate;
 	private String lastUpdate;
@@ -29,8 +31,10 @@ public class Registration {
 	private String instituteId;
 	private String courseId;
 	private String schoolYear;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dateFrom;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dateTo;
 	private String course;

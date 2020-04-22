@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -41,8 +42,10 @@ public class AttivitaAlternanza {
 	@Enumerated(EnumType.STRING)
 	private Stati stato;
 	private String descrizione;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataFine;
 	private String oraInizio;
@@ -61,6 +64,7 @@ public class AttivitaAlternanza {
 	private String luogoSvolgimento;
 	private Double latitude;
 	private Double longitude;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataArchiviazione;	
 	

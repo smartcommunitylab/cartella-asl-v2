@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.model.report;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
@@ -14,8 +15,10 @@ public class ReportPresenzeAttvitaAlternanza {
 	private int tipologia;
 	private String annoScolastico;
 	private String stato;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataFine;
 	private int oreValidate;
