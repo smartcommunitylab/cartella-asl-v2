@@ -1,7 +1,9 @@
 package it.smartcommunitylab.cartella.asl.security;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.HttpResponse;
@@ -17,6 +19,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import it.smartcommunitylab.aac.AACException;
 import it.smartcommunitylab.aac.model.AccountProfile;
@@ -48,6 +53,22 @@ public class AACConnector {
 	private ErrorLabelManager errorLabelManager;	
 	
 	private ObjectMapper mapper = new ObjectMapper();	
+	
+	private LoadingCache<String, AccountProfile> accountProfileCache;
+	
+	@PostConstruct
+	public void init() throws Exception {
+		CacheLoader<String, AccountProfile> loader = new CacheLoader<String, AccountProfile>() {
+      @Override
+      public AccountProfile load(String key) throws Exception {
+      	return findAccountProfile(key);
+      }
+		};
+		accountProfileCache = CacheBuilder.newBuilder()
+				.maximumSize(500)
+				.expireAfterWrite(15,TimeUnit.MINUTES)
+	      .build(loader);
+	}
 
 	public ASLUser getASLUser(HttpServletRequest request) throws UnauthorizedException {
 			//Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -147,11 +168,10 @@ public class AACConnector {
 	private AccountProfile getAccoutProfile(HttpServletRequest request) {
 		AccountProfile result = null;
 		String token = request.getHeader("Authorization");
-		logger.info("Token: " + token);
 		if (token != null && !token.isEmpty()) {
 			token = token.replace("Bearer ", "");
 			try {
-				result = findAccountProfile(token);
+				result = accountProfileCache.get(token);
 			} catch (Exception e) {
 				if (logger.isWarnEnabled()) {
 					logger.warn(String.format("getAccoutProfile[%s]: %s", token, e.getMessage()));
@@ -162,6 +182,7 @@ public class AACConnector {
 	}	
 	
 	private AccountProfile findAccountProfile(String token)  throws SecurityException, AACException {
+		logger.info("findAccountProfile: " + token);
 		try {
 	        final HttpResponse resp;
 	        String url = aacURL + "accountprofile/me";
