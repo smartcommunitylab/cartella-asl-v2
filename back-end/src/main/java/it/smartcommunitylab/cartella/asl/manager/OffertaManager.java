@@ -124,22 +124,28 @@ public class OffertaManager extends DataEntityManager {
 	}
 	
 	public Offerta getOfferta(Long id) {
-		Optional<Offerta> optional = offertaRepository.findById(id);
-		if(optional.isPresent()) {
-			Offerta offerta = optional.get();
-			offerta.setStato(getStato(offerta));
-			offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
-			return offerta;
+		if(id != null) {
+			Optional<Offerta> optional = offertaRepository.findById(id);
+			if(optional.isPresent()) {
+				Offerta offerta = optional.get();
+				offerta.setStato(getStato(offerta));
+				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
+				return offerta;
+			}			
 		}
 		return null;
 	}
 	
-	public Offerta saveOfferta(Offerta offerta) throws Exception {
+	public Offerta saveOffertaIstituto(Offerta offerta, String istitutoId) throws Exception {
 		Offerta offertaDb = getOfferta(offerta.getId());
 		if(offertaDb == null) {
+			offerta.setIstitutoId(istitutoId);
 			offerta.setUuid(Utils.getUUID());
 			return offertaRepository.save(offerta);
 		} else {
+			if(!istitutoId.equals(offertaDb.getIstitutoId())) {
+				throw new BadRequestException("offerta has a different owner");
+			}
 			int postiOccupati = offertaDb.getPostiDisponibili() - offertaDb.getPostiRimanenti();
 			if(offerta.getPostiDisponibili() < postiOccupati) {
 				throw new BadRequestException("offerta has not enough 'postiDisponibili'");

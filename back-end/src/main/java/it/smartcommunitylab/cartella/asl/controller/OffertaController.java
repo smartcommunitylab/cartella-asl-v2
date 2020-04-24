@@ -101,7 +101,7 @@ public class OffertaController {
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Offerta result = offertaManager.saveOfferta(offerta);
+		Offerta result = offertaManager.saveOffertaIstituto(offerta, istitutoId);
 		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, offerta.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
