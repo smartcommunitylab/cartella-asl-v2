@@ -66,7 +66,7 @@ public class AACConnector {
 		};
 		accountProfileCache = CacheBuilder.newBuilder()
 				.maximumSize(500)
-				.expireAfterWrite(15,TimeUnit.MINUTES)
+				.expireAfterWrite(60,TimeUnit.MINUTES)
 	      .build(loader);
 	}
 

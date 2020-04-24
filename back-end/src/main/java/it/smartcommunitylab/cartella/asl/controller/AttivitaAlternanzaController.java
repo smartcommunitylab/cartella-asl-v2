@@ -369,5 +369,21 @@ public class AttivitaAlternanzaController implements AslController {
 			logger.info(String.format("validaPresenzeAttivitaGruppo:%s / %s", id, istitutoId));
 		}
 	}
+	
+	@PostMapping("/api/attivita/offerta/{id}/associa")
+	public @ResponseBody AttivitaAlternanza associaOfferta(
+			@PathVariable long offertaId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.associaOfferta(offertaId, istitutoId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("associaOfferta:%s / %s / %s", aa.getId(), offertaId, istitutoId));
+		}		
+		return aa;
+	}
 
 }

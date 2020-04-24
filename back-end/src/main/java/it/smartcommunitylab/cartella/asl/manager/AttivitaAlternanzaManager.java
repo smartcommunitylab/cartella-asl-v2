@@ -22,6 +22,7 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.report.ReportArchiviaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
@@ -540,6 +541,43 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 				}
 			}
 		}
+	}
+
+	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId) 
+			throws BadRequestException {
+		Offerta offerta = offertaManager.getOfferta(offertaId);
+		if(offerta != null) {
+			throw new BadRequestException("offerta not found");
+		}
+		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta);
+		return saveAttivitaAlternanza(aa, istitutoId);
+	}
+
+	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta) {
+		AttivitaAlternanza aa = new AttivitaAlternanza();
+		aa.setTitolo(offerta.getTitolo());
+		aa.setTipologia(offerta.getTipologia());
+		aa.setAnnoScolastico(Utils.annoScolastico(offerta.getDataInizio()));
+		aa.setDescrizione(offerta.getDescrizione());
+		aa.setDataInizio(offerta.getDataInizio());
+		aa.setDataFine(offerta.getDataFine());
+		aa.setOraInizio(offerta.getOraInizio());
+		aa.setOraFine(offerta.getOraFine());
+		aa.setOre(offerta.getOre());
+		aa.setOffertaId(offerta.getId());
+		aa.setTitoloOfferta(offerta.getTitolo());
+		aa.setEnteId(offerta.getEnteId());
+		aa.setNomeEnte(offerta.getNomeEnte());
+		aa.setReferenteScuola(offerta.getReferenteScuola());
+		aa.setReferenteScuolaCF(offerta.getReferenteScuolaCF());
+		aa.setReferenteEsterno(offerta.getReferenteEsterno());
+		aa.setReferenteEsternoCF(offerta.getReferenteEsternoCF());
+		aa.setFormatore(offerta.getFormatore());
+		aa.setFormatoreCF(offerta.getFormatoreCF());
+		aa.setLuogoSvolgimento(offerta.getLuogoSvolgimento());
+		aa.setLatitude(offerta.getLatitude());
+		aa.setLongitude(offerta.getLongitude());
+		return aa;
 	}
 	
 }
