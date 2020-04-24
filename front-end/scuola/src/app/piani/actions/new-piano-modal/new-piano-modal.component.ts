@@ -20,6 +20,7 @@ export class NewPianoModalComponent implements OnInit {
   @Input() corsiStudio?: any; //list of corsi studio
   @Output() newPianoListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
+  forceErrorDisplayTitolo: boolean = false;
 
   constructor(public activeModal: NgbActiveModal, public dataService: DataService) { }
 
@@ -53,13 +54,18 @@ export class NewPianoModalComponent implements OnInit {
 
   allValidated() {
     return (
-      (this.titolo && this.titolo != '')
+      (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
       && (this.monte3anno && this.monte3anno > 0)
       && (this.monte4anno && this.monte4anno > 0)
       && (this.monte5anno && this.monte5anno > 0)
       && (this.annoRiferimento && this.annoRiferimento != '')
       && (this.corsoStudioId && this.corsoStudioId != 'Corso di studio')
       );
+  }
+  
+  trimValue(event) { 
+    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    event.target.value = event.target.value.trim(); 
   }
 
 }

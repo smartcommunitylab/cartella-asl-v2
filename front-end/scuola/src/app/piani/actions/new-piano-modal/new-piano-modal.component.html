@@ -37,9 +37,9 @@
                 <!-- titolo -->
                 <div class="row v-center form-group">
                     <div class="col-10" [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
-                        <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel" required>
+                        <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel" (keyup)="trimValue($event)" required>
                         <label for="titolo" >Titolo</label>
-                        <div class="invalid-feedback" [class.d-block]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
+                        <div class="invalid-feedback" [class.d-block]="forceErrorDisplayTitolo || titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                             Campo necessario.
                         </div>
                     </div>

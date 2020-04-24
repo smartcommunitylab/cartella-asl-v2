@@ -34,6 +34,7 @@ export class PianoModificaDatiComponent implements OnInit {
   corsiStudio;
   @Output() editPianoListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
+  forceErrorDisplayTitolo: boolean = false;
 
   constructor(private dataService: DataService,
     private router: Router,
@@ -76,12 +77,18 @@ export class PianoModificaDatiComponent implements OnInit {
 
   allValidated() {
     return (
-      (this.piano.titolo && this.piano.titolo != '')
+      (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
       && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
       && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
       && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
       && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
       );
+  }
+
+  
+  trimValue(event) { 
+    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    event.target.value = event.target.value.trim(); 
   }
 
   menuContentShow() {

@@ -13,6 +13,7 @@ export class CreaCompetenzaModalComponent implements OnInit {
   fieldsError: string;
   @Output() newCompetenzeListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
+  forceErrorDisplayTitolo: boolean = false;
   arrEQF=[1,2,3,4,5,6,7,8];
 
   constructor(public activeModal: NgbActiveModal) { }
@@ -37,10 +38,16 @@ export class CreaCompetenzaModalComponent implements OnInit {
 
   allValidated() {
     return (
-      (this.definizione && this.definizione != '')
+      (this.definizione && this.definizione != '' && this.definizione.trim().length > 0)
       && (this.livelloEQF && this.livelloEQF != 'livelloEQF')
     );
   }
+
+  trimValue(event) { 
+    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    // event.target.value = event.target.value.trim(); 
+  }
+
   onChange(eqf){
     this.livelloEQF= eqf;
   }
