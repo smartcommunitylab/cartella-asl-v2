@@ -86,7 +86,9 @@ public class OffertaManager extends DataEntityManager {
 		String q = sb.toString();
 		
 		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
-		query.setParameter("istitutoId", istitutoId);
+		if((ownerIstituto == null) || ownerIstituto) {
+			query.setParameter("istitutoId", istitutoId);
+		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
