@@ -6,10 +6,11 @@ import { AuthGuard } from './core/services/auth.guard';
 const app_routes: Routes = [
   { path: 'piani', loadChildren: 'app/piani/pianifica.module#PianificaModule' },
   { path: 'attivita', loadChildren: 'app/attivita/attivita.module#AttivitaModule' },
-  { path: 'competenze', loadChildren: 'app/competenze/competenze.module#CompetenzeModule' },
+  { path: 'offerte', loadChildren: 'app/offerte/offerte.module#OfferteModule' },
   { path: 'studenti', loadChildren: 'app/studenti/studenti.module#StudentiModule' },
   { path: 'enti', loadChildren: 'app/enti/enti.module#EntiModule' },
-  { path: 'terms/:authorized', loadChildren: 'app/terms/terms.module#TermsModule'},
+  { path: 'competenze', loadChildren: 'app/competenze/competenze.module#CompetenzeModule' },
+  { path: 'terms/:authorized', loadChildren: 'app/terms/terms.module#TermsModule' },
   { path: '**', pathMatch: 'full', redirectTo: '/attivita/list' }
 ];
 

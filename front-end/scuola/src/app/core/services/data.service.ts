@@ -783,6 +783,45 @@ export class DataService {
       );
   }
 
+/** OFFERTE */
+  
+getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
+
+  let url = this.host + "/offerta/search/";
+  let headers = new HttpHeaders();
+  let params = new HttpParams();
+
+  if (filter.tipologia)
+    params = params.append('tipologia', filter.tipologia);
+  if (filter.titolo)
+    params = params.append('text', filter.titolo);
+  if (filter.stato)
+    params = params.append('stato', filter.stato);
+  if (filter.ownerIstituto != null) {
+    params = params.append('ownerIstituto', filter.ownerIstituto);
+  }
+
+  params = params.append('istitutoId', this.istitutoId);
+  params = params.append('page', page);
+  params = params.append('size', pageSize);
+
+  return this.http.get<IPagedAA>(
+    url,
+    {
+      headers: headers,
+      params: params,
+      observe: 'response'
+    })
+    .timeout(this.timeout)
+    .pipe(
+      map(res => {
+        return (res.body as IPagedAA);
+
+      }),
+      catchError(this.handleError)
+    );
+}
+
 
   /** STUDENTI */
   getStudenteForIstituto(filtro: any, page, pageSize) {
