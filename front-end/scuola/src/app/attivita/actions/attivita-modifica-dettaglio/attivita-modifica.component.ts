@@ -186,7 +186,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
   save(myForm) {
 
-    if (this.attivita.referenteScuola && this.attivita.referenteScuola != '') {
+    if (this.attivita.referenteScuola && this.attivita.referenteScuola != '' && this.attivita.referenteScuola.trim().length > 0) {
       this.forceReferenteScuolaErrorDisplay = false;
     } else {
       this.forceReferenteScuolaErrorDisplay = true;
@@ -198,7 +198,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       this.forceOreErrorDisplay = true;
     }
 
-    if (this.titolo && this.titolo != '') {
+    if (this.titolo && this.titolo != '' && this.titolo.trim().length > 0) {
       this.attivita.titolo = this.titolo;
       this.forceTitoloErrorDisplay = false;
     } else {
@@ -330,4 +330,12 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
   }
 
+  trimValue(event, type) { 
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay   = false;
+    } else if(type == 'scolastico'){
+      (event.target.value.trim().length == 0) ? this.forceReferenteScuolaErrorDisplay = true : this.forceReferenteScuolaErrorDisplay = false;
+    }
+    event.target.value = event.target.value.trim(); 
+  }
 }

@@ -53,6 +53,8 @@ export class CreaAttivitaModalComponent implements OnInit {
   @Input() tipologie?: any;
   @Output() newAttivitaListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
+  forceErrorDisplayTitolo: boolean = false;
+  forceErrorDisplayRS: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -120,16 +122,16 @@ export class CreaAttivitaModalComponent implements OnInit {
 
     if (this.tipoInterna) {
       return (
-        (this.titolo && this.titolo != '')
-        && (this.referenteScuola && this.referenteScuola != '')
+        (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
+        && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.tipologia && this.tipologia != 'Tipologie')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );  
     } else {
       return (
-        (this.titolo && this.titolo != '')
-        && (this.referenteScuola && this.referenteScuola != '')
+        (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
+        && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.referenteEsterno && this.referenteEsterno != '')
         && (this.ore && this.ore > 0)
         && (this.azienda.id != '')
@@ -138,7 +140,15 @@ export class CreaAttivitaModalComponent implements OnInit {
       );
     }
   }
-
+  
+  trimValue(event, type) { 
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    } else if(type == 'scolastico'){
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayRS = true : this.forceErrorDisplayRS = false;
+    }
+    event.target.value = event.target.value.trim(); 
+  }
   // search = (text$: Observable<string>) =>
   //   text$.pipe(
   //     debounceTime(200),

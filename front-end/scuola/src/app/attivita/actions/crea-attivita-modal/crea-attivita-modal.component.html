@@ -36,10 +36,11 @@
             <div class="col-sm-4"
                 [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
-                    placeholder="Titolo" required>
+                    placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" required>
                 <div class="invalid-feedback"
-                    [class.d-block]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
-                    Campo necessario.</div>
+                    [class.d-block]="forceErrorDisplayTitolo || titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
+                    Campo necessario.
+                </div>
             </div>
 
             <div class="col-sm-4"
@@ -56,10 +57,11 @@
             <div class="col-sm-4"
                 [class.has-danger]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="referenteScuola" id="referenteScuola"
-                    #referenteScuolaInput="ngModel" placeholder="Referente scolastico" required>
+                    #referenteScuolaInput="ngModel" placeholder="Referente scolastico" (keyup)="trimValue($event, 'scolastico')" required>
                 <div class="invalid-feedback"
-                    [class.d-block]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
-                    Campo necessario.</div>
+                    [class.d-block]="forceErrorDisplayRS || referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
+                    Campo necessario.
+                </div>
             </div>
            
         </div>
