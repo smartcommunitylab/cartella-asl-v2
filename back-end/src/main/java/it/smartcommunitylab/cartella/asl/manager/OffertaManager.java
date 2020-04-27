@@ -143,6 +143,7 @@ public class OffertaManager extends DataEntityManager {
 		if(offertaDb == null) {
 			offerta.setIstitutoId(istitutoId);
 			offerta.setUuid(Utils.getUUID());
+			offerta.setPostiRimanenti(offerta.getPostiDisponibili());
 			return offertaRepository.save(offerta);
 		} else {
 			if(!istitutoId.equals(offertaDb.getIstitutoId())) {
