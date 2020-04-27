@@ -54,7 +54,7 @@
         <div class="row v-center form-group">
             <div class="col-6" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="competenza.titolo" id="definizione" #definizioneInput="ngModel"
-                (keyup)="trimValue($event)" required>
+                (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
                     <label for="definizione" class="active">Nome competenza</label>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayTitolo || definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">

@@ -25,7 +25,7 @@ export class CreaCompetenzaModalComponent implements OnInit {
     let competenza;
     if (this.allValidated()) {
       competenza = {
-        titolo: this.definizione,
+        titolo: this.definizione.trim(),
         livelloEQF: this.livelloEQF
       }
       this.newCompetenzeListener.emit(competenza);
@@ -43,9 +43,12 @@ export class CreaCompetenzaModalComponent implements OnInit {
     );
   }
 
-  trimValue(event) { 
-    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
-    // event.target.value = event.target.value.trim(); 
+  trimValue(event, type) { 
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    } else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    }
   }
 
   onChange(eqf){

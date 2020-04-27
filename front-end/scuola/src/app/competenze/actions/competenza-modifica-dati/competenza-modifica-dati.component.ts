@@ -57,6 +57,7 @@ export class CompetenzaModificaDatiComponent implements OnInit {
   // modify competenza
   saveEdit() { //create or update
     if (this.allValidated()) {
+      this.competenza.titolo = this.competenza.titolo.trim();
       this.dataService.updateIstitutoCompetenza(this.competenza).subscribe((res) => {
         this.router.navigate(['../../'], { relativeTo: this.activeRoute });
       });
@@ -71,9 +72,12 @@ export class CompetenzaModificaDatiComponent implements OnInit {
       && (this.competenza.livelloEQF || this.competenza.livelloEQF != null)
     );
   }
-  trimValue(event) { 
-    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
-    // event.target.value = event.target.value.trim(); 
+  trimValue(event, type) { 
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    } else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    }
   }
   onChange(eqf){
     this.competenza.livelloEQF= eqf;

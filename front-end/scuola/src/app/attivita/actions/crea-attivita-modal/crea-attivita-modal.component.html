@@ -36,7 +36,7 @@
             <div class="col-sm-4"
                 [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
-                    placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" required>
+                    placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayTitolo || titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                     Campo necessario.
@@ -57,7 +57,7 @@
             <div class="col-sm-4"
                 [class.has-danger]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="referenteScuola" id="referenteScuola"
-                    #referenteScuolaInput="ngModel" placeholder="Referente scolastico" (keyup)="trimValue($event, 'scolastico')" required>
+                    #referenteScuolaInput="ngModel" placeholder="Referente scolastico" (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayRS || referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                     Campo necessario.
@@ -117,9 +117,10 @@
                 <div class="invalid-feedback" [class.d-block]="!tipoInterna && forceEnteDisplay">Campo necessario.</div>
             </div>
             <div class="col-sm-4"  [class.has-danger]="referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
-            <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="referenteEsterno" id="referenteEsterno" #referenteEsternoInput="ngModel" placeholder="Referente esterno" required>
+            <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="referenteEsterno" id="referenteEsterno" 
+            #referenteEsternoInput="ngModel" placeholder="Referente esterno" (keyup)="trimValue($event, 'esterno')" (focusout)="trimValue($event, 'trim')" required>
             <div class="invalid-feedback"
-                [class.d-block]="!tipoInterna && referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
+                [class.d-block]="forceErrorDisplayRE || (!tipoInterna && referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay))">
                 Campo necessario.</div>
         </div>        
         </div>

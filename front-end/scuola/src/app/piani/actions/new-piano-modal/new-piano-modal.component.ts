@@ -35,7 +35,7 @@ export class NewPianoModalComponent implements OnInit {
     if (this.allValidated()) {
       console.log(this.corsoStudioId);
       piano = {
-        titolo: this.titolo,
+        titolo: this.titolo.trim(),
         corsoDiStudioId: this.corsoStudioId,
         corsoDiStudio: this.corsiStudio.find(corso => corso.courseId == this.corsoStudioId).nome,
         note: this.note,
@@ -63,9 +63,12 @@ export class NewPianoModalComponent implements OnInit {
       );
   }
   
-  trimValue(event) { 
-    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
-    event.target.value = event.target.value.trim(); 
+  trimValue(event, type) {
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    } else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    }
   }
 
 }

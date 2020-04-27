@@ -56,7 +56,7 @@
         <!-- titolo -->
         <div class="row v-center form-group">
           <div class="col-10" [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
-            <input type="text" class="form-control" [(ngModel)]="piano.titolo" id="titolo" #titoloInput="ngModel" (keyup)="trimValue($event)" required>
+            <input type="text" class="form-control" [(ngModel)]="piano.titolo" id="titolo" #titoloInput="ngModel" (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
             <label for="titolo" class="active">Titolo</label>
             <div class="invalid-feedback" [class.d-block]="!titoloInput.value || forceErrorDisplay || forceErrorDisplayTitolo">
                 Campo necessario.
@@ -96,7 +96,7 @@
         <!-- Note -->
         <div class="row v-center form-group">
           <div class="col-10" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
-            <input type="text" class="form-control" [(ngModel)]="piano.note" id="note" #definizioneInput="ngModel">
+            <input type="text" class="form-control" [(ngModel)]="piano.note" id="note" #definizioneInput="ngModel" (focusout)="trimValue($event, 'trim')">
             <label for="note" *ngIf="piano.note" class="active">Note</label>
             <label for="note" *ngIf="!piano.note">Note</label>
           </div>
@@ -105,7 +105,7 @@
         <!-- Anno -->
         <div class="row v-center form-group">
           <div class="col-10" [class.has-danger]="definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched || forceErrorDisplay)">
-            <input type="text" [disabled]=true class="form-control bg-transparent" [(ngModel)]="piano.periodo" id="anno" #definizioneInput="ngModel">
+            <input type="text" [disabled]=true class="form-control bg-transparent" [(ngModel)]="piano.periodo" id="anno" #definizioneInput="ngModel" >
             <label for="anno" *ngIf="piano.periodo" class="active">Anni riferimento</label>
           </div>
           <div class="col-2"></div>

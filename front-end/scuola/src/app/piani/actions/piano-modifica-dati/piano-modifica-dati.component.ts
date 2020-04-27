@@ -46,7 +46,6 @@ export class PianoModificaDatiComponent implements OnInit {
       let id = params['id'];
       this.dataService.getPianoById(id).subscribe((piano: PianoAlternanza) => {
         this.piano = piano;
-        console.log('this.piano', this.piano)
       },
         (err: any) => console.log(err),
         () => console.log('get piano tipologie'));
@@ -62,6 +61,8 @@ export class PianoModificaDatiComponent implements OnInit {
   update() { //update
     
     if (this.allValidated()) {
+      this.piano.titolo = this.piano.titolo.trim();
+      (this.piano.note)?this.piano.note=this.piano.note.trim(): null;
       this.piano.dataAttivazione = null;
       this.piano.dataCreazione = null;
       this.piano.dataDisattivazione = null;
@@ -86,9 +87,12 @@ export class PianoModificaDatiComponent implements OnInit {
   }
 
   
-  trimValue(event) { 
-    (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
-    event.target.value = event.target.value.trim(); 
+  trimValue(event, type) {  
+    if(type == 'titolo'){
+      (event.target.value.trim().length == 0)? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
+    } else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    }
   }
 
   menuContentShow() {

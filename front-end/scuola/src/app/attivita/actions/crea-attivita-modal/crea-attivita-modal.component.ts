@@ -55,6 +55,7 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
   forceErrorDisplayRS: boolean = false;
+  forceErrorDisplayRE: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -94,9 +95,9 @@ export class CreaAttivitaModalComponent implements OnInit {
     let attivita;
     if (this.allValidated()) {
       attivita = {
-        titolo: this.titolo,
-        referenteScuola: this.referenteScuola,
-        referenteEsterno: this.tipoInterna?null:this.referenteEsterno,
+        titolo: this.titolo.trim(),
+        referenteScuola: this.referenteScuola.trim(),
+        referenteEsterno: this.tipoInterna?null:this.referenteEsterno.trim(),
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
         ore: this.ore,
@@ -132,7 +133,7 @@ export class CreaAttivitaModalComponent implements OnInit {
       return (
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
-        && (this.referenteEsterno && this.referenteEsterno != '')
+        && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.azienda.id != '')
         && (this.tipologia && this.tipologia != 'Tipologie')
@@ -146,8 +147,11 @@ export class CreaAttivitaModalComponent implements OnInit {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
     } else if(type == 'scolastico'){
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayRS = true : this.forceErrorDisplayRS = false;
-    }
-    event.target.value = event.target.value.trim(); 
+    } else if(type == 'esterno'){
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayRE = true : this.forceErrorDisplayRE = false;
+    }else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    } 
   }
   // search = (text$: Observable<string>) =>
   //   text$.pipe(
