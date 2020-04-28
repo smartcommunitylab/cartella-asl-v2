@@ -123,12 +123,12 @@
 .blu-row {
     background: #0066CC 0% 0% no-repeat padding-box;
     opacity: 1;
-    min-height: 96px;
+    min-height: 75px;
 }
 .blu-row-logo{
-    width: 98px !important;
-    height: 83px !important;
-    margin: 6px 6px 6px 16px;
+    width: 85px !important;
+    height: 65px !important;
+    margin: 5px 5px 5px 16px;
 }
 .blu-row-text{
     text-align: left;
@@ -140,26 +140,26 @@
     opacity: 1;
 }
 .m-top-logo-text{
-    margin-top: 20px;
+    margin-top: 10px;
 }
 .option-row-logo{
-    width: 141px;
-    height: 103px;
+    width: 100px;
+    height: 80px;
 }
 .m-top-body{
-    margin-top: 55px;
+    margin-top: 10px;
 }
-.m-top-body100{
-    margin-top: 138px;
+.m-top20{
+    margin-top: 20px;
 }
 .page-body {
     position: relative;
-    top: 50px;
+    top: 35px;
     /* height: 490px; */
     /* width: 1100px; */
     overflow-x: hidden;
     overflow-y: auto;
-    width: 90%;
+    width: 85%;
     border-radius: 12px;
     margin: 0 auto;
     background: #FAFDFF 0% 0% no-repeat padding-box;
@@ -188,7 +188,9 @@
 }
 
 .heading-1 {
-    font: Bold 30px/59px Titillium Web;
+    font-family: Titillium Web;
+    font-size: 27px;
+    font-weight: Bold;
     letter-spacing: 2.22px;
     color: #707070;
     opacity: 1;
@@ -196,14 +198,16 @@
 
 .heading-2 {
     text-align: center;
-    font: normal 25px/42px Titillium Web;
+    font: normal 22px/42px Titillium Web;
     letter-spacing: 1.39px;
     color: #707070;
     opacity: 1;
 }
 
 .option-1 {
-    font: 600 30px/42px Titillium Web;
+    font-family: Titillium Web;
+    font-size: 21px;
+    font-weight: bold;
     letter-spacing: 1.94px;
     color: #707070;
     opacity: 1;
@@ -225,7 +229,7 @@
     display: block;
     position: relative;
     padding-left: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     cursor: pointer;
     font-size: 18px;
     -webkit-user-select: none;

@@ -13,7 +13,7 @@
 
   <div class="page-body" [ngClass]="{'border-selected': loginSelected, 'border-error': errMsg != '' }">
 
-    <div class="row m-top-body">
+    <div class="row">
       <div class="col-5"></div>
       <div class="col-2 text-center">
         <img src="assets/images/provinciaTN.png" class="">
@@ -25,7 +25,7 @@
         <p class="text-center heading-1">Benvenuto nel portale Esperienze Didattiche Insieme al Territorio della Provincia di Trento</p>
       </div>
     </div>
-    <div class="row m-top-body">
+    <div class="row">
       <div class="col-12">
         <p *ngIf="!loginSelected" class="text-center heading-2">Seleziona il tuo profilo prima di effettuare l’accesso</p>
         <p *ngIf="loginSelected" class="text-center heading-2">Premi ok e vai alla schermata di login</p>
@@ -41,7 +41,7 @@
         </label>
       </li>
     </ul> -->
-    <div class="row m-top-body100">
+    <div class="row m-top20">
       <div class="col-4">
         <div class="row">
           <div class="col-4"></div>
@@ -115,15 +115,19 @@
         </div>
       </div>
     </div>
-    <div class="text-center m-top-body">
-      <button type="button" class="btn btn-lg" 
-      [ngClass]="{'btn-primary': loginSelected, 'btn-secondary':!loginSelected }"
-      (click)="login()">&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    <div class="row text-center m-top20">
+      <div class="col-5"></div>
+      <div class="col-2">
+        <button type="button" class="btn btn-lg" 
+        [ngClass]="{'btn-primary': loginSelected, 'btn-secondary':!loginSelected }"
+        (click)="login()">&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;</button>
+      </div>
+      <div class="col-5"></div>
     </div>
-    <br>
-    <div class="text-center error-font" [innerHTML]="errMsg"></div>
-    <br>
-
+    <div class="row">
+      <div class="text-center error-font" [innerHTML]="errMsg"></div>
+    </div>
+    
   </div>
 
 </div>
