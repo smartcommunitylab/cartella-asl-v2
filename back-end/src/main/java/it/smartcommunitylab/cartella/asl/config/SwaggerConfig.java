@@ -18,15 +18,15 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@Configuration
-@EnableSwagger2
+//@Configuration
+//@EnableSwagger2
 public class SwaggerConfig {
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("it.smartcommunitylab.cartella.asl.controller")).paths(PathSelectors.ant("/**")).build()
-				.securitySchemes(Lists.newArrayList(apiKey()))
-		        .securityContexts(Arrays.asList(securityContext()));
-	}
+//	@Bean
+//	public Docket api() {
+//		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.basePackage("it.smartcommunitylab.cartella.asl.controller")).paths(PathSelectors.ant("/**")).build()
+//				.securitySchemes(Lists.newArrayList(apiKey()))
+//		        .securityContexts(Arrays.asList(securityContext()));
+//	}
 
 	private ApiKey apiKey() {
 		return new ApiKey("apiKey", "Authorization", "header");
