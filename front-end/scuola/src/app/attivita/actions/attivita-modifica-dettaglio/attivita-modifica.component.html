@@ -201,6 +201,7 @@
                             <span class="sr-only">Caricamento...</span>
                         </small>
                         <label *ngIf="!tipoInterna" for="typeahead-basic" class="active">Azienda</label>
+                        <label *ngIf="tipoInterna">Azienda</label>
                         <div class="invalid-feedback"
                             [class.d-block]="!tipoInterna && (forceEnteDisplay || definizioneInput.invalid && (definizioneInput.dirty || definizioneInput.touched) )">
                             Campo necessario.</div>
