@@ -83,7 +83,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let aa of attivitaAAs">
+                <tr *ngFor="let aa of attivitaAAs" (click)="openDetail(aa)">
                     <!-- Titolo -->
                     <td class="pointer">
                         <span #tooltipTitolo="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipTitolo);" class="align-middle" (click)="openDetail(aa)">{{ aa.titolo }}
