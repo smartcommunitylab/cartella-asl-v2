@@ -14657,3 +14657,12 @@ div.dp-input-container> input.dp-picker-input{
   color: #FFFFFF !important;
   position: relative;
 }
+/** for navbar*/
+.hiddenBG{
+  background-color: transparent !important;
+  border: none !important;
+}
+.noHeight{
+  max-height: 0px !important;
+}
+/* end for navbar*/
