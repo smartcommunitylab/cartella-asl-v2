@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
 
   entra() {
     var getUrl = window.location;
-    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1]
+    var baseUrl = getUrl.protocol + "//" + getUrl.host + "/"; //+ getUrl.pathname.split('/')[1]
     window.location.href = baseUrl + '/' + this.type + '/';
   }
 
