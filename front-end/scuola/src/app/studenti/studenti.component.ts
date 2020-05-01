@@ -143,5 +143,11 @@ export class StudentiComponent implements OnInit {
 
   }
 
-
+  refreshStudenti(){
+    this.filtro = {
+      text: null,
+      corsoId: null
+  }
+  this.getStudenti(1);
+  }
 }

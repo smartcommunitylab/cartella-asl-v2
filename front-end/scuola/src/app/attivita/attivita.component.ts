@@ -338,5 +338,14 @@ export class AttivitaComponent implements OnInit {
         }
     }
 
-
+    refreshAttivita(){
+        this.filtro = {
+            tipologia: '',
+            titolo: '',
+            stato : ''
+        }
+        this.tipologia = "Tipologie"
+        this.stato = undefined;
+        this.getAttivitaAltPage(1);
+    }
 }

@@ -147,8 +147,33 @@
         </table>
     </div>
     <div *ngIf="!attivitaAAs?.length" class="font-14 text-center font-weight-bold">
-        <span *ngIf="filtro.corsoStudio">Nessun attività corrispondende al filtro impostato</span>
-        <span *ngIf="!filtro.corsoStudio">Nessun attività, creane una tramite l'apposito pulsante</span>
+        <!-- <span *ngIf="filtro.corsoStudio">Nessun attività corrispondende al filtro impostato</span>
+        <span *ngIf="!filtro.corsoStudio">Nessun attività, creane una tramite l'apposito pulsante</span> -->
+        <div class="row">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-danger icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+            </div>
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn" (click)='refreshAttivita()'>
+                    
+                    <span class="resetFilterBtn" >
+                        <div class="row">
+                            <div class="col-sm-2 text-center">
+                                <svg class="icon icon-danger">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                                </svg>
+                            </div>
+                            <div class="col-sm-10 ">Resetta filtri</div>
+                        </div>
+                    </span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">

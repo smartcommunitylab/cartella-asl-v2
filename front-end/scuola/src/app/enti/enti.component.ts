@@ -99,5 +99,8 @@ export class EntiComponent implements OnInit {
         this.getEntiPaged(page);
     }
 
-
+    refreshEnti(){
+        this.filtro = null;
+        this.getEntiPaged(1);
+    }
 }
