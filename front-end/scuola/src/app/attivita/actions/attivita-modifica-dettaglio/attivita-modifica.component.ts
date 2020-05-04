@@ -254,11 +254,13 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
       && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay) {
-      this.attivita.descrizione = this.attivita.descrizione.trim();
-      this.attivita.formatore = this.attivita.formatore.trim();
-      this.attivita.formatoreCF = this.attivita.formatoreCF.trim();
-      this.attivita.referenteScuolaCF = this.attivita.referenteScuolaCF.trim();
+ 
+      (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
+      (this.attivita.formatore) ? this.attivita.formatore = this.attivita.formatore.trim() : this.attivita.formatore = null;
+      (this.attivita.formatoreCF) ? this.attivita.formatoreCF = this.attivita.formatoreCF.trim() : this.attivita.formatoreCF = null;
+      (this.attivita.referenteScuolaCF) ? this.attivita.referenteScuolaCF = this.attivita.referenteScuolaCF.trim() : this.attivita.referenteScuolaCF = null;
       (this.attivita.referenteEsternoCF) ? this.attivita.referenteEsternoCF = this.attivita.referenteEsternoCF.trim() : this.attivita.referenteEsternoCF = null;
+  
       this.dataService.createAttivitaAlternanza(this.attivita).subscribe((res => {
         this.router.navigate(['../../'], { relativeTo: this.route });
       }));
