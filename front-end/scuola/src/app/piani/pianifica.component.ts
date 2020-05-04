@@ -243,5 +243,16 @@ export class PianificaComponent implements OnInit {
         console.log(event);
     }
    
+    refreshPiani() {
+        this.filtro = {
+            inUso: '',
+            corsoStudio: '',
+            titolo: '',
+            stato : ''
+        }
+        this.corsodistudio = undefined;
+        this.stato = undefined;
+        this.getPianiPage(1);
+    }
 
 }
