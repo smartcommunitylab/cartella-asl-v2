@@ -77,8 +77,13 @@ export class EnteDettaglioModificaComponent implements OnInit {
       this.ente.coordinate = {
         'latitude': this.ente.latitude,
         'longitude': this.ente.longitude
-      }
+      };
       
+      (this.ente.nome) ? this.ente.nome = this.ente.nome.trim() : this.ente.nome = null;
+      (this.ente.email) ? this.ente.email = this.ente.email.trim() : this.ente.email = null;
+      (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
+      (this.ente.phone) ? this.ente.phone = this.ente.phone.trim() : this.ente.phone = null;
+
       this.dataService.addAzienda(this.ente).subscribe((res) => {
         this.router.navigate(['../detail', res.id], { relativeTo: this.route });
       },
@@ -97,7 +102,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
 
 
   allValidated() {
-    return ((this.ente.nome && this.ente.nome != '')
+    return ((this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0)
       && (this.ente.partita_iva && this.ente.partita_iva != '')
       && (this.place)
       && (this.ente.idTipoAzienda && this.ente.idTipoAzienda != '' && this.ente.idTipoAzienda != 'Tipo'));
