@@ -266,7 +266,7 @@ public class DevController {
 	 * 
 	 * @throws Exception
 	 */
-	//@Scheduled(cron = "0 00 02 * * ?") TODO for prod deploy
+	@Scheduled(cron = "0 00 02 * * ?")
 	public void scheduledImport() throws Exception {
 		if (logger.isInfoEnabled()) {
 			logger.info("start schedule import from Cartella");

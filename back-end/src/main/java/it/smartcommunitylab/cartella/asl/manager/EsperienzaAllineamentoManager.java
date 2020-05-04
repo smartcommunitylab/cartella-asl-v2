@@ -59,7 +59,7 @@ public class EsperienzaAllineamentoManager {
 		}
 	}
 
-	//@Scheduled(cron = "0 00 03 * * ?") TODO for prod deploy
+	@Scheduled(cron = "0 00 03 * * ?")
 	public void allineamentEsperienza() throws Exception {
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask per allineare esperienza");
