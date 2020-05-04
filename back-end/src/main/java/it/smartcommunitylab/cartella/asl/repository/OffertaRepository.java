@@ -18,7 +18,8 @@ public interface OffertaRepository extends JpaRepository<Offerta, Long> {
 			+ " oraInizio=:#{#off.oraInizio}, oraFine=:#{#off.oraFine}, referenteScuola=:#{#off.referenteScuola}, referenteScuolaCF=:#{#off.referenteScuolaCF},"
 			+ " referenteEsterno=:#{#off.referenteEsterno}, referenteEsternoCF=:#{#off.referenteEsternoCF}, formatore=:#{#off.formatore}, formatoreCF=:#{#off.formatoreCF},"
 			+ " luogoSvolgimento=:#{#off.luogoSvolgimento}, latitude=:#{#off.latitude}, longitude=:#{#off.longitude}, prerequisiti=:#{#off.prerequisiti},"
-			+ " postiDisponibili=:#{#off.postiDisponibili}, postiRimanenti=:#{#off.postiRimanenti}"
+			+ " postiDisponibili=:#{#off.postiDisponibili}, postiRimanenti=:#{#off.postiRimanenti},"
+			+ " enteId=:#{#off.enteId}, nomeEnte=:#{#off.nomeEnte}"
 			+ " WHERE off0.id=:#{#off.id}")
 	public void update(@Param("off") Offerta off);
 	
