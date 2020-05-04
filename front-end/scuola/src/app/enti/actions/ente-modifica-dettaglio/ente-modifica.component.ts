@@ -31,7 +31,8 @@ export class EnteDettaglioModificaComponent implements OnInit {
   azienda: any;
   place: any;
   forceErrorDisplay: boolean = false;
-  forceAddressDisplay;
+  forceTitoloErrorDisplay: boolean = false;
+  forceAddressDisplay: boolean = false;;
   showContent: boolean = false;
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
@@ -78,7 +79,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
         'latitude': this.ente.latitude,
         'longitude': this.ente.longitude
       };
-      
+     
       (this.ente.nome) ? this.ente.nome = this.ente.nome.trim() : this.ente.nome = null;
       (this.ente.email) ? this.ente.email = this.ente.email.trim() : this.ente.email = null;
       (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
@@ -96,6 +97,11 @@ export class EnteDettaglioModificaComponent implements OnInit {
         this.forceAddressDisplay = false;
       } else {
         this.forceAddressDisplay = true;
+      }
+      if (this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0) {
+        this.forceTitoloErrorDisplay = false;
+      } else {
+        this.forceTitoloErrorDisplay = true;
       }
     }
   }
@@ -191,6 +197,12 @@ export class EnteDettaglioModificaComponent implements OnInit {
       this.ente.longitude = placeObj.location[1];
       this.selectedLocationMarker.setLatLng(placeObj.location).update();
       this.map.setView(this.selectedLocationMarker.getLatLng());
+    }
+  }
+
+  trimValue(event, type) {
+    if (type == 'titolo') {
+      (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay = false;
     }
   }
 

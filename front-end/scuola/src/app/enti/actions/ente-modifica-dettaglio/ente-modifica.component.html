@@ -44,7 +44,7 @@
                         <input type="text" class="form-control" [(ngModel)]="ente.nome" id="nome" #NomeInput="ngModel"
                             placeholder="Nome" required>
                         <div class="invalid-feedback"
-                            [class.d-block]="NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay)">
+                            [class.d-block]="forceTitoloErrorDisplay || (NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay))">
                             Campo necessario.</div>
                     </div>
                     <div class="col-2"></div>
