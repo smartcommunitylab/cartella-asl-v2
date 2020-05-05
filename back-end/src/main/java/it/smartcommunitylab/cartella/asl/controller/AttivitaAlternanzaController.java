@@ -370,7 +370,7 @@ public class AttivitaAlternanzaController implements AslController {
 		}
 	}
 	
-	@PostMapping("/api/attivita/offerta/{id}/associa")
+	@PostMapping("/api/attivita/offerta/{offertaId}/associa")
 	public @ResponseBody AttivitaAlternanza associaOfferta(
 			@PathVariable long offertaId,
 			@RequestParam String istitutoId,

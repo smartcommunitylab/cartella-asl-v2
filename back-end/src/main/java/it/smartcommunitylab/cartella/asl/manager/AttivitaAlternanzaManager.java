@@ -546,7 +546,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId) 
 			throws BadRequestException {
 		Offerta offerta = offertaManager.getOfferta(offertaId);
-		if(offerta != null) {
+		if(offerta == null) {
 			throw new BadRequestException("offerta not found");
 		}
 		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta);
