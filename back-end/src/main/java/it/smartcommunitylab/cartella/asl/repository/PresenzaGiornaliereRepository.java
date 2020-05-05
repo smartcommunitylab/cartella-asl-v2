@@ -29,7 +29,7 @@ public interface PresenzaGiornaliereRepository extends JpaRepository<PresenzaGio
   	@Query("UPDATE PresenzaGiornaliera pg SET pg.attivitaSvolta=(:attivitaSvolta), pg.oreSvolte=(:oreSvolte) WHERE pg.id=(:id) AND pg.esperienzaSvoltaId=(:esperienzaSvoltaId) AND pg.verificata=false")
   	public void aggiornaPresenza(Long id, Long esperienzaSvoltaId, String attivitaSvolta, int oreSvolte);
   	
-  	@Query("SELECT COUNT(pg.oreSvolte) FROM PresenzaGiornaliera pg WHERE pg.esperienzaSvoltaId=(:esperienzaSvoltaId) AND pg.verificata=TRUE")
+  	@Query("SELECT SUM(pg.oreSvolte) FROM PresenzaGiornaliera pg WHERE pg.esperienzaSvoltaId=(:esperienzaSvoltaId) AND pg.verificata=TRUE")
   	public Long getOreValidateByEsperienzaId(Long esperienzaSvoltaId);
 
 }
