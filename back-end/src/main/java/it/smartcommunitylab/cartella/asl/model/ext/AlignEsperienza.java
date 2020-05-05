@@ -24,6 +24,7 @@ public class AlignEsperienza {
 	private String tutorInternoEsperienzaASL;
 	private String tutorEsternoEsperienzaASL;
 	private String numeroOreFrequentateStudente;
+	private boolean inItalia = true;
 
 	public AlignEsperienza() {
 	}
@@ -202,6 +203,18 @@ public class AlignEsperienza {
 
 	public void setNumeroOreFrequentateStudente(String numeroOreFrequentateStudente) {
 		this.numeroOreFrequentateStudente = numeroOreFrequentateStudente;
+	}
+
+	public boolean isInItalia() {
+		return inItalia;
+	}
+
+	public void setInItalia(boolean inItalia) {
+		this.inItalia = inItalia;
+	}
+
+	public void setCodiceTipoEsperienzaASL(long codiceTipoEsperienzaASL) {
+		this.codiceTipoEsperienzaASL = codiceTipoEsperienzaASL;
 	}
 
 }

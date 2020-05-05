@@ -149,6 +149,10 @@ public class InfoTNAlignExpService {
 					ae.setPartitaIVAAzienda(azienda.getPartita_iva());
 					// obligatory while defining opportunity.
 					ae.setTutorEsternoEsperienzaASL(aa.getReferenteEsterno());
+					//TODO fix p_iva estera
+					if(azienda.getPartita_iva().length() < 11) {
+						ae.setInItalia(false);
+					}
 				} else {
 					throw new BadRequestException(errorLabelManager.get("codice.tipo.azienda.error.notfound"));
 				}
