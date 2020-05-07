@@ -549,13 +549,15 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(offerta == null) {
 			throw new BadRequestException("offerta not found");
 		}
-		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta);
+		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId);
 		return saveAttivitaAlternanza(aa, istitutoId);
 	}
 
-	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta) {
+	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta, String istitutoId) {
+		String titolo = offerta.getTitolo() + " - " + 
+				(attivitaAlternanzaRepository.countByOffertaIdAndIstitutoId(offerta.getId(), istitutoId) + 1);
 		AttivitaAlternanza aa = new AttivitaAlternanza();
-		aa.setTitolo(offerta.getTitolo());
+		aa.setTitolo(titolo);
 		aa.setTipologia(offerta.getTipologia());
 		aa.setAnnoScolastico(Utils.annoScolastico(offerta.getDataInizio()));
 		aa.setDescrizione(offerta.getDescrizione());

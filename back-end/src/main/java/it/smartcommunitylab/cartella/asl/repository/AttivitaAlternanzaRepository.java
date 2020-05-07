@@ -38,6 +38,9 @@ public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlte
 	@Query("SELECT COUNT(aa) FROM AttivitaAlternanza aa WHERE aa.offertaId=(:offertaId)")
 	public int countByOffertaId(Long offertaId);
 	
+	@Query("SELECT COUNT(aa) FROM AttivitaAlternanza aa WHERE aa.offertaId=(:offertaId) AND aa.istitutoId=(:istitutoId)")
+	public int countByOffertaIdAndIstitutoId(Long offertaId, String istitutoId);
+	
 	public List<AttivitaAlternanza> findAttivitaAlternanzaByEnteId(String enteId);
 	
 	public AttivitaAlternanza findByUuid(String uuid);
