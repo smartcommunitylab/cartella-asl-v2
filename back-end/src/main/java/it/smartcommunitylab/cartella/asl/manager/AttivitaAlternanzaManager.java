@@ -267,11 +267,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 						toKeep++;
 					}
 		 		}
-				if((offerta.getPostiRimanenti() + toDelete - (listaEspReg.size() - toKeep)) < 0) {
+				int postiRimanenti = offerta.getPostiRimanenti() + toDelete - (listaEspReg.size() - toKeep);
+				if((postiRimanenti) < 0) {
 					throw new BadRequestException(errorLabelManager.get("offerta.postiRimanenti"));
 				}
-				offertaManager.rimuoviPostiEsperienze(offerta.getId(), toDelete);
-				offertaManager.aggiungiPostiEsperienze(offerta.getId(), listaEspReg.size() - toKeep);
+				offertaManager.updatePostiRimanenti(offerta.getId(), postiRimanenti);
 			}
 		}
 		for(EsperienzaSvolta esperienzaDb : esperienze) {

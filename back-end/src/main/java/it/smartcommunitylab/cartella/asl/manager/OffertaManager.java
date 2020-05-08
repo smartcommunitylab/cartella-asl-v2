@@ -58,6 +58,10 @@ public class OffertaManager extends DataEntityManager {
 		}
 	}
 	
+	public void updatePostiRimanenti(Long offertaId, int posti) {
+		offertaRepository.updatePostiRimanenti(offertaId, posti);
+	}
+	
 	public Page<Offerta> findOfferta(String istitutoId, String text, int tipologia,	Boolean ownerIstituto, String stato, 
 			Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
