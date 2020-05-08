@@ -14524,6 +14524,10 @@ div.dp-input-container> input.dp-picker-input{
   color: #A2ADB8;
   font-weight: bold;
 }
+.disponibile{
+  color: #00CF86;
+  font-weight: bold;
+}
 .bozza{
   color: #FF9700;
   font-weight: bold;
@@ -14640,6 +14644,17 @@ div.dp-input-container> input.dp-picker-input{
   width: 200px;
   height: 40px;
   background-color: #FF9700!important;
+  font-family: Titillium Web !important;
+  font-size: 18px;
+  font-weight: 600;
+  color: #FFFFFF !important;
+  position: relative;
+}
+
+.btnCrea{
+  width: 272px;
+  height: 40px;
+  background-color: #00cc85!important;
   font-family: Titillium Web !important;
   font-size: 18px;
   font-weight: 600;

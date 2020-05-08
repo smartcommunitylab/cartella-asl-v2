@@ -31,6 +31,7 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   attivita: AttivitaAlternanza;
   esperienze;
+  offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   cardTitle: string = "Vedi";
   individuale: boolean;
@@ -53,7 +54,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
   showContent: boolean = false;
-  stati = [ {"name": "In attesa", "value": "in_attesa"}, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, {"name": "Archiviata", "value": "archiviata"}];
+  stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   zeroStudent: boolean;
   breadcrumbItems = [
     {
@@ -71,15 +72,19 @@ export class AttivitaDettaglioComponent implements OnInit {
     this.route.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getAttivita(id).subscribe((res) => {
-        this.dataService.getAttivitaPresenzeGruppoListaGiorni(id,moment(res.attivitaAlternanza.dataInizio).format('YYYY-MM-DD'),moment(res.attivitaAlternanza.dataFine).format('YYYY-MM-DD')).subscribe((studenti) => {
-          studenti.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
-        })
-      })
-      
-      this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
+
+        if (this.attivita.offertaId) {
+          this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
+            this.offertaAssociata = off;
+          })
+        }
+
+        this.dataService.getAttivitaPresenzeGruppoListaGiorni(id, moment(res.attivitaAlternanza.dataInizio).format('YYYY-MM-DD'), moment(res.attivitaAlternanza.dataFine).format('YYYY-MM-DD')).subscribe((studenti) => {
+          studenti.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
+        })
 
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
@@ -103,28 +108,17 @@ export class AttivitaDettaglioComponent implements OnInit {
         (err: any) => console.log(err),
         () => console.log('getAttivita'));
     });
-
-
-
-  }
-  openDetailCompetenza(competenza, $event) {
-    // if ($event) $event.stopPropagation();
-    // const modalRef = this.modalService.open(CompetenzaDetailModalComponent, { size: "lg" });
-    // modalRef.componentInstance.competenza = competenza;
   }
 
   openDetail(attivita) {
     this.router.navigate([attivita.id], { relativeTo: this.route });
   }
 
-  getAttivitaType() {
-
-  }
-
+  getAttivitaType() { }
+  
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
   }
-
 
   getCorsoDiStudioString(corsoStudioId) {
     if (this.corsiStudio) {
@@ -145,6 +139,7 @@ export class AttivitaDettaglioComponent implements OnInit {
       return tipologiaId;
     }
   }
+
   getTipologia(tipologiaId) {
     if (this.tipologie) {
       return this.tipologie.find(data => data.id == tipologiaId);
@@ -152,7 +147,6 @@ export class AttivitaDettaglioComponent implements OnInit {
       return tipologiaId;
     }
   }
-
 
   uploadDocument(fileInput) {
     if (fileInput.target.files && fileInput.target.files[0]) {
@@ -183,7 +177,7 @@ export class AttivitaDettaglioComponent implements OnInit {
       downloadLink.download = doc.nomeFile;
       document.body.appendChild(downloadLink);
       downloadLink.click();
-      document.body.removeChild(downloadLink);    
+      document.body.removeChild(downloadLink);
     });
   }
 
@@ -233,7 +227,6 @@ export class AttivitaDettaglioComponent implements OnInit {
         () => console.log('archiviaAttivita'));
   }
 
-
   showTip(ev, piano) {
     console.log(ev.target.title);
     if (!piano.toolTip) {
@@ -262,10 +255,20 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   getStatoNome(statoValue) {
     if (this.stati) {
-        let rtn = this.stati.find(data => data.value == statoValue);
-        if (rtn) return rtn.name;
-        return statoValue;
+      let rtn = this.stati.find(data => data.value == statoValue);
+      if (rtn) return rtn.name;
+      return statoValue;
     }
+  }
+
+  setNomeEnte(off) {
+    let label = '';
+    if (off.nomeEnte) {
+      label = off.nomeEnte;
+    } else {
+      label = 'Istituto';
+    }
+    return label;
   }
 
 }

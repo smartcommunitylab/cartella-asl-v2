@@ -5,7 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-
+import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 
 @Component({
     selector: 'offerte',
@@ -29,14 +29,14 @@ export class OfferteComponent implements OnInit {
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
     sources = [{ "name": "Istituto", "value": "istituto" }, { "name": "Ente", "value": "ente" }];
-    @ViewChild('tooltip') tooltip: NgbTooltip;
-
+    
     filterDatePickerConfig = {
         locale: 'it',
         firstDayOfWeek: 'mo'
     };
 
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
+    @ViewChild('tooltip') tooltip: NgbTooltip;
 
 
     constructor(
@@ -75,21 +75,21 @@ export class OfferteComponent implements OnInit {
 
     }
 
-    openDetail(aa) {
-        // this.router.navigate(['../detail', aa.id], { relativeTo: this.route });
+    openDetail(off) {
+        this.router.navigate(['../detail', off.id], { relativeTo: this.route });
     }
 
     creaOfferta() {
-        // const modalRef = this.modalService.open(CreaAttivitaModalComponent, { windowClass: "creaAttivitaModalClass" });
-        // modalRef.componentInstance.tipologie = this.tipologie;
-        // modalRef.componentInstance.newAttivitaListener.subscribe((attivita) => {
-        //      this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
-        //         this.router.navigate(['../detail', response.id], { relativeTo: this.route });
-        //      },
-        //          (err: any) => console.log(err),
-        //          () => console.log('createAttivitaAlternanza'));
+        const modalRef = this.modalService.open(CreaOffertaModalComponent, { windowClass: "creaAttivitaModalClass" });
+        modalRef.componentInstance.tipologie = this.tipologie;
+        modalRef.componentInstance.newOffertaListener.subscribe((offerta) => {
+             this.dataService.createOfferta(offerta).subscribe((response) => {
+                this.router.navigate(['../detail', response.id], { relativeTo: this.route });
+             },
+                 (err: any) => console.log(err),
+                 () => console.log('createAttivitaAlternanza'));
 
-        // });
+        });
     }
 
     getOffertePage(page: number) {
@@ -199,6 +199,19 @@ export class OfferteComponent implements OnInit {
             if (rtn) return rtn.name;
             return statoValue;
         }
+    }
+
+    refreshOfferte(){
+        this.filtro = {
+            tipologia: '',
+            titolo: '',
+            stato: '',
+            ownerIstituto: null
+        }
+        this.tipologia = "Tipologie"
+        this.stato = undefined;
+        this.owner = undefined;
+        this.getOffertePage(1);
     }
 
 }

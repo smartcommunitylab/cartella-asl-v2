@@ -86,7 +86,9 @@ export class AttivitaComponent implements OnInit {
     openCreate() {
         const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.newPianoListener.subscribe((option) => {
-            if (option == 2) {
+            if (option == 1) {
+                this.router.navigate(['associa/offerta'], { relativeTo: this.route });
+            } else if (option == 2) {
                 this.openCreateNewAttivita();            
             }
 

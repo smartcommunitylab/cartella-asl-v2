@@ -1,0 +1,119 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below">
+    <div class="row">
+        <div class="card modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row rectangle-selector v-center-inline">
+                    <div class="col-11">
+                        <label *ngIf="offertaAssociata.length < 1" class="font-weight-bold">Seleziona un’offerta da
+                            associare all’attività.</label>
+                        <label *ngIf="offertaAssociata.length == 1" class="font-weight-bold">Hai selezionato:
+                            <span class="primary-color">{{ offertaAssociata[0].titolo }},
+                                {{ getTipologia(offertaAssociata[0].tipologia).titolo }} presso
+                                {{ setNomeEnte(offertaAssociata[0]) }},
+                                {{ offertaAssociata[0].dataInizio | date: 'dd/MM/yyyy'}} -
+                                {{ offertaAssociata[0].dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata[0].ore }}
+                                ore</span></label>
+                    </div>
+                    <div class="col-1 text-center">
+                        <span *ngIf="offertaAssociata.length == 1" #tooltip="ngbTooltip" placement="bottom" ngbTooltip="Rimuovi associazione">
+                            <svg class="icon iconDangerColor pointer" (click)="cancelSelection()">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                            </svg>
+                        </span>                        
+                    </div>
+                </div>
+                <div class="row v-center bg-white">
+                    <div class="col-3 v-center-inline">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaTitolo" class="form-control search-input"
+                                [(ngModel)]="filterText" (keyup.enter)="cerca()">
+                            <label for="cercaTitolo">Cerca</label>
+                        </div>
+                        <it-button class="v-center-inline" (click)="cerca()">
+                            <svg class="icon icon-primary">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+                            </svg>
+                        </it-button>
+                    </div>
+                    <div class="col-4 v-center-inline">
+                        <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="tipologia"
+                            (ngModelChange)="selectTipologiaFilter()">
+                            <option selected="selected">Tipologie</option>
+                            <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-2 v-center-inline">
+                        <select class="custom-select form-control" [(ngModel)]="owner"
+                            (ngModelChange)="selectOwnerFilter()">
+                            <option [ngValue]="undefined">Creata da</option>
+                            <option [value]="src.value" *ngFor="let src of sources">{{src.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead class="bg-white">
+                        <tr>
+                            <th></th>
+                            <th>Titolo</th>
+                            <th>Tipologia</th>
+                            <th>Ente</th>
+                            <th>Periodo</th>
+                            <th>Creata da</th>
+                            <th>Ore</th>
+                            <th>Posti liberi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let off of offerte" class="{{off.valida?'validRow':'canceledRow'}}">
+                            <td class="align-middle pointer">
+                                <it-radio-button #tooltip="ngbTooltip" placement="right" ngbTooltip="{{off.toolTip}}"
+                                    (mouseenter)="showTip($event, off, tooltip);" [checked]="off.valida" (change)="onFilterChange(off, tooltip)">
+                                </it-radio-button>                            
+                            </td>
+                            <td class="align-middle pointer">{{ off.titolo }}</td>
+                            <td class="align-middle pointer">{{ getTipologia(off.tipologia).titolo }}</td>
+                            <td class="align-middle pointer">{{ setNomeEnte(off) }}</td>
+                            <td class="align-middle pointer">{{ off.dataInizio | date: 'dd/MM/yyyy'}} -
+                                {{ off.dataFine | date: 'dd/MM/yyyy' }}</td>
+                            <td class="align-middle pointer">{{ setSource(off) }}</td>
+                            <td class="align-middle pointer">{{ off.ore }}</td>
+                            <td class="align-middle pointer">{{ showPostiLiberi(off) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="!offerte?.length" class="font-14 text-center font-weight-bold">
+                    <div class="row">
+                        <div class="col-xl-12 text-center errorIconPaddingTop">
+                            <svg class="icon icon-danger icon-xl">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                            </svg>
+                        </div>
+                        <div class="col-xl-12 text-center">
+                            <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+                        </div>
+                        <div class="col-sm-12 text-center">
+                            <button type="button" class="btn" (click)='refreshOfferte()'>
+                
+                                <span class="resetFilterBtn">
+                                    <div class="row">
+                                        <div class="col-sm-2 text-center">
+                                            <svg class="icon icon-danger">
+                                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                                            </svg>
+                                        </div>
+                                        <div class="col-sm-10 ">Resetta filtri</div>
+                                    </div>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5"
+                [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+        </div>
+    </div>
+</div>

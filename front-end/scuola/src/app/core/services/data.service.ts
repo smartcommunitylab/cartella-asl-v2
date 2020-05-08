@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import { forkJoin } from 'rxjs';  // RxJS 6 syntax
 import { catchError, map, } from 'rxjs/operators';
 import { Attivita } from '../../shared/classes/Attivita.class';
@@ -477,6 +477,28 @@ export class DataService {
       );
   }
 
+  associaOffertaToAttivita(offertaId): Observable<AttivitaAlternanza> {
+
+    let url = this.host + "/attivita/offerta/" + offertaId + '/associa';
+
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.post<AttivitaAlternanza>(url, null,
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+  
+
   getAttivitaAlternanzaForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
 
     let url = this.host + "/attivita/search/";
@@ -820,7 +842,67 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       }),
       catchError(this.handleError)
     );
-}
+  }
+
+  createOfferta(offerta): Observable<AttivitaAlternanza> {
+   
+    let url = this.host + "/offerta";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+  
+    return this.http.post<any>(url, offerta,
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
+  getOfferta(id): Observable<any>{
+    let url = this.host + "/offerta/" + id;
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+        }),
+        catchError(this.handleError)
+      );
+
+  }
+  
+  deleteOfferta(id: number): Observable<any> {
+    let url = this.host + "/offerta/" + id;
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
 
   /** STUDENTI */
@@ -2082,10 +2164,10 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       errMsg = error.message;
     }
     else if (error.error) {
-      if (error.error.ex) {
+      if (error.error.message) {
+        errMsg = error.error.message;
+      } else if (error.error.ex) {
         errMsg = error.error.ex;
-        // Use the following instead if using lite-server
-        //return Observable.throw(err.text() || 'backend server error');
       } else if (typeof error.error === "string") {
         try {
           let errore = JSON.parse(error.error);

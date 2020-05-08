@@ -10,7 +10,8 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import { SkillsSelectorModule } from '../shared/skills-selector/skills-selector.module';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
+import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -29,6 +30,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbActiveModal,
   ],
   entryComponents: [
+    CreaOffertaModalComponent,
+    OffertaCancellaModal
    ],
 declarations: [OfferteRoutingModule.components]
 })

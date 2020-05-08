@@ -29,11 +29,11 @@ export class NewAttivtaModal implements OnInit {
   create(option) {
     
     if (option == 1) {
-      alert('Crea nuova attività a partire da un’offerta');  
+      this.activeModal.dismiss('Crea nuova attività a partire da un’offerta');;
+      this.newPianoListener.emit(1);  
     } else {
       this.activeModal.dismiss('Crea nuova attività');
       this.newPianoListener.emit(2);
-
     }
 
   }
