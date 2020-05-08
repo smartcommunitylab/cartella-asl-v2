@@ -28,7 +28,6 @@ public class ReportEsperienzaRegistration {
 				studenteId.equals(esperienza.getStudenteId()) &&
 				cfStudente.equals(esperienza.getCfStudente()) &&
 				classeStudente.equals(esperienza.getClasseStudente()) &&
-				studenteId.equals(esperienza.getStudenteId()) &&
 				registrazioneId.equals(esperienza.getRegistrazioneId());
 	}
 	

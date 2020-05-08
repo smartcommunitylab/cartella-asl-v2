@@ -252,6 +252,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		if(aa.getOffertaId() != null) {
+			Offerta offerta = offertaManager.getOfferta(aa.getOffertaId());
+			if(offerta != null) {
+				int toDelete = 0;
+				int toKeep = 0;
+				for(EsperienzaSvolta esperienzaDb : esperienze) {
+					if(!checkExistingEsperienza(esperienzaDb, listaEspReg)) {
+						toDelete++;
+					} else {
+						toKeep++;
+					}
+		 		}
+				if((offerta.getPostiRimanenti() + toDelete - (listaEspReg.size() - toKeep)) < 0) {
+					throw new BadRequestException("offerta has not enough 'postiRimanenti'");
+				}
+				offertaManager.rimuoviPostiEsperienze(offerta.getId(), toDelete);
+				offertaManager.aggiungiPostiEsperienze(offerta.getId(), listaEspReg.size() - toKeep);
+			}
+		}
 		for(EsperienzaSvolta esperienzaDb : esperienze) {
 			if(!checkExistingEsperienza(esperienzaDb, listaEspReg)) {
 				esperienzaSvoltaManager.deleteEsperienza(esperienzaDb);
