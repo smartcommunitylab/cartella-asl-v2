@@ -69,7 +69,7 @@
                         <tr *ngFor="let off of offerte" class="{{off.valida?'validRow':'canceledRow'}}">
                             <td class="align-middle pointer">
                                 <it-radio-button #tooltip="ngbTooltip" placement="right" ngbTooltip="{{off.toolTip}}"
-                                    (mouseenter)="showTip($event, off, tooltip);" [checked]="off.valida" (change)="onFilterChange(off, tooltip)">
+                                    [disabled]="off.postiRimanenti <= 0" (mouseenter)="showTip($event, off, tooltip);" [checked]="off.valida" (change)="onFilterChange(off, tooltip)">
                                 </it-radio-button>                            
                             </td>
                             <td class="align-middle pointer">{{ off.titolo }}</td>

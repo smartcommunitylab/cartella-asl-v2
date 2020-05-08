@@ -21,7 +21,8 @@
                         </span>
                     </span>
                 </button>
-                <button class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnCrea mLeft12" placement="bottom" ngbTooltip="Crea una nuova attività a partire da questa offerta" (click)="associaOfferta()">
+                <button class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnCrea mLeft12" placement="bottom" 
+                    *ngIf="offerta.postiRimanenti > 0" ngbTooltip="Crea una nuova attività a partire da questa offerta" (click)="associaOfferta()">
                     <span class="row btnModificationText">
                         <span class="col-10 leftItem">Crea attività da offerta</span>
                         <span class="col-2 rightItem">
