@@ -19,6 +19,7 @@ import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.Offerta.Stati;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
+import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
@@ -30,6 +31,8 @@ public class OffertaManager extends DataEntityManager {
 	CompetenzaManager competenzaManager;
 	@Autowired
 	LocalDocumentManager documentManager;
+	@Autowired
+	ErrorLabelManager errorLabelManager;
 
 	public void rimuoviPostiEsperienze(Long offertaId, int posti) {
 		if(posti > 0) {
@@ -49,7 +52,7 @@ public class OffertaManager extends DataEntityManager {
 				if((offerta.getPostiRimanenti() - posti) >= 0) {
 					offertaRepository.updatePostiRimanenti(offertaId, offerta.getPostiRimanenti() - posti);
 				} else {
-					throw new BadRequestException("offerta has not enough 'postiRimanenti'");
+					throw new BadRequestException(errorLabelManager.get("offerta.postiRimanenti"));
 				}
 			}					
 		}
@@ -147,11 +150,11 @@ public class OffertaManager extends DataEntityManager {
 			return offertaRepository.save(offerta);
 		} else {
 			if(!istitutoId.equals(offertaDb.getIstitutoId())) {
-				throw new BadRequestException("offerta has a different owner");
+				throw new BadRequestException(errorLabelManager.get("offerta.owner"));
 			}
 			int postiOccupati = offertaDb.getPostiDisponibili() - offertaDb.getPostiRimanenti();
 			if(offerta.getPostiDisponibili() < postiOccupati) {
-				throw new BadRequestException("offerta has not enough 'postiDisponibili'");
+				throw new BadRequestException(errorLabelManager.get("offerta.postiDisponibili"));
 			}
 			offerta.setPostiRimanenti(offerta.getPostiDisponibili() - postiOccupati);
 			offertaRepository.update(offerta);
@@ -162,7 +165,7 @@ public class OffertaManager extends DataEntityManager {
 	public void deleteOfferta(Offerta offerta) throws Exception {
 		int count = countAttivitaAlternanzaByOfferta(offerta.getId());
 		if(count > 0) {
-			throw new BadRequestException("offerta is used");
+			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());

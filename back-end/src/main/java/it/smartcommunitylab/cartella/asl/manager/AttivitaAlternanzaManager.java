@@ -34,6 +34,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraG
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzeAttvitaAlternanza;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
+import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
@@ -52,6 +53,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	PresenzaGiornalieraManager presenzaGiornalieraManager;
 	@Autowired
 	CompetenzaManager competenzaManager;
+	@Autowired
+	ErrorLabelManager errorLabelManager;
 	
 	public AttivitaAlternanza saveAttivitaAlternanza(AttivitaAlternanza aa, String istitutoId) 
 			throws BadRequestException {
@@ -63,7 +66,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			return attivitaAlternanzaRepository.save(aa);
 		} else {
 			if(aaDb.getStato().equals(Stati.archiviata)) {
-				throw new BadRequestException("attivitàAlternanza is not editable");
+				throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
@@ -96,7 +99,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	
 	public void deleteAttivitaAlternanza(AttivitaAlternanza aa) throws Exception {
 		if(aa.getStato().equals(Stati.archiviata)) {
-			throw new BadRequestException("attivitàAlternanza is not editable");
+			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
 		int numEsperienze = esperienzaSvoltaManager.deleteEsperienzeByAttivita(aa);
 		if(aa.getOffertaId() != null) {
@@ -248,7 +251,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public void setStudentList(AttivitaAlternanza aa, List<ReportEsperienzaRegistration> listaEspReg) 
 			throws Exception {
 		if(aa.getStato().equals(Stati.archiviata)) {
-			throw new BadRequestException("attivitàAlternanza is not editable");
+			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
@@ -265,7 +268,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 					}
 		 		}
 				if((offerta.getPostiRimanenti() + toDelete - (listaEspReg.size() - toKeep)) < 0) {
-					throw new BadRequestException("offerta has not enough 'postiRimanenti'");
+					throw new BadRequestException(errorLabelManager.get("offerta.postiRimanenti"));
 				}
 				offertaManager.rimuoviPostiEsperienze(offerta.getId(), toDelete);
 				offertaManager.aggiungiPostiEsperienze(offerta.getId(), listaEspReg.size() - toKeep);
@@ -314,12 +317,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public void archiveAttivitaAlternanza(AttivitaAlternanza aa, List<ReportArchiviaEsperienza> listaEsperienze) 
 			throws Exception {
 		if(aa.getStato().equals(Stati.archiviata)) {
-			throw new BadRequestException("attivitàAlternanza is not editable");
+			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
 		for(ReportArchiviaEsperienza report : listaEsperienze) {
 			EsperienzaSvolta esperienzaSvolta = esperienzaSvoltaManager.findById(report.getEsperienzaSvoltaId());
 			if(esperienzaSvolta == null) {
-				throw new BadRequestException("esperienzaSvolta not found");
+				throw new BadRequestException(errorLabelManager.get("esperienza.notfound"));
 			}
 			esperienzaSvoltaManager.chiudiEsperienza(report.getEsperienzaSvoltaId(), report.isValida());
 		}
@@ -369,7 +372,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
 		if(esperienze.size() == 0) {
-			throw new BadRequestException("esperienzaSvolta not found");
+			throw new BadRequestException(errorLabelManager.get("esperienza.notfound"));
 		}
 		EsperienzaSvolta esperienza = esperienze.get(0);
 		
@@ -566,7 +569,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			throws BadRequestException {
 		Offerta offerta = offertaManager.getOfferta(offertaId);
 		if(offerta == null) {
-			throw new BadRequestException("offerta not found");
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
 		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId);
 		return saveAttivitaAlternanza(aa, istitutoId);

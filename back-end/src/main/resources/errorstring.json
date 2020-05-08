@@ -36,5 +36,12 @@
 	"codice.tipo.azienda.error.notfound": "codiceTipoAzienda non trovata",
 	"azienda.error.notfound": "Azienda non trovata",
 	"azienda.error.exist": "Azienda già esiste",
-	"studente.notfound": "Studente non trovato/a"
+	"studente.notfound": "Studente non trovato/a",
+	"offerta.postiRimanenti": "L'Offerta non ha abbastanza posti rimanenti",
+	"offerta.postiDisponibili": "L'Offerta non ha abbastanza posti disponibili",
+	"offerta.owner": "L'Offerta è gestita da un altro ente",
+	"offerta.used": "L'Offerta è utilizzata",
+	"offerta.notfound": "Offerta non trovata",
+	"esperienza.notfound": "Esperienza Svlota non trovata",
+	"attivita.noteditable": "Attività Alternanza non modificabile"
 }
