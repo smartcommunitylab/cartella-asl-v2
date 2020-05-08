@@ -207,6 +207,7 @@ export class OfferteSelectorComponent implements OnInit {
     }
     this.tipologia = "Tipologie"
     this.owner = undefined;
+    this.filterText = undefined;
     this.getOffertePage(1);
   }
 
