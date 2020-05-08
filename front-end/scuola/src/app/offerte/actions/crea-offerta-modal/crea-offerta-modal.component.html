@@ -34,7 +34,7 @@
             <div class="col-sm-4"
                 [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
-                    placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" required>
+                    placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayTitolo || titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                     Campo necessario.

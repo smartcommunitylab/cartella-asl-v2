@@ -148,8 +148,9 @@ export class CreaOffertaModalComponent implements OnInit {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayRS = true : this.forceErrorDisplayRS = false;
     } else if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayRE = true : this.forceErrorDisplayRE = false;
-    }
-    event.target.value = event.target.value.trim();
+    } else if(type == 'trim'){
+      event.target.value = event.target.value.trim(); 
+    } 
   }
 
   searchingAZ = false;
