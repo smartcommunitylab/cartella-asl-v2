@@ -11,7 +11,9 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="offerta.istitutoId && offerta.istitutoId==dataService.istitutoId" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete mLeft12" placement="bottom"  ngbTooltip="Elimina questa offerta" (click)="delete()">
+                <button *ngIf="offerta.istitutoId && offerta.istitutoId==dataService.istitutoId" [disabled]="offerta.numeroAttivita > 0" 
+                class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete mLeft12" 
+                placement="bottom"  ngbTooltip="Elimina questa offerta" (click)="delete()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Elimina offerta</span>
                         <span class="col-2">
@@ -22,7 +24,7 @@
                     </span>
                 </button>
                 <button class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnCrea mLeft12" placement="bottom" 
-                    *ngIf="offerta.postiRimanenti > 0" ngbTooltip="Crea una nuova attività a partire da questa offerta" (click)="associaOfferta()">
+                    [disabled]="offerta.postiRimanenti <= 0" ngbTooltip="Crea una nuova attività a partire da questa offerta" (click)="associaOfferta()">
                     <span class="row btnModificationText">
                         <span class="col-10 leftItem">Crea attività da offerta</span>
                         <span class="col-2 rightItem">

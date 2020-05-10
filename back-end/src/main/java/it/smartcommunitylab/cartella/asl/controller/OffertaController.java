@@ -29,7 +29,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 
 @RestController
-public class OffertaController {
+public class OffertaController implements AslController {
 	private static Log logger = LogFactory.getLog(OffertaController.class);
 	
 	@Autowired
