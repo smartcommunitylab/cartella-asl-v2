@@ -861,6 +861,8 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         },
           catchError(this.handleError)
         )
+        ,
+          catchError(this.handleError)
       );
   }
 
