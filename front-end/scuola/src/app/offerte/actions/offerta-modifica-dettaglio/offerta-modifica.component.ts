@@ -237,8 +237,8 @@ export class OffertaDettaglioModificaComponent implements OnInit {
         this.router.navigate(['../../'], { relativeTo: this.route });
       },err => {
           console.log(err);
-          if (err.error.message.indexOf("offerta has not enough 'postiDisponibili'") != -1) {
-            this.growler.growl(err.error.message, GrowlerMessageType.Danger, 5000);
+          if (err.indexOf("non ha abbastanza posti disponibili") != -1) {
+            // this.growler.growl(err.error.message, GrowlerMessageType.Danger, 5000);
             this.forcePostiErrorDisplay = true;
           }
       });
