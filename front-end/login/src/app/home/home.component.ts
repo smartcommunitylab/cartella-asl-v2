@@ -27,7 +27,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params['errMsg']) {
-        this.errMsg = 'Attenzione:' + params['errMsg'];
+        let errMsg = params['errMsg'].replace(/(^'|'$)/g, '');
+        errMsg = errMsg.replace(/(^"|"$)/g, '');
+        this.errMsg = 'Attenzione: ' + errMsg;
       }
     });
   }
