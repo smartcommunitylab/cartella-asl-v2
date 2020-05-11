@@ -30,7 +30,7 @@
 	"missing.domainId" : "Id dominio mancante",
 	"missing.user.role" : "Ruolo utente mancante",
 	"wrong.domainId" : "Id dominio errato",
-	"api.access.error" : "Utente non autorizato all'operazione.<br/>Si prega di effettuare nuovamente il login con un account registrato nel sistema.<br/>Contattare il supporto tecnico cartella-help@smartcommunitylab.it in caso di problemi.<br/>",
+	"api.access.error" : "Utente non autorizzato all'operazione.<br/>Si prega di effettuare nuovamente il login con un account registrato nel sistema.<br/>Contattare il supporto tecnico cartella-help@smartcommunitylab.it in caso di problemi.<br/>",
 	"registration.date.error" : "La data di attività e fuori del periodo di registrazione",
 	"teaching.unit.error.notfound": "Teaching unit non trovata",
 	"codice.tipo.azienda.error.notfound": "codiceTipoAzienda non trovata",
