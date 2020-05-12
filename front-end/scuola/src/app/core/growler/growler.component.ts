@@ -92,7 +92,7 @@ class Growl {
     this.enabled = false;
     window.setTimeout(() => {
       this.growlerContainer.removeGrowl(this.id);
-    }, this.timeout);
+    }, 0);
   }
   
 }
