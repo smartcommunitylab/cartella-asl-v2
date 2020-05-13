@@ -2,7 +2,6 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { FilterTextboxModule } from './filter-textbox/filter-textbox.module';
 import { MapModule } from './map/map.module';
 import { PaginationModule } from './pagination/pagination.module';
 
@@ -24,9 +23,9 @@ registerLocaleData(localeIt, 'it-IT', localeItExtra);
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 
 @NgModule({
-  imports: [CommonModule, MapModule, FilterTextboxModule, PaginationModule ,SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
+  imports: [CommonModule, MapModule, PaginationModule ,SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
   exports: [ CommonModule, FormsModule, CapitalizePipe, TrimPipe, LocalizedDatePipe, CalendarDatePipe, SortByDirective, 
-             MapModule, FilterTextboxModule, PaginationModule, SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
+             MapModule, PaginationModule, SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
   declarations: [ CapitalizePipe, TrimPipe, LocalizedDatePipe, CalendarDatePipe, SortByDirective],
   providers: [
     { provide: LOCALE_ID, useValue: "it-IT" }, //replace "en-US" with your locale
