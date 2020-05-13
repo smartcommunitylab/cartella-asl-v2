@@ -20,6 +20,10 @@ public class TipologiaTipologiaAttivitaManager {
 		return tipologiaRepository.getOne(id);
 	}		
 	
+	public TipologiaTipologiaAttivita getTipologiaTipologiaAttivitaByTipologia(int tipologia) {
+		return tipologiaRepository.findByTipologia(tipologia);
+	}
+	
 	public List<TipologiaTipologiaAttivita> findTipologiaTipologiaAttivitaByTipologia(List<Integer> tipologie) {
 		return tipologiaRepository.findByTipologia(tipologie);
 	}		
