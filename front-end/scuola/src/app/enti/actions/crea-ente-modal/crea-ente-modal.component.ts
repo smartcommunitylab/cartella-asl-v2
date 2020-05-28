@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { GeoService } from '../../../core/services/geo.service';
+import { FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 
@@ -27,9 +28,11 @@ export class CreaEnteModalComponent implements OnInit {
   forceAddressDisplay;
   idTipoAzienda: any = 'Tipo';
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
+  aziendaEstera: boolean = false;
 
   @Output() newEnteListener = new EventEmitter<Object>();
 
+  @ViewChild('enteForm') enteForm: FormGroup;
 
   constructor(public activeModal: NgbActiveModal, private dataService: DataService, private geoService: GeoService) { }
 
@@ -47,7 +50,8 @@ export class CreaEnteModalComponent implements OnInit {
         latitude: this.place.location[0],
         longitude: this.place.location[1],
         phone: this.phone,
-        idTipoAzienda: this.idTipoAzienda
+        idTipoAzienda: this.idTipoAzienda,
+        estera: this.aziendaEstera
       }
 
       this.dataService.addAzienda(ente).subscribe((res) => {
@@ -72,7 +76,15 @@ export class CreaEnteModalComponent implements OnInit {
 
 
   allValidated() {
-    return ((this.nome && this.nome != '')
+    var partita_iva = false;
+    if(this.aziendaEstera) {
+      partita_iva = this.enteForm.controls['partitaIva'].valid.valueOf();
+    } else {
+      partita_iva = this.enteForm.controls['partitaIvaLocale'].valid.valueOf();
+    }
+
+    return (partita_iva
+      && (this.nome && this.nome != '')
       && (this.partitaIva && this.partitaIva != '')
       && (this.place && this.place.location)
       && (this.idTipoAzienda && this.idTipoAzienda !='' && this.idTipoAzienda != 'Tipo'));

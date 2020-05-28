@@ -26,7 +26,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
   map;
   selectedLocationMarker;
   titolo;
-  myForm: FormGroup;
+  myForm:  FormGroup;
   pageSize = 20;
   azienda: any;
   place: any;
@@ -48,6 +48,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
     }
   ];
 
+  @ViewChild('enteForm') enteForm: FormGroup;
 
   ngOnInit() {
 
@@ -106,9 +107,26 @@ export class EnteDettaglioModificaComponent implements OnInit {
     }
   }
 
+  onEnteEstero() {
+    if(this.ente.estera) {
+      this.enteForm.controls['partitaIva'].markAsTouched();
+      this.enteForm.controls['partitaIva'].markAsDirty();
+    } else {
+      this.enteForm.controls['partitaIvaLocale'].markAsTouched();
+      this.enteForm.controls['partitaIvaLocale'].markAsDirty();
+    }
+  }
 
   allValidated() {
-    return ((this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0)
+    var partita_iva = false;
+    if(this.ente.estera) {
+      partita_iva = this.enteForm.controls['partitaIva'].valid.valueOf();
+    } else {
+      partita_iva = this.enteForm.controls['partitaIvaLocale'].valid.valueOf();
+    }
+
+    return (partita_iva
+      && (this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0)
       && (this.ente.partita_iva && this.ente.partita_iva != '')
       && (this.place)
       && (this.ente.idTipoAzienda && this.ente.idTipoAzienda != '' && this.ente.idTipoAzienda != 'Tipo'));

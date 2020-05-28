@@ -18,11 +18,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
+import it.smartcommunitylab.cartella.asl.model.AziendaEstera;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.ext.AlignEsperienza;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
+import it.smartcommunitylab.cartella.asl.repository.AziendaEsteraRepository;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
@@ -52,6 +54,8 @@ public class InfoTNAlignExpService {
 	private PresenzaGiornaliereRepository presenzaGiornaliereRepository;
 	@Autowired
 	private AziendaRepository aziendaRepository;
+	@Autowired
+	private AziendaEsteraRepository aziendaEsteraRepository;
 	@Autowired
 	private HttpsUtils httpsUtils;
 	@Autowired
@@ -149,8 +153,9 @@ public class InfoTNAlignExpService {
 					ae.setPartitaIVAAzienda(azienda.getPartita_iva());
 					// obligatory while defining opportunity.
 					ae.setTutorEsternoEsperienzaASL(aa.getReferenteEsterno());
-					//TODO fix p_iva estera
-					if(azienda.getPartita_iva().length() < 11) {
+					//fix p_iva estera
+					AziendaEstera aziendaEstera = aziendaEsteraRepository.findByPartitaIva(azienda.getPartita_iva());
+					if(aziendaEstera != null) {
 						ae.setInItalia(false);
 					}
 				} else {

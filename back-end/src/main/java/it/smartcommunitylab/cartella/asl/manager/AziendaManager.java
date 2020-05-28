@@ -25,9 +25,11 @@ import com.google.common.collect.Lists;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
+import it.smartcommunitylab.cartella.asl.model.AziendaEstera;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.report.ReportUtilizzoAzienda;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
+import it.smartcommunitylab.cartella.asl.repository.AziendaEsteraRepository;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
@@ -45,6 +47,8 @@ public class AziendaManager extends DataEntityManager {
 	OffertaRepository offertaRepository;
 	@Autowired
 	AttivitaAlternanzaRepository attivitaAltRepository;
+	@Autowired
+	AziendaEsteraRepository aziendaEsteraRepository;
 
 	private static final String AZIENDE = "SELECT DISTINCT az FROM Azienda az ";
 
@@ -146,6 +150,7 @@ public class AziendaManager extends DataEntityManager {
 			}			
 			a.setId(Utils.getUUID());
 			a.setOrigin(Constants.ORIGIN_CONSOLE);
+			allineaAziendaEstera(null, a.getPartita_iva(), a.isEstera());
 			return aziendaRepository.save(a); 
 		} else {
 			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
@@ -156,8 +161,29 @@ public class AziendaManager extends DataEntityManager {
 					throw new BadRequestException("partita iva already exists");
 				}							
 			}
+			allineaAziendaEstera(aziendaDb.getPartita_iva(), a.getPartita_iva(), a.isEstera());
 			aziendaRepository.update(a);
 			return a;
+		}
+	}
+	
+	private void allineaAziendaEstera(String oldPartitaIva, String newPartitaIva, boolean estera) {
+		if(Utils.isNotEmpty(oldPartitaIva)) {
+			AziendaEstera aziendaEstera = aziendaEsteraRepository.findByPartitaIva(oldPartitaIva);
+			if(aziendaEstera != null) {
+				aziendaEsteraRepository.deleteById(aziendaEstera.getId());
+			}
+			if(estera) {
+				aziendaEstera = new AziendaEstera();
+				aziendaEstera.setPartita_iva(newPartitaIva);
+				aziendaEsteraRepository.save(aziendaEstera);
+			}
+		} else {
+			if(estera) {
+				AziendaEstera aziendaEstera = new AziendaEstera();
+				aziendaEstera.setPartita_iva(newPartitaIva);
+				aziendaEsteraRepository.save(aziendaEstera);				
+			}
 		}
 	}
 	
@@ -165,7 +191,12 @@ public class AziendaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(id)) {
 			Optional<Azienda> optional = aziendaRepository.findById(id);
 			if(optional.isPresent()) {
-				return optional.get();
+				Azienda azienda = optional.get();
+				AziendaEstera aziendaEstera = aziendaEsteraRepository.findByPartitaIva(azienda.getPartita_iva());
+				if(aziendaEstera != null) {
+					azienda.setEstera(true);
+				}
+				return azienda;
 			}
 		}
 		return null;

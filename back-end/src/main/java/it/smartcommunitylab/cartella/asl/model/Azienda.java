@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -45,6 +46,9 @@ public class Azienda {
 	private Double latitude;
 	private Double longitude;
 	private int idTipoAzienda;
+	
+	@Transient
+	private boolean estera = false;
 
 	public String getId() {
 		return id;
@@ -196,6 +200,14 @@ public class Azienda {
 
 	public void setIdTipoAzienda(int idTipoAzienda) {
 		this.idTipoAzienda = idTipoAzienda;
+	}
+
+	public boolean isEstera() {
+		return estera;
+	}
+
+	public void setEstera(boolean estera) {
+		this.estera = estera;
 	}
 
 }
