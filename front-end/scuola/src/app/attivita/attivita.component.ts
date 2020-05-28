@@ -83,19 +83,19 @@ export class AttivitaComponent implements OnInit {
         this.router.navigate(['../detail', aa.id], { relativeTo: this.route });
     }
    
-    openCreate() {
-        const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
-        modalRef.componentInstance.newPianoListener.subscribe((option) => {
-            if (option == 1) {
-                this.router.navigate(['associa/offerta'], { relativeTo: this.route });
-            } else if (option == 2) {
-                this.openCreateNewAttivita();            
-            }
+    // openCreate() {
+    //     const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
+    //     modalRef.componentInstance.newPianoListener.subscribe((option) => {
+    //         if (option == 1) {
+    //             this.router.navigate(['associa/offerta'], { relativeTo: this.route });
+    //         } else if (option == 2) {
+    //             this.openCreateNewAttivita();            
+    //         }
 
-        });
-    }
+    //     });
+    // }
     
-    openCreateNewAttivita() {
+    openCreate() { //NewAttivita
         const modalRef = this.modalService.open(CreaAttivitaModalComponent, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.tipologie = this.tipologie;
         modalRef.componentInstance.newAttivitaListener.subscribe((attivita) => {

@@ -57,9 +57,9 @@
                 <span *ngIf="offertaAssociata">
                     Offerta associata: {{ offertaAssociata.titolo }}, {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso {{ setNomeEnte(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} - {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
                 </span>
-                <span>
+                <!-- <span>
                     <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA ASSOCIATA</a>
-                </span>
+                </span> -->
             </label>
             <br *ngIf="offertaAssociata"/>
             <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di quest’attività" (click)="modifica()">
