@@ -30,20 +30,22 @@ public class ExportDataManager {
 	public ExportCsv getStudenteAttivitaReportCsv(String istitutoId, String studenteId) throws Exception {
 		LocalDate today = LocalDate.now();
 		ReportDettaglioStudente reportDettaglioStudente = studenteManager.getReportDettaglioStudente(istitutoId, studenteId);
-		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		String filename = "Resoconto_Attività_" + reportDettaglioStudente.getStudente().getName() + "_"
 				+ reportDettaglioStudente.getStudente().getSurname() + "_" + reportDettaglioStudente.getStudente().getCf() + "_"
 				+ reportDettaglioStudente.getStudente().getCorsoDiStudio().getNome() + "_"
 				+ reportDettaglioStudente.getStudente().getAnnoScolastico() + "_"
 				+ reportDettaglioStudente.getStudente().getClassroom() + "_"
 				+ today.format(ldf) + ".csv";
-		StringBuffer sb = new StringBuffer("\"attività\";\"tipo\";\"dataInizio\";\"dataFine\";oreSvolte;\"nomeEnte\";\"pivaEnte\"\n");
+		StringBuffer sb = new StringBuffer("\"titolo attività\";\"tipo\";\"dataInizio\";\"dataFine\";\"classe\";oreSvolte;oreProgrammate;\"nomeEnte\";\"pivaEnte\"\n");
 		reportDettaglioStudente.getEsperienze().forEach(esp -> {
 			String attivita = "";
 			String tipo = "";
 			String dataInizio = "";
 			String dataFine = "";
+			String classeStudente = "";
 			String oreSvolte = "";
+			String oreProgrammate = "";
 			String nomeEnte = "";
 			String pivaEnte = "";
 			AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(esp.getAttivitaAlternanzaId());
@@ -52,7 +54,9 @@ public class ExportDataManager {
 				tipo = getTipologia(aa);
 				dataInizio = aa.getDataInizio().format(ldf);
 				dataFine = aa.getDataFine().format(ldf);
+				classeStudente = esp.getClasseStudente();
 				oreSvolte = String.valueOf(esp.getOreValidate());
+				oreProgrammate = String.valueOf(esp.getOreTotali());
 				if(Utils.isNotEmpty(aa.getEnteId())) {
 					Azienda azienda = aziendaManager.getAzienda(aa.getEnteId());
 					if(azienda != null) {
@@ -65,7 +69,9 @@ public class ExportDataManager {
 			sb.append("\"" + tipo + "\";");
 			sb.append("\"" + dataInizio + "\";");
 			sb.append("\"" + dataFine + "\";");
+			sb.append("\"" + classeStudente + "\";");
 			sb.append(oreSvolte + ";");
+			sb.append(oreProgrammate + ";");
 			sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\";");
 			sb.append("\"" + pivaEnte + "\"\n");
 		});
@@ -81,10 +87,10 @@ public class ExportDataManager {
 		LocalDate today = LocalDate.now();
 		List<ReportDettaglioStudente> reportDettaglioStudenteList = studenteManager.getReportDettaglioStudente(
 				istitutoId, annoScolastico, corsoId, classe);
-		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		String filename = "Resoconto_Attività_" + corso + "_" + annoScolastico + "_" + classe + "_"
 				+ today.format(ldf) + ".csv";
-		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"attività\";\"tipo\";\"dataInizio\";\"dataFine\";oreSvolte;\"nomeEnte\";\"pivaEnte\"\n");
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"titolo attività\";\"tipo\";\"dataInizio\";\"dataFine\";\"classe\";oreSvolte;oreProgrammate;\"nomeEnte\";\"pivaEnte\"\n");
 		reportDettaglioStudenteList.forEach(report -> {
 			String cognome = report.getStudente().getSurname();
 			String nome = report.getStudente().getName();
@@ -94,7 +100,9 @@ public class ExportDataManager {
 				String tipo = "";
 				String dataInizio = "";
 				String dataFine = "";
+				String classeStudente = "";
 				String oreSvolte = "";
+				String oreProgrammate = "";
 				String nomeEnte = "";
 				String pivaEnte = "";
 				AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(esp.getAttivitaAlternanzaId());
@@ -103,7 +111,9 @@ public class ExportDataManager {
 					tipo = getTipologia(aa);
 					dataInizio = aa.getDataInizio().format(ldf);
 					dataFine = aa.getDataFine().format(ldf);
+					classeStudente = esp.getClasseStudente();
 					oreSvolte = String.valueOf(esp.getOreValidate());
+					oreProgrammate = String.valueOf(esp.getOreTotali());
 					if(Utils.isNotEmpty(aa.getEnteId())) {
 						Azienda azienda = aziendaManager.getAzienda(aa.getEnteId());
 						if(azienda != null) {
@@ -119,7 +129,9 @@ public class ExportDataManager {
 				sb.append("\"" + tipo + "\";");
 				sb.append("\"" + dataInizio + "\";");
 				sb.append("\"" + dataFine + "\";");
+				sb.append("\"" + classeStudente + "\";");
 				sb.append(oreSvolte + ";");
+				sb.append(oreProgrammate + ";");
 				sb.append("\"" + nomeEnte.replace("\"", "\\\"") + "\";");
 				sb.append("\"" + pivaEnte + "\"\n");
 			});			
