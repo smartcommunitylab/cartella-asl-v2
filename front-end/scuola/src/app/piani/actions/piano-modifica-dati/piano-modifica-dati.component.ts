@@ -67,6 +67,7 @@ export class PianoModificaDatiComponent implements OnInit {
       this.piano.dataCreazione = null;
       this.piano.dataDisattivazione = null;
       this.piano.dataScadenza = null;
+      this.piano.pianoCorrelato = null;
       this.dataService.updatePianoDetails(this.piano).subscribe((pianoUpdated) => {
         this.router.navigate(['../../'], { relativeTo: this.activeRoute });
       });
