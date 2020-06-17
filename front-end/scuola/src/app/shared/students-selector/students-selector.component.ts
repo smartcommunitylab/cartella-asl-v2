@@ -144,6 +144,35 @@ export class StudentsSelectorComponent implements OnInit {
 
   }
 
+  addPageStudenti() {
+    if (!this.individuale) {
+      this.studenti.forEach(studente => {
+        if (this.attachedStudenti.findIndex(element => element.studenteId == studente.studenteId) < 0) {
+          this.attachedStudenti.push(studente);
+          studente['disabled'] = true;
+        }        
+      });
+      this.getStudenteAssociate(1);
+    }
+  }
+
+  removePageStudenti() {
+    if (!this.individuale) {
+      this.studentiAssociateWindow.forEach(studente => {
+        var index = this.attachedStudenti.findIndex(element => element.studenteId == studente.studenteId);
+        if(index >= 0) {
+          this.attachedStudenti.splice(index, 1);          
+        }
+        var index = this.studenti.findIndex(element => element.studenteId == studente.studenteId);
+        if (index >= 0) {
+          this.studenti[index]['disabled'] = false;
+        }
+      });
+      this.studentiAssociateWindow = [];
+      this.getStudenteAssociate(1);
+    }
+  }
+
   addStudenti() {
     if (this.attachedStudenti.length == 0) {
       const modalRef = this.modalService.open(ConfirmModalComponent, { windowClass: "cancellaModalClass" });
