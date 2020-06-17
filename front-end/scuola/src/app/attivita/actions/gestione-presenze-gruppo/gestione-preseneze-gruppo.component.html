@@ -94,9 +94,21 @@
                 <span class="col-12 thStyle">Nome</span>
               </div>
             </th>
-            <th><span class="thStyle">Classe</span></th>
-            <th>
+            <th width="10%">
+              <div class="row mBottom22">
+                <span class="col-12">
+                  <label class="titleDate">Ore al giorno</label>
+                  <div class="col-sm-12 m-left">
+                    <input class="hourInput" type="number" min="1" max="12" maxlength="2" [(ngModel)]="defaultHour">
+                  </div>
+                </span>
+              </div>
               <div class="row">
+                <span class="col-12 thStyle">Classe</span>
+              </div>
+            </th>
+            <th>
+              <div class="row mBottom22">
                 <div class="col-1 v-center">
                   <button class="btn" [disabled]="!isDaysBackAvailable()" (click)="navigateDaysBack()">
                     <svg class="icon icon-primary icon-bg">
