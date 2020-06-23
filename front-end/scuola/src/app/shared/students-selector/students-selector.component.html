@@ -12,7 +12,7 @@
                     <div class="col-4">
                         <label class="complementary-3-color-a6 font-weight-bold" >Studenti associabili: {{totalRecords}}</label>
                     </div>
-                    <div class="col-1"></div>
+                    <div class="col-2"></div>
                     <div class="col-6 input-group">
                         <div class="form-group center-formGroup">
                             <input type="text" id="cercaStudenteNome" class="form-control search-input"
@@ -23,19 +23,20 @@
                             <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
                         </button>
                     </div>
-                    <div class="col-1">
-                        <svg class="icon icon-primary pointer" *ngIf="!individuale" (click)="addPageStudenti()">
-                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-circle"></use>
-                        </svg>
-                    </div>
                 </div>
                 <table class="table table-hover">
                     <thead class="bg-white">
                         <tr>
-                            <th >Nome:</th>
+                            <th>Nome:</th>
                             <th>CF</th>
                             <th>Classe</th>
-                            <th></th>
+                            <th>
+                                <svg class="float-right icon icon-primary iconPrimaryColor icon-sm pointer" 
+                                    *ngIf="!individuale" (click)="addPageStudenti()">
+                                    <title>Aggiungi tutti gli studenti visualizzati</title>
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-circle"></use>
+                                </svg>        
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="modify-card-body">
@@ -64,15 +65,10 @@
         <div class="col-6 card broderLeft modify-card-bgcolor">
             <div class="card-body p0 modify-bgcolor">
                 <div class="row v-center bg-white">
-                    <div class="col-1">
-                        <svg class="icon icon-primary pointer" *ngIf="!individuale" (click)="removePageStudenti()">
-                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-left-circle"></use>
-                        </svg>
-                    </div>
                     <div class="col-4">
                         <label class="primary-color font-weight-bold">Studenti associati: {{attachedStudenti.length}}</label>
                     </div>
-                    <div class="col-1"></div>
+                    <div class="col-2"></div>
                     <div class="col-6 input-group">
                         <div class="form-group center-formGroup">
                             <input type="text" id="cercaStudenteAssociateNome" class="form-control search-input"
@@ -87,10 +83,16 @@
                 <table class="table table-hover">
                     <thead class="bg-white">
                         <tr>
-                            <th >Nome:</th>
+                            <th>Nome:</th>
                             <th>CF</th>
                             <th>Classe</th>
-                            <th></th>
+                            <th>
+                                <svg class="float-right icon icon-danger iconDangerColor icon-sm pointer"     
+                                    *ngIf="!individuale" (click)="removePageStudenti()">
+                                    <title>Rimuovi tutti gli studenti visualizzati</title>
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-left-circle"></use>
+                                </svg>        
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="modify-card-body">
