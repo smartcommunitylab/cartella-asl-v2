@@ -36,6 +36,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsp
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
@@ -389,18 +390,30 @@ public class StudenteManager extends DataEntityManager {
 
 	public ReportDettaglioAttivitaEsperienza getReportDettaglioAttivitaEsperienza(Long esperienzaSvoltaId,
 			String studenteId) throws Exception {
-		EsperienzaSvolta es = esperienzaSvoltaRepository.getOne(esperienzaSvoltaId);
+		EsperienzaSvolta es = esperienzaSvoltaManager.findById(esperienzaSvoltaId);
 		if(es == null) {
 			throw new BadRequestException("esperienzaSvolta not found");
 		}
 		if(!studenteId.equals(es.getStudenteId())) {
 			throw new UnauthorizedException("esperienza id not authorized");
 		}
-		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(es.getAttivitaAlternanzaId());
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanzaStub(es.getAttivitaAlternanzaId());
 		if(aa == null) {
 			throw new BadRequestException("attivitaAlternanza not found");
 		}
-		return new ReportDettaglioAttivitaEsperienza(aa, es);
+		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienzaSvoltaId);
+		int oreValidate = 0;
+		int oreDaValidare = 0;
+		for(PresenzaGiornaliera presenza : presenze) {
+			if(presenza.getOreSvolte() > 0) {
+				if(presenza.getVerificata()) {
+					oreValidate += presenza.getOreSvolte();
+				} else {
+					oreDaValidare += presenza.getOreSvolte();
+				}
+			}
+		}
+		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre());
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeStudente(Long esperienzaSvoltaId, LocalDate dateFrom, 
@@ -433,6 +446,39 @@ public class StudenteManager extends DataEntityManager {
 		if(!studenteId.equals(esperienzaSvolta.getStudenteId())) {
 			throw new UnauthorizedException("uuid not authorized");
 		}
+	}
+
+	public ReportStudenteSommario getReportStudenteSommario(String studenteId) {
+		ReportStudenteSommario report = new ReportStudenteSommario();
+
+		Studente studente = findStudente(studenteId);
+		
+		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(studente.getIstitutoId(), 
+				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
+		if(corsoStudio != null) {
+			report.setOreTotali(corsoStudio.getOreAlternanza());
+		}
+		
+		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId);
+		int oreValidate = 0;
+		int oreTotali = 0;
+		int esperienzeConcluse = 0;
+		int espereinzeInCorso = 0;
+		for(ReportEsperienzaStudente reportEsp : esperienzeStudente) {
+			oreValidate += reportEsp.getOreValidate();
+			oreTotali += reportEsp.getOreTotali();
+			if(reportEsp.getStato().equals("archiviata")) {
+				esperienzeConcluse++;
+			}
+			if(reportEsp.getStato().equals("in_corso")) {
+				esperienzeConcluse++;
+			}
+		}
+		report.setOreTotali(oreTotali);
+		report.setOreValidate(oreValidate);
+		report.setEsperienzeConcluse(esperienzeConcluse);
+		report.setEspereinzeInCorso(espereinzeInCorso);
+		return report;
 	}
 
 }

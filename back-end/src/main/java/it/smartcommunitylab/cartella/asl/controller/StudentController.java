@@ -31,6 +31,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsp
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -89,6 +90,18 @@ public class StudentController implements AslController {
 		ReportDettaglioStudente report = studentManager.getReportDettaglioStudente(istitutoId, studenteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportDettaglioStudente:%s / %s", istitutoId, studenteId));
+		}
+		return report;
+	}
+	
+	@GetMapping("/api/studente/attivita/sommario")
+	public ReportStudenteSommario getReportSommarioStudente(
+			@RequestParam String studenteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
+		ReportStudenteSommario report = studentManager.getReportStudenteSommario(studenteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportSommarioStudente:%s", studenteId));
 		}
 		return report;
 	}
