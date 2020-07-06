@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.smartcommunitylab.cartella.asl.beans.Point;
 import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.MetaInfo;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
-import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
 import it.smartcommunitylab.cartella.asl.util.HttpsUtils;
 import it.smartcommunitylab.cartella.asl.util.Utils;
@@ -37,8 +35,6 @@ public class CartellaImportAziende {
 
 	@Autowired
 	private AziendaRepository aziendaRepository;
-	@Autowired
-	private OffertaRepository opportunitaRepository;
 	
 	@Autowired
 	private APIUpdateManager apiUpdateManager;
@@ -106,7 +102,8 @@ public class CartellaImportAziende {
 					result.setPhone(aziendaExt.getPhone());
 					result.setBusinessName(getMaxString(aziendaExt.getBusinessName()));
 					if (aziendaExt.getGeocode() != null) {
-						result.setCoordinate(new Point(aziendaExt.getGeocode()[1], aziendaExt.getGeocode()[0]));
+						result.setLatitude(aziendaExt.getGeocode()[1]);
+						result.setLongitude(aziendaExt.getGeocode()[0]);
 					}
 					if(aziendaExt.getAtecoCode().size() > 0) {
 						String[] codes = new String[aziendaExt.getAtecoCode().size()]; 

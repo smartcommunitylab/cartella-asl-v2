@@ -116,7 +116,7 @@ export class EnteDettaglioComponent implements OnInit {
       maxZoom: 18
     }).addTo(this.map);
 
-    if (this.ente.coordinate) {
+    if (this.ente.coordinate && this.ente.coordinate.latitude && this.ente.coordinate.longitude) {
       let selectedLocationMarker = Leaflet.marker([this.ente.coordinate.latitude, this.ente.coordinate.longitude]).addTo(this.map);
       this.map.setView(selectedLocationMarker.getLatLng(), 14);
     }

@@ -76,11 +76,17 @@ export class EnteDettaglioModificaComponent implements OnInit {
 
     if (this.allValidated()) {
 
-      this.ente.coordinate = {
-        'latitude': this.ente.latitude,
-        'longitude': this.ente.longitude
-      };
-     
+      this.ente.coordinate = null;
+      if (this.place.location) {
+        this.ente.address = this.place.name;
+        this.ente.latitude = this.place.location[0];
+        this.ente.longitude = this.place.location[1];
+      } else {
+        this.ente.address = this.place;
+        this.ente.latitude = null;
+        this.ente.longitude = null;
+      }
+
       (this.ente.nome) ? this.ente.nome = this.ente.nome.trim() : this.ente.nome = null;
       (this.ente.email) ? this.ente.email = this.ente.email.trim() : this.ente.email = null;
       (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
@@ -94,7 +100,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
 
     } else {
       this.forceErrorDisplay = true;
-      if (this.place) {
+      if (this.checkPlace()) {
         this.forceAddressDisplay = false;
       } else {
         this.forceAddressDisplay = true;
@@ -128,10 +134,19 @@ export class EnteDettaglioModificaComponent implements OnInit {
     return (partita_iva
       && (this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0)
       && (this.ente.partita_iva && this.ente.partita_iva != '')
-      && (this.place)
+      && this.checkPlace()
       && (this.ente.idTipoAzienda && this.ente.idTipoAzienda != '' && this.ente.idTipoAzienda != 'Tipo'));
   }
 
+  checkPlace() {
+    if(this.place && this.place.location) {
+      return true;
+    }
+    if(typeof this.place === 'string') {
+      return this.place.trim() != ''
+    }
+    return false;
+  }
 
   searching = false;
   searchFailed = false;
@@ -208,6 +223,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
 
   selectPlace(placeObj) {
     if (placeObj.location) {
+      this.forceAddressDisplay = false;
       this.ente.address = placeObj.name;
       // this.ente.coordinate.latitude = placeObj.location[0];
       // this.ente.coordinate.longitude = placeObj.location[1];

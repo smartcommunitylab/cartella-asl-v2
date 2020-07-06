@@ -143,12 +143,6 @@ public class Azienda {
 		return new Point(latitude, longitude);
 	}
 
-	public void setCoordinate(Point coordinate) {
-		// this.coordinate = coordinate;
-		this.latitude = coordinate.getLatitude();
-		this.longitude = coordinate.getLongitude();
-	}
-
 	public Double getLatitude() {
 		return latitude;
 	}

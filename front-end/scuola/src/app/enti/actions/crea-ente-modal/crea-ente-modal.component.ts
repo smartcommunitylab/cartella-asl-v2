@@ -46,12 +46,16 @@ export class CreaEnteModalComponent implements OnInit {
         email: this.email,
         partita_iva: this.partitaIva,
         pec: this.pec,
-        address: this.place.name,
-        latitude: this.place.location[0],
-        longitude: this.place.location[1],
         phone: this.phone,
         idTipoAzienda: this.idTipoAzienda,
         estera: this.aziendaEstera
+      }
+      if (this.place.location) {
+        ente.address = this.place.name;
+        ente.latitude = this.place.location[0];
+        ente.longitude = this.place.location[1];
+      } else {
+        ente.address = this.place;
       }
 
       this.dataService.addAzienda(ente).subscribe((res) => {
@@ -82,12 +86,21 @@ export class CreaEnteModalComponent implements OnInit {
     } else {
       partita_iva = this.enteForm.controls['partitaIvaLocale'].valid.valueOf();
     }
-
     return (partita_iva
-      && (this.nome && this.nome != '')
+      && (this.nome && this.nome.trim() != '')
       && (this.partitaIva && this.partitaIva != '')
-      && (this.place && this.place.location)
+      && this.checkPlace()
       && (this.idTipoAzienda && this.idTipoAzienda !='' && this.idTipoAzienda != 'Tipo'));
+  }
+
+  checkPlace() {
+    if(this.place && this.place.location) {
+      return true;
+    }
+    if(typeof this.place === 'string') {
+      return this.place.trim() != ''
+    }
+    return false;
   }
 
   searching = false;
