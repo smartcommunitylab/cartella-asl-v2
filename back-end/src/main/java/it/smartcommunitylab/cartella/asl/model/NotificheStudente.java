@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +21,8 @@ public class NotificheStudente {
 	@Column(columnDefinition = "VARCHAR(1024)")
 	private String registrationToken;
 	
+	private LocalDate dataAttivazione;
+	
 	public Long getId() {
 		return id;
 	}
@@ -36,5 +40,11 @@ public class NotificheStudente {
 	}
 	public void setRegistrationToken(String registrationToken) {
 		this.registrationToken = registrationToken;
+	}
+	public LocalDate getDataAttivazione() {
+		return dataAttivazione;
+	}
+	public void setDataAttivazione(LocalDate dataAttivazione) {
+		this.dataAttivazione = dataAttivazione;
 	}
 }

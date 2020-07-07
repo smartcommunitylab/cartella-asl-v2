@@ -491,6 +491,7 @@ public class StudenteManager extends DataEntityManager {
 			notifica = new NotificheStudente();
 			notifica.setStudenteId(studenteId);
 			notifica.setRegistrationToken(registrationToken);
+			notifica.setDataAttivazione(LocalDate.now());
 			notificheStudenteRepository.save(notifica);
 		}
 	}
