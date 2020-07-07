@@ -28,6 +28,7 @@ import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudioBean;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.NotificheStudente;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.Registration;
@@ -39,6 +40,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
+import it.smartcommunitylab.cartella.asl.repository.NotificheStudenteRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
 import it.smartcommunitylab.cartella.asl.util.Utils;
@@ -65,6 +67,8 @@ public class StudenteManager extends DataEntityManager {
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
 	@Autowired
 	private CompetenzaManager competenzaManager;
+	@Autowired
+	private NotificheStudenteRepository notificheStudenteRepository;
 	
 	private static final String STUDENT_REGISTRATION = "SELECT r0 FROM Registration r0 WHERE r0.studentId = (:id) AND r0.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = (:id)) ";
 
@@ -479,6 +483,23 @@ public class StudenteManager extends DataEntityManager {
 		report.setEsperienzeConcluse(esperienzeConcluse);
 		report.setEspereinzeInCorso(espereinzeInCorso);
 		return report;
+	}
+	
+	public void attivaNotifica(String studenteId, String registrationToken) {
+		NotificheStudente notifica = notificheStudenteRepository.findByStudenteIdAndRegistrationToken(studenteId, registrationToken);
+		if(notifica == null) {
+			notifica = new NotificheStudente();
+			notifica.setStudenteId(studenteId);
+			notifica.setRegistrationToken(registrationToken);
+			notificheStudenteRepository.save(notifica);
+		}
+	}
+	
+	public void disattivaNotifica(String studenteId, String registrationToken) {
+		NotificheStudente notifica = notificheStudenteRepository.findByStudenteIdAndRegistrationToken(studenteId, registrationToken);
+		if(notifica != null) {
+			notificheStudenteRepository.delete(notifica);
+		}
 	}
 
 }

@@ -165,5 +165,22 @@ public class StudentController implements AslController {
 			logger.info(String.format("aggiornaPresenze:%s / %s", studenteId, esperienzaSvoltaId));
 		}	
 	}
+	
+	@PostMapping("/api/studente/{studenteId}/notifica")
+	public void aggiornaNotifica(
+			@PathVariable String studenteId,
+			@RequestParam boolean attiva,
+			@RequestBody String registrationToken,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
+		if(attiva) {
+			studentManager.attivaNotifica(studenteId, registrationToken);
+		} else {
+			studentManager.disattivaNotifica(studenteId, registrationToken);
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("aggiornaNotifica:%s / %s / %s", studenteId, attiva, registrationToken));
+		}			
+	}
 
 }
