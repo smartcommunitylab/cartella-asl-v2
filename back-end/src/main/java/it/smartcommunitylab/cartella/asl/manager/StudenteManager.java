@@ -11,11 +11,14 @@ import java.util.Optional;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,11 +46,13 @@ import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.NotificheStudenteRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
+import it.smartcommunitylab.cartella.asl.services.FirebaseService;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
 @Transactional
 public class StudenteManager extends DataEntityManager {
+	private static final transient Log logger = LogFactory.getLog(StudenteManager.class);
 
 	@Autowired
 	private StudenteRepository studenteRepository;
@@ -69,6 +74,8 @@ public class StudenteManager extends DataEntityManager {
 	private CompetenzaManager competenzaManager;
 	@Autowired
 	private NotificheStudenteRepository notificheStudenteRepository;
+	@Autowired
+	private FirebaseService firebaseService;
 	
 	private static final String STUDENT_REGISTRATION = "SELECT r0 FROM Registration r0 WHERE r0.studentId = (:id) AND r0.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = (:id)) ";
 
@@ -501,6 +508,72 @@ public class StudenteManager extends DataEntityManager {
 		if(notifica != null) {
 			notificheStudenteRepository.delete(notifica);
 		}
+	}
+	
+	public List<EsperienzaSvolta> getMancataCompilazioneDiarioStudenti(LocalDate giornata) {
+		String qPresenze = "SELECT es,pg FROM "
+				+ " AttivitaAlternanza aa LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId = aa.id"
+				+ " LEFT JOIN PresenzaGiornaliera pg ON pg.esperienzaSvoltaId = es.id"
+				+ " WHERE aa.stato='attiva' AND (dataInizio <= (:giornata)) AND (dataFine >= (:giornata))"
+				+ " AND es.studenteId IS NOT NULL"				
+				+ " ORDER BY pg.giornata ASC, es.id ASC";
+		Query query = em.createQuery(qPresenze);
+		query.setParameter("giornata", giornata);
+		List<Object[]> result = query.getResultList();
+		Map<Long, EsperienzaSvolta> esperienzeMap = new HashMap<>();
+		Map<Long, Boolean> compilazioneMap = new HashMap<>();
+		for (Object[] obj : result) {
+			EsperienzaSvolta es = (EsperienzaSvolta) obj[0];
+			PresenzaGiornaliera pg = (PresenzaGiornaliera) obj[1];
+			if(!esperienzeMap.containsKey(es.getId())) {
+				esperienzeMap.put(es.getId(), es);
+				compilazioneMap.put(es.getId(), Boolean.FALSE);
+			}
+			if(pg == null) {
+				continue;
+			}
+			if(pg.getGiornata().isBefore(giornata)) {
+				continue;
+			}
+			if(pg.getGiornata().isEqual(giornata)) {
+				compilazioneMap.put(es.getId(), Boolean.TRUE);
+			}
+			if(pg.getGiornata().isAfter(giornata)) {
+				break;
+			}
+		}
+		List<EsperienzaSvolta> esperienzeStudenti = new ArrayList<>();
+		compilazioneMap.forEach((k, v) -> {
+			if(!v) {
+				esperienzeStudenti.add(esperienzeMap.get(k));
+			}
+		});
+		return esperienzeStudenti;
+	}
+	
+	public List<String> sendNotificaEspereinzeStudenti(LocalDate giornata) {
+		if(giornata == null) {
+			giornata = LocalDate.now().minusDays(1);
+		}
+		List<EsperienzaSvolta> esperienzeStudenti = getMancataCompilazioneDiarioStudenti(giornata);
+		String title = "EDIT - Notifica";
+		String msg = "Ricordati di compilare il diario delle attività di ieri.";
+		List<String> studenti = new ArrayList<>();
+		esperienzeStudenti.forEach(esp -> {
+			if(!studenti.contains(esp.getStudenteId())) {
+				studenti.add(esp.getStudenteId());
+			}
+		});
+		firebaseService.sendNotification(title, msg, studenti);
+		if(logger.isInfoEnabled()) {
+			logger.info("sendNotificaEspereinzeStudenti:" + studenti);
+		}
+		return studenti;
+	}
+	
+	@Scheduled(cron = "0 00 05 * * ?")
+	public void notificaEspereinzeStudenti() throws Exception {
+		sendNotificaEspereinzeStudenti(null); 
 	}
 
 }

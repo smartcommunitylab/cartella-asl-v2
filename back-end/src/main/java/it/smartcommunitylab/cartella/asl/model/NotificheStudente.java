@@ -7,10 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "notifiche_studente")
+@Table(name = "notifiche_studente", indexes = { @Index(name = "studenteId_idx", columnList = "studenteId", unique = false) })
 public class NotificheStudente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
