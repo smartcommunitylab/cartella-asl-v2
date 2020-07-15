@@ -394,8 +394,8 @@ public class StudenteManager extends DataEntityManager {
 		return result;
 	}
 
-	public Page<ReportEsperienzaStudente> getReportEsperienzaStudenteList(String studenteId, Pageable pageRequest) {
-		Page<ReportEsperienzaStudente> page = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId, pageRequest);
+	public Page<ReportEsperienzaStudente> getReportEsperienzaStudenteList(String studenteId, String stato, Pageable pageRequest) {
+		Page<ReportEsperienzaStudente> page = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId, stato, pageRequest);
 		return page;
 	}
 

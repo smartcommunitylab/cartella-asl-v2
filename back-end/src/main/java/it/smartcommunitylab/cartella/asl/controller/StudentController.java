@@ -108,11 +108,12 @@ public class StudentController implements AslController {
 	
 	@GetMapping("/api/studente/attivita")
 	public Page<ReportEsperienzaStudente> getStudenteListaEsperienze(
-			@RequestParam String studenteId, 
+			@RequestParam String studenteId,
+			@RequestParam(required = false) String stato,
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
-		Page<ReportEsperienzaStudente> page = studentManager.getReportEsperienzaStudenteList(studenteId, pageRequest);
+		Page<ReportEsperienzaStudente> page = studentManager.getReportEsperienzaStudenteList(studenteId, stato, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getStudenteListaEsperienze:%s", studenteId));
 		}
