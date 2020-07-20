@@ -327,6 +327,18 @@ export class GestionePresenzeGruppoComponent implements OnInit {
     this.toolTipSave = 'Valida ore studenti';
   }
 
+  styleOption(giornata) {
+    var style = {
+      'color': '#F83E5A',
+      'font-size.px': 18
+    };
+    if (giornata.verificata) 
+      style['color'] = '#435a70';
+    if (giornata.oreSvolte == 0)
+      style['font-size.px'] = 16;
+    return style;
+  }
+
   savePresences() {
     var toBeSaved = this.convertPresencesIntoStudenti();
     this.dataService.validaPresenzeAttivitaGruppo(this.attivita.id, toBeSaved).subscribe((res) => {
