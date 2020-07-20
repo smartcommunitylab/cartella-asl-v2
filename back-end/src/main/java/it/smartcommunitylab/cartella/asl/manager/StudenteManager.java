@@ -573,7 +573,7 @@ public class StudenteManager extends DataEntityManager {
 	
 	@Scheduled(cron = "0 00 05 * * ?")
 	public void notificaEspereinzeStudenti() throws Exception {
-		sendNotificaEspereinzeStudenti(null); 
+		//sendNotificaEspereinzeStudenti(null); 
 	}
 
 }
