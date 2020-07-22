@@ -1,0 +1,36 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="istitutoId">Istituto</label>
+                    <select class="form-control" id="istitutoId" 
+                        [(ngModel)]="istitutoId" (ngModelChange)="getReport()">
+                        <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="annoScolastico">Anno scolastico</label>
+                    <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" [(ngModel)]="annoScolastico">
+                </div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="getReport()">
+                <i class="material-icons">search</i> Aggiorna
+            </button>
+        </div>
+        <div class="row col form-group">
+            <label>Numero studenti iscritti: {{report.numeroStudentiIscritti}}</label>
+        </div>
+        <div class="row col form-group">
+            <label>Numero studenti con esperienze assegnate: {{report.numeroStudentiConEsperienze}}</label>
+        </div>
+        <div class="row col form-group">
+            <label>Numero attività: {{report.numeroAttivita}}</label>
+        </div>
+    </div>
+</div>

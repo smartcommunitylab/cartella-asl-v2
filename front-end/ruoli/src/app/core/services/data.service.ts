@@ -266,6 +266,63 @@ export class DataService {
       );
   }
 
+  getUtilizzoSistema(istitutoId, annoScolastico):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    return this.http.get<any>(
+      this.host + '/dashboard/sistema',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportAttivita(istitutoId, annoScolastico):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    return this.http.get<any>(
+      this.host + '/dashboard/attivita',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportEsperienze(istitutoId, annoScolastico, text):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    if(text) {
+      params = params.append('text', text);
+    }
+    return this.http.get<any>(
+      this.host + '/dashboard/esperienze',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 

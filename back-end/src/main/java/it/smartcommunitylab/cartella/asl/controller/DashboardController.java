@@ -58,7 +58,7 @@ public class DashboardController {
 		return report;
 	}
 
-	@GetMapping("/api/dashboard/esperienza")
+	@GetMapping("/api/dashboard/esperienze")
 	public List<ReportDashboardEsperienza> getReportEsperienze (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
