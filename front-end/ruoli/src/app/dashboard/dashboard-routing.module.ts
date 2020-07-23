@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardSistemaComponent } from './sistema/sistema.component';
+import { DashboardAttivitaComponent } from './attivita/attivita.component';
+import { DashboardEsperienzeComponent } from './esperienze/esperienze.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent,
     children: [
-      { path: 'esperienze', component: DashboardSistemaComponent },
-      { path: 'attivita', component: DashboardSistemaComponent },
+      { path: 'esperienze', component: DashboardEsperienzeComponent },
+      { path: 'attivita', component: DashboardAttivitaComponent },
       { path: 'sistema', component: DashboardSistemaComponent },
     ]
   }

@@ -47,8 +47,8 @@ public class DashboardController {
 	public ReportDashboardAttivita getReportAttivita (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
-			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,			
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,			
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		ReportDashboardAttivita report = dashboardManager.getReportAttivita(istitutoId, annoScolastico, dateFrom, dateTo);
