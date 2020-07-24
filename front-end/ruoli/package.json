@@ -26,6 +26,7 @@
     "@angular/platform-browser-dynamic": "6.0.3",
     "@angular/router": "6.0.3",
     "@ng-bootstrap/ng-bootstrap": "^1.1.2",
+    "angular-6-clipboard": "^1.0.1",
     "angular-calendar": "^0.23.2",
     "angular2-bootstrap-switch": "^0.2.3",
     "body-parser": "1.18.2",

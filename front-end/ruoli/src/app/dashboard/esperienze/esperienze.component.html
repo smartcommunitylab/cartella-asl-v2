@@ -14,48 +14,64 @@
             <div class="col col-3">
                 <div class="form-group">
                     <label for="annoScolastico">Anno scolastico</label>
-                    <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" [(ngModel)]="annoScolastico">
+                    <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" 
+                        [(ngModel)]="annoScolastico">
                 </div>
             </div>
             <div class="col col-3">
                 <div class="form-group">
                     <label for="text">Cerca</label>
-                    <input type="text" class="form-control" id="text" placeholder="studente o classe" [(ngModel)]="text">
+                    <input type="text" class="form-control" id="text" placeholder="studente o classe" 
+                        [(ngModel)]="text" (keyup.enter)="getReport()">
                 </div>
             </div>
         </div>
-        <div class="row">
-            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="getReport()">
-                <i class="material-icons">refresh</i> Aggiorna
-            </button>
+        <div class="pull-right">
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary v-center mr-3" (click)="getReport()">
+                    <i class="material-icons">refresh</i> Aggiorna
+                </button>    
+            </div>
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary v-center mr-3" (click)="getEsperienzeCsv()"
+                *ngIf="esperienze.length > 0">
+                <i class="material-icons">save_alt</i> CSV
+            </button>    
+            </div>
         </div>
-        <div class="table list-group hidden-sm-down">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Studente</th>
-                        <th>Classe</th>
-                        <th>Esperienza</th>
-                        <th>Tipologia</th>
-                        <th>Ore</th>
-                        <th>Stato</th>
-                        <th>TnDigit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let esp of esperienze">
-                        <td>
-                            <span ngbTooltip="{{esp.cfStudente}}" tooltipClass="tp-custom" container="body">{{esp.nominativoStudente}}</span>
-                        </td>
-                        <td>{{esp.classeStudente}}</td>
-                        <td>{{esp.titolo}}</td>
-                        <td>{{esp.tipologia}}</td>
-                        <td>{{esp.oreValidate}} / {{esp.oreTotali}}</td>
-                        <td>{{esp.stato}}</td>
-                        <td>{{esp.errore}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Studente</th>
+                    <th>Classe</th>
+                    <th>Esperienza</th>
+                    <th>Tipologia</th>
+                    <th>Ore</th>
+                    <th>Stato</th>
+                    <th>TnDigit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let esp of esperienze">
+                    <td>
+                        <span ngbTooltip="{{esp.cfStudente}}">{{esp.nominativoStudente}}</span>
+                    </td>
+                    <td>{{esp.classeStudente}}</td>
+                    <td>{{esp.titolo}}</td>
+                    <td>{{getTipologia(esp.tipologia)}}</td>
+                    <td>{{esp.oreValidate}} / {{esp.oreTotali}}</td>
+                    <td>{{esp.stato}}</td>
+                    <td>
+                        <i *ngIf="esp.stato=='valida' && esp.allineato" class="material-icons ok"
+                        ngbTooltip="esperienza allineata">check_circle_outline</i> 
+                        <i *ngIf="esp.stato=='valida' && !esp.allineato" class="material-icons error"
+                        ngbTooltip="errore nell'allineamento">highlight_off</i>
+                        &nbsp;
+                        <i *ngIf="esp.stato=='valida' && esp.errore" class="material-icons pointer" 
+                        ngbTooltip="copia errore nella clipboard" (click)="copyText(esp.errore)">content_copy</i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

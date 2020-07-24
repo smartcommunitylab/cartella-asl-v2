@@ -1,7 +1,16 @@
-.tp-custom .tooltip-inner {
-  font-size: 250%;
+::ng-deep .tooltip-inner {
+  font-size: 14px !important;
 }
-
-.tooltip {
-  font-size: 250%;
+.long-text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.material-icons.error { 
+  color: #FF0000; 
+}
+.material-icons.ok { 
+  color: #7aaf40; 
+}
+.pointer {
+  cursor: pointer;
 }

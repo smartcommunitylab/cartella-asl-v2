@@ -12,6 +12,7 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.export.ExportCsv;
+import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -26,6 +27,8 @@ public class ExportDataManager {
 	private AziendaManager aziendaManager;
 	@Autowired
 	private TipologiaTipologiaAttivitaManager tipologiaAttivitaManager;
+	@Autowired
+	private DashboardManager dashboardManager;
 	
 	public ExportCsv getStudenteAttivitaReportCsv(String istitutoId, String studenteId) throws Exception {
 		LocalDate today = LocalDate.now();
@@ -143,10 +146,55 @@ public class ExportDataManager {
 		return exportCsv;
 	}
 	
+	public ExportCsv getDashboardEsperienze(String istitutoId, String annoScolastico, 
+			String text) throws Exception {
+		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text);
+		String filename = "esperienze.csv";
+		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\"\n");
+		for(ReportDashboardEsperienza esp : list) {
+			sb.append(esp.getEsperienzaId() + ";");
+			sb.append("\"" + esp.getStudenteId() + "\";");
+			sb.append("\"" + esp.getNominativoStudente() + "\";");
+			sb.append("\"" + esp.getCfStudente() + "\";");
+			sb.append("\"" + esp.getClasseStudente() + "\";");
+			sb.append("\"" + cleanString(esp.getTitolo()) + "\";");
+			sb.append("\"" + getTipologia(esp.getTipologia()) + "\";");
+			sb.append("\"" + esp.getStato() + "\";");
+			sb.append(esp.getOreTotali() + ";");
+			sb.append(esp.getOreValidate() + ";");
+			sb.append("\"" + esp.isAllineato() + "\";");
+			if(Utils.isNotEmpty(esp.getErrore())) {
+				sb.append("\"" + cleanString(esp.getErrore()) + "\"\n");
+			} else {
+				sb.append("\"\"\n");
+			}
+		}
+		ExportCsv exportCsv = new ExportCsv();
+		exportCsv.setFilename(filename);
+		exportCsv.setContentType("text/csv");
+		exportCsv.setContent(sb);
+		return exportCsv;
+	}
+	
 	private String getTipologia(AttivitaAlternanza aa) {
 		TipologiaTipologiaAttivita tta = tipologiaAttivitaManager.getTipologiaTipologiaAttivitaByTipologia(aa.getTipologia());
 		if(tta != null) {
 			return tta.getTitolo();
+		}
+		return "";
+	}
+	
+	private String getTipologia(int tipologia) {
+		TipologiaTipologiaAttivita tta = tipologiaAttivitaManager.getTipologiaTipologiaAttivitaByTipologia(tipologia);
+		if(tta != null) {
+			return tta.getTitolo();
+		}
+		return "";		
+	}
+	
+	private String cleanString(String text) {
+		if(Utils.isNotEmpty(text)) {
+			return text.replace("\"", "'").replace('\n', ' ').replace('\r', ' ');
 		}
 		return "";
 	}
