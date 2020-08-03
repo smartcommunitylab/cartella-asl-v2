@@ -18,8 +18,11 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
+import it.smartcommunitylab.cartella.asl.model.Registration;
+import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
+import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardRegistrazione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardUsoSistema;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -229,6 +232,34 @@ public class DashboardManager {
 			}
 		}
 		return oreValidate;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<ReportDashboardRegistrazione> getReportRegistrazioni(String istitutoId, String cf) {
+		List<ReportDashboardRegistrazione> list = new ArrayList<>();
+		String q = "SELECT r, s FROM Registration r, Studente s"
+		+ " WHERE r.studentId=s.id AND r.instituteId=(:istitutoId) AND s.cf=(:cf)"
+		+ " ORDER BY r.dateFrom DESC";
+		Query query = em.createQuery(q);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("cf", cf.trim().toUpperCase());
+		List<Object[]> result = query.getResultList();
+		for (Object[] obj : result) {
+			Registration r = (Registration) obj[0];
+			Studente s = (Studente) obj[1];
+			ReportDashboardRegistrazione report = new ReportDashboardRegistrazione();
+			report.setRegistrationId(r.getId());
+			report.setStudenteId(s.getId());
+			report.setNominativoStudente(s.getSurname() + " " + s.getName());
+			report.setCfStudente(s.getCf());
+			report.setClasseStudente(r.getClassroom());
+			report.setAnnoScolastico(r.getSchoolYear());
+			report.setCorso(r.getCourse());
+			report.setDataInizio(r.getDateFrom());
+			report.setDataFine(r.getDateTo());
+			list.add(report);
+		}
+		return list;
 	}
 	
 	

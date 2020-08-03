@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardSistemaComponent } from './sistema/sistema.component';
 import { DashboardAttivitaComponent } from './attivita/attivita.component';
 import { DashboardEsperienzeComponent } from './esperienze/esperienze.component';
+import { DashboardRegistrazioniComponent } from './registrazioni/registrazioni.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
@@ -18,7 +19,7 @@ import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
     SubNavbarModule,
     DashboardRoutingModule
   ],
-  declarations: [DashboardComponent, DashboardSistemaComponent, DashboardAttivitaComponent, DashboardEsperienzeComponent],
+  declarations: [DashboardComponent, DashboardSistemaComponent, DashboardAttivitaComponent, DashboardEsperienzeComponent, DashboardRegistrazioniComponent],
   entryComponents: []
 })
 export class DashboardModule { }

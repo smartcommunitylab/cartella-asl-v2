@@ -1,0 +1,54 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-6">
+                <div class="form-group">
+                    <label for="istitutoId">Istituto</label>
+                    <select class="form-control" id="istitutoId" 
+                        [(ngModel)]="istitutoId">
+                        <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col col-3">
+                <div class="form-group">
+                    <label for="annoScolastico">Codice fiscale</label>
+                    <input type="text" class="form-control" id="annoScolastico" placeholder="codice fiscale" 
+                        [(ngModel)]="cf">
+                </div>
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="btn-group" role="group">
+                <button class="btn btn-secondary v-center mr-3" (click)="getReport()">
+                    <i class="material-icons">refresh</i> Aggiorna
+                </button>    
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Studente</th>
+                    <th>Classe</th>
+                    <th>Corso</th>
+                    <th>Anno scolastico</th>
+                    <th>Inizio</th>
+                    <th>Fine</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reg of registrazioni">
+                    <td>
+                        <span ngbTooltip="{{reg.cfStudente}}">{{reg.nominativoStudente}}</span>
+                    </td>
+                    <td>{{reg.classeStudente}}</td>
+                    <td>{{reg.corso}}</td>
+                    <td>{{reg.annoScolastico}}</td>
+                    <td>{{reg.dataInizio}}</td>
+                    <td>{{reg.dataFine}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

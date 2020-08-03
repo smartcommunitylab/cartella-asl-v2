@@ -302,6 +302,24 @@ export class DataService {
       );    
   }
 
+  getReportRegistrazioni(istitutoId, cf):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('cf', cf);
+    return this.http.get<any>(
+      this.host + '/dashboard/registrazioni',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
   getReportEsperienze(istitutoId, annoScolastico, text):  Observable<any> {
     let params = new HttpParams();
     params = params.append('istitutoId', istitutoId);

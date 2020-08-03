@@ -17,6 +17,7 @@ import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.DashboardManager;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
+import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardRegistrazione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardUsoSistema;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 
@@ -70,6 +71,19 @@ public class DashboardController {
 			logger.info(String.format("getReportEsperienze:%s - %s", istitutoId, annoScolastico));
 		}
 		return list;
+	}
+	
+	@GetMapping("/api/dashboard/registrazioni")
+	public List<ReportDashboardRegistrazione> getReportRegistrazioni (
+			@RequestParam String istitutoId,
+			@RequestParam String cf,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		List<ReportDashboardRegistrazione> list = dashboardManager.getReportRegistrazioni(istitutoId, cf);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportRegistrazioni:%s - %s", istitutoId, cf));
+		}
+		return list;		
 	}
 
 }
