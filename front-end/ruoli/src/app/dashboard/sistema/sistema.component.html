@@ -1,0 +1,58 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="istitutoId">Istituto</label>
+                    <select class="form-control" id="istitutoId" 
+                        [(ngModel)]="istitutoId" (ngModelChange)="getReport()">
+                        <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="annoScolastico">Anno scolastico</label>
+                    <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" [(ngModel)]="annoScolastico">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="getReport()">
+                <i class="material-icons">refresh</i> Aggiorna
+            </button>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero studenti iscritti:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroStudentiIscritti}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero studenti con esperienze assegnate:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroStudentiConEsperienze}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero attività:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroAttivita}}</strong></label>    
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-3"><span></span></div>
+            <div class="col col-6">
+                <canvas id="doughnutChartCanvas"></canvas>
+            </div>
+            <div class="col col-3"><span></span></div>    
+        </div>
+    </div>
+</div>

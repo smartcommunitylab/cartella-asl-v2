@@ -31,6 +31,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsp
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -93,13 +94,26 @@ public class StudentController implements AslController {
 		return report;
 	}
 	
+	@GetMapping("/api/studente/attivita/sommario")
+	public ReportStudenteSommario getReportSommarioStudente(
+			@RequestParam String studenteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
+		ReportStudenteSommario report = studentManager.getReportStudenteSommario(studenteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportSommarioStudente:%s", studenteId));
+		}
+		return report;
+	}
+	
 	@GetMapping("/api/studente/attivita")
 	public Page<ReportEsperienzaStudente> getStudenteListaEsperienze(
-			@RequestParam String studenteId, 
+			@RequestParam String studenteId,
+			@RequestParam(required = false) String stato,
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
-		Page<ReportEsperienzaStudente> page = studentManager.getReportEsperienzaStudenteList(studenteId, pageRequest);
+		Page<ReportEsperienzaStudente> page = studentManager.getReportEsperienzaStudenteList(studenteId, stato, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getStudenteListaEsperienze:%s", studenteId));
 		}
@@ -151,6 +165,23 @@ public class StudentController implements AslController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("aggiornaPresenze:%s / %s", studenteId, esperienzaSvoltaId));
 		}	
+	}
+	
+	@PostMapping("/api/studente/{studenteId}/notifica")
+	public void aggiornaNotifica(
+			@PathVariable String studenteId,
+			@RequestParam boolean attiva,
+			@RequestBody String registrationToken,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
+		if(attiva) {
+			studentManager.attivaNotifica(studenteId, registrationToken);
+		} else {
+			studentManager.disattivaNotifica(studenteId, registrationToken);
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("aggiornaNotifica:%s / %s / %s", studenteId, attiva, registrationToken));
+		}			
 	}
 
 }

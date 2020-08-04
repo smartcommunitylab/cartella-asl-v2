@@ -97,6 +97,16 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return null;
 	}
 	
+	public AttivitaAlternanza getAttivitaAlternanzaStub(Long id) {
+		AttivitaAlternanza aa = getAttivitaAlternanza(id);
+		if(aa != null) {
+			AttivitaAlternanza attivita = aa.clona();
+			attivita.setStato(getStato(aa));
+			return attivita;
+		}
+		return null;
+	}
+	
 	public void deleteAttivitaAlternanza(AttivitaAlternanza aa) throws Exception {
 		if(aa.getStato().equals(Stati.archiviata)) {
 			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
@@ -518,13 +528,39 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return reportList;
 	}
 	
-	public Page<ReportEsperienzaStudente> getReportEsperienzaStudente(String studenteId, Pageable pageRequest) {
+	public Page<ReportEsperienzaStudente> getReportEsperienzaStudente(String studenteId, String stato, Pageable pageRequest) {
 		String qEsperienze = "SELECT aa,es FROM AttivitaAlternanza aa, EsperienzaSvolta es"
-				+ " WHERE es.attivitaAlternanzaId=aa.id AND es.studenteId=(:studenteId)"
-				+ " ORDER BY aa.dataInizio DESC, aa.titolo ASC";
+				+ " WHERE es.attivitaAlternanzaId=aa.id AND es.studenteId=(:studenteId)";
+		
+		boolean setDataParam = false;
+		if(Utils.isNotEmpty(stato)) {
+			Stati statoEnum = Stati.valueOf(stato);
+			if(statoEnum == Stati.archiviata) {
+				qEsperienze += " AND aa.stato='" + Stati.archiviata.toString() + "'";
+			} else {
+				qEsperienze += " AND aa.stato='" + Stati.attiva.toString() + "'";
+				setDataParam = true;
+				if(statoEnum == Stati.in_attesa) {
+					qEsperienze += " AND aa.dataInizio > (:data)";
+				}
+				if(statoEnum == Stati.revisione) {
+					qEsperienze += " AND aa.dataFine < (:data)";
+				}
+				if(statoEnum == Stati.in_corso) {
+					qEsperienze += " AND aa.dataInizio <= (:data) AND aa.dataFine >= (:data)";
+				}
+			}
+		}
+		
+		qEsperienze += " ORDER BY aa.dataInizio DESC, aa.titolo ASC";
+
 		Query query = em.createQuery(qEsperienze);
 		query.setParameter("studenteId", studenteId);
-		
+		if(setDataParam) {
+			LocalDate localDate = LocalDate.now(); 
+			query.setParameter("data", localDate);
+		}
+
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
 		List<Object[]> result = query.getResultList();
@@ -602,6 +638,29 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		aa.setLatitude(offerta.getLatitude());
 		aa.setLongitude(offerta.getLongitude());
 		return aa;
+	}
+
+	public List<ReportEsperienzaStudente> getReportEsperienzaStudente(String studenteId) {
+		String qEsperienze = "SELECT aa,es FROM AttivitaAlternanza aa, EsperienzaSvolta es"
+				+ " WHERE es.attivitaAlternanzaId=aa.id AND es.studenteId=(:studenteId)"
+				+ " ORDER BY aa.dataInizio DESC, aa.titolo ASC";
+		Query query = em.createQuery(qEsperienze);
+		query.setParameter("studenteId", studenteId);
+		
+		List<Object[]> result = query.getResultList();
+		
+		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
+		Map<Long, ReportEsperienzaStudente> reportMap = new HashMap<>();
+		for (Object[] obj : result) {
+			AttivitaAlternanza aa = (AttivitaAlternanza) obj[0];
+			EsperienzaSvolta es = (EsperienzaSvolta) obj[1];
+			ReportEsperienzaStudente report = new ReportEsperienzaStudente(aa, es);
+			report.setStato(getStato(aa).toString());
+			reportList.add(report);
+			reportMap.put(es.getId(), report);
+		}
+		fillReportEsperienzaStudenteWithPresenze(studenteId, reportMap);
+		return reportList;
 	}
 	
 }

@@ -266,6 +266,112 @@ export class DataService {
       );
   }
 
+  getUtilizzoSistema(istitutoId, annoScolastico):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    return this.http.get<any>(
+      this.host + '/dashboard/sistema',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportAttivita(istitutoId, annoScolastico):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    return this.http.get<any>(
+      this.host + '/dashboard/attivita',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportRegistrazioni(istitutoId, cf):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('cf', cf);
+    return this.http.get<any>(
+      this.host + '/dashboard/registrazioni',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportEsperienze(istitutoId, annoScolastico, text):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    if(text) {
+      params = params.append('text', text);
+    }
+    return this.http.get<any>(
+      this.host + '/dashboard/esperienze',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getEsperienzeCsv(istitutoId, annoScolastico, text): Observable<any> {
+    let url = this.host + '/export/csv/studente';
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    if(text) {
+      params = params.append('text', text);
+    }
+    return this.http.get(
+      this.host + '/export/csv/dashboard/esperienze',
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
+        const url = URL.createObjectURL(blob); 
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=')+1).replace(/\\\"/g, '');
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
+      },
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 

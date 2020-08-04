@@ -1,0 +1,75 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="istitutoId">Istituto</label>
+                    <select class="form-control" id="istitutoId" 
+                        [(ngModel)]="istitutoId" (ngModelChange)="getReport()">
+                        <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="annoScolastico">Anno scolastico</label>
+                    <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" [(ngModel)]="annoScolastico">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="getReport()">
+                <i class="material-icons">refresh</i> Aggiorna
+            </button>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero attività:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroAttivita}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero attività archiviate:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroAttivitaArchiviate}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero attività senza studenti associate:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroAttivitaSenzaStudenti}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero esperienze:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroEsperienze}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero esperienze annullate:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroEsperienzeAnnullate}}</strong></label>    
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-4">
+                <label>Numero esperienze allineate con TrentinoDigitale:</label>    
+            </div>
+            <div class="col-1">
+                <label><strong>{{report.numeroEsperienzeAllineate}}</strong></label>    
+            </div>
+        </div>
+    </div>
+</div>

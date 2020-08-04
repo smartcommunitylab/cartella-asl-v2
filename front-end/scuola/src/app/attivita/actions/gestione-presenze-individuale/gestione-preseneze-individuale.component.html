@@ -125,9 +125,14 @@
             </label>
           </td>
           <td class="custom_tr">
-            <input [disabled]="isArchivio" type="number" min="0" max="12" class="form-control custom_tr" [(ngModel)]="event.oreSvolte" (ngModelChange)="edit(event)"
-              [ngStyle]="(event.verificata) ? { 'color': 'black' } : { 'color': 'red' }"  #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{event.toolTipOra}}" (mouseenter)="showTipOra($event, event);"
-              onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" onpaste="return false">
+            <select class="form-control custom_tr"
+              [disabled]="isArchivio"
+              [(ngModel)]="event.oreSvolte"
+              [ngStyle]="styleOption(event)"
+              (ngModelChange)="edit(event)">
+              <option [value]="0" [ngStyle]="{ 'font-size.px': 16 }">Assente</option>
+              <option [value]="ore" *ngFor="let ore of [1,2,3,4,5,6,7,8,9,10,11,12]">{{ore}}</option>
+            </select>
           </td>
           <td class="custom_tr">
             <textarea [disabled]="isArchivio" class="form-control custom_select" [(ngModel)]="event.attivitaSvolta"

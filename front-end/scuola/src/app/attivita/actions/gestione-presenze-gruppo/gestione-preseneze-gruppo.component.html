@@ -165,12 +165,14 @@
               <div class="row">
                 <div class="col-1"></div>
                 <div class="col-1 p-0 m-auto text-center" *ngFor="let giornata of presenzaStudenti[studenteId]">
-                  <input *ngIf="isDayBetween(giornata.giornata)" type="number" class="form-control text-center w-100 tdDataInput" min="0" max="12"
-                    oninput="this.value = Math.abs(this.value)" 
+                  <select *ngIf="isDayBetween(giornata.giornata)" class="form-control text-center w-100 tdDataInput"
                     [disabled]="isArchivio || !isDayBetween(giornata.giornata)"
                     [(ngModel)]="giornata.oreSvolte"
-                    [ngStyle]="(giornata.verificata) ? { 'color': '#435a70' } : { 'color': '#F83E5A' }"
-                    (ngModelChange)="edit(giornata)" />
+                    [ngStyle]="styleOption(giornata)"
+                    (ngModelChange)="edit(giornata)">
+                    <option [value]="0" [ngStyle]="{ 'font-size.px': 16 }">Assente</option>
+                    <option [value]="ore" *ngFor="let ore of [1,2,3,4,5,6,7,8,9,10,11,12]">{{ore}}</option>
+                  </select>
                   <input *ngIf="!isDayBetween(giornata.giornata)" type="text" class="form-control text-center w-100 tdDataInput" 
                     [disabled]="true" value="-"
                     [ngStyle]="(giornata.verificata) ? { 'color': '#435a70' } : { 'color': '#a2adb8' }"/>

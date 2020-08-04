@@ -2,6 +2,8 @@ package it.smartcommunitylab.cartella.asl.controller;
 
 import java.io.File;
 import java.io.FileReader;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +27,9 @@ import it.smartcommunitylab.cartella.asl.csv.ImportFromCsv;
 import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaAllineamentoManager;
+import it.smartcommunitylab.cartella.asl.manager.StudenteManager;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
+import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -66,6 +70,9 @@ public class DevController {
 	
 	@Autowired
 	private EsperienzaAllineamentoManager esperienzaAllineamentoManager;	
+	
+	@Autowired
+	private StudenteManager studenteManager;
 
 	@Value("${import.dir}")
 	private String importPath;
@@ -291,4 +298,14 @@ public class DevController {
 			esperienzaAllineamentoManager.allineaEsperienzaSvolta(esAl);
 		}
 	}
+
+	@GetMapping("/admin/studenti/notifiche")
+	public List<String> getMancataCompilazioneDiarioStudenti(
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate giornata,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		List<String> studenti = studenteManager.sendNotificaEspereinzeStudenti(giornata);
+		return studenti;
+	}
+
 }

@@ -87,6 +87,7 @@ export class UserPermissionRead {
   referenti_azienda: boolean;
   dirigenti_scolastici: boolean;
   funzione_strumentale: boolean;
+  dashboard: boolean;
 
   constructor() {
     this.all = false;
@@ -95,6 +96,7 @@ export class UserPermissionRead {
     this.referenti_azienda = false;
     this.dirigenti_scolastici = false;
     this.funzione_strumentale = false;
+    this.dashboard = false;
   }
 }
 export class UserPermissionWrite {

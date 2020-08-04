@@ -198,6 +198,18 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
 
   }
 
+  styleOption(giornata) {
+    var style = {
+      'color': '#F83E5A',
+      'font-size.px': 18
+    };
+    if (giornata.verificata) 
+      style['color'] = '#435a70';
+    if (giornata.oreSvolte == 0)
+      style['font-size.px'] = 16;
+    return style;
+  }
+  
   savePresenze() {
     let toBeSaved = this.prepareSaveArray();
 

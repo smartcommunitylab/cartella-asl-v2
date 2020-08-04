@@ -64,6 +64,21 @@ public class ExportDataController implements AslController {
 		}
 	}
 	
+	@GetMapping("/api/export/csv/dashboard/esperienze")
+	public void getDashboardReportEsperienze(
+			@RequestParam String istitutoId,
+			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String text,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		ExportCsv reportCsv = exportDataManager.getDashboardEsperienze(istitutoId, annoScolastico, text);
+		downloadCsv(reportCsv, response);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getDashboardReportEsperienze:%s / %s", istitutoId, annoScolastico));
+		}
+	}
+	
 	private void downloadCsv(ExportCsv reportCsv, HttpServletResponse response) throws IOException {
 		response.setContentType(reportCsv.getContentType());
 		response.setHeader("Content-Disposition", "attachment; filename=" + reportCsv.getFilename());

@@ -32,8 +32,12 @@
                 <a class="nav-link" routerLink="/home">Home</a>
             </li>
             <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: ''}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.all">Tutti</a>
+                <a class="nav-link" routerLink="/utenti" [queryParams]="{role: ''}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.all">Ruoli</a>
             </li>
+            <li class="nav-item" routerLinkActive="active">
+                <a class="nav-link" routerLink="/dashboard" *ngIf="permissionService.getMyPermissions()?.viewUsersList.dashboard">Dashboard</a>
+            </li>
+            <!--
             <li class="nav-item" routerLinkActive="active">
                 <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'STUDENTE'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.studenti">Studenti</a>
             </li>
@@ -49,6 +53,7 @@
             <li class="nav-item" routerLinkActive="active">
                 <a class="nav-link" routerLink="/utenti" [queryParams]="{role: 'FUNZIONE_STRUMENTALE'}" *ngIf="permissionService.getMyPermissions()?.viewUsersList.funzione_strumentale">Funzione strumentale</a>
             </li>
+            -->
         </ul>
         <button class="navbar-profile v-center" (click)="profileDropdownVisible = !profileDropdownVisible">
             <div class="navbar-profile-icon"><i class="material-icons">account_circle</i></div>

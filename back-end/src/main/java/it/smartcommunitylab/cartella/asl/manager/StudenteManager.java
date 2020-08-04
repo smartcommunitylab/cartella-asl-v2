@@ -11,11 +11,14 @@ import java.util.Optional;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +31,7 @@ import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudioBean;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.NotificheStudente;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.Registration;
@@ -36,15 +40,19 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsp
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
+import it.smartcommunitylab.cartella.asl.repository.NotificheStudenteRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
+import it.smartcommunitylab.cartella.asl.services.FirebaseService;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
 @Transactional
 public class StudenteManager extends DataEntityManager {
+	private static final transient Log logger = LogFactory.getLog(StudenteManager.class);
 
 	@Autowired
 	private StudenteRepository studenteRepository;
@@ -64,6 +72,10 @@ public class StudenteManager extends DataEntityManager {
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
 	@Autowired
 	private CompetenzaManager competenzaManager;
+	@Autowired
+	private NotificheStudenteRepository notificheStudenteRepository;
+	@Autowired
+	private FirebaseService firebaseService;
 	
 	private static final String STUDENT_REGISTRATION = "SELECT r0 FROM Registration r0 WHERE r0.studentId = (:id) AND r0.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = (:id)) ";
 
@@ -382,25 +394,37 @@ public class StudenteManager extends DataEntityManager {
 		return result;
 	}
 
-	public Page<ReportEsperienzaStudente> getReportEsperienzaStudenteList(String studenteId, Pageable pageRequest) {
-		Page<ReportEsperienzaStudente> page = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId, pageRequest);
+	public Page<ReportEsperienzaStudente> getReportEsperienzaStudenteList(String studenteId, String stato, Pageable pageRequest) {
+		Page<ReportEsperienzaStudente> page = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId, stato, pageRequest);
 		return page;
 	}
 
 	public ReportDettaglioAttivitaEsperienza getReportDettaglioAttivitaEsperienza(Long esperienzaSvoltaId,
 			String studenteId) throws Exception {
-		EsperienzaSvolta es = esperienzaSvoltaRepository.getOne(esperienzaSvoltaId);
+		EsperienzaSvolta es = esperienzaSvoltaManager.findById(esperienzaSvoltaId);
 		if(es == null) {
 			throw new BadRequestException("esperienzaSvolta not found");
 		}
 		if(!studenteId.equals(es.getStudenteId())) {
 			throw new UnauthorizedException("esperienza id not authorized");
 		}
-		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(es.getAttivitaAlternanzaId());
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanzaStub(es.getAttivitaAlternanzaId());
 		if(aa == null) {
 			throw new BadRequestException("attivitaAlternanza not found");
 		}
-		return new ReportDettaglioAttivitaEsperienza(aa, es);
+		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienzaSvoltaId);
+		int oreValidate = 0;
+		int oreDaValidare = 0;
+		for(PresenzaGiornaliera presenza : presenze) {
+			if(presenza.getOreSvolte() > 0) {
+				if(presenza.getVerificata()) {
+					oreValidate += presenza.getOreSvolte();
+				} else {
+					oreDaValidare += presenza.getOreSvolte();
+				}
+			}
+		}
+		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre());
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeStudente(Long esperienzaSvoltaId, LocalDate dateFrom, 
@@ -433,6 +457,123 @@ public class StudenteManager extends DataEntityManager {
 		if(!studenteId.equals(esperienzaSvolta.getStudenteId())) {
 			throw new UnauthorizedException("uuid not authorized");
 		}
+	}
+
+	public ReportStudenteSommario getReportStudenteSommario(String studenteId) {
+		ReportStudenteSommario report = new ReportStudenteSommario();
+
+		Studente studente = findStudente(studenteId);
+		
+		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(studente.getIstitutoId(), 
+				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
+		if(corsoStudio != null) {
+			report.setOreTotali(corsoStudio.getOreAlternanza());
+		}
+		
+		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId);
+		int oreValidate = 0;
+		int oreTotali = 0;
+		int esperienzeConcluse = 0;
+		int espereinzeInCorso = 0;
+		for(ReportEsperienzaStudente reportEsp : esperienzeStudente) {
+			oreValidate += reportEsp.getOreValidate();
+			oreTotali += reportEsp.getOreTotali();
+			if(reportEsp.getStato().equals("archiviata")) {
+				esperienzeConcluse++;
+			}
+			if(reportEsp.getStato().equals("in_corso")) {
+				esperienzeConcluse++;
+			}
+		}
+		report.setOreTotali(oreTotali);
+		report.setOreValidate(oreValidate);
+		report.setEsperienzeConcluse(esperienzeConcluse);
+		report.setEspereinzeInCorso(espereinzeInCorso);
+		return report;
+	}
+	
+	public void attivaNotifica(String studenteId, String registrationToken) {
+		NotificheStudente notifica = notificheStudenteRepository.findByStudenteIdAndRegistrationToken(studenteId, registrationToken);
+		if(notifica == null) {
+			notifica = new NotificheStudente();
+			notifica.setStudenteId(studenteId);
+			notifica.setRegistrationToken(registrationToken);
+			notifica.setDataAttivazione(LocalDate.now());
+			notificheStudenteRepository.save(notifica);
+		}
+	}
+	
+	public void disattivaNotifica(String studenteId, String registrationToken) {
+		NotificheStudente notifica = notificheStudenteRepository.findByStudenteIdAndRegistrationToken(studenteId, registrationToken);
+		if(notifica != null) {
+			notificheStudenteRepository.delete(notifica);
+		}
+	}
+	
+	public List<EsperienzaSvolta> getMancataCompilazioneDiarioStudenti(LocalDate giornata) {
+		String qPresenze = "SELECT es,pg FROM "
+				+ " AttivitaAlternanza aa LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId = aa.id"
+				+ " LEFT JOIN PresenzaGiornaliera pg ON pg.esperienzaSvoltaId = es.id"
+				+ " WHERE aa.stato='attiva' AND (dataInizio <= (:giornata)) AND (dataFine >= (:giornata))"
+				+ " AND es.studenteId IS NOT NULL"				
+				+ " ORDER BY pg.giornata ASC, es.id ASC";
+		Query query = em.createQuery(qPresenze);
+		query.setParameter("giornata", giornata);
+		List<Object[]> result = query.getResultList();
+		Map<Long, EsperienzaSvolta> esperienzeMap = new HashMap<>();
+		Map<Long, Boolean> compilazioneMap = new HashMap<>();
+		for (Object[] obj : result) {
+			EsperienzaSvolta es = (EsperienzaSvolta) obj[0];
+			PresenzaGiornaliera pg = (PresenzaGiornaliera) obj[1];
+			if(!esperienzeMap.containsKey(es.getId())) {
+				esperienzeMap.put(es.getId(), es);
+				compilazioneMap.put(es.getId(), Boolean.FALSE);
+			}
+			if(pg == null) {
+				continue;
+			}
+			if(pg.getGiornata().isBefore(giornata)) {
+				continue;
+			}
+			if(pg.getGiornata().isEqual(giornata)) {
+				compilazioneMap.put(es.getId(), Boolean.TRUE);
+			}
+			if(pg.getGiornata().isAfter(giornata)) {
+				break;
+			}
+		}
+		List<EsperienzaSvolta> esperienzeStudenti = new ArrayList<>();
+		compilazioneMap.forEach((k, v) -> {
+			if(!v) {
+				esperienzeStudenti.add(esperienzeMap.get(k));
+			}
+		});
+		return esperienzeStudenti;
+	}
+	
+	public List<String> sendNotificaEspereinzeStudenti(LocalDate giornata) {
+		if(giornata == null) {
+			giornata = LocalDate.now().minusDays(1);
+		}
+		List<EsperienzaSvolta> esperienzeStudenti = getMancataCompilazioneDiarioStudenti(giornata);
+		String title = "EDIT - Notifica";
+		String msg = "Ricordati di compilare il diario delle attività di ieri.";
+		List<String> studenti = new ArrayList<>();
+		esperienzeStudenti.forEach(esp -> {
+			if(!studenti.contains(esp.getStudenteId())) {
+				studenti.add(esp.getStudenteId());
+			}
+		});
+		firebaseService.sendNotification(title, msg, studenti);
+		if(logger.isInfoEnabled()) {
+			logger.info("sendNotificaEspereinzeStudenti:" + studenti);
+		}
+		return studenti;
+	}
+	
+	@Scheduled(cron = "0 00 05 * * ?")
+	public void notificaEspereinzeStudenti() throws Exception {
+		//sendNotificaEspereinzeStudenti(null); 
 	}
 
 }
