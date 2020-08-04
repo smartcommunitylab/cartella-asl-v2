@@ -1,8 +1,14 @@
 package it.smartcommunitylab.cartella.asl.model.report;
 
+import java.time.LocalDate;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta.Stati;
 
 public class ReportDashboardEsperienza {
@@ -15,6 +21,12 @@ public class ReportDashboardEsperienza {
 	private int tipologia;
 	@Enumerated(EnumType.STRING)
 	private Stati stato;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	private LocalDate dataInizio;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	private LocalDate dataFine;	
 	private int oreValidate;
 	private int oreTotali;
 	private boolean allineato;
@@ -91,5 +103,17 @@ public class ReportDashboardEsperienza {
 	}
 	public void setErrore(String errore) {
 		this.errore = errore;
+	}
+	public LocalDate getDataInizio() {
+		return dataInizio;
+	}
+	public void setDataInizio(LocalDate dataInizio) {
+		this.dataInizio = dataInizio;
+	}
+	public LocalDate getDataFine() {
+		return dataFine;
+	}
+	public void setDataFine(LocalDate dataFine) {
+		this.dataFine = dataFine;
 	}
 }

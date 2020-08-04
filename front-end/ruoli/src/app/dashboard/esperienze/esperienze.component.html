@@ -46,6 +46,7 @@
                     <th>Classe</th>
                     <th>Esperienza</th>
                     <th>Tipologia</th>
+                    <th>Periodo</th>
                     <th>Ore</th>
                     <th>Stato</th>
                     <th>TnDigit</th>
@@ -59,7 +60,8 @@
                     <td>{{esp.classeStudente}}</td>
                     <td>{{esp.titolo}}</td>
                     <td>{{getTipologia(esp.tipologia)}}</td>
-                    <td>{{esp.oreValidate}} / {{esp.oreTotali}}</td>
+                    <td>{{esp.dataInizio}} <br/> {{esp.dataFine}}</td>
+                    <td><span ngbTooltip="validate / totali">{{esp.oreValidate}} / {{esp.oreTotali}}</span></td>
                     <td>{{esp.stato}}</td>
                     <td>
                         <i *ngIf="esp.stato=='valida' && esp.allineato" class="material-icons ok"

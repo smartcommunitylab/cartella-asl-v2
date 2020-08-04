@@ -206,6 +206,8 @@ public class DashboardManager {
 			report.setClasseStudente(es.getClasseStudente());
 			report.setTitolo(aa.getTitolo());
 			report.setTipologia(aa.getTipologia());
+			report.setDataInizio(aa.getDataInizio());
+			report.setDataFine(aa.getDataFine());
 			report.setStato(es.getStato());
 			report.setOreTotali(aa.getOre());
 			report.setOreValidate(oreValidate);

@@ -150,7 +150,8 @@ public class ExportDataManager {
 			String text) throws Exception {
 		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text);
 		String filename = "esperienze.csv";
-		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\"\n");
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\"\n");
 		for(ReportDashboardEsperienza esp : list) {
 			sb.append(esp.getEsperienzaId() + ";");
 			sb.append("\"" + esp.getStudenteId() + "\";");
@@ -159,6 +160,8 @@ public class ExportDataManager {
 			sb.append("\"" + esp.getClasseStudente() + "\";");
 			sb.append("\"" + cleanString(esp.getTitolo()) + "\";");
 			sb.append("\"" + getTipologia(esp.getTipologia()) + "\";");
+			sb.append("\"" + esp.getDataInizio().format(ldf) + "\";");
+			sb.append("\"" + esp.getDataFine().format(ldf) + "\";");
 			sb.append("\"" + esp.getStato() + "\";");
 			sb.append(esp.getOreTotali() + ";");
 			sb.append(esp.getOreValidate() + ";");
