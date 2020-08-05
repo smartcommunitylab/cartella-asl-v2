@@ -163,17 +163,12 @@ public class ASLUserManager extends DataEntityManager {
 		return user;
 	}	
 	
-	public Page<ASLUser> findASLUsers(ASLRole role, String nome, String cf, ASLRole userRole, String userDomainId, Pageable pageRequest) {
+	public Page<ASLUser> findASLUsers(ASLRole role, String text, ASLRole userRole, String userDomainId, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder(ASLUSERS);
-//		if (role != null) {
-//			sb.append(" JOIN u.roles r AND r = (:role) ");
-//		}
-		if (nome != null && !nome.isEmpty()) {
+		if (Utils.isNotEmpty(text)) {
 			sb.append(
-					" AND (lower(u.name) LIKE (:nome) OR lower(u.surname) LIKE (:nome) OR lower(u.email) LIKE (:nome))");
-		}
-		if (cf != null && !cf.isEmpty()) {
-			sb.append(" AND u.cf = (:cf) ");
+					" AND ((UPPER(u.name) LIKE (:text)) OR (UPPER(u.surname) LIKE (:text)) OR (UPPER(u.email) LIKE (:text)) "
+					+ "OR (UPPER(u.cf) LIKE (:text)))");
 		}
 
 		sb.append(" ORDER BY u.email");
@@ -183,11 +178,8 @@ public class ASLUserManager extends DataEntityManager {
 
 		TypedQuery<ASLUser> query = em.createQuery(q, ASLUser.class);
 
-		if (nome != null && !nome.isEmpty()) {
-			query.setParameter("nome", "%" + nome + "%");
-		}
-		if (cf != null) {
-			query.setParameter("cf", cf);
+		if (Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
 
 		List<ASLUser> result = query.getResultList();

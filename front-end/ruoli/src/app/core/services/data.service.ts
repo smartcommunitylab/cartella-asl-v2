@@ -44,10 +44,8 @@ export class DataService {
     if (filters) {
       if (filters.role)
         params = params.append('role', filters.role);
-      if (filters.nome)
-        params = params.append('nome', filters.nome);
-      if (filters.cf)
-        params = params.append('cf', filters.cf);
+      if (filters.text)
+        params = params.append('text', filters.text);
     }
 
     return this.http.get<any>(

@@ -24,7 +24,7 @@ export class DashboardRegistrazioniComponent implements OnInit {
   istitutoId = '';
   cf = '';
   registrazioni = [];
-  title: string = "Lista registrazioni";
+  title: string = "Lista iscrizioni";
 
     ngOnInit() {
       this.dataService.getProfile().subscribe(profile => {

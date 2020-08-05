@@ -10,15 +10,19 @@
         <div class="row">
             <div class="col">
                 <div class="form-group">
-                    <label for="cf">Codice Fiscale</label>
-                    <input type="text" class="form-control" id="cf" placeholder="Ricerca tramite codice fiscale" [(ngModel)]="filtro.cf" (keyup.enter)="searchUser()">
+                    <label for="text">Nominativo o codice fiscale o email</label>
+                    <input type="text" class="form-control" id="cf" placeholder="Ricerca tramite nome, cognome, codice fiscale o email" 
+                    [(ngModel)]="filtro.text" (keyup.enter)="searchUser()">
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
-                    <label for="nomeutente">Nome utente</label>
-                    <input type="text" class="form-control" id="nomeutente" placeholder="Ricerca tramite nome utente" [(ngModel)]="filtro.nome"
-                        (keyup.enter)="searchUser()">
+                    <label for="ruolo">Ruolo</label>
+                    <select class="form-control" id="ruolo" [(ngModel)]="filtro.role"
+                        (ngModelChange)="searchUser()">
+                        <option [ngValue]="undefined">TUTTI</option>
+                        <option [ngValue]="ruolo" *ngFor="let ruolo of ruoli">{{ruolo}}</option>
+                    </select>
                 </div>
             </div>
         </div>

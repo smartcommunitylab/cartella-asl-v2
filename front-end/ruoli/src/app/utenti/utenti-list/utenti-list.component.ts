@@ -24,13 +24,13 @@ export class UtentiListComponent implements OnInit {
 
   filtro = {
     page: 1,
-    cf: '',
-    nome: '',
+    text: '',
     role: ''
   }
   totalRecords: number = 0;
   pageSize: number = 10;
   utenti;
+  ruoli = ['STUDENTE', 'DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE', 'REFERENTE_AZIENDA', 'LEGALE_RAPPRESENTANTE_AZIENDA', 'ADMIN'];
 
   title: string = "Utenti";
 

@@ -115,8 +115,7 @@ public class ASLUserController implements AslController {
 			@RequestParam(required=false) ASLRole userRole, 
 			@RequestParam(required=false) String userDomainId, 
 			@RequestParam(required=false) ASLRole role, 
-			@RequestParam(required=false) String nome, 
-			@RequestParam(required=false) String cf,
+			@RequestParam(required=false) String text, 
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
 		ASLUser admin = usersValidator.getUser(request);
@@ -127,7 +126,7 @@ public class ASLUserController implements AslController {
 		if (!ASLRole.ADMIN.equals(userRole)) {
 			usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);			
 		}
-		return aslManager.findASLUsers(role, nome, cf, userRole, userDomainId, pageRequest);
+		return aslManager.findASLUsers(role, text, userRole, userDomainId, pageRequest);
 	}
 	
 	@GetMapping(value = "/api/user/{id}")
