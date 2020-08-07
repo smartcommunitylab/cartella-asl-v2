@@ -51,6 +51,9 @@ public class PresenzaGiornaliera {
 	}
 
 	public Boolean getVerificata() {
+		if(verificata == null) {
+			return Boolean.FALSE;
+		}
 		return verificata;
 	}
 
