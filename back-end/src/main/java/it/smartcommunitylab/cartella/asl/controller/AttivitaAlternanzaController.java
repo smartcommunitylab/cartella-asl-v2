@@ -260,7 +260,7 @@ public class AttivitaAlternanzaController implements AslController {
 	}
 	
 	@PostMapping("/api/attivita/{id}/presenze/individuale")
-	public void validaPresenzeAttivitaIndividuale(
+	public List<PresenzaGiornaliera> validaPresenzeAttivitaIndividuale(
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			@RequestBody List<PresenzaGiornaliera> presenze,
@@ -274,12 +274,13 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
 		}
-		attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
+		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("validaPresenzeAttivitaIndividuale:%s / %s", id, istitutoId));
 		}
+		return list;
 	}
 	
 	@GetMapping("/api/attivita/{id}/presenze/individuale/report")
@@ -348,7 +349,7 @@ public class AttivitaAlternanzaController implements AslController {
 	}
 
 	@PostMapping("/api/attivita/{id}/presenze/gruppo")
-	public void validaPresenzeAttivitaGruppo(
+	public List<PresenzaGiornaliera> validaPresenzeAttivitaGruppo(
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			@RequestBody List<PresenzaGiornaliera> presenze,
@@ -362,12 +363,13 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
 		}
-		attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
+		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("validaPresenzeAttivitaGruppo:%s / %s", id, istitutoId));
 		}
+		return list;
 	}
 	
 	@PostMapping("/api/attivita/offerta/{offertaId}/associa")

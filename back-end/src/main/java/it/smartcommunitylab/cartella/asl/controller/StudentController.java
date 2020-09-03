@@ -152,19 +152,20 @@ public class StudentController implements AslController {
 	}
 	
 	@PostMapping("/api/studente/{studenteId}/esperienza/{esperienzaSvoltaId}/presenze")
-	public void aggiornaPresenze(
+	public List<PresenzaGiornaliera> aggiornaPresenze(
 			@PathVariable String studenteId,
 			@PathVariable Long esperienzaSvoltaId,
 			@RequestBody List<PresenzaGiornaliera> presenze,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
 		studentManager.checkEsperienzeStudente(esperienzaSvoltaId, studenteId);
-		studentManager.aggiornaPresenze(esperienzaSvoltaId, presenze);
+		List<PresenzaGiornaliera> list = studentManager.aggiornaPresenze(esperienzaSvoltaId, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), EsperienzaSvolta.class, esperienzaSvoltaId, user, new Object(){});
 		auditManager.save(audit);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("aggiornaPresenze:%s / %s", studenteId, esperienzaSvoltaId));
 		}	
+		return list;
 	}
 	
 	@PostMapping("/api/studente/{studenteId}/notifica")

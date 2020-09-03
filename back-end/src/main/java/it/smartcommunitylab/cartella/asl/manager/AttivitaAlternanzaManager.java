@@ -443,14 +443,47 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		query.setParameter("dateFrom", dateFrom);
 		query.setParameter("dateTo", dateTo);
 	
-		List<PresenzaGiornaliera> resultList = query.getResultList();
+		List<PresenzaGiornaliera> list = query.getResultList();
+		//fix duplicated days in db
+		List<PresenzaGiornaliera> resultList = removeDuplicatedDays(list);
 		return resultList;
 	}
 
-	public void validaPresenzeAttivita(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
-		for(PresenzaGiornaliera pg : presenze) {
-			presenzaGiornalieraManager.validaPresenza(pg);
+	private List<PresenzaGiornaliera> removeDuplicatedDays(List<PresenzaGiornaliera> list) {
+		Map<Long, Map<LocalDate, PresenzaGiornaliera>> mapEsperienze = new HashMap<>();
+		for(PresenzaGiornaliera pg : list) {
+			Map<LocalDate, PresenzaGiornaliera> mapPresenze = mapEsperienze.get(pg.getEsperienzaSvoltaId()); 
+			if(mapPresenze == null) {
+				mapPresenze = new HashMap<>();
+				mapEsperienze.put(pg.getEsperienzaSvoltaId(), mapPresenze);
+			}
+			if(mapPresenze.containsKey(pg.getGiornata())) {
+				PresenzaGiornaliera pgMap = mapPresenze.get(pg.getGiornata());
+				if((pgMap != null) && (pgMap.getId() > pg.getId())) {
+					mapPresenze.put(pg.getGiornata(), pg);
+				}
+			} else {
+				mapPresenze.put(pg.getGiornata(), pg);
+			}
 		}
+		List<PresenzaGiornaliera> result = new ArrayList<>();
+		for(PresenzaGiornaliera pg : list) {
+			Map<LocalDate, PresenzaGiornaliera> mapPresenze = mapEsperienze.get(pg.getEsperienzaSvoltaId());
+			PresenzaGiornaliera pgMap = mapPresenze.get(pg.getGiornata());
+			if(pgMap != null) {
+				result.add(pgMap);
+				mapPresenze.remove(pg.getGiornata());
+			}
+		}
+		return result;
+	}
+
+	public List<PresenzaGiornaliera> validaPresenzeAttivita(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
+		List<PresenzaGiornaliera> result = new ArrayList<>();
+		for(PresenzaGiornaliera pg : presenze) {
+			result.add(presenzaGiornalieraManager.validaPresenza(pg));
+		}
+		return  result;
 	}
 	
 	public List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppo(AttivitaAlternanza aa, LocalDate dateFrom, 
@@ -478,7 +511,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		queryPresenze.setParameter("attivitaAlternanzaId", aa.getId());
 		queryPresenze.setParameter("dateFrom", dateFrom);
 		queryPresenze.setParameter("dateTo", dateTo);
-		List<PresenzaGiornaliera> presenze = queryPresenze.getResultList();
+		List<PresenzaGiornaliera> list = queryPresenze.getResultList();
+		//fix duplicated days in db
+		List<PresenzaGiornaliera> presenze = removeDuplicatedDays(list);
 
 		for (PresenzaGiornaliera pg : presenze) {
 			ReportPresenzaGiornalieraGruppo report = checkReport(pg.getEsperienzaSvoltaId(), reportList);

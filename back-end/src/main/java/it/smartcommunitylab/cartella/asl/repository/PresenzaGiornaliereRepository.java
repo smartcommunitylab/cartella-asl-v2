@@ -1,5 +1,6 @@
 package it.smartcommunitylab.cartella.asl.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,8 @@ public interface PresenzaGiornaliereRepository extends JpaRepository<PresenzaGio
         boolean verifica);
     
     public List<PresenzaGiornaliera> findByEsperienzaSvoltaId(Long esperienzaSvoltaId, Sort sort);
+    
+    public List<PresenzaGiornaliera> findByEsperienzaSvoltaIdAndGiornata(Long esperienzaSvoltaId, LocalDate giornata);
     
   	@Modifying
   	@Query("update PresenzaGiornaliera pg set pg.attivitaSvolta=(:attivitaSvolta), pg.oreSvolte=(:oreSvolte), pg.verificata=true where pg.id=(:id)")

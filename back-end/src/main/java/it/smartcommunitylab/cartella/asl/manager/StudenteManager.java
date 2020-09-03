@@ -441,11 +441,13 @@ public class StudenteManager extends DataEntityManager {
 		return resultList;
 	}
 	
-	public void aggiornaPresenze(Long esperienzaSvoltaId, List<PresenzaGiornaliera> presenze) {
+	public List<PresenzaGiornaliera> aggiornaPresenze(Long esperienzaSvoltaId, List<PresenzaGiornaliera> presenze) {
+		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
 			pg.setEsperienzaSvoltaId(esperienzaSvoltaId);
-			presenzaGiornalieraManager.aggiornaPresenza(pg);
+			result.add(presenzaGiornalieraManager.aggiornaPresenza(pg));
 		}
+		return result;
 	}
 	
 	public void checkEsperienzeStudente(Long esperienzaSvoltaId, String studenteId)

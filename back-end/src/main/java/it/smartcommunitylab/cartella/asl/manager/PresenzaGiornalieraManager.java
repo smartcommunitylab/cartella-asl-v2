@@ -34,23 +34,33 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 		});
 	}
 	
-	public void validaPresenza(PresenzaGiornaliera pg) {
-		if(pg.getId() == null) {
+	public PresenzaGiornaliera validaPresenza(PresenzaGiornaliera pg) {
+		List<PresenzaGiornaliera> list = presenzaRepository.findByEsperienzaSvoltaIdAndGiornata(pg.getEsperienzaSvoltaId(), 
+				pg.getGiornata());
+		if(list.size() == 0) {
 			pg.setVerificata(true);
 			presenzaRepository.save(pg);
 		} else {
-			presenzaRepository.validaPresenza(pg.getId(), pg.getAttivitaSvolta(), pg.getOreSvolte());
+			PresenzaGiornaliera pgDb = list.get(0);
+			presenzaRepository.validaPresenza(pgDb.getId(), pg.getAttivitaSvolta(), pg.getOreSvolte());
+			pg.setId(pgDb.getId());
 		}
+		return pg;
 	}
 	
-	public void aggiornaPresenza(PresenzaGiornaliera pg) {
-		if(pg.getId() == null) {
+	public PresenzaGiornaliera aggiornaPresenza(PresenzaGiornaliera pg) {
+		List<PresenzaGiornaliera> list = presenzaRepository.findByEsperienzaSvoltaIdAndGiornata(pg.getEsperienzaSvoltaId(), 
+				pg.getGiornata());
+		if(list.size() == 0) {
 			pg.setVerificata(false);
 			presenzaRepository.save(pg);
 		} else {
-			presenzaRepository.aggiornaPresenza(pg.getId(), pg.getEsperienzaSvoltaId(),
+			PresenzaGiornaliera pgDb = list.get(0);
+			presenzaRepository.aggiornaPresenza(pgDb.getId(), pgDb.getEsperienzaSvoltaId(),
 					pg.getAttivitaSvolta(), pg.getOreSvolte());
+			pg.setId(pgDb.getId());
 		}
+		return pg;
 	}
 
 }
