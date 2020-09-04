@@ -1,6 +1,10 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Parameter;
@@ -12,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
+import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
@@ -70,5 +75,33 @@ public class DataEntityManager {
 	public int countAttivitaAlternanzaByOfferta(Long offertaId) {
 		return attivitaAlternanzaRepository.countByOffertaId(offertaId);
 	}
-
+	
+	public List<PresenzaGiornaliera> removeDuplicatedDays(List<PresenzaGiornaliera> list) {
+		Map<Long, Map<LocalDate, PresenzaGiornaliera>> mapEsperienze = new HashMap<>();
+		for(PresenzaGiornaliera pg : list) {
+			Map<LocalDate, PresenzaGiornaliera> mapPresenze = mapEsperienze.get(pg.getEsperienzaSvoltaId()); 
+			if(mapPresenze == null) {
+				mapPresenze = new HashMap<>();
+				mapEsperienze.put(pg.getEsperienzaSvoltaId(), mapPresenze);
+			}
+			if(mapPresenze.containsKey(pg.getGiornata())) {
+				PresenzaGiornaliera pgMap = mapPresenze.get(pg.getGiornata());
+				if((pgMap != null) && (pgMap.getId() > pg.getId())) {
+					mapPresenze.put(pg.getGiornata(), pg);
+				}
+			} else {
+				mapPresenze.put(pg.getGiornata(), pg);
+			}
+		}
+		List<PresenzaGiornaliera> result = new ArrayList<>();
+		for(PresenzaGiornaliera pg : list) {
+			Map<LocalDate, PresenzaGiornaliera> mapPresenze = mapEsperienze.get(pg.getEsperienzaSvoltaId());
+			PresenzaGiornaliera pgMap = mapPresenze.get(pg.getGiornata());
+			if(pgMap != null) {
+				result.add(pgMap);
+				mapPresenze.remove(pg.getGiornata());
+			}
+		}
+		return result;
+	}
 }

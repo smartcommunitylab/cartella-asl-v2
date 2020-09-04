@@ -437,7 +437,9 @@ public class StudenteManager extends DataEntityManager {
 		query.setParameter("dateFrom", dateFrom);
 		query.setParameter("dateTo", dateTo);
 	
-		List<PresenzaGiornaliera> resultList = query.getResultList();
+		List<PresenzaGiornaliera> list = query.getResultList();
+		//fix duplicated days in db
+		List<PresenzaGiornaliera> resultList = removeDuplicatedDays(list);		
 		return resultList;
 	}
 	
