@@ -486,7 +486,7 @@ public class StudenteManager extends DataEntityManager {
 				esperienzeConcluse++;
 			}
 			if(reportEsp.getStato().equals("in_corso")) {
-				esperienzeConcluse++;
+				espereinzeInCorso++;
 			}
 		}
 		report.setOreTotali(oreTotali);
