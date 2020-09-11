@@ -28,6 +28,7 @@ public class ReportEsperienzaStudente {
 	private String classeStudente;
 	private int oreValidate;
 	private int oreTotali;	
+	private int oreDaValidare;
 	private Long attivitaAlternanzaId;
 	private String referenteScuola;
 	
@@ -145,6 +146,14 @@ public class ReportEsperienzaStudente {
 
 	public void setReferenteScuola(String referenteScuola) {
 		this.referenteScuola = referenteScuola;
+	}
+
+	public int getOreDaValidare() {
+		return oreDaValidare;
+	}
+
+	public void setOreDaValidare(int oreDaValidare) {
+		this.oreDaValidare = oreDaValidare;
 	}	
 	
 }
