@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { UtenteDetailComponent } from './utente-detail/utente-detail.component';
 import { UtentiListComponent } from './utenti-list/utenti-list.component';
+import { UtentiImportComponent } from './utenti-import/utenti-import.component';
 import { UtenteAddRoleComponent } from './utente-add-role/utente-add-role.component';
 import { DeleteUserModalComponent } from './modals/delete-user-modal/delete-user-modal.component';
 import { DeleteRoleSingleModalComponent } from './modals/delete-role-single-modal/delete-role-single-modal.component';
@@ -21,7 +22,7 @@ import { DeleteRoleModalComponent } from './modals/delete-role-modal/delete-role
     SubNavbarModule,
     UtentiRoutingModule
   ],
-  declarations: [UtentiComponent, UtenteDetailComponent, UtentiListComponent, UtenteAddRoleComponent, DeleteUserModalComponent, DeleteRoleSingleModalComponent, DeleteRoleModalComponent],
+  declarations: [UtentiComponent, UtenteDetailComponent, UtentiListComponent, UtentiImportComponent, UtenteAddRoleComponent, DeleteUserModalComponent, DeleteRoleSingleModalComponent, DeleteRoleModalComponent],
   entryComponents: [
     DeleteUserModalComponent,
     DeleteRoleSingleModalComponent,

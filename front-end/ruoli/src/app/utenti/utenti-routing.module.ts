@@ -3,14 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { UtentiComponent } from './utenti.component';
 import { UtenteDetailComponent } from './utente-detail/utente-detail.component';
 import { UtentiListComponent } from './utenti-list/utenti-list.component';
+import { UtentiImportComponent } from './utenti-import/utenti-import.component';
 import { UtenteAddRoleComponent } from './utente-add-role/utente-add-role.component';
 
 const routes: Routes = [
   { path: '', component: UtentiComponent,
     children: [
-      { path: '', component: UtentiListComponent },
+      { path: 'list', component: UtentiListComponent },
       { path: 'detail', component: UtenteDetailComponent },
-      { path: 'detail/:userid', component: UtenteDetailComponent }
+      { path: 'detail/:userid', component: UtenteDetailComponent },
+      { path: 'import', component: UtentiImportComponent }
     ]
   }
 ];

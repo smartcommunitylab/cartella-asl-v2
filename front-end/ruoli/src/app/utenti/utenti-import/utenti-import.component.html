@@ -1,0 +1,17 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <label>Import utenti da csv:</label>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="btn btn-primary v-center-inline btn-icon"  placement="right"  
+                    ngbTooltip="Allega un nuovo documento all’attività">
+                        Carica Studenti&nbsp;<i class="material-icons">publish</i>
+                        <input #fileInput type="file" hidden (click)="fileInput.value = null" value="" (change)="uploadStudenti($event)">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
