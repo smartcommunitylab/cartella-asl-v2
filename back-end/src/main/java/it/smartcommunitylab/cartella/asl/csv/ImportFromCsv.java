@@ -86,7 +86,7 @@ public class ImportFromCsv {
 	
 	/**
 	 * Create ASLUser starting from csv info and referenteAlternanzaRepository and istituzioneRepository.
-	 * @param csv : [referente-cf,referente-email,istitute-extId] 
+	 * @param csv : [referente-email;istitute-extId;referente.name;referente-surname] 
 	 * @return
 	 */
 	public List<ASLUser> importFunzioneStrumentaleRole(Reader contentReader) {
@@ -136,4 +136,50 @@ public class ImportFromCsv {
 		}
 		return result;
 	}
+	
+	/**
+	 * 
+	 * @param contentReader: [referente-email;referente-name;referente-surname]
+	 * @param istitutoId
+	 * @return
+	 */
+	public List<ASLUser> importFunzioneStrumentaleRole(Reader contentReader, String istitutoId) {
+		BufferedReader in = new BufferedReader(contentReader);
+		List<ASLUser> result = new ArrayList<>();
+		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
+		if(istituzione == null) {
+			logger.warn("importFunzioneStrumentale: istituzione not found - " + istitutoId);
+			return result;
+		}
+		String line;
+		try {
+			while((line = in.readLine()) != null) {
+				try {
+					String[] strings = line.split(";");
+					String email = strings[0].trim();
+					String name = strings[1].trim();
+					String surname = strings[2].trim();
+					ASLUser aslUser = aslUserRepository.findByEmail(email);
+					if(aslUser == null) {
+						aslUser = new ASLUser();
+						aslUser.setEmail(email);
+						aslUser.setName(name);
+						aslUser.setSurname(surname);
+						aslUserRepository.save(aslUser);
+						ASLUserRole userRole = new ASLUserRole(ASLRole.FUNZIONE_STRUMENTALE, istituzione.getId(), aslUser.getId());
+						roleRepository.save(userRole);
+						result.add(aslUser);
+					} else {
+						logger.warn("importFunzioneStrumentale: aslUser already present - " + email);
+					}
+				} catch (Exception e) {
+					logger.warn("importFunzioneStrumentale:" + e.getMessage());
+				}
+			}
+		} catch (IOException e) {
+			logger.warn("importFunzioneStrumentale:" + e.getMessage());
+		}
+		return result;
+	}
+	
 }

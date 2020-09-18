@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.io.InputStreamReader;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.base.Splitter;
 import com.google.common.primitives.Doubles;
 
+import it.smartcommunitylab.cartella.asl.csv.ImportFromCsv;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.ASLUserManager;
@@ -59,7 +63,9 @@ public class ASLUserController implements AslController {
 	@Autowired
 	private ErrorLabelManager errorLabelManager;	
 	@Autowired
-	private AuditManager auditManager;	
+	private AuditManager auditManager;
+	@Autowired
+	private ImportFromCsv csvManager;
 	
 	private static Log logger = LogFactory.getLog(ASLUserController.class);
 
@@ -298,7 +304,24 @@ public class ASLUserController implements AslController {
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		return studenteManager.findStudenti(cf, text, pageRequest);
-	}		
+	}
 	
+	@GetMapping(value = "/api/user/import/funzionestrumentale")
+	public @ResponseBody List<ASLUser> uploadFunzioneStrumentaleRole(
+			@RequestParam String istitutoId,
+			@RequestParam("data") MultipartFile data,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		return csvManager.importFunzioneStrumentaleRole(new InputStreamReader(data.getInputStream(), "UTF-8"), istitutoId);
+	}
+	
+	@GetMapping(value = "/api/user/import/studente")
+	public @ResponseBody List<ASLUser> uploadStudenteRole(
+			@RequestParam String istitutoId,
+			@RequestParam("data") MultipartFile data,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		return csvManager.importStudenteRole(new InputStreamReader(data.getInputStream(), "UTF-8"));
+	}
 	
 }
