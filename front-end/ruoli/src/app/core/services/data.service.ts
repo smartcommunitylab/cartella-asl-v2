@@ -370,6 +370,38 @@ export class DataService {
       );
   }
 
+  uploadStudenti(file: File): Observable<any> {
+    let url = this.host + '/user/import/studente';
+    let formData: FormData = new FormData();
+    formData.append('data', file, file.name);
+    return this.http.post(url, formData)
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      )
+  }
+
+  uploadFunzioniStrumentali(file: File, istitutoId:string): Observable<any> {
+    let url = this.host + '/user/import/funzionestrumentale';
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    let formData: FormData = new FormData();
+    formData.append('data', file, file.name);
+    return this.http.post(url, formData, {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      )
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 

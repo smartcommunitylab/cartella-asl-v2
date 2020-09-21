@@ -306,7 +306,7 @@ public class ASLUserController implements AslController {
 		return studenteManager.findStudenti(cf, text, pageRequest);
 	}
 	
-	@GetMapping(value = "/api/user/import/funzionestrumentale")
+	@PostMapping(value = "/api/user/import/funzionestrumentale")
 	public @ResponseBody List<ASLUser> uploadFunzioneStrumentaleRole(
 			@RequestParam String istitutoId,
 			@RequestParam("data") MultipartFile data,
@@ -315,9 +315,8 @@ public class ASLUserController implements AslController {
 		return csvManager.importFunzioneStrumentaleRole(new InputStreamReader(data.getInputStream(), "UTF-8"), istitutoId);
 	}
 	
-	@GetMapping(value = "/api/user/import/studente")
+	@PostMapping(value = "/api/user/import/studente")
 	public @ResponseBody List<ASLUser> uploadStudenteRole(
-			@RequestParam String istitutoId,
 			@RequestParam("data") MultipartFile data,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);

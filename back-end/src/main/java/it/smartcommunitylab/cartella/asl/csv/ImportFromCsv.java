@@ -139,7 +139,7 @@ public class ImportFromCsv {
 	
 	/**
 	 * 
-	 * @param contentReader: [referente-email;referente-name;referente-surname]
+	 * @param contentReader: [referente-cf;referente-email;referente-name;referente-surname]
 	 * @param istitutoId
 	 * @return
 	 */
@@ -156,12 +156,14 @@ public class ImportFromCsv {
 			while((line = in.readLine()) != null) {
 				try {
 					String[] strings = line.split(";");
-					String email = strings[0].trim();
-					String name = strings[1].trim();
-					String surname = strings[2].trim();
+					String cf = strings[0].toUpperCase().trim();
+					String email = strings[1].trim();
+					String name = strings[2].trim();
+					String surname = strings[3].trim();
 					ASLUser aslUser = aslUserRepository.findByEmail(email);
 					if(aslUser == null) {
 						aslUser = new ASLUser();
+						aslUser.setCf(cf);
 						aslUser.setEmail(email);
 						aslUser.setName(name);
 						aslUser.setSurname(surname);
