@@ -10,8 +10,8 @@ const routes: Routes = [
   { path: '', component: UtentiComponent,
     children: [
       { path: 'list', component: UtentiListComponent },
-      { path: 'detail', component: UtenteDetailComponent },
-      { path: 'detail/:userid', component: UtenteDetailComponent },
+      { path: 'list/detail', component: UtenteDetailComponent },
+      { path: 'list/detail/:userid', component: UtenteDetailComponent },
       { path: 'import', component: UtentiImportComponent }
     ]
   }

@@ -59,7 +59,7 @@ export class UtenteDetailComponent implements OnInit {
             () => console.log('get user by id'));
       } else {
         this.user = {};
-        this.breadcrumbItems[0].location = "../";
+        //this.breadcrumbItems[0].location = "../";
         this.navTitle = "Nuovo utente";
       }
     });
