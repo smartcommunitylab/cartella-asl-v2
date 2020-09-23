@@ -280,11 +280,11 @@ public class StudenteManager extends DataEntityManager {
 	public Page<Studente> findStudenti(String cf, String text, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT st FROM Studente st");
 
-		if (cf != null) {
-			sb.append(" AND st.cf = (:cf) ");
+		if (Utils.isNotEmpty(cf)) {
+			sb.append(" AND UPPER(st.cf) = (:cf) ");
 		}
-		if (text != null && !text.isEmpty()) {
-			sb.append(" AND (lower(st.name) LIKE (:text) OR lower(st.surname) LIKE (:text))");
+		if (Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(st.name) LIKE (:text) OR UPPER(st.surname) LIKE (:text))");
 		}
 
 		sb.append(" ORDER BY st.surname, st.name");
@@ -294,11 +294,11 @@ public class StudenteManager extends DataEntityManager {
 
 		TypedQuery<Studente> query = em.createQuery(q, Studente.class);
 
-		if (cf != null) {
-			query.setParameter("cf", cf);
+		if (Utils.isNotEmpty(cf)) {
+			query.setParameter("cf", cf.trim().toUpperCase());
 		}
-		if (text != null) {
-			query.setParameter("text", "%" + text.trim() + "%");
+		if (Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
 
 		Page<Studente> page = null;
