@@ -1,7 +1,6 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
 import java.io.InputStreamReader;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.base.Splitter;
 import com.google.common.primitives.Doubles;
 
+import it.smartcommunitylab.cartella.asl.beans.ImportRuoliResult;
 import it.smartcommunitylab.cartella.asl.csv.ImportFromCsv;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
@@ -307,7 +307,7 @@ public class ASLUserController implements AslController {
 	}
 	
 	@PostMapping(value = "/api/user/import/funzionestrumentale")
-	public @ResponseBody List<ASLUser> uploadFunzioneStrumentaleRole(
+	public @ResponseBody ImportRuoliResult uploadFunzioneStrumentaleRole(
 			@RequestParam String istitutoId,
 			@RequestParam("data") MultipartFile data,
 			HttpServletRequest request) throws Exception {
@@ -316,7 +316,7 @@ public class ASLUserController implements AslController {
 	}
 	
 	@PostMapping(value = "/api/user/import/studente")
-	public @ResponseBody List<ASLUser> uploadStudenteRole(
+	public @ResponseBody ImportRuoliResult uploadStudenteRole(
 			@RequestParam("data") MultipartFile data,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);

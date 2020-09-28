@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { GrowlerService, GrowlerMessageType } from '../../core/growler/growler.service';
+import { ngCopy } from 'angular-6-clipboard';
 
 @Component({
   selector: 'cm-utenti-import',
@@ -23,6 +24,7 @@ export class UtentiImportComponent implements OnInit {
   profile: any;
   istitutoId = '';
   title: string = "Import utenti da csv";
+  importResult: any;
 
   ngOnInit() {
     this.dataService.getProfile().subscribe(profile => {
@@ -46,19 +48,29 @@ export class UtentiImportComponent implements OnInit {
 
   uploadStudenti(fileInput) {
     if (fileInput.target.files && fileInput.target.files[0]) {
-      this.dataService.uploadStudenti(fileInput.target.files[0]).subscribe((users) => {
+      this.dataService.uploadStudenti(fileInput.target.files[0]).subscribe((result) => {
+        this.importResult = result;
         console.log("uploadStudenti OK");
-        this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 5000);
+        this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 3000);
       });
     }
   }
 
   uploadFunzioniStrumentali(fileInput) {
     if (fileInput.target.files && fileInput.target.files[0]) {
-      this.dataService.uploadFunzioniStrumentali(fileInput.target.files[0], this.istitutoId).subscribe((users) => {
+      this.dataService.uploadFunzioniStrumentali(fileInput.target.files[0], this.istitutoId).subscribe((result) => {
+        this.importResult = result;
         console.log("uploadFunzioniStrumentali OK");
-        this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 5000);
+        this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 3000);
       });
+    }
+  }
+
+  copyText() {
+    if(this.importResult) {
+      var myJSON = JSON.stringify(this.importResult);
+      ngCopy(myJSON);
+      this.growler.growl('dati copiati nella clipboard', GrowlerMessageType.Success, 3000);
     }
   }
 

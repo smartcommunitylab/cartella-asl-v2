@@ -5,7 +5,7 @@
 					<div class="col col-6">
 							<div class="form-group">
 									<label class="btn btn-primary v-center-inline btn-icon"  placement="right"  
-									ngbTooltip="Allega un nuovo documento all’attività">
+									ngbTooltip="Scegli file csv">
 											Carica Studenti&nbsp;<i class="material-icons">publish</i>
 											<input #fileInputStudenti type="file" hidden (click)="fileInputStudenti.value = null" value="" (change)="uploadStudenti($event)">
 									</label>
@@ -19,10 +19,44 @@
 				</select>		
 				<div class="form-group col col-2" *ngIf="istitutoId">
 					<label class="btn btn-primary v-center-inline btn-icon"  placement="top"  
-					ngbTooltip="Allega un nuovo documento all’attività">
+					ngbTooltip="Scegli file csv">
 							Carica Funzioni Strumentali&nbsp;<i class="material-icons">publish</i>
 							<input #fileInputFunzioniStrumentali type="file" hidden (click)="fileInputFunzioniStrumentali.value = null" value="" (change)="uploadFunzioniStrumentali($event)">
 					</label>
+				</div>
 			</div>
-    </div>
+		<table class="table" *ngIf="importResult">
+			<thead>
+				<tr>
+						<th>
+							Ruoli Aggiunti {{importResult.users.length}} 
+						</th>
+						<th>
+							Ruoli già esistenti {{importResult.alreadyPresent.length}}
+						</th>
+						<th>
+							Entità non trovate {{importResult.notFound.length}}
+						</th>
+						<th>
+							<button class="btn btn-secondary v-center mr-3" (click)="copyText()"
+								ngbTooltip="Copia dati nella clipboard">
+								<i class="material-icons">content_copy</i> Copia
+							</button>    
+						</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<div *ngFor="let text of importResult.users">{{text}}</div>
+					</td>
+					<td>
+						<div *ngFor="let text of importResult.alreadyPresent">{{text}}</div>
+					</td>
+					<td>
+						<div *ngFor="let text of importResult.notFound">{{text}}</div>
+					</td>
+				</tr>
+			</tbody>			
+		</table>
 </div>

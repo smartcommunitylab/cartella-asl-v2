@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import it.smartcommunitylab.cartella.asl.beans.ImportRuoliResult;
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -44,9 +46,9 @@ public class ImportFromCsv {
 	 * @param csv : [student-cf,student-email]
 	 * @return
 	 */
-	public List<ASLUser> importStudenteRole(Reader contentReader) {
+	public ImportRuoliResult importStudenteRole(Reader contentReader) {
+		ImportRuoliResult result = new ImportRuoliResult();
 		BufferedReader in = new BufferedReader(contentReader);
-		List<ASLUser> result = new ArrayList<>();
 		String line;
 		try {
 			while((line = in.readLine()) != null) {
@@ -57,6 +59,7 @@ public class ImportFromCsv {
 					Studente studente = studenteRepository.findStudenteByCf(cf);
 					if(studente == null) {
 						logger.warn("importStudente: student not found - " + cf);
+						result.getNotFound().add(cf);
 						continue;
 					}
 					ASLUser aslUser = aslUserRepository.findByCf(cf);
@@ -69,10 +72,11 @@ public class ImportFromCsv {
 						aslUserRepository.save(aslUser);
 						ASLUserRole userRole = new ASLUserRole(ASLRole.STUDENTE, studente.getId(), aslUser.getId());
 						roleRepository.save(userRole);
-						result.add(aslUser);
+						result.getUsers().add(aslUser);
 						logger.warn("importStudente: aslUser created - " + cf);
 					} else {
 						logger.warn("importStudente: aslUser already present - " + cf);
+						result.getAlreadyPresent().add(cf);
 					}
 				} catch (Exception e) {
 					logger.warn("importStudente:" + e.getMessage());
@@ -143,13 +147,13 @@ public class ImportFromCsv {
 	 * @param istitutoId
 	 * @return
 	 */
-	public List<ASLUser> importFunzioneStrumentaleRole(Reader contentReader, String istitutoId) {
+	public ImportRuoliResult importFunzioneStrumentaleRole(Reader contentReader, String istitutoId) throws Exception {
+		ImportRuoliResult result = new ImportRuoliResult();
 		BufferedReader in = new BufferedReader(contentReader);
-		List<ASLUser> result = new ArrayList<>();
 		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
 		if(istituzione == null) {
 			logger.warn("importFunzioneStrumentale: istituzione not found - " + istitutoId);
-			return result;
+			throw new BadRequestException("importFunzioneStrumentale: istituzione not found - " + istitutoId);
 		}
 		String line;
 		try {
@@ -170,9 +174,10 @@ public class ImportFromCsv {
 						aslUserRepository.save(aslUser);
 						ASLUserRole userRole = new ASLUserRole(ASLRole.FUNZIONE_STRUMENTALE, istituzione.getId(), aslUser.getId());
 						roleRepository.save(userRole);
-						result.add(aslUser);
+						result.getUsers().add(aslUser);
 					} else {
 						logger.warn("importFunzioneStrumentale: aslUser already present - " + email);
+						result.getAlreadyPresent().add(email);
 					}
 				} catch (Exception e) {
 					logger.warn("importFunzioneStrumentale:" + e.getMessage());
