@@ -22,11 +22,13 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.report.ReportArchiviaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicercaEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudenti;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistration;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
@@ -53,6 +55,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	PresenzaGiornalieraManager presenzaGiornalieraManager;
 	@Autowired
 	CompetenzaManager competenzaManager;
+	@Autowired
+	IstituzioneManager istituzioneManager;
 	@Autowired
 	ErrorLabelManager errorLabelManager;
 	
@@ -669,6 +673,86 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		fillReportEsperienzaStudenteWithPresenze(studenteId, reportMap);
 		return reportList;
+	}
+
+	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, String stato,
+			Pageable pageRequest) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
+		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
+		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
+		
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
+		}
+		
+		boolean setDataParam = false;
+		if(Utils.isNotEmpty(stato)) {
+			Stati statoEnum = Stati.valueOf(stato);
+			if(statoEnum == Stati.archiviata) {
+				sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
+			} else {
+				sb.append(" AND aa.stato='" + Stati.attiva.toString() + "'");
+				setDataParam = true;
+				if(statoEnum == Stati.in_attesa) {
+					sb.append(" AND aa.dataInizio > (:data)");
+				}
+				if(statoEnum == Stati.revisione) {
+					sb.append(" AND aa.dataFine < (:data)");
+					setDataParam = true;
+				}
+				if(statoEnum == Stati.in_corso) {
+					sb.append(" AND aa.dataInizio <= (:data) AND aa.dataFine >= (:data)");
+					setDataParam = true;
+				}
+			}
+		}
+				
+		sb.append(" ORDER BY aa.dataInizio DESC, aa.titolo ASC");
+		String q = sb.toString();
+
+		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
+		
+		query.setParameter("enteId", enteId);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		if(setDataParam) {
+			LocalDate localDate = LocalDate.now(); 
+			query.setParameter("data", localDate);
+		}
+		
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<AttivitaAlternanza> aaList = query.getResultList();
+		
+		List<ReportAttivitaAlternanzaRicercaEnte> reportList = new ArrayList<>();
+		Map<Long, ReportAttivitaAlternanzaRicercaEnte> reportMap = new HashMap<>();
+		List<Long> aaIdList = new ArrayList<>();
+		for (AttivitaAlternanza aa : aaList) {
+			ReportAttivitaAlternanzaRicercaEnte report = new ReportAttivitaAlternanzaRicercaEnte(aa); 
+			report.setStato(getStato(aa).toString());
+			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+			if(istituto != null) {
+				report.setNomeIstituto(istituto.getName());
+			}
+			reportMap.put(aa.getId(), report);
+			reportList.add(report);
+			aaIdList.add(aa.getId());
+		}
+		
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaIds(aaIdList);
+		for(EsperienzaSvolta es : esperienze) {
+			ReportAttivitaAlternanzaRicercaEnte report = reportMap.get(es.getAttivitaAlternanzaId());
+			if(report != null) {
+				report.getStudenti().add(es.getNominativoStudente());
+			}
+		}
+		
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), query);
+		long total = (Long) cQuery.getSingleResult();
+		
+		Page<ReportAttivitaAlternanzaRicercaEnte> page = new PageImpl<ReportAttivitaAlternanzaRicercaEnte>(reportList, pageRequest, total);
+		return page;
 	}
 	
 }

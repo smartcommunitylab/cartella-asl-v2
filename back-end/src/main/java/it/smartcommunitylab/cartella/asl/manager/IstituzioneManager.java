@@ -79,7 +79,7 @@ public class IstituzioneManager extends DataEntityManager {
 	}
 	
 	public Istituzione getIstituto(String istitutoId) {
-		Istituzione istituzione = istituzioneRepository.getOne(istitutoId);
+		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
 		return istituzione;
 	}
 	

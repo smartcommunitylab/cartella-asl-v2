@@ -32,6 +32,7 @@ import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.ReportArchiviaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicerca;
+import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicercaEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudenti;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistration;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
@@ -387,5 +388,22 @@ public class AttivitaAlternanzaController implements AslController {
 		}		
 		return aa;
 	}
+	
+	@GetMapping("/api/attivita/ente/search")
+	public @ResponseBody Page<ReportAttivitaAlternanzaRicercaEnte> searchAttivitaAlternanzaByEnte(
+			@RequestParam String enteId,
+			@RequestParam(required = false) String text,
+			@RequestParam(required = false) String stato,
+			Pageable pageRequest, 
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<ReportAttivitaAlternanzaRicercaEnte> result = attivitaAlternanzaManager.findAttivitaByEnte(enteId, text, stato, pageRequest);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("searchAttivitaAlternanzaByEnte:%s", text));
+		}
+		return result;
+	}
+	
 
 }
