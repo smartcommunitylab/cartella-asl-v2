@@ -50,8 +50,10 @@ public class Offerta {
 	private String nomeEnte;
 	private String referenteScuola;
 	private String referenteScuolaCF;
+	private String referenteScuolaTelefono;	
 	private String referenteEsterno;
 	private String referenteEsternoCF;
+	private String referenteEsternoTelefono;	
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -277,6 +279,22 @@ public class Offerta {
 
 	public void setNumeroAttivita(int numeroAttivita) {
 		this.numeroAttivita = numeroAttivita;
+	}
+
+	public String getReferenteEsternoTelefono() {
+		return referenteEsternoTelefono;
+	}
+
+	public void setReferenteEsternoTelefono(String referenteEsternoTelefono) {
+		this.referenteEsternoTelefono = referenteEsternoTelefono;
+	}
+
+	public String getReferenteScuolaTelefono() {
+		return referenteScuolaTelefono;
+	}
+
+	public void setReferenteScuolaTelefono(String referenteScuolaTelefono) {
+		this.referenteScuolaTelefono = referenteScuolaTelefono;
 	}
 
 }

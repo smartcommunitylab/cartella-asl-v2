@@ -57,8 +57,10 @@ public class AttivitaAlternanza {
 	private String nomeEnte;
 	private String referenteScuola;
 	private String referenteScuolaCF;
+	private String referenteScuolaTelefono;
 	private String referenteEsterno;
 	private String referenteEsternoCF;
+	private String referenteEsternoTelefono;
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -344,5 +346,21 @@ public class AttivitaAlternanza {
 
 	public void setDataArchiviazione(LocalDate dataArchiviazione) {
 		this.dataArchiviazione = dataArchiviazione;
+	}
+
+	public String getReferenteScuolaTelefono() {
+		return referenteScuolaTelefono;
+	}
+
+	public void setReferenteScuolaTelefono(String referenteScuolaTelefono) {
+		this.referenteScuolaTelefono = referenteScuolaTelefono;
+	}
+
+	public String getReferenteEsternoTelefono() {
+		return referenteEsternoTelefono;
+	}
+
+	public void setReferenteEsternoTelefono(String referenteEsternoTelefono) {
+		this.referenteEsternoTelefono = referenteEsternoTelefono;
 	}
 }

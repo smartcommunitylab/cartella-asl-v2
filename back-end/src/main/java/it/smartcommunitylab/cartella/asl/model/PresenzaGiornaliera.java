@@ -33,6 +33,7 @@ public class PresenzaGiornaliera {
 	private String attivitaSvolta;
 	private int oreSvolte;
 	private Boolean verificata;
+	private Boolean validataEnte;
 
 	public Long getId() {
 		return id;
@@ -91,6 +92,17 @@ public class PresenzaGiornaliera {
 
 	public void setGiornata(LocalDate giornata) {
 		this.giornata = giornata;
+	}
+
+	public Boolean getValidataEnte() {
+		if(validataEnte == null) {
+			return Boolean.FALSE;
+		}
+		return validataEnte;
+	}
+
+	public void setValidataEnte(Boolean validataEnte) {
+		this.validataEnte = validataEnte;
 	}
 
 }
