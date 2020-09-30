@@ -405,5 +405,25 @@ public class AttivitaAlternanzaController implements AslController {
 		return result;
 	}
 	
+	@GetMapping("/api/attivita/{id}/ente")
+	public @ResponseBody ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("entity not visible");
+		}
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getAttivitaAlternanzaByEnte:%s / %s", id, enteId));
+		}
+		return report;
+	}
 
 }

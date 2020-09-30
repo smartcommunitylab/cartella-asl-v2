@@ -253,6 +253,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
 		report.setAttivitaAlternanza(attivita);
+		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+		if(istituto != null) {
+			report.setNomeIstituto(istituto.getName());
+		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 		for (EsperienzaSvolta esperienza : esperienze) {
