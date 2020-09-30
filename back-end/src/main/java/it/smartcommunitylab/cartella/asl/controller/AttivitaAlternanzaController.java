@@ -483,5 +483,51 @@ public class AttivitaAlternanzaController implements AslController {
 		}	
 		return report;
 	}
+	
+	@GetMapping("/api/attivita/{id}/presenze/individuale/ente")
+	public @ResponseBody List<PresenzaGiornaliera> getPresenzeAttivitaIndividualeByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		List<PresenzaGiornaliera> result = attivitaAlternanzaManager.getPresenzeAttivitaIndividuale(aa, dateFrom, dateTo);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getPresenzeAttivitaIndividualeByEnte:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
+		}
+		return result;
+	}
+
+	@GetMapping("/api/attivita/{id}/presenze/gruppo/ente")
+	public @ResponseBody List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppoByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		List<ReportPresenzaGiornalieraGruppo> reportList = attivitaAlternanzaManager.getPresenzeAttivitaGruppo(aa, dateFrom, dateTo);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getPresenzeAttivitaGruppo:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
+		}
+		return reportList;
+	}
 
 }
