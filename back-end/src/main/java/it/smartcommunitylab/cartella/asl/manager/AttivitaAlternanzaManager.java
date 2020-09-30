@@ -758,5 +758,20 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		Page<ReportAttivitaAlternanzaRicercaEnte> page = new PageImpl<ReportAttivitaAlternanzaRicercaEnte>(reportList, pageRequest, total);
 		return page;
 	}
+
+	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws BadRequestException {
+		AttivitaAlternanza aaDb = getAttivitaAlternanza(aa.getId());
+		if(aaDb == null) {
+			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
+		}
+		if(!enteId.equals(aaDb.getEnteId())) {
+			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
+		}		
+		if(aaDb.getStato().equals(Stati.archiviata)) {
+			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
+		}
+		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
+		return getAttivitaAlternanza(aa.getId());
+	}
 	
 }

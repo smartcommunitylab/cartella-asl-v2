@@ -92,8 +92,10 @@ public class AttivitaAlternanza {
 		aa.setOre(ore);
 		aa.setReferenteEsterno(referenteEsterno);
 		aa.setReferenteEsternoCF(referenteEsternoCF);
+		aa.setReferenteEsternoTelefono(referenteEsternoTelefono);
 		aa.setReferenteScuola(referenteScuola);
 		aa.setReferenteScuolaCF(referenteScuolaCF);
+		aa.setReferenteScuolaTelefono(referenteScuolaTelefono);
 		aa.setStato(stato);
 		aa.setTipologia(tipologia);
 		aa.setTitolo(titolo);

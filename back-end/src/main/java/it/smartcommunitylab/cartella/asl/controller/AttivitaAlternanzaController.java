@@ -425,5 +425,21 @@ public class AttivitaAlternanzaController implements AslController {
 		}
 		return report;
 	}
+	
+	@PostMapping("/api/attivita/ente")
+	public @ResponseBody AttivitaAlternanza updateAttivitaAlternanzaByEnte(
+			@RequestParam String enteId,
+			@RequestBody AttivitaAlternanza attivita,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza result = attivitaAlternanzaManager.updateAttivitaAlternanzaByEnte(attivita, enteId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, attivita.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("updateAttivitaAlternanzaByEnte:%s / %s", result.getId(), enteId));
+		}		
+		return result;
+	}
 
 }
