@@ -442,4 +442,46 @@ public class AttivitaAlternanzaController implements AslController {
 		return result;
 	}
 
+	@GetMapping("/api/attivita/{id}/presenze/individuale/report/ente")
+	public @ResponseBody ReportPresenzeAttvitaAlternanza getReportPresenzeAttvitaAlternanzaIndividualeByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaIndividuale(aa);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportPresenzeAttvitaAlternanzaIndividualeByEnte:%s / %s", id, enteId));
+		}	
+		return report;		
+	}
+
+	@GetMapping("/api/attivita/{id}/presenze/gruppo/report/ente")
+	public @ResponseBody ReportPresenzeAttvitaAlternanza getReportPresenzeAttvitaAlternanzaGruppoByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaGruppo(aa);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportPresenzeAttvitaAlternanzaGruppoByEnte:%s / %s", id, enteId));
+		}	
+		return report;
+	}
+
 }
