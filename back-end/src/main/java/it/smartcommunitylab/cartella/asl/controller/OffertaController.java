@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -22,6 +24,7 @@ import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.OffertaManager;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
+import it.smartcommunitylab.cartella.asl.model.OffertaIstituto;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -132,6 +135,22 @@ public class OffertaController implements AslController {
 			logger.info(String.format("deleteOffertaByEnte:%s / %s", id, enteId));
 		}		
 		return offerta;
+	}
+	
+	@PostMapping("/api/offerta/{id}/istituti")
+	public void associaIstitutiByEnte(
+			@PathVariable Long id,
+			@RequestParam String enteId,
+			@RequestBody List<OffertaIstituto> istituti,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		offertaManager.associaIstitutiByEnte(id, enteId, istituti);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("associaIstitutiByEnte:%s / %s", id, enteId));
+		}		
 	}
 
 }

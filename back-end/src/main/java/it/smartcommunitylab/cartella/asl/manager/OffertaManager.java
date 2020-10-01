@@ -18,6 +18,8 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.Offerta.Stati;
+import it.smartcommunitylab.cartella.asl.model.OffertaIstituto;
+import it.smartcommunitylab.cartella.asl.repository.OffertaIstitutoRepository;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -28,6 +30,8 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 public class OffertaManager extends DataEntityManager {
 	@Autowired
 	OffertaRepository offertaRepository;
+	@Autowired
+	OffertaIstitutoRepository offertaIstitutoRepository;
 	@Autowired
 	CompetenzaManager competenzaManager;
 	@Autowired
@@ -226,6 +230,35 @@ public class OffertaManager extends DataEntityManager {
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
 		offertaRepository.deleteById(offerta.getId());
 		return offerta;
+	}
+
+	public void associaIstitutiByEnte(Long id, String enteId, 
+			List<OffertaIstituto> istituti) throws Exception{
+		Offerta offerta = getOfferta(id);
+		if(offerta == null) {
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
+		}
+		if(!enteId.equals(offerta.getEnteId())) {
+			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
+		}
+		if(offerta.getNumeroAttivita() > 0) {
+			throw new BadRequestException(errorLabelManager.get("offerta.used"));
+		}
+		cancellaIstitutiAssociati(id);
+		for(OffertaIstituto o : istituti) {
+			OffertaIstituto entity = new OffertaIstituto();
+			entity.setOffertaId(id);
+			entity.setIstitutoId(o.getIstitutoId());
+			entity.setNomeIstituto(o.getNomeIstituto());
+			offertaIstitutoRepository.save(entity);
+		}
+	}
+
+	private void cancellaIstitutiAssociati(Long offertaId) {
+		List<OffertaIstituto> list = offertaIstitutoRepository.findByOffertaId(offertaId);
+		for(OffertaIstituto o : list) {
+			offertaIstitutoRepository.delete(o);
+		}
 	}
 
 
