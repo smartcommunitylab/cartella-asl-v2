@@ -26,7 +26,7 @@ import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 public class Offerta {
 
 	public static enum Stati {
-		scaduta, disponibile
+		scaduta, disponibile, bozza
 	}
 
 	@Id

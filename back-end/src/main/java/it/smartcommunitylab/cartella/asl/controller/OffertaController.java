@@ -166,5 +166,21 @@ public class OffertaController implements AslController {
 		}
 		return offerta;
 	}
+	
+	@GetMapping("/api/offerta/search/ente")
+	public @ResponseBody Page<Offerta> searchOffertaByEnte(
+			@RequestParam String enteId,
+			@RequestParam(required = false) String text,
+			@RequestParam(required = false) String stato,
+			Pageable pageRequest, 
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<Offerta> result = offertaManager.findOffertaByEnte(enteId, text, stato, pageRequest);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("searchOffertaByEnte:%s / %s /", enteId, text));
+		}
+		return result;
+	}
 
 }

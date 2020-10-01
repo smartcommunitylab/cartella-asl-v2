@@ -283,5 +283,57 @@ public class OffertaManager extends DataEntityManager {
 		return offerta;
 	}
 
+	public Page<Offerta> findOffertaByEnte(String enteId, String text, String stato, Pageable pageRequest) {
+		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT DISTINCT off FROM Offerta off LEFT JOIN AttivitaAlternanza aa ON aa.offertaId=o.id"
+				+ " LEFT JOIN EspereinzaSvolta es ON es.attivitaAlternanzaId=aa.id"
+				+ " LEFT JOIN OffertaIstituto oi ON off.id=io.offertaId WHERE off.enteId=(:enteId)");
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text))");
+		}
+		boolean bozza = false;
+		if(Utils.isNotEmpty(stato)) {
+			Stati statoEnum = Stati.valueOf(stato);
+			if(statoEnum == Stati.disponibile) {
+				sb.append(" AND off.postiRimanenti > 0 AND off.dataFine >= (:date)");
+			} else if (statoEnum == Stati.bozza) {
+				sb.append(" AND off.postiRimanenti > 0 AND off.dataFine >= (:date)");
+				bozza = true;
+			} else {
+				sb.append(" AND (off.postiRimanenti <= 0 OR off.dataFine < (:date))");
+			}
+		}
+		sb.append(" GROUP BY off.id, oi.offertaId");
+		if(bozza) {
+			sb.append(" HAVING COUNT(oi.offertaId)=0");
+		}
+		sb.append(" ORDER BY off.dataInizio DESC");
+		String q = sb.toString();
+		
+		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
+		query.setParameter("enteId", enteId);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		if(Utils.isNotEmpty(stato)) {
+			LocalDate localDate = LocalDate.now();
+			query.setParameter("date", localDate);
+		}
+		
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Offerta> rows = query.getResultList();
+		for (Offerta off : rows) {
+			off.setStato(getStato(off));
+		}
+		
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT off","COUNT(DISTINCT off)"), query);
+		long total = (Long) cQuery.getSingleResult();
+		
+		Page<Offerta> page = new PageImpl<Offerta>(rows, pageRequest, total);
+		return page;
+	}
+
 
 }
