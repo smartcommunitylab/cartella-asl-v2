@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
-import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.OffertaManager;
@@ -78,14 +77,7 @@ public class OffertaController implements AslController {
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Offerta offerta = offertaManager.getOfferta(id);
-		if(offerta == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if((offerta.getIstitutoId() == null) || !offerta.getIstitutoId().equals(istitutoId)) {
-			throw new BadRequestException("istitutoId not corresponding");
-		}
-		offertaManager.deleteOfferta(offerta);
+		Offerta offerta = offertaManager.deleteOfferta(id, istitutoId);
 		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -124,6 +116,22 @@ public class OffertaController implements AslController {
 			logger.info(String.format("saveOffertaByEnte:%s / %s", result.getId(), enteId));
 		}		
 		return result;
+	}
+
+	@DeleteMapping("/api/offerta/{id}/ente")
+	public @ResponseBody Offerta deleteOffertaByEnte(
+			@PathVariable Long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Offerta offerta = offertaManager.deleteOffertaByEnte(id, enteId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("deleteOffertaByEnte:%s / %s", id, enteId));
+		}		
+		return offerta;
 	}
 
 }

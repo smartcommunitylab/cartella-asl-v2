@@ -169,18 +169,24 @@ public class OffertaManager extends DataEntityManager {
 		}
 	}
 	
-	public void deleteOfferta(Offerta offerta) throws Exception {
-		int count = countAttivitaAlternanzaByOfferta(offerta.getId());
-		if(count > 0) {
+	public Offerta deleteOfferta(Long id, String istitutoId) throws Exception {
+		Offerta offerta = getOfferta(id);
+		if(offerta == null) {
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
+		}
+		if(!istitutoId.equals(offerta.getIstitutoId())) {
+			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
+		}
+		if(offerta.getNumeroAttivita() > 0) {
 			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
 		offertaRepository.deleteById(offerta.getId());
+		return offerta;
 	}
 
 	public Offerta saveOffertaByEnte(Offerta offerta, String enteId) throws Exception {
-		// TODO Auto-generated method stub
 		Offerta offertaDb = getOfferta(offerta.getId());
 		if(offertaDb == null) {
 			offerta.setEnteId(enteId);
@@ -204,5 +210,23 @@ public class OffertaManager extends DataEntityManager {
 			return offerta;
 		}
 	}
+
+	public Offerta deleteOffertaByEnte(Long id, String enteId) throws Exception {
+		Offerta offerta = getOfferta(id);
+		if(offerta == null) {
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
+		}
+		if(!enteId.equals(offerta.getEnteId())) {
+			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
+		}
+		if(offerta.getNumeroAttivita() > 0) {
+			throw new BadRequestException(errorLabelManager.get("offerta.used"));
+		}
+		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
+		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
+		offertaRepository.deleteById(offerta.getId());
+		return offerta;
+	}
+
 
 }
