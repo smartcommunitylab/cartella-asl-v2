@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
@@ -146,12 +147,22 @@ public class OffertaManager extends DataEntityManager {
 				Offerta offerta = optional.get();
 				offerta.setStato(getStato(offerta));
 				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
+				completaAssociazioni(offerta);
 				return offerta;
 			}			
 		}
 		return null;
 	}
 	
+	private void completaAssociazioni(Offerta offerta) {
+		if(offerta != null) {
+			List<OffertaIstituto> list = offertaIstitutoRepository.findByOffertaId(offerta.getId());
+			for(OffertaIstituto o : list) {
+				offerta.getIstitutiAssociati().add(new OffertaIstitutoStub(o));
+			}
+		}
+	}
+
 	public Offerta saveOffertaIstituto(Offerta offerta, String istitutoId) throws Exception {
 		Offerta offertaDb = getOfferta(offerta.getId());
 		if(offertaDb == null) {
@@ -233,7 +244,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public void associaIstitutiByEnte(Long id, String enteId, 
-			List<OffertaIstituto> istituti) throws Exception{
+			List<OffertaIstitutoStub> istituti) throws Exception{
 		Offerta offerta = getOfferta(id);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
@@ -245,7 +256,7 @@ public class OffertaManager extends DataEntityManager {
 			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		cancellaIstitutiAssociati(id);
-		for(OffertaIstituto o : istituti) {
+		for(OffertaIstitutoStub o : istituti) {
 			OffertaIstituto entity = new OffertaIstituto();
 			entity.setOffertaId(id);
 			entity.setIstitutoId(o.getIstitutoId());
@@ -259,6 +270,17 @@ public class OffertaManager extends DataEntityManager {
 		for(OffertaIstituto o : list) {
 			offertaIstitutoRepository.delete(o);
 		}
+	}
+
+	public Offerta getOffertaByEnte(Long id, String enteId) throws Exception {
+		Offerta offerta = getOfferta(id);
+		if(offerta == null) {
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
+		}
+		if(!enteId.equals(offerta.getEnteId())) {
+			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
+		}
+		return offerta;
 	}
 
 

@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.OffertaManager;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
-import it.smartcommunitylab.cartella.asl.model.OffertaIstituto;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -141,7 +141,7 @@ public class OffertaController implements AslController {
 	public void associaIstitutiByEnte(
 			@PathVariable Long id,
 			@RequestParam String enteId,
-			@RequestBody List<OffertaIstituto> istituti,
+			@RequestBody List<OffertaIstitutoStub> istituti,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
@@ -151,6 +151,20 @@ public class OffertaController implements AslController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("associaIstitutiByEnte:%s / %s", id, enteId));
 		}		
+	}
+
+	@GetMapping("/api/offerta/{id}/ente")
+	public @ResponseBody Offerta getOffertaByEnte(
+			@PathVariable Long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Offerta offerta = offertaManager.getOffertaByEnte(id, enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getOffertaByEnte:%s / %s", id, enteId));
+		}
+		return offerta;
 	}
 
 }
