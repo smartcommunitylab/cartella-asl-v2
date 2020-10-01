@@ -110,4 +110,20 @@ public class OffertaController implements AslController {
 		return result;
 	}
 
+	@PostMapping("/api/offerta/ente")
+	public @ResponseBody Offerta saveOffertaByEnte(
+			@RequestParam String enteId,
+			@RequestBody Offerta offerta,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Offerta result = offertaManager.saveOffertaByEnte(offerta, enteId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, offerta.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("saveOffertaByEnte:%s / %s", result.getId(), enteId));
+		}		
+		return result;
+	}
+
 }

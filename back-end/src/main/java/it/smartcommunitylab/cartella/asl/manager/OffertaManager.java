@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
+import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.Offerta.Stati;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
@@ -31,6 +32,8 @@ public class OffertaManager extends DataEntityManager {
 	CompetenzaManager competenzaManager;
 	@Autowired
 	LocalDocumentManager documentManager;
+	@Autowired
+	AziendaManager aziendaManager;
 	@Autowired
 	ErrorLabelManager errorLabelManager;
 
@@ -174,6 +177,32 @@ public class OffertaManager extends DataEntityManager {
 		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
 		offertaRepository.deleteById(offerta.getId());
+	}
+
+	public Offerta saveOffertaByEnte(Offerta offerta, String enteId) throws Exception {
+		// TODO Auto-generated method stub
+		Offerta offertaDb = getOfferta(offerta.getId());
+		if(offertaDb == null) {
+			offerta.setEnteId(enteId);
+			Azienda azienda = aziendaManager.getAzienda(enteId);
+			if(azienda != null) {
+				offerta.setNomeEnte(azienda.getNome());
+			}
+			offerta.setUuid(Utils.getUUID());
+			offerta.setPostiRimanenti(offerta.getPostiDisponibili());
+			return offertaRepository.save(offerta);
+		} else {
+			if(!enteId.equals(offertaDb.getEnteId())) {
+				throw new BadRequestException(errorLabelManager.get("offerta.owner"));
+			}
+			int postiOccupati = offertaDb.getPostiDisponibili() - offertaDb.getPostiRimanenti();
+			if(offerta.getPostiDisponibili() < postiOccupati) {
+				throw new BadRequestException(errorLabelManager.get("offerta.postiDisponibili"));
+			}
+			offerta.setPostiRimanenti(offerta.getPostiDisponibili() - postiOccupati);
+			offertaRepository.update(offerta);
+			return offerta;
+		}
 	}
 
 }
