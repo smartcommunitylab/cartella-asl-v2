@@ -465,6 +465,14 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return  result;
 	}
 	
+	public List<PresenzaGiornaliera> validaPresenzeAttivitaByEnte(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
+		List<PresenzaGiornaliera> result = new ArrayList<>();
+		for(PresenzaGiornaliera pg : presenze) {
+			result.add(presenzaGiornalieraManager.validaPresenzaByEnte(pg));
+		}
+		return  result;
+	}
+	
 	public List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppo(AttivitaAlternanza aa, LocalDate dateFrom, 
 			LocalDate dateTo) throws Exception {
 		List<ReportPresenzaGiornalieraGruppo> reportList = new ArrayList<ReportPresenzaGiornalieraGruppo>();

@@ -530,4 +530,52 @@ public class AttivitaAlternanzaController implements AslController {
 		return reportList;
 	}
 
+	@PostMapping("/api/attivita/{id}/presenze/individuale/ente")
+	public List<PresenzaGiornaliera> validaPresenzeAttivitaIndividualeByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			@RequestBody List<PresenzaGiornaliera> presenze,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("validaPresenzeAttivitaIndividualeByEnte:%s / %s", id, enteId));
+		}
+		return list;
+	}
+
+	@PostMapping("/api/attivita/{id}/presenze/gruppo/ente")
+	public List<PresenzaGiornaliera> validaPresenzeAttivitaGruppoByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			@RequestBody List<PresenzaGiornaliera> presenze,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("validaPresenzeAttivitaGruppoByEnte:%s / %s", id, enteId));
+		}
+		return list;
+	}
+
 }
