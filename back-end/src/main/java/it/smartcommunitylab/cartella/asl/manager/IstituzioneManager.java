@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.List;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -85,6 +86,26 @@ public class IstituzioneManager extends DataEntityManager {
 	
 	public void updateIstituzioneHoursThreshold(String id, Double hours) {
 		istituzioneRepository.updateHoursThreshold(id, hours);
+	}
+
+	public Page<Istituzione> findIstituti(String text, Pageable pageRequest) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i FROM Istituzione i");
+		sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+		sb.append(" ORDER BY i.name ASC");
+		String q = sb.toString();
+		
+		TypedQuery<Istituzione> query = em.createQuery(q, Istituzione.class);
+		query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Istituzione> list = query.getResultList();
+		
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT i","COUNT(DISTINCT i)"), query);
+		long total = (Long) cQuery.getSingleResult();
+
+		Page<Istituzione> page = new PageImpl<Istituzione>(list, pageRequest, total);
+		return page;
 	}	
 
 
