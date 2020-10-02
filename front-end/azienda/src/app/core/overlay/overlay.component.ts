@@ -17,7 +17,7 @@ export class OverlayComponent implements OnInit, OnDestroy {
     timerId: number = null;
     timerHideId: number = null;
 
-    @Input() delay = 500;
+    @Input() delay;
 
     constructor(private eventBus: EventBusService) { }
 
