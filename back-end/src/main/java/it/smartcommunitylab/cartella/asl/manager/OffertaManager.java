@@ -290,9 +290,9 @@ public class OffertaManager extends DataEntityManager {
 	public Page<Offerta> findOffertaByEnte(String enteId, String text, String stato, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT DISTINCT off.id FROM Offerta off LEFT JOIN OffertaIstituto oi ON off.id=oi.offertaId"
-				+ " LEFT JOIN Istituzione i ON oi.istitutoId=i.id WHERE off.enteId=(:enteId)");
+				+ " WHERE off.enteId=(:enteId)");
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
+			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(oi.nomeIstituto) LIKE (:text))");
 		}
 		boolean bozza = false;
 		if(Utils.isNotEmpty(stato)) {
