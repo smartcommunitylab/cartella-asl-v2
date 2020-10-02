@@ -1,56 +1,139 @@
-<div class="navbar-header-top p-5" #navbarHeaderTop>
-    <div class="media ml-8">
-        <a class="navbar-brand" routerLink="/home">
-            <img src="assets/images/logo_alternanza.png" alt="logo" />
-        </a>
-        <div class="media-content">
-            <h1>Alternanza scuola lavoro</h1>
-            <h2 *ngIf="actualAzienda">Azienda: {{actualAzienda.nome}}</h2>
+<div class="it-header-navbar-wrapper sticky">
+    <div class="row">
+        <div class="col-1">
+            <a target="_blank" href="#" class="mr-5">
+                <img src="assets/images/logo_trasparente.png" class="nav-logo">
+            </a>
+        </div>
+        <div class="col-2">
+            <div class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</div>
+            <div class="nav-logo-institute">{{dataService? dataService.aziendaName : "" }}</div>
+        </div>
+        <div class="col-9">
+            <nav class="navbar navbar-expand-lg">
+                <div class="navbar-collapsable" id="nav10">
+                    <div class="overlay"></div>
+                    <div class="close-div sr-only">
+                        <button class="btn close-menu" type="button">
+                            <span class="it-close"></span>close
+                        </button>
+                    </div>
+                    <div class="menu-wrapper">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/attivita') }" href="./#/attivita/list">
+                                    <span>Attività</span>
+                                    <span class="sr-only">current</span>
+                                </a>
+                            </li>
+                            <!-- ./#/offerte/list -->
+                            <li class="nav-item">
+                                <a class="nav-link"  [ngClass]="{ active: isActive('/offerte') }" href="./#/offerte/list">
+                                    <span>Offerte</span>
+                                    <span class="sr-only">current</span></a>
+                            </li>
+                            <!-- ./#/enti -->
+                            <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/enti') }" href="./#/enti/list">
+                                    <span>Scheda ente</span>
+                                    <span class="sr-only">current</span>
+                                </a>
+                            </li>
+                            <!-- ./#/studenti -->
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/studenti/list') }" href="./#/studenti/list">
+                                    <span>Studenti</span>
+                                    <span class="sr-only">current</span>
+                                </a>
+                            </li>                             -->
+                             <!-- /istituti -->
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/competenze/list') }" href="./#/competenze/list">
+                                    <span>Istituti</span>
+                                    <span class="sr-only">current</span>
+                                </a>
+                            </li> -->
+                        </ul>
+                        <ul class="navbar-nav navbar-secondary">
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item v-center" *ngIf="profile">
+                                <!-- <span class="text-white nav-link">{{titleAnnoScolastico}}</span>&nbsp; -->
+                                <span class="float-right btn btn-primary btn-icon btn-full"
+                                    (click)="profileDropdownVisible = !profileDropdownVisible;">
+                                    <div>
+                                        <span>
+                                            <div>
+                                                <svg class="bg-light icon icon-lg icon-padded rounded-circle">
+                                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user">
+                                                    </use>
+                                                </svg>
+                                                <br />
+                                                {{profile.name}} {{profile.surname}}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
 </div>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark row" #navbar>
-    <div class="navbar-header col-2">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01"
-            aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand navbar-brand-small" routerLink="/home">
-            <img src="assets/images/logo_alternanza_intero.png" alt="logo" /><span class="app-title">Azienda</span>
-        </a>
-    </div>
-    <div class="navbar-menu collapse navbar-collapse col-10" [attr.data-collapse]="isCollapsed">
-        <ul class="navbar-nav nav-pills navBarPadding">
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" routerLink="/home">Home</a>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" routerLink="/attivita/tabs/incorso">Attività</a>
-            </li>
-            <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link" routerLink="/oppurtunita/list">Offerte</a>
-            </li>
-
-        </ul>
-        <button class="navbar-profile v-center" (click)="profileDropdownVisible = !profileDropdownVisible;">
-            <div class="navbar-profile-icon">
-                <i class="material-icons">account_circle</i>
-            </div>
-            <div class="navbar-profile-text" *ngIf="profile">{{profile.name}} {{profile.surname}}</div>
-        </button>
-        <div class="navbar-profile-dropdown card" [hidden]="!profileDropdownVisible">
-            <div class="card-body">
-                <h2 *ngIf="profile">{{profile.name}} {{profile.surname}}</h2>
-                <h3 *ngIf="profile">{{profile.email}}</h3>
-                <button class="btn btn-secondary v-center" (click)="logout()">
-                    <i class="material-icons">lock</i> Logout</button>
-                    <ul class="list-group mt-5">
-                        <li class="list-group-item" *ngFor="let azienda of aziende">
-                            <input type="radio" [value]="azienda" [(ngModel)]="actualAzienda" (change)="onAziendaChange(azienda);profileDropdownVisible = !profileDropdownVisible"> {{azienda.nome}}
-    
-                        </li>
-                    </ul>
+<!-- dropdown menu -->
+<div [hidden]="!profileDropdownVisible">
+    <div class="row sticky noHeight">
+        <div class="col-10"></div>
+        <div class="col-2 card-wrapper">
+            <div class="card hiddenBG">
+                <div class="card-on-top card-body profile-card">
+                    <!-- profile info -->
+                    <!-- <div class="row rowBottomPadding" *ngIf="profile">
+                        <div class="col-sm-4 profile-image">
+                            <svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user"></use></svg>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="container">
+                                <div class="row profile-name"><span class="col-sm-12">{{profile.name}} {{profile.surname}}</span></div>
+                                <div class="row profile-email"><span class="col-sm-12">{{profile.email}}</span></div>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="row profile-name" *ngIf="profile"><span class="col-sm-12">{{profile.name}} {{profile.surname}}</span></div>
+                    <div class="row profile-email" *ngIf="profile"><span class="col-sm-12">{{profile.email}}</span></div>   
+                    <!-- istitutes -->
+                    <div class="row link-list-wrapper rowBottomPadding">
+                            
+                        <ul class="link-list">
+                            <li class="list-item list-istituto" *ngFor="let az of aziende">
+                                <label class="customradio">
+                                    <input type="radio" [value]="istituto" [(ngModel)]="actualIstituto"
+                                    (change)="onIstitutoChange(az);profileDropdownVisible = !profileDropdownVisible">
+                                    <span class="istituto-name-parofile changeColor">{{az.nome}}</span>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- logout button -->
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8 button-logout-center">
+                            <button type="button" class="btn btn-primary btn-xs button-logout" (click)="logout()">
+                                Logout 
+                                <svg class="icon icon-white icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-circle"></use></svg>
+                            </button>                                
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</nav>
+</div>
