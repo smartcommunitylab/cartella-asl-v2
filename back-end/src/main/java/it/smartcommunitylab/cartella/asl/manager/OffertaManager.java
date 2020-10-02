@@ -1,6 +1,7 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,6 +138,9 @@ public class OffertaManager extends DataEntityManager {
 		if(localDate.isAfter(offerta.getDataFine())) {
 			return Stati.scaduta;
 		}
+		if(offerta.getIstitutiAssociati().size() == 0) {
+			return Stati.bozza;
+		}
 		return Stati.disponibile;
 	}
 	
@@ -145,8 +149,8 @@ public class OffertaManager extends DataEntityManager {
 			Optional<Offerta> optional = offertaRepository.findById(id);
 			if(optional.isPresent()) {
 				Offerta offerta = optional.get();
-				offerta.setStato(getStato(offerta));
 				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
+				offerta.setStato(getStato(offerta));
 				completaAssociazioni(offerta);
 				return offerta;
 			}			
@@ -284,11 +288,10 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public Page<Offerta> findOffertaByEnte(String enteId, String text, String stato, Pageable pageRequest) {
-		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off FROM Offerta off LEFT JOIN AttivitaAlternanza aa ON aa.offertaId=o.id"
-				+ " LEFT JOIN EspereinzaSvolta es ON es.attivitaAlternanzaId=aa.id"
-				+ " LEFT JOIN OffertaIstituto oi ON off.id=io.offertaId WHERE off.enteId=(:enteId)");
+		sb.append("SELECT DISTINCT off.id FROM Offerta off LEFT JOIN AttivitaAlternanza aa ON aa.offertaId=off.id"
+				+ " LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id"
+				+ " LEFT JOIN OffertaIstituto oi ON off.id=oi.offertaId WHERE off.enteId=(:enteId)");
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text))");
 		}
@@ -311,7 +314,7 @@ public class OffertaManager extends DataEntityManager {
 		sb.append(" ORDER BY off.dataInizio DESC");
 		String q = sb.toString();
 		
-		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
+		Query query = em.createQuery(q);
 		query.setParameter("enteId", enteId);
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
@@ -323,15 +326,19 @@ public class OffertaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
-		List<Offerta> rows = query.getResultList();
-		for (Offerta off : rows) {
-			off.setStato(getStato(off));
+		List<Object> rows = query.getResultList();
+		List<Offerta> list = new ArrayList<>();
+		for (Object obj : rows) {
+			Long offertaId = (Long) obj;
+			Offerta offerta = getOfferta(offertaId);
+			list.add(offerta);
 		}
 		
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT off","COUNT(DISTINCT off)"), query);
+		String counterQuery = "SELECT COUNT(off) FROM Offerta off WHERE off.id IN (" + q + ")";
+		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();
 		
-		Page<Offerta> page = new PageImpl<Offerta>(rows, pageRequest, total);
+		Page<Offerta> page = new PageImpl<Offerta>(list, pageRequest, total);
 		return page;
 	}
 
