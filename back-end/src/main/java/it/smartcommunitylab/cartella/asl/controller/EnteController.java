@@ -127,4 +127,19 @@ public class EnteController implements AslController {
 		return azienda;
 	}
 
+	@PostMapping("/api/azienda/ente")
+	public @ResponseBody Azienda saveAziendaByEnte(
+			@RequestBody Azienda azienda,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, azienda.getId()), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, azienda.getId())));
+		Azienda result = aziendaManager.updateAziendaByEnte(azienda);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Azienda.class, azienda.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("saveAziendaByEnte:%s", azienda.getId()));
+		}		
+		return result;
+	}
+
 }
