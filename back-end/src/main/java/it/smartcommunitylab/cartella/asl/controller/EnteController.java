@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
@@ -25,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.manager.AziendaManager;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.ReportUtilizzoAzienda;
+import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 
@@ -108,4 +110,21 @@ public class EnteController implements AslController {
 		}		
 		return azienda;
 	}
+	
+	@GetMapping("/api/azienda/{enteId}/ente")
+	public @ResponseBody Azienda getAziendaByEnte(
+			@PathVariable String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Azienda azienda = aziendaManager.getAzienda(enteId);
+		if(azienda == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getAziendaByEnte:%s", enteId));
+		}		
+		return azienda;
+	}
+
 }
