@@ -30,6 +30,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDe
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicercaEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudenti;
+import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudentiEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistration;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
@@ -780,6 +781,24 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
 		return getAttivitaAlternanza(aa.getId());
+	}
+
+	public ReportAttivitaAlternanzaStudentiEnte getStudentInfoEnte(AttivitaAlternanza attivitaAlternanza) {
+		ReportAttivitaAlternanzaStudentiEnte report = new ReportAttivitaAlternanzaStudentiEnte(attivitaAlternanza);
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(attivitaAlternanza, 
+				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		for(EsperienzaSvolta esperienza : esperienze) {
+			List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienza.getId());
+			for(PresenzaGiornaliera presenza :  presenze) {
+				if(!presenza.getValidataEnte()) {
+					report.addOreDaValidare(presenza.getOreSvolte());
+				}
+			}
+			if(report.getNumeroOreDaValidare() > 0) {
+				report.addStudenteDaValidare();
+			}
+		}
+		return report;
 	}
 	
 }

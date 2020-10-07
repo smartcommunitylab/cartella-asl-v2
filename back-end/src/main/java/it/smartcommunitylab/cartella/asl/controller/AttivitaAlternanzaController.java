@@ -34,6 +34,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDe
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicercaEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudenti;
+import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudentiEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistration;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzeAttvitaAlternanza;
@@ -101,7 +102,7 @@ public class AttivitaAlternanzaController implements AslController {
 		}
 		ReportAttivitaAlternanzaStudenti result = attivitaAlternanzaManager.getStudentInfo(attivitaAlternanza);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("reportAttivitaAlternanza:%s / %s", id, istitutoId));
+			logger.info(String.format("reportAttivitaAlternanzaStudenti:%s / %s", id, istitutoId));
 		}
 		return result;
 	}
@@ -576,6 +577,28 @@ public class AttivitaAlternanzaController implements AslController {
 			logger.info(String.format("validaPresenzeAttivitaGruppoByEnte:%s / %s", id, enteId));
 		}
 		return list;
+	}
+
+	@GetMapping("/api/attivita/{id}/report/studenti/ente")
+	public @ResponseBody ReportAttivitaAlternanzaStudentiEnte reportAttivitaAlternanzaStudentiByEnte(
+			@PathVariable long id,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {		
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		AttivitaAlternanza attivitaAlternanza = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("enteId not corresponding");
+		}		
+		ReportAttivitaAlternanzaStudentiEnte result = attivitaAlternanzaManager.getStudentInfoEnte(attivitaAlternanza);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("reportAttivitaAlternanzaStudentiByEnte:%s / %s", id, enteId));
+		}
+		return result;
 	}
 
 }
