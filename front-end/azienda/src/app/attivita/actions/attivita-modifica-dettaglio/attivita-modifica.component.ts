@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../../core/services/data.service';
-import { GeoService } from '../../../core/services/geo.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Azienda } from '../../../shared/interfaces';
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment';
@@ -19,37 +17,23 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService,
-    private geoService: GeoService) { }
+    private dataService: DataService) { }
 
   attivita: AttivitaAlternanza;
   esperienze;
   titolo;
   descrizione;
   formatore;
-  // referenteScuola;
   referenteEsterno;
-  // luogoSvolgimento;
-  // formatoreCF;
-  // referenteScuolaCF;
   referenteEsternoCF;
   myForm: FormGroup;
-  // aziende: Azienda[];
-  // pageSize = 20;
   tipologie;
-  // azienda: any;
-  // place: any;
   date;
-  // forceEnteDisplay: boolean = false;
   start: moment.Moment;
   end: moment.Moment;
   forceTitoloErrorDisplay: boolean = false;
-  // forceReferenteScuolaErrorDisplay: boolean = false;
   forceReferenteEsternoErrorDisplay: boolean = false;
   forceOreErrorDisplay: boolean = false;
-  // forceDalle23ErrorDisplay: boolean = false;
-  // forceAlle23ErrorDisplay: boolean = false;
-  // forceDalleAlleErrorDisplay: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   attivitaTipologia;
@@ -105,9 +89,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.attivita = res.attivitaAlternanza;
           this.attivita.nomeIstituto = res.nomeIstituto;
           this.attivitaStato = this.getStatoNome(this.attivita.stato);
-          // this.place = {};
-          // this.place.name = this.attivita.luogoSvolgimento;
-          // this.place.location = [this.attivita.latitude, this.attivita.longitude];
           this.esperienze = res.esperienze;
           this.tipologie.filter(tipo => {
             if (tipo.id == this.attivita.tipologia) {
