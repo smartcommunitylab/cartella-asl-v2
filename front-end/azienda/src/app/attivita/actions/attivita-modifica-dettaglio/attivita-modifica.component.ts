@@ -25,15 +25,14 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   date;
   start: moment.Moment;
   end: moment.Moment;
-  forceTitoloErrorDisplay: boolean = false;
-  forceReferenteEsternoErrorDisplay: boolean = false;
-  forceOreErrorDisplay: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   attivitaTipologia;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   attivitaStato: string = "";
   evn = environment;
+  forceReferenteEsternoErrorDisplay: boolean = false;
+  
   breadcrumbItems = [
     {
       title: "Dettaglio attività",
@@ -140,7 +139,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     this.attivita.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
     this.attivita.dataFine = moment(this.date.dataFine, 'YYYY-MM-DD').valueOf();
 
-    if (!this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay) {
+    if (!this.forceReferenteEsternoErrorDisplay) {
       (this.attivita.referenteEsternoCF) ? this.attivita.referenteEsternoCF = this.attivita.referenteEsternoCF.trim() : this.attivita.referenteEsternoCF = null;
       (this.attivita.referenteEsternoTelefono) ? this.attivita.referenteEsternoTelefono = this.attivita.referenteEsternoTelefono.trim() : this.attivita.referenteEsternoTelefono = null;
   
@@ -163,9 +162,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   trimValue(event, type) { 
-    if(type == 'titolo'){
-      (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay   = false;
-    } else if(type == 'esterno'){
+    if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceReferenteEsternoErrorDisplay = true : this.forceReferenteEsternoErrorDisplay = false;
     }else if(type == 'trim'){
       event.target.value = event.target.value.trim(); 
