@@ -790,7 +790,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		for(EsperienzaSvolta esperienza : esperienze) {
 			List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienza.getId());
 			for(PresenzaGiornaliera presenza :  presenze) {
-				if(!presenza.getValidataEnte()) {
+				if(!presenza.getValidataEnte() && !presenza.getVerificata()) {
 					report.addOreDaValidare(presenza.getOreSvolte());
 				}
 			}
