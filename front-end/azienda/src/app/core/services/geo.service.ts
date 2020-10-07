@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { of, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -12,8 +11,7 @@ export class GeoService {
   constructor(private http: HttpClient) {}
 
   getAddressFromCoordinates(location): Promise<any> {
-    
-    var url = 'https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?mode=retrieveAddresses&gen=9&apiKey=0ReQd5oXt0gIXl2OxqVppwH_gMBEzALANA2LettZyb8&prox=' + location.latlng.lat + ',' + location.latlng.lng;
+    var url = 'https://os.smartcommunitylab.it/core.geocoder/location?latlng=' + location.latlng.lat + ',' + location.latlng.lng;
     environment.globalSpinner = false;
     return this.http
       .get(url)
@@ -21,7 +19,7 @@ export class GeoService {
       .toPromise()
       .then(response => {
         environment.globalSpinner = true;
-        let places = response["Response"].View[0].Result;
+        let places = response["response"].docs;
         let name = '';
         if (places[0]) {
           return this.getNameFromComplex(places[0])
@@ -36,24 +34,16 @@ export class GeoService {
       return of([]);
     }
 
-    var url = 'https://geocoder.ls.hereapi.com/6.2/geocode.json?searchtext=' + location + '&gen=9&apiKey=0ReQd5oXt0gIXl2OxqVppwH_gMBEzALANA2LettZyb8';
+    var url = 'https://os.smartcommunitylab.it/core.geocoder/address?address=' + location;
     environment.globalSpinner = false;
-    return this.http.get<any>(url, { observe: 'response' })  
-    .timeout(this.timeout)
-      .pipe(
-        map(result => {
-          environment.globalSpinner = true;
-          if (result.body && result.body.Response && result.body.Response.View[0]) {
-            return (result.body.Response.View[0].Result);
-          }
-        }, catchError(this.handleError)), catchError(this.handleError));
-    
-    
-    
-  }
-
-  test(response) { 
-    alert(response);
+    return this.http.get<any>(url, { observe: 'response' }).timeout(this.timeout)
+      .map(result => {
+        environment.globalSpinner = true;
+        if (result.body && result.body.response && result.body.response.docs) {
+          return (result.body.response.docs);
+        }
+      })
+      .catch(this.handleError);
   }
 
   createPlaces = function (places) {
@@ -61,37 +51,31 @@ export class GeoService {
     
     if (places) {
       for (var i = 0; i < places.length; i++) {
-        let temp = places[i].Location.Address.Label;
-        // if (places[i].name)
-        //   temp = temp + places[i].name;
-        // if (places[i].street != places[i].name)
-        //   if (places[i].street) {
-        //     if (temp)
-        //       temp = temp + ', ';
-        //     temp = temp + places[i].street;
-        //   }
-        // if (places[i].housenumber) {
-        //   if (temp)
-        //     temp = temp + ', ';
-        //   temp = temp + places[i].housenumber;
-        // }
-        // if (places[i].city) {
-        //   if (temp)
-        //     temp = temp + ', ';
-        //   temp = temp + places[i].city;
-        // }
-        // if (places[i].state) {
-        //   temp = temp + ' - ' + places[i].state;
-        // }
-
-        var arr = new Array();
-        arr.push(places[i].Location.DisplayPosition.Latitude);
-        arr.push(places[i].Location.DisplayPosition.Longitude);
-        
+        let temp = '';
+        if (places[i].name)
+          temp = temp + places[i].name;
+        if (places[i].street != places[i].name)
+          if (places[i].street) {
+            if (temp)
+              temp = temp + ', ';
+            temp = temp + places[i].street;
+          }
+        if (places[i].housenumber) {
+          if (temp)
+            temp = temp + ', ';
+          temp = temp + places[i].housenumber;
+        }
+        if (places[i].city) {
+          if (temp)
+            temp = temp + ', ';
+          temp = temp + places[i].city;
+        }
+        if (places[i].state) {
+          temp = temp + ' - ' + places[i].state;
+        }
         geoCoderPlaces[i] = {
           name: temp,
-          location: arr
-          // location: places[i].coordinate.split(',')
+          location: places[i].coordinate.split(',')
         }
       }
     }
@@ -101,28 +85,27 @@ export class GeoService {
 
   getNameFromComplex = function (data) {
     let name = '';
-    name = data.Location.Address.Label;
-    // if (data) {
-    //   if (data.name) {
-    //     name = name + data.name;
-    //   }
-    //   if (data.street && (data.name != data.street)) {
-    //     if (name)
-    //       name = name + ', ';
-    //     name = name + data.street;
-    //   }
-    //   if (data.housenumber) {
-    //     if (name)
-    //       name = name + ', ';
-    //     name = name + data.housenumber;
-    //   }
-    //   if (data.city) {
-    //     if (name)
-    //       name = name + ', ';
-    //     name = name + data.city;
-    //   }
+    if (data) {
+      if (data.name) {
+        name = name + data.name;
+      }
+      if (data.street && (data.name != data.street)) {
+        if (name)
+          name = name + ', ';
+        name = name + data.street;
+      }
+      if (data.housenumber) {
+        if (name)
+          name = name + ', ';
+        name = name + data.housenumber;
+      }
+      if (data.city) {
+        if (name)
+          name = name + ', ';
+        name = name + data.city;
+      }
       return name;
-    // }
+    }
   }
 
   private handleError(error: HttpErrorResponse) {
