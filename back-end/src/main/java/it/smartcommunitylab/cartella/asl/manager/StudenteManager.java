@@ -580,4 +580,15 @@ public class StudenteManager extends DataEntityManager {
 		//sendNotificaEspereinzeStudenti(null); 
 	}
 
+	public Studente updateProfile(Studente studente, String studenteId) throws Exception {
+		Studente studenteDB = studenteRepository.findById(studenteId).orElse(null);
+		if(studenteDB == null) {
+			throw new BadRequestException("studente non trovato");
+		}
+		studenteDB.setEmail(studente.getEmail());
+		studenteDB.setPhone(studente.getPhone());
+		studenteRepository.save(studenteDB);
+		return studenteDB;
+	}
+
 }
