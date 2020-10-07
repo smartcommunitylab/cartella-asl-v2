@@ -99,9 +99,9 @@ export class AttivitaDettaglioComponent implements OnInit {
           })
         });
 
-        // this.dataService.getRisorsaCompetenze(this.attivita.uuid).subscribe((res) => {
-        //   this.atttivitaCompetenze = res;
-        // });
+        this.dataService.getRisorsaCompetenze(this.attivita.uuid).subscribe((res) => {
+          this.atttivitaCompetenze = res;
+        });
 
       },
         (err: any) => console.log(err),
