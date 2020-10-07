@@ -148,36 +148,36 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   uploadDocument(fileInput) {
-    if (fileInput.target.files && fileInput.target.files[0]) {
-      this.dataService.uploadDocumentToRisorsa(fileInput.target.files[0], this.attivita.uuid + '').subscribe((doc) => {
-        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
-          this.documenti = docs;
-        });
-      });
-    }
+    // if (fileInput.target.files && fileInput.target.files[0]) {
+    //   this.dataService.uploadDocumentToRisorsa(fileInput.target.files[0], this.attivita.uuid + '').subscribe((doc) => {
+    //     this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
+    //       this.documenti = docs;
+    //     });
+    //   });
+    // }
   }
 
   deleteDoc(doc) {
-    const modalRef = this.modalService.open(DocumentoCancellaModal);
-    modalRef.componentInstance.documento = doc;
-    modalRef.result.then((result) => {
-      if (result == 'deleted') {
-        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
-          this.documenti = docs;
-        });
-      }
-    });
+    // const modalRef = this.modalService.open(DocumentoCancellaModal);
+    // modalRef.componentInstance.documento = doc;
+    // modalRef.result.then((result) => {
+    //   if (result == 'deleted') {
+    //     this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
+    //       this.documenti = docs;
+    //     });
+    //   }
+    // });
   }
 
   downloadDoc(doc) {
-    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
-      const downloadLink = document.createElement("a");
-      downloadLink.href = url;
-      downloadLink.download = doc.nomeFile;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    });
+    // this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
+    //   const downloadLink = document.createElement("a");
+    //   downloadLink.href = url;
+    //   downloadLink.download = doc.nomeFile;
+    //   document.body.appendChild(downloadLink);
+    //   downloadLink.click();
+    //   document.body.removeChild(downloadLink);
+    // });
   }
 
   gestionePresenze() {
