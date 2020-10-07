@@ -14452,6 +14452,8 @@ div.dp-input-container> input.dp-picker-input{
 div.dp-input-container> input.dp-picker-input:disabled {
   background-color: #cacacc;
   opacity: 1;
+  font-weight: normal;
+  color: #17324d;
 }
 .form-group label{
   background-color: transparent;

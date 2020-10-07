@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
-import { FormGroup, FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment';
@@ -22,11 +21,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   attivita: AttivitaAlternanza;
   esperienze;
   titolo;
-  descrizione;
-  formatore;
-  referenteEsterno;
-  referenteEsternoCF;
-  myForm: FormGroup;
   tipologie;
   date;
   start: moment.Moment;
@@ -102,19 +96,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.date.dataFine = moment(dataFine);
 
           this.titolo = this.attivita.titolo;
-
-          this.myForm = new FormGroup({
-            titolo: new FormControl(),
-            descrizione: new FormControl(),
-            formatore: new FormControl(),
-            referenteScuola: new FormControl(),
-            referenteEsterno: new FormControl(),
-            ore: new FormControl(),
-            luogoSvolgimento: new FormControl(),
-            formatoreCF: new FormControl(),
-            referenteScuolaCF: new FormControl(),
-            referenteEsternoCF: new FormControl()
-          });
+         
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
       });
