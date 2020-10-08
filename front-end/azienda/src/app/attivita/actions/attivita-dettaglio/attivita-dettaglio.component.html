@@ -57,7 +57,11 @@
             </label>
             <br *ngIf="offertaAssociata"/>
             <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica alcuni dati dell’attività" (click)="modifica()">
-                Modifica dati attività&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+                Modifica dati attività&nbsp;&nbsp;&nbsp;
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
+                </svg>
+            </button>
         </div>
         <br>
         <div class="p-1 row">
@@ -110,7 +114,9 @@
             </button> -->
             <!--&nbsp;&nbsp;<button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="updateStudentiAssociate()">
-                Modifica studenti associati&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button> -->
+                Modifica studenti associati&nbsp;&nbsp;&nbsp; <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
+                </svg></button> -->
         </div>
         <div *ngIf="esperienze.length > 0">
             <div class="table list-group">
@@ -162,8 +168,6 @@
         <br>
         <div class="title" *ngIf="atttivitaCompetenze[0]">
             Competenze associate<br/>
-            <!-- <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="right"  ngbTooltip="Aggiungi, modifica o rimuovi competenze associate" (click)="updateCompetenzePiano()">
-                Modifica competenze&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button> -->
         </div>
         <div *ngIf="atttivitaCompetenze[0]">
             <div class="table list-group">

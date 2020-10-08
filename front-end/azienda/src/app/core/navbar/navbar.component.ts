@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, private growler: GrowlerService, private dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
+    constructor(private router: Router, private growler: GrowlerService, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
     
     ngOnInit() {
 
