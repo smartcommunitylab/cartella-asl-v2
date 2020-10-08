@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
 import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
@@ -80,10 +79,6 @@ export class AttivitaDettaglioComponent implements OnInit {
             this.offertaAssociata = off;
           })
         }
-
-        // this.dataService.getAttivitaPresenzeGruppoListaGiorni(id, moment(res.attivitaAlternanza.dataInizio).format('YYYY-MM-DD'), moment(res.attivitaAlternanza.dataFine).format('YYYY-MM-DD')).subscribe((studenti) => {
-        //   studenti.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
-        // })
 
         // this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
         //   this.documenti = docs;
@@ -194,28 +189,6 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   updateCompetenzePiano() {
     this.router.navigate(['modifica/competenze/'], { relativeTo: this.route });
-  }
-
-  showTip(ev, piano) {
-    console.log(ev.target.title);
-    if (!piano.toolTip) {
-      piano.fetchingToolTip = true;
-      let in_scadenza_msg = 'Premi qui per attivare il piano. Se attivato, questo piano sara sostituito da *nomepiano* all’inizio del nuovo anno scolastico il gg/mm/aaaa';
-      let in_attesa_msg = 'Premi qui per attivare il piano. Se attivato, questo piano sostituirà *nomepiano* all’inizio del nuovo anno scolastico il gg/mm/aaaa';
-      // this.dataService.getDulicaPiano(piano.id).subscribe((duplicaPiano) => {
-      //   piano.fetchingToolTip = false;
-      //   var date = new Date(duplicaPiano.dataAttivazione)
-      //   if (piano.stato == 'in_scadenza') {
-      //     in_scadenza_msg = in_scadenza_msg.replace("*nomepiano*", duplicaPiano.titolo);
-      //     in_scadenza_msg = in_scadenza_msg.replace("gg/mm/aaaa", date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-      //     piano.toolTip = in_scadenza_msg;
-      //   } else if (piano.stato == 'in_attesa') {
-      //     in_attesa_msg = in_attesa_msg.replace("*nomepiano*", duplicaPiano.titolo);
-      //     in_attesa_msg = in_attesa_msg.replace("gg/mm/aaaa", date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-      //     piano.toolTip = in_attesa_msg;
-      //   }
-      // });
-    }
   }
 
   menuContentShow() {

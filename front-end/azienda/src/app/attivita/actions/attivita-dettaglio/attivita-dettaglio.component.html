@@ -43,7 +43,6 @@
             <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
         </div>
     </div>
-    <!-- <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar> -->
     <div class="card-body m-16" *ngIf="attivita">
         <div>
             <span class="title">Dati Attività</span><br/>
@@ -105,18 +104,6 @@
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
                 </svg>
             </button>
-            <!-- <button *ngIf="attivita.stato!='archiviata' && zeroStudent"  class="btn v-center-inline btnZeroStudent" placement="bottom"
-                ngbTooltip="Associa almeno uno studente all'attività!">
-                Gestisci presenze studenti&nbsp;&nbsp;&nbsp;
-                <svg class="icon icon-white icon-sm btnModificationIcon">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
-                </svg>
-            </button> -->
-            <!--&nbsp;&nbsp;<button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
-                ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="updateStudentiAssociate()">
-                Modifica studenti associati&nbsp;&nbsp;&nbsp; <svg class="icon icon-white icon-sm btnModificationIcon">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
-                </svg></button> -->
         </div>
         <div *ngIf="esperienze.length > 0">
             <div class="table list-group">

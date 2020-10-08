@@ -101,6 +101,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       });
     });
   }
+
   ngOnDestroy(){
     this.evn.modificationFlag=false;
   }
@@ -153,6 +154,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   menuContentShow() {
     this.showContent = !this.showContent;
   }
+
   getStatoNome(statoValue) {
     if (this.stati) {
       let rtn = this.stati.find(data => data.value == statoValue);
@@ -168,4 +170,5 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       event.target.value = event.target.value.trim(); 
     }
   }
+  
 }
