@@ -32,9 +32,9 @@
                                     <span>Offerte</span>
                                     <span class="sr-only">current</span></a>
                             </li>
-                            <!-- ./#/enti -->
+                            <!-- ./#/ente -->
                             <li class="nav-item">
-                                <a class="nav-link" [ngClass]="{ active: isActive('/enti') }" href="./#/enti/list">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/ente') }" href="./#/ente/scheda">
                                     <span>Scheda ente</span>
                                     <span class="sr-only">current</span>
                                 </a>
@@ -62,7 +62,6 @@
                             <li class="nav-item">
                             </li>
                             <li class="nav-item v-center" *ngIf="profile">
-                                <!-- <span class="text-white nav-link">{{titleAnnoScolastico}}</span>&nbsp; -->
                                 <span class="float-right btn btn-primary btn-icon btn-full"
                                     (click)="profileDropdownVisible = !profileDropdownVisible;">
                                     <div>
@@ -93,28 +92,16 @@
         <div class="col-2 card-wrapper">
             <div class="card hiddenBG">
                 <div class="card-on-top card-body profile-card">
-                    <!-- profile info -->
-                    <!-- <div class="row rowBottomPadding" *ngIf="profile">
-                        <div class="col-sm-4 profile-image">
-                            <svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user"></use></svg>
-                        </div>
-                        <div class="col-sm-8">
-                            <div class="container">
-                                <div class="row profile-name"><span class="col-sm-12">{{profile.name}} {{profile.surname}}</span></div>
-                                <div class="row profile-email"><span class="col-sm-12">{{profile.email}}</span></div>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="row profile-name" *ngIf="profile"><span class="col-sm-12">{{profile.name}} {{profile.surname}}</span></div>
                     <div class="row profile-email" *ngIf="profile"><span class="col-sm-12">{{profile.email}}</span></div>   
-                    <!-- istitutes -->
+                    <!-- aziende -->
                     <div class="row link-list-wrapper rowBottomPadding">
                             
                         <ul class="link-list">
                             <li class="list-item list-istituto" *ngFor="let az of aziende">
                                 <label class="customradio">
-                                    <input type="radio" [value]="istituto" [(ngModel)]="actualIstituto"
-                                    (change)="onIstitutoChange(az);profileDropdownVisible = !profileDropdownVisible">
+                                    <input type="radio" [value]="az" [(ngModel)]="actualAzienda"
+                                    (change)="onAziendaChange(az);profileDropdownVisible = !profileDropdownVisible">
                                     <span class="istituto-name-parofile changeColor">{{az.nome}}</span>
                                     <span class="checkmark"></span>
                                 </label>
