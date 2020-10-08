@@ -74,8 +74,8 @@ public class OffertaManager extends DataEntityManager {
 	public Page<Offerta> findOfferta(String istitutoId, String text, int tipologia,	Boolean ownerIstituto, String stato, 
 			Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT off FROM Offerta off WHERE");
-		if(ownerIstituto == null) {
+		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
+		/*if(ownerIstituto == null) {
 			sb.append(" (off.istitutoId=(:istitutoId) OR off.istitutoId IS NULL)");
 		} else {
 			if(ownerIstituto) {
@@ -83,7 +83,7 @@ public class OffertaManager extends DataEntityManager {
 			} else {
 				sb.append(" off.istitutoId IS NULL");
 			}
-		}
+		}*/
 		if(tipologia > 0) {
 			sb.append(" AND off.tipologia=(:tipologia)");
 		}
@@ -102,9 +102,7 @@ public class OffertaManager extends DataEntityManager {
 		String q = sb.toString();
 		
 		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
-		if((ownerIstituto == null) || ownerIstituto) {
-			query.setParameter("istitutoId", istitutoId);
-		}
+		query.setParameter("istitutoId", istitutoId);
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
@@ -123,7 +121,7 @@ public class OffertaManager extends DataEntityManager {
 			o.setStato(getStato(o));
 		});
 		
-		Query cQuery = queryToCountQuery(q, query);
+		Query cQuery = queryToCount(q.replace("DISTINCT off", "COUNT(DISTINCT off)"), query);
 		long total = (Long) cQuery.getSingleResult();
 		
 		Page<Offerta> page = new PageImpl<Offerta>(rows, pageRequest, total);
@@ -170,21 +168,17 @@ public class OffertaManager extends DataEntityManager {
 	public Offerta saveOffertaIstituto(Offerta offerta, String istitutoId) throws Exception {
 		Offerta offertaDb = getOfferta(offerta.getId());
 		if(offertaDb == null) {
-			offerta.setIstitutoId(istitutoId);
-			offerta.setUuid(Utils.getUUID());
-			offerta.setPostiRimanenti(offerta.getPostiDisponibili());
-			return offertaRepository.save(offerta);
+			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		} else {
-			if(!istitutoId.equals(offertaDb.getIstitutoId())) {
+			OffertaIstituto oi = offertaIstitutoRepository.findByOffertaIdAndIstitutoId(offerta.getId(), istitutoId);
+			if(oi == null) {
 				throw new BadRequestException(errorLabelManager.get("offerta.owner"));
 			}
-			int postiOccupati = offertaDb.getPostiDisponibili() - offertaDb.getPostiRimanenti();
-			if(offerta.getPostiDisponibili() < postiOccupati) {
-				throw new BadRequestException(errorLabelManager.get("offerta.postiDisponibili"));
-			}
-			offerta.setPostiRimanenti(offerta.getPostiDisponibili() - postiOccupati);
-			offertaRepository.update(offerta);
-			return offerta;
+			offertaDb.setReferenteScuola(offerta.getReferenteScuola());
+			offertaDb.setReferenteScuolaCF(offerta.getReferenteScuolaCF());
+			offertaDb.setReferenteScuolaTelefono(offerta.getReferenteScuolaTelefono());
+			offertaRepository.update(offertaDb);
+			return offertaDb;
 		}
 	}
 	

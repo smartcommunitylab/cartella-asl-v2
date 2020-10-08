@@ -10,4 +10,5 @@ import it.smartcommunitylab.cartella.asl.model.OffertaIstituto;
 @Repository
 public interface OffertaIstitutoRepository extends JpaRepository<OffertaIstituto, Long> {
 	List<OffertaIstituto> findByOffertaId(Long offertaId);
+	OffertaIstituto findByOffertaIdAndIstitutoId(Long offertaId, String istitutoId);
 }
