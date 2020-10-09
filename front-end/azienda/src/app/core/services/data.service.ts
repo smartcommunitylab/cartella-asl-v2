@@ -266,7 +266,6 @@ export class DataService {
       );
 
   }
-
  
   getAttivitaReportStudenti(id): Observable<any> {
     let url = this.host + "/attivita/" + id + '/report/studenti/ente';
@@ -288,6 +287,46 @@ export class DataService {
         catchError(this.handleError)
       );
 
+  }
+
+  getAttivitaPresenzeIndividualeListaGiorni(id: any, dataInizio, dataFine): Observable<any> {
+    let url = this.host + "/attivita/" + id + '/presenze/individuale/ente';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('dateFrom', dataInizio);
+    params = params.append('dateTo', dataFine);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+
+  }
+
+  validaPresenzeAttivitaIndividuale(id, presenze): Observable<any> {
+    let url = this.host + "/attivita/" + id + "/presenze/individuale/ente";
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+
+    return this.http.post(url, presenze, { params: params })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res
+        },
+          catchError(this.handleError)
+        )
+      );
   }
 
    /** DOCUMENTI **/
