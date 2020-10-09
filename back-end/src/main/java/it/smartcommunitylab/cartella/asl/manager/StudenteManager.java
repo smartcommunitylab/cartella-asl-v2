@@ -266,11 +266,8 @@ public class StudenteManager extends DataEntityManager {
 			String annoScolastico) {
 		List<PianoAlternanza> pianiAttivi = pianoAlternanzaManager.findPianoAlternanzaAttivoForCorso(istitutoId,
 				corsoDiStudioId);
-		final LocalDate startAnnoScolastico = Utils.startAnnoScolasticoDate(annoScolastico);
 		
 		return pianiAttivi.stream()
-				.filter(p -> p.getDataAttivazione().isBefore(startAnnoScolastico)
-						|| p.getDataAttivazione().isEqual(startAnnoScolastico))
 				.filter(p -> { 
 					pianoAlternanzaManager.calculateAnni(p);
 					return p.getAnni().contains(Utils.annoDiCorso(classroom));
