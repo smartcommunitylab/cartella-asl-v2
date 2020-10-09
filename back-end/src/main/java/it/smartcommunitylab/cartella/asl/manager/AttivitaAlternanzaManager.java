@@ -73,6 +73,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(aaDb.getStato().equals(Stati.archiviata)) {
 				throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 			}
+			if(!aaDb.getAnnoScolastico().equalsIgnoreCase(Utils.annoScolastico(aa.getDataInizio()))) {
+				throw new BadRequestException(errorLabelManager.get("attivita.error.schoolYear"));
+			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 			if(aa.getOffertaId() != aaDb.getOffertaId()) {
