@@ -622,6 +622,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(report != null) {
 				if(pg.getVerificata()) {
 					report.setOreValidate(report.getOreValidate() + pg.getOreSvolte());
+					if(pg.getSmartWorking()) {
+						report.setOreSmartWorking(report.getOreSmartWorking() + pg.getOreSvolte());
+					}
 				} else {
 					report.setOreDaValidare(report.getOreDaValidare() + pg.getOreSvolte());
 				}
