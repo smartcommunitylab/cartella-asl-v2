@@ -200,6 +200,43 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
 
   }
 
+  styleOption(giornata) {
+    var style = {
+      'color': '#707070',
+      'font-size.px': 18
+    };
+    if (!giornata.verificata && !giornata.validataEnte) {
+      style['color'] = '#F83E5A';
+    } else if (giornata.validataEnte && !giornata.verificata) {
+      style['color'] = '#7A73FF';
+    }      
+    if (giornata.oreSvolte == 0)
+      style['font-size.px'] = 16;
+    return style;
+  }
+
+  styleOptionTextArea(giornata) {
+    var style = {
+      'color': '#707070',
+    };
+    if (!giornata.verificata && !giornata.validataEnte) {
+      style['color'] = '#F83E5A';
+    } else if (giornata.validataEnte && !giornata.verificata) {
+      style['color'] = '#7A73FF';
+    }      
+    return style;
+  }
+
+  setToolTipGiorno(giornata) {
+    if (!giornata.verificata && !giornata.validataEnte) {
+      return 'Questa riga deve essere validata o, se errata, corretta e validata';
+    } else if (giornata.validataEnte && !giornata.verificata) {
+      return 'Presenze validate';
+    } else {
+      return 'Presenze validate da istituto, non modificabili';
+    }
+  }
+  
   savePresenze() {
     let toBeSaved = this.prepareSaveArray();
 

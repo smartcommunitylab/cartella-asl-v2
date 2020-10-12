@@ -5,6 +5,7 @@ import { AttivitaComponent } from './attivita.component';
 import { AttivitaContainerComponent } from './attivita-container.component';
 import { AttivitaDettaglioComponent } from './actions/attivita-dettaglio/attivita-dettaglio.component';
 import { AttivitaDettaglioModificaComponent } from './actions/attivita-modifica-dettaglio/attivita-modifica.component';
+import { GestionePresenzeIndividualeComponent } from './actions/gestione-presenze-individuale/gestione-preseneze-individuale.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'list', component: AttivitaComponent },
       { path: 'detail/:id', component: AttivitaDettaglioComponent },
       { path: 'detail/:id/modifica/attivita', component: AttivitaDettaglioModificaComponent },
+      { path: 'detail/:id/modifica/studenti/presenze/individuale', component: GestionePresenzeIndividualeComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -27,7 +29,8 @@ export class AttivitaRoutingModule {
     AttivitaContainerComponent,
     AttivitaComponent,
     AttivitaDettaglioComponent,
-    AttivitaDettaglioModificaComponent
+    AttivitaDettaglioModificaComponent,
+    GestionePresenzeIndividualeComponent,
   ];
 }
 
