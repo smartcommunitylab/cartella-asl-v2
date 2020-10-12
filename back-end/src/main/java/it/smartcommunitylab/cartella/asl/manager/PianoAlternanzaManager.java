@@ -510,18 +510,14 @@ public class PianoAlternanzaManager extends DataEntityManager {
 	
 	@Scheduled(cron = "0 00 01 * * ?")
 	public void alignPianoAlternanza() {
-		for (PianoAlternanza pa : pianoAlternanzaRepository.findPianoAlternanzaByStatoAndDataAttivazioneLessThanEqual(
-				PianoAlternanza.Stati.in_attesa, LocalDate.now())) {
-			logger.info("Migrating status in_attesa->attivo" + pa.getTitolo());
-			pa.setStato(Stati.attivo);
-			pianoAlternanzaRepository.save(pa);
-			for (PianoAlternanza paInScadenza : pianoAlternanzaRepository
-					.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
-							pa.getCorsoDiStudio(), pa.getIstitutoId(), PianoAlternanza.Stati.in_scadenza,
-							pa.getDataAttivazione().minusYears(1), pa.getDataAttivazione())) {
-				logger.info("Migrating status in_scadenza->scaduto" + paInScadenza.getTitolo());
-				paInScadenza.setStato(Stati.scaduto);
-				pianoAlternanzaRepository.save(pa);
+		LocalDate today = LocalDate.now();
+		List<PianoAlternanza> list = pianoAlternanzaRepository.findPianoAlternanzaByStato(Stati.in_scadenza);
+		for(PianoAlternanza piano : list) {
+			if(piano.getDataScadenza() != null) {
+				if(piano.getDataScadenza().isBefore(today)) {
+					piano.setStato(Stati.scaduto);
+					pianoAlternanzaRepository.save(piano);
+				}
 			}
 		}
 	}
