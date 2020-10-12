@@ -466,7 +466,8 @@ public class StudenteManager extends DataEntityManager {
 		int oreValidate = 0;
 		int oreTotali = 0;
 		int esperienzeConcluse = 0;
-		int espereinzeInCorso = 0;
+		int esperienzeInCorso = 0;
+		int esperienzeNonCompletate = 0;
 		for(ReportEsperienzaStudente reportEsp : esperienzeStudente) {
 			oreValidate += reportEsp.getOreValidate();
 			oreTotali += reportEsp.getOreTotali();
@@ -474,13 +475,17 @@ public class StudenteManager extends DataEntityManager {
 				esperienzeConcluse++;
 			}
 			if(reportEsp.getStato().equals("in_corso")) {
-				espereinzeInCorso++;
+				esperienzeInCorso++;
+			}
+			if(reportEsp.getStato().equals("revisione")) {
+				esperienzeNonCompletate++;
 			}
 		}
 		report.setOreTotali(oreTotali);
 		report.setOreValidate(oreValidate);
 		report.setEsperienzeConcluse(esperienzeConcluse);
-		report.setEspereinzeInCorso(espereinzeInCorso);
+		report.setEsperienzeInCorso(esperienzeInCorso);
+		report.setEsperienzeNonCompletate(esperienzeNonCompletate);
 		return report;
 	}
 	
