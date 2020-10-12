@@ -34,6 +34,7 @@ public class PresenzaGiornaliera {
 	private int oreSvolte;
 	private Boolean verificata;
 	private Boolean validataEnte;
+	private Boolean smartWorking;
 
 	public Long getId() {
 		return id;
@@ -103,6 +104,17 @@ public class PresenzaGiornaliera {
 
 	public void setValidataEnte(Boolean validataEnte) {
 		this.validataEnte = validataEnte;
+	}
+
+	public Boolean getSmartWorking() {
+		if(smartWorking == null) {
+			return Boolean.FALSE;
+		}
+		return smartWorking;
+	}
+
+	public void setSmartWorking(Boolean smartWorking) {
+		this.smartWorking = smartWorking;
 	}
 
 }
