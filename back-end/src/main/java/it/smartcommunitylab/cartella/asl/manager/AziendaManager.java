@@ -344,20 +344,7 @@ public class AziendaManager extends DataEntityManager {
 			aziendaDb.setCap(azienda.getCap());
 			aziendaDb.setComune(azienda.getComune());
 			aziendaDb.setProvincia(azienda.getProvincia());
-			String address = "";
-			if(Utils.isNotEmpty(azienda.getViaPiazza())) {
-				address += azienda.getViaPiazza() + " ";
-			}
-			if(Utils.isNotEmpty(azienda.getCap())) {
-				address += azienda.getCap() + " ";
-			}
-			if(Utils.isNotEmpty(azienda.getComune())) {
-				address += azienda.getComune() + " ";
-			}
-			if(Utils.isNotEmpty(azienda.getProvincia())) {
-				address += azienda.getProvincia();
-			}
-			aziendaDb.setAddress(address);
+			aziendaDb.setAddress(azienda.getAddress());
 			aziendaRepository.update(aziendaDb);
 			return aziendaDb;
 		}
