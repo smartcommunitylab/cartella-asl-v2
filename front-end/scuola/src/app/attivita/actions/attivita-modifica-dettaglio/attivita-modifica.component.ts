@@ -54,6 +54,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceDalle23ErrorDisplay: boolean = false;
   forceAlle23ErrorDisplay: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
+  forceErrorDisplayOraInizio: boolean = false;
+  forceErrorDisplayOraFine: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
@@ -211,10 +213,22 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       this.forceTitoloErrorDisplay = true;
     }
 
+    if (!this.attivita.oraInizio) {
+      this.forceErrorDisplayOraInizio = true;
+    } else {
+      this.forceErrorDisplayOraInizio = false;
+    }
+
     if (this.attivita.oraInizio > 23) {
       this.forceDalle23ErrorDisplay = true;
     } else {
       this.forceDalle23ErrorDisplay = false;
+    }
+
+    if (!this.attivita.oraFine) {
+      this.forceErrorDisplayOraFine = true;
+    } else {
+      this.forceErrorDisplayOraFine = false;
     }
 
     if (this.attivita.oraFine > 23) {
@@ -258,7 +272,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
-      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay) {
+      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay
+      && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
  
       (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
       (this.attivita.formatore) ? this.attivita.formatore = this.attivita.formatore.trim() : this.attivita.formatore = null;
