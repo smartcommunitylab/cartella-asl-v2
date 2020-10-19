@@ -128,6 +128,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivitaAlternanzaRepository.deleteById(aa.getId());
 	}
 	
+	public void deleteAttivitaAlternanzaById(Long id) throws Exception {
+		attivitaAlternanzaRepository.deleteById(id);
+	}
+	
 	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
 			Pageable pageRequest) {
 
@@ -212,7 +216,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return page;
 	}
 	
-	private Stati getStato(AttivitaAlternanza attivita) {
+	public Stati getStato(AttivitaAlternanza attivita) {
 		if(attivita.getStato() == Stati.archiviata) {
 			return Stati.archiviata;
 		}

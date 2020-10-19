@@ -6,31 +6,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.Registration;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
+import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardDettaglioAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardRegistrazione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardUsoSistema;
+import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
 @Transactional
-public class DashboardManager {
+public class DashboardManager extends DataEntityManager {
 	@Autowired
-	EntityManager em;
+	AttivitaAlternanzaManager attivitaAlternanzaManager;
+	@Autowired
+	EsperienzaSvoltaManager esperienzaSvoltaManager;
+	@Autowired
+	OffertaManager offertaManager;
+	@Autowired
+	LocalDocumentManager documentManager;
+	@Autowired
+	CompetenzaManager competenzaManager;	
+	@Autowired
+	EsperienzaAllineamentoManager allineamentoManager;
 
 	@SuppressWarnings("unchecked")
 	public ReportDashboardUsoSistema getReportUtilizzoSistema(String istitutoId, String annoScolastico) throws Exception {
@@ -213,6 +227,7 @@ public class DashboardManager {
 			report.setOreValidate(oreValidate);
 			if(esa != null) {
 				report.setAllineato(esa.isAllineato());
+				report.setNumeroTentativi(esa.getNumeroTentativi());
 				report.setErrore(esa.getErrore());
 			}
 			list.add(report);
@@ -263,6 +278,81 @@ public class DashboardManager {
 		}
 		return list;
 	}
-	
+
+	public List<ReportDashboardDettaglioAttivita> getReportDettaglioAttivita(String istitutoId, 
+			String annoScolastico, String text) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa LEFT JOIN EsperienzaSvolta es");
+		sb.append(" ON es.attivitaAlternanzaId=aa.id WHERE aa.istitutoId=(:istitutoId) and aa.annoScolastico=(:annoScolastico)");
+		
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+		}
+		
+		sb.append(" ORDER BY aa.dataInizio DESC, aa.titolo ASC");
+		String q = sb.toString();
+
+		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
+		
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("annoScolastico", annoScolastico);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		
+		List<AttivitaAlternanza> aaList = query.getResultList();
+		
+		List<ReportDashboardDettaglioAttivita> reportList = new ArrayList<>();
+		Map<Long, ReportDashboardDettaglioAttivita> reportMap = new HashMap<>();
+		List<Long> aaIdList = new ArrayList<>();
+		for (AttivitaAlternanza aa : aaList) {
+			ReportDashboardDettaglioAttivita report = new ReportDashboardDettaglioAttivita(aa); 
+			report.setStato(attivitaAlternanzaManager.getStato(aa).toString());
+			reportMap.put(aa.getId(), report);
+			reportList.add(report);
+			aaIdList.add(aa.getId());
+		}
+		
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaIds(aaIdList);
+		for(EsperienzaSvolta es : esperienze) {
+			ReportDashboardDettaglioAttivita report = reportMap.get(es.getAttivitaAlternanzaId());
+			if(report != null) {
+				report.getStudenti().add(es.getNominativoStudente());
+				report.getClassi().add(es.getClasseStudente());
+			}
+		}
+		
+		return reportList;
+	}
+
+	public AttivitaAlternanza deleteAttivita(Long attivitaId) throws Exception {
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(attivitaId);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(aa.getStato().equals(Stati.archiviata)) {
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+			for(EsperienzaSvolta es : esperienze) {
+				allineamentoManager.deleteEsperienzaSvoltaAllineamento(es.getId());
+			}
+		}
+		int numEsperienze = esperienzaSvoltaManager.deleteEsperienzeByAttivita(aa);
+		if(aa.getOffertaId() != null) {
+			offertaManager.rimuoviPostiEsperienze(aa.getOffertaId(), numEsperienze);
+		}
+		documentManager.deleteDocumentsByRisorsaId(aa.getUuid());
+		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(aa.getUuid());
+		attivitaAlternanzaManager.deleteAttivitaAlternanzaById(attivitaId);
+		return aa;
+	}
+
+	public EsperienzaSvolta deleteEsperienza(Long esperienzaId) throws Exception {
+		EsperienzaSvolta es = esperienzaSvoltaManager.getEsperienzaSvolta(esperienzaId);
+		if(es == null) {
+			throw new BadRequestException("entity not found");
+		}
+		allineamentoManager.deleteEsperienzaSvoltaAllineamento(es.getId());
+		esperienzaSvoltaManager.deleteEsperienza(es);
+		return es;
+	}
 	
 }

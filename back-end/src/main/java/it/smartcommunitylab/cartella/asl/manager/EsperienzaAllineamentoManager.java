@@ -69,5 +69,12 @@ public class EsperienzaAllineamentoManager {
 		}
 	}
 
+	public void deleteEsperienzaSvoltaAllineamento(Long esperienzaSvoltaId) {
+		EsperienzaSvoltaAllineamento esa = esperienzaAllineamentoRepository.findByEspSvoltaId(esperienzaSvoltaId);
+		if(esa != null) {
+			esperienzaAllineamentoRepository.delete(esa);
+		}
+	}
+
 	
 }
