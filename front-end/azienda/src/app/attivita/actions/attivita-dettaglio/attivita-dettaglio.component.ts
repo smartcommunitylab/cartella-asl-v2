@@ -203,12 +203,16 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
   }
 
-  setNomeEnte(off) {
+  setIstiutoLabel(off) {
     let label = '';
-    if (off.nomeEnte) {
-      label = off.nomeEnte;
+    if (off.istitutiAssociati.length > 0) {
+      if (off.istitutiAssociati.length > 1) {
+        label = off.istitutiAssociati.length + ' istituti';
+      } else {
+        label = off.istitutiAssociati.length + ' istituto';
+      }      
     } else {
-      label = 'istituto';
+      label = '0 istituto';
     }
     return label;
   }

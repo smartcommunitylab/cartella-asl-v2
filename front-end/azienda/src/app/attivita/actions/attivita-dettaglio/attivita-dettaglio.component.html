@@ -48,7 +48,7 @@
             <span class="title">Dati Attività</span><br/>
             <label *ngIf="attivita.offertaId" class="font-weight-bold in_attesa">
                 <span *ngIf="offertaAssociata">
-                    Offerta associata: {{ offertaAssociata.titolo }}, {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso {{ setNomeEnte(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} - {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
+                    Offerta associata: {{ offertaAssociata.titolo }}, {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso {{ setIstiutoLabel(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} - {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
                 </span>
                 <span>
                     <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA ASSOCIATA</a>
