@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { IApiResponse } from '../../shared/classes/IApiResponse.class';
 import { IPagedIstituto } from '../../shared/classes/IPagedIstituto.class';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
+import { CorsoDiStudio } from '../../shared/classes/CorsoDiStudio.class';
 import { serverAPIConfig } from '../serverAPIConfig'
 import { Azienda, IPagedAA } from '../../shared/interfaces';
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';

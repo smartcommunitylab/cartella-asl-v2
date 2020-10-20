@@ -225,9 +225,9 @@ export class PianificaComponent implements OnInit {
     }
 
     setTooltip(piano) {
-        let in_scadenza_msg = 'Il gg/mm/aaaa questo piano sarà sostituito da *nomepiano*'; 
+        let in_scadenza_msg = 'Il gg/mm/aaaa questo piano è stato sostituito da *nomepiano*'; 
         let in_attesa_msg = 'Il gg/mm/aaaa questo piano sostituirà il piano *nomepiano*'; 
-        var dateActual = new Date(piano.dataAttivazione);
+        var dateActual = new Date(piano.duplicaPiano.dataAttivazione);
         if (piano.stato == 'in_scadenza') {
             in_scadenza_msg = in_scadenza_msg.replace("*nomepiano*", piano.duplicaPiano.titolo);
             in_scadenza_msg = in_scadenza_msg.replace("gg/mm/aaaa", dateActual.getDate() + '/' + (dateActual.getMonth()+1) + '/' + dateActual.getFullYear());

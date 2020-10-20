@@ -22,6 +22,8 @@ public class Studente implements Comparable<Studente> {
 	private String surname;
 	private String birthdate;
 	private String cf;
+	private String phone;
+	private String email;
 
 	@Transient
 	private String classroom;
@@ -32,8 +34,8 @@ public class Studente implements Comparable<Studente> {
 	@Transient
 	private String istitutoId;
 
-    @Transient
-    private CorsoDiStudioBean corsoDiStudio;
+  @Transient
+  private CorsoDiStudioBean corsoDiStudio;
 
 	public String getId() {
 		return id;
@@ -123,6 +125,22 @@ public class Studente implements Comparable<Studente> {
 
 		public void setAnnoScolastico(String annoScolastico) {
 			this.annoScolastico = annoScolastico;
+		}
+
+		public String getPhone() {
+			return phone;
+		}
+
+		public void setPhone(String phone) {
+			this.phone = phone;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
 		}
 
 }

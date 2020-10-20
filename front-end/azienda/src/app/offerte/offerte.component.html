@@ -1,0 +1,161 @@
+
+<div class="mb-3 list-container md-margin">
+    <div class="row">
+        <div class="col-4">
+            <div class="row v-center">
+                <span class="title m-left2">{{title}}</span>&nbsp;&nbsp;
+                <span (click)="menuContentShow()">
+                    <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                    </svg>
+                    <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+                </span>                
+            </div>
+        </div>
+        <div class="col-8">
+            <button class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="creaOfferta()">
+                <span class="row btnCreateText">
+                    <span class="col-8 m-left18" placement="bottom"  ngbTooltip="Crea una nuova offerta">Crea offerta</span>
+                    <span class="col-4">
+                        <svg class="icon icon-white icon-sm btnIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-3 v-center-inline">
+            <div class="form-group center-formGroup">
+                <input type="text" id="cercaTitolo" class="form-control search-input"
+                    [(ngModel)]="filterText" (keyup.enter)="cerca()">
+                <label for="cercaTitolo" >Cerca</label>
+            </div>
+            <it-button class="v-center-inline" (click)="cerca()">
+                <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+            </it-button>
+        </div>
+        <div class="col-5 v-center-inline">
+            <!-- <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="tipologia"
+                (ngModelChange)="selectTipologiaFilter()">
+                <option selected="selected">Tipologie</option>
+                <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
+            </select> -->
+        </div>
+         <div class="col-2 v-center-inline">
+            <!-- <select class="custom-select form-control" [(ngModel)]="owner" (ngModelChange)="selectOwnerFilter()">
+                <option [ngValue]="undefined">Creata da</option>
+                <option [value]="src.value" *ngFor="let src of sources">{{src.name}}</option>
+            </select> -->
+        </div>
+        <div class="col-2 v-center-inline">
+            <select class="float-right custom-select form-control" [(ngModel)]="stato" (ngModelChange)="selectStatoFilter()">
+                <option [ngValue]="undefined">Seleziona stato</option>
+                <option [value]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
+            </select>            
+        </div>
+    </div>
+    <br />
+    <div class="table list-group" *ngIf="offerte && offerte.length">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Titolo</th>
+                    <th>Indirizzo</th>
+                    <th>Posti disponibili</th>
+                    <th>Istituti</th>
+                    <th>Periodo</th>
+                    <th>Creata da</th>
+                    <th>Stato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let off of offerte">
+                    <!-- Titolo -->
+                    <td class="pointer">
+                        <span class="align-middle" (click)="openDetail(off)">{{ off.titolo }}
+                        </span>
+                    </td>
+                    <!-- Indirizzo -->
+                    <td class="pointer">                  
+                        <span class="align-middle" #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{off.luogoSvolgimento}}" class="align-middle" (click)="openDetail(off)">{{ setIndirizzo(off) }}
+                        </span>
+                    </td>
+                    <!-- Posti disponibili -->
+                    <td class="pointer">
+                        <span class="align-middle" (click)="openDetail(off)">{{ off.postiRimanenti }} / {{ (off.postiDisponibili) }}
+                        </span>
+                    </td>
+                     <!-- Istituti -->
+                     <td class="pointer">
+                        <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{off.toolTipRiga}}" (mouseenter)="showTipRiga($event, off, tooltipEnte);" class="align-middle {{off.stato}}" (click)="openDetail(off)">{{ setIstitutiLabel(off) }}
+                        </span>
+                    </td>                    
+                    <!-- Periodo -->
+                    <td class="pointer">
+                        <span class="align-middle" (click)="openDetail(off)">{{ off.dataInizio | date: 'dd/MM/yyyy'}} - {{ off.dataFine | date: 'dd/MM/yyyy'}}
+                        </span>
+                    </td>
+                    <!-- Creata da -->
+                    <td class="pointer">
+                        <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{off.toolTipRiga}}" (mouseenter)="showTipRiga($event, off, tooltipEnte);" class="align-middle" (click)="openDetail(off)" >{{ setSource(off) }}
+                        </span>
+                    </td>
+                    <!-- Stato -->
+                    <td class="pointer">
+                        <!-- #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{off.toolTipoStatoRiga}}" (mouseenter)="showTipStatoRiga($event, off, tooltipStato);" -->
+                        <span class="align-middle {{off.stato}}" (click)="openDetail(off)">
+                            {{getStatoNome(off.stato) }}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!offerte?.length" class="font-14 text-center font-weight-bold">
+        <div class="row">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-danger icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+            </div>
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn" (click)='refreshOfferte()'>
+    
+                    <span class="resetFilterBtn">
+                        <div class="row">
+                            <div class="col-sm-2 text-center">
+                                <svg class="icon icon-danger">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                                </svg>
+                            </div>
+                            <div class="col-sm-10 ">Resetta filtri</div>
+                        </div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+            #cmPagination></cm-pagination>
+    </div>
+</div>

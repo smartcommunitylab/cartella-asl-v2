@@ -8,9 +8,9 @@ export class SorterService {
 	property: string = null;
 	direction: number = 1;
 
-    sort(collection: any[], prop: any) {
+    sort(collection: any[], prop: any, direction: number) {
         this.property = prop;
-        this.direction = (this.property === prop) ? this.direction * -1 : 1;
+        this.direction =  direction;
 
         collection.sort((a: any,b: any) => {
             let aVal: any;

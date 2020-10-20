@@ -2,7 +2,6 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,6 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
-import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudioBean;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.NotificheStudente;
@@ -41,7 +39,6 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
-import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.NotificheStudenteRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
@@ -64,8 +61,6 @@ public class StudenteManager extends DataEntityManager {
 	private PianoAlternanzaManager pianoAlternanzaManager;
 	@Autowired
 	private AttivitaAlternanzaManager attivitaAlternanzaManager;
-	@Autowired
-	private CorsoDiStudioRepository corsoDiStudioRepository;
 	@Autowired
 	private PresenzaGiornalieraManager presenzaGiornalieraManager;
 	@Autowired
@@ -194,6 +189,9 @@ public class StudenteManager extends DataEntityManager {
 			if(activePianoForClassrom.isPresent()) {
 				studenteReport.setTitoloPiano(activePianoForClassrom.get().getTitolo());
 				studenteReport.setPianoId(activePianoForClassrom.get().getId());
+				studenteReport.setOreTotali(activePianoForClassrom.get().getOreTerzoAnno() + 
+						activePianoForClassrom.get().getOreQuartoAnno() + 
+						activePianoForClassrom.get().getOreQuintoAnno());
 			}
 							
 			final int oreTotaliTerza = activePianoForClassrom.map(p -> p.getOreTerzoAnno()).orElse(0);
@@ -224,12 +222,6 @@ public class StudenteManager extends DataEntityManager {
 				}
 			}
 			
-			CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(istitutoId, 
-					s.getCorsoDiStudio().getCourseId(), s.getAnnoScolastico());
-			if(corsoStudio != null) {
-				studenteReport.setOreTotali(corsoStudio.getOreAlternanza());
-			}
-
 			studenteReport.getOreSvolteTerza().setHours(oreSvolteTerza);
 			studenteReport.getOreSvolteTerza().setTotal(oreTotaliTerza);
 			studenteReport.getOreSvolteQuarta().setHours(oreSvolteQuarta);
@@ -266,11 +258,8 @@ public class StudenteManager extends DataEntityManager {
 			String annoScolastico) {
 		List<PianoAlternanza> pianiAttivi = pianoAlternanzaManager.findPianoAlternanzaAttivoForCorso(istitutoId,
 				corsoDiStudioId);
-		final LocalDate startAnnoScolastico = Utils.startAnnoScolasticoDate(annoScolastico);
 		
 		return pianiAttivi.stream()
-				.filter(p -> p.getDataAttivazione().isBefore(startAnnoScolastico)
-						|| p.getDataAttivazione().isEqual(startAnnoScolastico))
 				.filter(p -> { 
 					pianoAlternanzaManager.calculateAnni(p);
 					return p.getAnni().contains(Utils.annoDiCorso(classroom));
@@ -346,17 +335,14 @@ public class StudenteManager extends DataEntityManager {
 		List<Competenza> competenze = competenzaManager.getCompetenzeByStudente(istitutoId, studenteId);
 		result.getCompetenze().addAll(competenze);
 		
-		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(istitutoId, 
-				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
-		if(corsoStudio != null) {
-			result.setOreTotali(corsoStudio.getOreAlternanza());
-		}
-
 		Optional<PianoAlternanza> pianoForClassrom = pianoForClassrom(istitutoId, 
 				studente.getCorsoDiStudio().getCourseId(), studente.getClassroom(), studente.getAnnoScolastico());
 		if(pianoForClassrom.isPresent()) {
 			result.setTitoloPiano(pianoForClassrom.get().getTitolo());
 			result.setPianoId(pianoForClassrom.get().getId());
+			result.setOreTotali(pianoForClassrom.get().getOreTerzoAnno() + 
+					pianoForClassrom.get().getOreQuartoAnno() + 
+					pianoForClassrom.get().getOreQuintoAnno());
 		}
 		
 		final int oreTotaliTerza = pianoForClassrom.map(p -> p.getOreTerzoAnno()).orElse(0);
@@ -468,17 +454,20 @@ public class StudenteManager extends DataEntityManager {
 
 		Studente studente = findStudente(studenteId);
 		
-		CorsoDiStudio corsoStudio = corsoDiStudioRepository.findCorsoDiStudioByIstituto(studente.getIstitutoId(), 
-				studente.getCorsoDiStudio().getCourseId(), Utils.annoScolastico(new Date()));
-		if(corsoStudio != null) {
-			report.setOreTotali(corsoStudio.getOreAlternanza());
+		Optional<PianoAlternanza> pianoForClassrom = pianoForClassrom(studente.getIstitutoId(), 
+				studente.getCorsoDiStudio().getCourseId(), studente.getClassroom(), studente.getAnnoScolastico());
+		if(pianoForClassrom.isPresent()) {
+			report.setOreTotali(pianoForClassrom.get().getOreTerzoAnno() + 
+					pianoForClassrom.get().getOreQuartoAnno() + 
+					pianoForClassrom.get().getOreQuintoAnno());
 		}
 		
 		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId);
 		int oreValidate = 0;
 		int oreTotali = 0;
 		int esperienzeConcluse = 0;
-		int espereinzeInCorso = 0;
+		int esperienzeInCorso = 0;
+		int esperienzeNonCompletate = 0;
 		for(ReportEsperienzaStudente reportEsp : esperienzeStudente) {
 			oreValidate += reportEsp.getOreValidate();
 			oreTotali += reportEsp.getOreTotali();
@@ -486,13 +475,17 @@ public class StudenteManager extends DataEntityManager {
 				esperienzeConcluse++;
 			}
 			if(reportEsp.getStato().equals("in_corso")) {
-				espereinzeInCorso++;
+				esperienzeInCorso++;
+			}
+			if(reportEsp.getStato().equals("revisione")) {
+				esperienzeNonCompletate++;
 			}
 		}
 		report.setOreTotali(oreTotali);
 		report.setOreValidate(oreValidate);
 		report.setEsperienzeConcluse(esperienzeConcluse);
-		report.setEspereinzeInCorso(espereinzeInCorso);
+		report.setEsperienzeInCorso(esperienzeInCorso);
+		report.setEsperienzeNonCompletate(esperienzeNonCompletate);
 		return report;
 	}
 	
@@ -578,6 +571,17 @@ public class StudenteManager extends DataEntityManager {
 	@Scheduled(cron = "0 00 05 * * ?")
 	public void notificaEspereinzeStudenti() throws Exception {
 		//sendNotificaEspereinzeStudenti(null); 
+	}
+
+	public Studente updateProfile(Studente studente, String studenteId) throws Exception {
+		Studente studenteDB = studenteRepository.findById(studenteId).orElse(null);
+		if(studenteDB == null) {
+			throw new BadRequestException("studente non trovato");
+		}
+		studenteDB.setEmail(studente.getEmail());
+		studenteDB.setPhone(studente.getPhone());
+		studenteRepository.save(studenteDB);
+		return studenteDB;
 	}
 
 }

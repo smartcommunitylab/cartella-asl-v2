@@ -322,4 +322,32 @@ public class AziendaManager extends DataEntityManager {
 
 	}
 
+	public Azienda updateAziendaByEnte(Azienda azienda) throws Exception {
+		Azienda aziendaDb = getAzienda(azienda.getId());
+		if(aziendaDb == null) {
+			throw new BadRequestException("ente non trovato");
+		} else {
+			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
+				throw new BadRequestException("ente non modificabile");
+			}
+			aziendaDb.setNome(azienda.getNome());
+			aziendaDb.setDescription(azienda.getDescription());
+			aziendaDb.setEmail(azienda.getEmail());
+			aziendaDb.setPec(azienda.getPec());
+			aziendaDb.setPhone(azienda.getPhone());
+			aziendaDb.setAtecoCode(azienda.getAtecoCode());
+			aziendaDb.setAtecoDesc(azienda.getAtecoDesc());
+			aziendaDb.setLegaleRappresentante(azienda.getLegaleRappresentante());
+			aziendaDb.setMedicoCompetente(azienda.getMedicoCompetente());
+			aziendaDb.setResponsabileSicurezza(azienda.getResponsabileSicurezza());
+			aziendaDb.setViaPiazza(azienda.getViaPiazza());
+			aziendaDb.setCap(azienda.getCap());
+			aziendaDb.setComune(azienda.getComune());
+			aziendaDb.setProvincia(azienda.getProvincia());
+			aziendaDb.setAddress(azienda.getAddress());
+			aziendaRepository.update(aziendaDb);
+			return aziendaDb;
+		}
+	}
+
 }
