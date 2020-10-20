@@ -464,13 +464,11 @@ public class StudenteManager extends DataEntityManager {
 		
 		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(studenteId);
 		int oreValidate = 0;
-		int oreTotali = 0;
 		int esperienzeConcluse = 0;
 		int esperienzeInCorso = 0;
 		int esperienzeNonCompletate = 0;
 		for(ReportEsperienzaStudente reportEsp : esperienzeStudente) {
 			oreValidate += reportEsp.getOreValidate();
-			oreTotali += reportEsp.getOreTotali();
 			if(reportEsp.getStato().equals("archiviata")) {
 				esperienzeConcluse++;
 			}
@@ -481,7 +479,6 @@ public class StudenteManager extends DataEntityManager {
 				esperienzeNonCompletate++;
 			}
 		}
-		report.setOreTotali(oreTotali);
 		report.setOreValidate(oreValidate);
 		report.setEsperienzeConcluse(esperienzeConcluse);
 		report.setEsperienzeInCorso(esperienzeInCorso);
