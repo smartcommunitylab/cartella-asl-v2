@@ -9,17 +9,24 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
+import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.DashboardManager;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
+import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardDettaglioAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardRegistrazione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardUsoSistema;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 
 @RestController
 public class DashboardController {
@@ -27,9 +34,10 @@ public class DashboardController {
 	
 	@Autowired
 	private DashboardManager dashboardManager;
-	
 	@Autowired
 	private ASLRolesValidator usersValidator;
+	@Autowired
+	private AuditManager auditManager;
 
 	@GetMapping("/api/dashboard/sistema")
 	public ReportDashboardUsoSistema getReportUtilizzoSistema (
@@ -44,7 +52,7 @@ public class DashboardController {
 		return report;
 	}
 	
-	@GetMapping("/api/dashboard/attivita")
+	@GetMapping("/api/dashboard/attivita/report")
 	public ReportDashboardAttivita getReportAttivita (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
@@ -59,6 +67,20 @@ public class DashboardController {
 		return report;
 	}
 
+	@GetMapping("/api/dashboard/attivita")
+	public List<ReportDashboardDettaglioAttivita> getAttivita (
+			@RequestParam String istitutoId,
+			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String text,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		List<ReportDashboardDettaglioAttivita> report = dashboardManager.getReportDettaglioAttivita(istitutoId, annoScolastico, text);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getAttivita:%s - %s", istitutoId, annoScolastico));
+		}
+		return report;
+	}
+	
 	@GetMapping("/api/dashboard/esperienze")
 	public List<ReportDashboardEsperienza> getReportEsperienze (
 			@RequestParam String istitutoId,
@@ -85,5 +107,33 @@ public class DashboardController {
 		}
 		return list;		
 	}
+	
+	@DeleteMapping("/api/dashboard/attivita")
+	public AttivitaAlternanza deleteAttivita(
+			@RequestParam Long attivitaId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
+		AttivitaAlternanza aa = dashboardManager.deleteAttivita(attivitaId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, attivitaId, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("deleteAttivita:%s", attivitaId));
+		}	
+		return aa;
+	}
+	
+	@DeleteMapping("/api/dashboard/esperienza")
+	public EsperienzaSvolta deleteEsperienza(
+			@RequestParam Long esperienzaId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
+		EsperienzaSvolta esperienza = dashboardManager.deleteEsperienza(esperienzaId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), EsperienzaSvolta.class, esperienzaId, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("deleteEsperienza:%s", esperienzaId));
+		}	
+		return esperienza;
+	}	
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 
-import { ModalService, IModalContent } from './modal.service';
+import { ModalService, IModalContent } from '../../core/modal/modal.service';
 
 @Component({
   selector: 'cm-modal',

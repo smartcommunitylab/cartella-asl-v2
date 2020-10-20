@@ -123,6 +123,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
 	public void calculateAnni(PianoAlternanza pa) {
     LocalDate today = LocalDate.now();
 		Long[] gestisciClassi = new Long[3];
+		Map<Long, PianoAlternanza> pianiMap = new HashMap<>();
     List<PianoAlternanza> paInscadenza = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdOrderByDataAttivazioneAsc(
     		pa.getCorsoDiStudioId(), pa.getIstitutoId());
     
@@ -130,6 +131,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
     	if(pas.getStato().equals(Stati.bozza) || pas.getStato().equals(Stati.scaduto)) {
     		continue;
     	}
+    	pianiMap.put(pas.getId(), pas);
     	LocalDate dataDisattivazione = null;
     	if(pas.getDataDisattivazione() != null) {
     		dataDisattivazione = pas.getDataDisattivazione();
@@ -137,8 +139,8 @@ public class PianoAlternanzaManager extends DataEntityManager {
     		dataDisattivazione = Utils.startAnnoScolasticoDate(today).plusYears(1);
     	}
     	LocalDate dataTerze = dataDisattivazione;
-    	LocalDate dataQuarte = dataDisattivazione.plusYears(1);
-    	LocalDate dataQuinte = dataDisattivazione.plusYears(2);
+    	LocalDate dataQuarte = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(1);
+    	LocalDate dataQuinte = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(2);
     	if(dataQuinte.isAfter(today)) {
     		if(gestisciClassi[2] == null) {
     			gestisciClassi[2] = pas.getId();
@@ -363,15 +365,6 @@ public class PianoAlternanzaManager extends DataEntityManager {
 			throw new BadRequestException(errorLabelManager.get("piano.alt.error.status"));
 		}
 		
-		//check for corosdiStudio, istitutoId, stato(in_attesa, in_scadenza) and importantly dataAttivazione(one year less).
-		List<PianoAlternanza> paInAttesa = pianoAlternanzaRepository
-				.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStato(pa.getCorsoDiStudioId(),
-						pa.getIstitutoId(), PianoAlternanza.Stati.in_attesa);
-        
-    if (!paInAttesa.isEmpty()) {
-    	throw new BadRequestException(errorLabelManager.get("piano.alt.error.activate"));
-    }
-        
 	  List<PianoAlternanza> paInscadenza = pianoAlternanzaRepository
 	  		.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStato(pa.getCorsoDiStudioId(),
 	  				pa.getIstitutoId(), PianoAlternanza.Stati.in_scadenza);
@@ -380,7 +373,6 @@ public class PianoAlternanzaManager extends DataEntityManager {
 	  	throw new BadRequestException(errorLabelManager.get("piano.alt.error.activate"));
 	  }
         
-
 		List<PianoAlternanza> paAttivi = pianoAlternanzaRepository
 				.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStato(pa.getCorsoDiStudioId(),
 						pa.getIstitutoId(), PianoAlternanza.Stati.attivo);
@@ -388,16 +380,23 @@ public class PianoAlternanzaManager extends DataEntityManager {
 		LocalDate today = LocalDate.now();
 		LocalDate startAnnoScolastico = Utils.startAnnoScolasticoDate(today);
 		if (!paAttivi.isEmpty()) {
+			//check se esiste un piano in scadenza per lo stesso anno scolastico
+			for(PianoAlternanza pas : paInscadenza) {
+				LocalDate dataScadenza = Utils.startAnnoScolasticoDate(pas.getDataDisattivazione()).plusYears(1);
+				if(dataScadenza.isAfter(today)) {
+					throw new BadRequestException(errorLabelManager.get("piano.alt.error.activate"));
+				}
+			}
 			PianoAlternanza pianoAttivo = paAttivi.get(0);
 			pianoAttivo.setStato(PianoAlternanza.Stati.in_scadenza);
-			pianoAttivo.setDataDisattivazione(startAnnoScolastico.plusYears(1));
+			pianoAttivo.setDataDisattivazione(today);
 			pianoAttivo.setDataScadenza(startAnnoScolastico.plusYears(3));
 			pianoAlternanzaRepository.save(pianoAttivo);
-			pa.setStato(PianoAlternanza.Stati.in_attesa);
-			pa.setDataAttivazione(startAnnoScolastico.plusYears(1));
+			pa.setStato(PianoAlternanza.Stati.attivo);
+			pa.setDataAttivazione(today);
 		} else {
 			pa.setStato(PianoAlternanza.Stati.attivo);
-			pa.setDataAttivazione(startAnnoScolastico);
+			pa.setDataAttivazione(today);
 		}
 		
 		return pianoAlternanzaRepository.save(pa);
@@ -449,7 +448,6 @@ public class PianoAlternanzaManager extends DataEntityManager {
 
 	public PianoAlternanzaBean getDuplicaPianoAlternanza(long id) throws BadRequestException {
 		PianoAlternanza pa = getPianoAlternanza(id);
-
 		if (pa == null) {
 			throw new BadRequestException(errorLabelManager.get("piano.error.notfound"));
 		}
@@ -460,26 +458,16 @@ public class PianoAlternanzaManager extends DataEntityManager {
 				return new PianoAlternanzaBean(pianoInScadenza.get(0));
 			else
 				return null;			
-		}
-		if (pa.getStato().equals(PianoAlternanza.Stati.in_attesa)) {
-			List<PianoAlternanza> pianoInScadenza = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
-					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.in_scadenza, pa.getDataAttivazione().minusYears(1), pa.getDataAttivazione());
-			if (!pianoInScadenza.isEmpty())
-				return new PianoAlternanzaBean(pianoInScadenza.get(0));
-			else
-				return null;
-		}
+		}		
 		if (pa.getStato().equals(PianoAlternanza.Stati.in_scadenza)) {
-			List<PianoAlternanza> pianoInAttesa = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
-					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.in_attesa, pa.getDataAttivazione(), pa.getDataAttivazione().plusYears(1));
-			if (!pianoInAttesa.isEmpty())
-				return new PianoAlternanzaBean(pianoInAttesa.get(0));
+			List<PianoAlternanza> pianoAttivo = pianoAlternanzaRepository.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStato(
+					pa.getCorsoDiStudioId(), pa.getIstitutoId(), PianoAlternanza.Stati.attivo);
+			if (!pianoAttivo.isEmpty())
+				return new PianoAlternanzaBean(pianoAttivo.get(0));
 			else 
 				return null;
 		}
-		
 		return null;
-		
 	}
 
 	public void disactivatePianAlternanza(Long id) throws BadRequestException {
@@ -522,18 +510,14 @@ public class PianoAlternanzaManager extends DataEntityManager {
 	
 	@Scheduled(cron = "0 00 01 * * ?")
 	public void alignPianoAlternanza() {
-		for (PianoAlternanza pa : pianoAlternanzaRepository.findPianoAlternanzaByStatoAndDataAttivazioneLessThanEqual(
-				PianoAlternanza.Stati.in_attesa, LocalDate.now())) {
-			logger.info("Migrating status in_attesa->attivo" + pa.getTitolo());
-			pa.setStato(Stati.attivo);
-			pianoAlternanzaRepository.save(pa);
-			for (PianoAlternanza paInScadenza : pianoAlternanzaRepository
-					.findPianoAlternanzaByCorsoDiStudioIdAndIstitutoIdAndStatoAndDataAttivazioneGreaterThanEqualAndDataAttivazioneLessThanEqual(
-							pa.getCorsoDiStudio(), pa.getIstitutoId(), PianoAlternanza.Stati.in_scadenza,
-							pa.getDataAttivazione().minusYears(1), pa.getDataAttivazione())) {
-				logger.info("Migrating status in_scadenza->scaduto" + paInScadenza.getTitolo());
-				paInScadenza.setStato(Stati.scaduto);
-				pianoAlternanzaRepository.save(pa);
+		LocalDate today = LocalDate.now();
+		List<PianoAlternanza> list = pianoAlternanzaRepository.findPianoAlternanzaByStato(Stati.in_scadenza);
+		for(PianoAlternanza piano : list) {
+			if(piano.getDataScadenza() != null) {
+				if(piano.getDataScadenza().isBefore(today)) {
+					piano.setStato(Stati.scaduto);
+					pianoAlternanzaRepository.save(piano);
+				}
 			}
 		}
 	}

@@ -150,7 +150,8 @@ export class Giornate {
     attivitaSvolta: string;
     oreSvolte: Number;
 	data: Date;
-	verificata: boolean;
+    verificata: boolean;
+    validataEnte: boolean;
     presenza: boolean;
     isModifiedState: boolean;
 }

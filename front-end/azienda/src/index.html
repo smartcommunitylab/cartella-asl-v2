@@ -1,24 +1,67 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <base href="./" />
-    <title>Cartella - Azienda Portale App</title>
+    <title>Cartella - Ente Portale</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="Angular JumpStart" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css' />
-    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+
+    <script>window.__PUBLIC_PATH__ = './assets/bootstrap-italia/fonts'</script>
+    <link rel="stylesheet" href="./assets/bootstrap-italia/css/bootstrap-italia.min.css" />
+    <link rel="stylesheet" href="./assets/styles.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <link rel="stylesheet" href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
     <script src="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
-    <link href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" crossorigin="anonymous"></script>
+    <script src="./assets/bootstrap-italia/js/bootstrap-italia.bundle.min.js"></script>
+        
+    <script>
+        var global = global || window;
+        var Buffer = Buffer || [];
+        var process = process || {
+            env: {
+                DEBUG: undefined
+            },
+            version: []
+        };
+    </script>
+
+    <script>
+        if (location.hash && location.hash.length > 1) {
+            var queryString = location.hash.substring(1);
+            var params = {};
+            var regex = /([^&=]+)=([^&]*)/g, m;
+            while (m = regex.exec(queryString)) {
+                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+            }
+            if (params['access_token'] && params['expires_in']) {
+                sessionStorage.access_token = params['access_token'];
+                sessionStorage.access_token_expires_in = new Date().getTime() + parseInt(params['expires_in'], 10) * 1000;
+                window.location.hash = '/';
+                window.location.reload();
+            }
+        }
+    </script>
+
 </head>
+
 <body>
     <cm-app-component>
         Loading...
     </cm-app-component>
+    
 </body>
-</html>
 
+</html>

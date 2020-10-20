@@ -15,8 +15,10 @@ public interface OffertaRepository extends JpaRepository<Offerta, Long> {
 	
 	@Modifying
 	@Query("UPDATE Offerta off0 SET titolo=:#{#off.titolo}, descrizione=:#{#off.descrizione}, dataInizio=:#{#off.dataInizio}, dataFine=:#{#off.dataFine},"
-			+ " oraInizio=:#{#off.oraInizio}, oraFine=:#{#off.oraFine}, referenteScuola=:#{#off.referenteScuola}, referenteScuolaCF=:#{#off.referenteScuolaCF},"
-			+ " referenteEsterno=:#{#off.referenteEsterno}, referenteEsternoCF=:#{#off.referenteEsternoCF}, formatore=:#{#off.formatore}, formatoreCF=:#{#off.formatoreCF},"
+			+ " oraInizio=:#{#off.oraInizio}, oraFine=:#{#off.oraFine},"
+			+ " referenteScuola=:#{#off.referenteScuola}, referenteScuolaCF=:#{#off.referenteScuolaCF}, referenteScuolaTelefono=:#{#off.referenteScuolaTelefono},"
+			+ " referenteEsterno=:#{#off.referenteEsterno}, referenteEsternoCF=:#{#off.referenteEsternoCF}, referenteEsternoTelefono=:#{#off.referenteEsternoTelefono},"
+			+ " formatore=:#{#off.formatore}, formatoreCF=:#{#off.formatoreCF},"
 			+ " luogoSvolgimento=:#{#off.luogoSvolgimento}, latitude=:#{#off.latitude}, longitude=:#{#off.longitude}, prerequisiti=:#{#off.prerequisiti},"
 			+ " postiDisponibili=:#{#off.postiDisponibili}, postiRimanenti=:#{#off.postiRimanenti},"
 			+ " enteId=:#{#off.enteId}, nomeEnte=:#{#off.nomeEnte}"

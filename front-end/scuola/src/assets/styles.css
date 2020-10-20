@@ -14704,4 +14704,17 @@ div.dp-input-container> input.dp-picker-input{
   color: #F83E5A;
   opacity: 1;
 }
+
+.text-bold {
+  font-weight: 700;
+}
+
+.text-semibold {
+  font-weight: 600;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
 /**/

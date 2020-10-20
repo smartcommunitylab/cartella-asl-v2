@@ -184,5 +184,20 @@ public class StudentController implements AslController {
 			logger.info(String.format("aggiornaNotifica:%s / %s / %s", studenteId, attiva, registrationToken));
 		}			
 	}
+	
+	@PostMapping("/api/studente/{studenteId}")
+	public Studente updateProfilo(
+			@PathVariable String studenteId,
+			@RequestBody Studente studente,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
+		Studente result = studentManager.updateProfile(studente, studenteId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Studente.class, studenteId, user, new Object(){});
+		auditManager.save(audit);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("updateProfilo:%s", studenteId));
+		}	
+		return result;
+	}
 
 }

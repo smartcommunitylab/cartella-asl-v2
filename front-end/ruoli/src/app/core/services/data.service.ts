@@ -287,7 +287,60 @@ export class DataService {
     params = params.append('istitutoId', istitutoId);
     params = params.append('annoScolastico', annoScolastico);
     return this.http.get<any>(
+      this.host + '/dashboard/attivita/report',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportDettaglioAttivita(istitutoId, annoScolastico, text):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('annoScolastico', annoScolastico);
+    params = params.append('text', text);
+    return this.http.get<any>(
       this.host + '/dashboard/attivita',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  deleteAttivita(attivitaId): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('attivitaId', attivitaId);
+    return this.http.delete<any>(
+      this.host + '/dashboard/attivita',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  deleteEsperienza(esperienzaId): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('esperienzaId', esperienzaId);
+    return this.http.delete<any>(
+      this.host + '/dashboard/esperienza',
       {
         params: params
       })

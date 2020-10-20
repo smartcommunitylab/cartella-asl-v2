@@ -5,8 +5,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="istitutoId">Istituto</label>
-                    <select class="form-control" id="istitutoId" 
-                        [(ngModel)]="istitutoId" (ngModelChange)="getReport()">
+                    <select class="form-control" id="istitutoId" [(ngModel)]="istitutoId">
                         <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
                     </select>
                 </div>
@@ -17,11 +16,29 @@
                     <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" [(ngModel)]="annoScolastico">
                 </div>
             </div>
+            <div class="col col-3">
+                <div class="form-group">
+                    <label for="text">Cerca</label>
+                    <input type="text" class="form-control" id="text" placeholder="studente o classe" 
+                        [(ngModel)]="text" (keyup.enter)="getReport()">
+                </div>
+            </div>
         </div>
         <div class="row">
-            <button class="btn btn-secondary v-center ml-auto mr-3" (click)="getReport()">
-                <i class="material-icons">refresh</i> Aggiorna
-            </button>
+            <div class="col">
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary v-center mr-4" (click)="getReport()">
+                            <i class="material-icons">refresh</i> Report
+                        </button>    
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-secondary v-center mr-4" (click)="getAttivita()">
+                            <i class="material-icons">refresh</i> Cerca
+                        </button>        
+                    </div>
+                </div>    
+            </div>
         </div>
         <div class="row form-group">
             <div class="col-4">
@@ -30,8 +47,6 @@
             <div class="col-1">
                 <label><strong>{{report.numeroAttivita}}</strong></label>    
             </div>
-        </div>
-        <div class="row form-group">
             <div class="col-4">
                 <label>Numero attività archiviate:</label>    
             </div>
@@ -46,8 +61,6 @@
             <div class="col-1">
                 <label><strong>{{report.numeroAttivitaSenzaStudenti}}</strong></label>    
             </div>
-        </div>
-        <div class="row form-group">
             <div class="col-4">
                 <label>Numero esperienze:</label>    
             </div>
@@ -62,8 +75,6 @@
             <div class="col-1">
                 <label><strong>{{report.numeroEsperienzeAnnullate}}</strong></label>    
             </div>
-        </div>
-        <div class="row form-group">
             <div class="col-4">
                 <label>Numero esperienze allineate con TrentinoDigitale:</label>    
             </div>
@@ -71,5 +82,30 @@
                 <label><strong>{{report.numeroEsperienzeAllineate}}</strong></label>    
             </div>
         </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Titolo</th>
+                    <th>Tipologia</th>
+                    <th>Periodo</th>
+                    <th>Stato</th>
+                    <th>Studenti</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let aa of attivitaList">
+                    <td><div ngbTooltip="{{aa.descrizione}}">{{aa.titolo}}</div></td>
+                    <td>{{getTipologia(aa.tipologia)}}</td>
+                    <td>{{aa.dataInizio}} <br/> {{aa.dataFine}}</td>
+                    <td>{{aa.stato}}</td>
+                    <td><div ngbTooltip="{{getStudentiTip(aa)}}">{{getNumStudentiTip(aa)}}</div></td>
+                    <td>
+                        <i class="material-icons pointer error" ngbTooltip="cancella attività"
+                        (click)="deleteAttivita(aa)">delete_forever</i> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

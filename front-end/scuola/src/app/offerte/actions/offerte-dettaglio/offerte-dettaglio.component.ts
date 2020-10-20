@@ -136,4 +136,8 @@ export class OfferteDettaglioComponent implements OnInit {
     this.showContent = !this.showContent;
   }
 
+  isMyOfferta() {
+    return (this.offerta.istitutoId && this.offerta.istitutoId===this.dataService.istitutoId);
+  }
+
 }
