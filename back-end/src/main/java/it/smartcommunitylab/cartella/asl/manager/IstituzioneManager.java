@@ -21,6 +21,7 @@ import com.google.common.collect.Lists;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
+import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
 @Transactional
@@ -90,12 +91,16 @@ public class IstituzioneManager extends DataEntityManager {
 
 	public Page<Istituzione> findIstituti(String text, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT i FROM Istituzione i");
-		sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+		}
 		sb.append(" ORDER BY i.name ASC");
 		String q = sb.toString();
 		
 		TypedQuery<Istituzione> query = em.createQuery(q, Istituzione.class);
-		query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
