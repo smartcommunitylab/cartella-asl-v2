@@ -1,0 +1,151 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+  <div class="row" *ngIf="attivita">
+    <div class="col-6 v-center">
+      <span class="modifyTitleStyle m-left">{{attivita.titolo}}</span>
+      <span (click)="menuContentShow()" class="pointer">
+        <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+        </svg>
+        <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+    </span>
+    </div>
+    <div class="col-6">
+      <span class="float-right m-right mTop">
+        <button type="button" class="btn btn-danger btn-xs btn-icon py-1 pr-2 btnAnnulla mLeft12" placement="bottom"
+          ngbTooltip="Esci senza validare" (click)="cancel()">
+          <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+              <svg class="icon icon-white icon-sm btnModificationIcon">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+              </svg>
+            </span>
+          </span>
+        </button>
+        <button *ngIf="!isArchivio" class="btn btn-success btn-xs btn-icon py-1 pr-2 btnCreate mLeft12"
+          placement="bottom" ngbTooltip="{{toolTipSave}}" (click)="savePresenze()">
+          <span class="row btnCreateText">
+            <span class="col-8">Valida presenze&nbsp;</span>
+            <span class="col-4">
+              <svg class="icon icon-white icon-sm m-right36">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
+              </svg>
+            </span>
+          </span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <hr class="hr modifyHr" />
+  <div *ngIf="showContent" class="row rectangle v-center-inline">
+    <div class="col-1 helpMessageIcon-mRight">
+        <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+    </div>
+    <div class="col-10 helpMessage-mLeft">
+        <span>{{menuContent}}</span>
+    </div>
+    <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+  </div>
+  <div class="row m-subNav">
+    <div class="col-8">
+      <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+    </div>
+    <div class="col-4 shadowDetails">
+      <span class="float-right mRight">
+      </span>
+    </div>
+  </div>
+  <br>
+  <div *ngIf="report" class="callNote default">
+    <span class="row">
+      <span class="col-2 font-weight-bold">Da validare</span>
+      <span class="col-2 font-weight-bold">Validate</span>
+      <span class="col-2 font-weight-bold">Inizio attività</span>
+      <span class="col-2 font-weight-bold">Fine attività</span>
+      <span class="col-2 font-weight-bold">Ore validate</span>
+    </span>
+    <span class="row">
+      <span class="col-2">{{report.giornateDaValidare}} giornate e {{report.giornateDaValidare}} diari personali</span>
+      <span class="col-2">{{report.giornateValidate}} giornate e {{report.giornateValidate}} diari personali</span>
+      <span class="col-2">{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.dataFine | date:'dd/MM/yyyy'}}</span>
+      <span class="col-2">{{report.oreValidate}}/{{report.oreTotali}}</span>
+    </span>
+  </div>
+  <br>
+  <br>
+  <div *ngIf="report" class="row v-center">
+    <span class="box red"></span>&nbsp;= ore da validare&nbsp;&nbsp;&nbsp;<span class="box purple"></span>&nbsp;= ore
+    validate da ente&nbsp;&nbsp;&nbsp;<span class="box grey"></span>&nbsp;= ore validate dall'istituto di riferimento(
+    non modificabili)
+  </div>
+  <br>
+  <div class="row" *ngIf="attivita">
+    <span class="col-6 pTop">
+      <label class="titleDate">Data inizio</label>&nbsp;
+      <div #calendarStart class="col-sm-4 m-left"
+        [class.has-danger]="!date.dataInizio || date.dataInizio < limitMin || date.dataInizio > limitMax">
+        <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataInizio" [config]="datePickerConfig"
+          theme="dp-material" id="dataInizio" required>
+        </dp-date-picker>
+        <div class="invalid-feedback" [class.d-block]="!date.dataInizio">
+          Data inizio richiesta.
+        </div>
+        <div class="invalid-feedback" [class.d-block]="date.dataInizio < limitMin || date.dataInizio > limitMax">
+          Data inizio fuori del periodo della attività
+        </div>
+      </div>
+    </span>
+    <span class="col-6 pTop">
+      <label class="titleDate">Data fine</label>&nbsp;
+      <div #calendarEnd class="col-sm-4 m-left"
+        [class.has-danger]="!date.dataFine || date.dataFine > limitMax || date.dataFine < limitMin">
+        <dp-date-picker (onChange)="refresh()" [(ngModel)]="date.dataFine" [config]="datePickerConfig"
+          theme="dp-material" id="dataFine" required>
+        </dp-date-picker>
+        <div class="invalid-feedback" [class.d-block]="!date.dataFine">
+          Data fine richiesta.
+        </div>
+        <div class="invalid-feedback" [class.d-block]="date.dataFine > limitMax || date.dataFine < limitMin">
+          Data fine Data fuori del periodo della attività.
+        </div>
+      </div>
+    </span>
+  </div>
+  <br>
+  <div class="row m-16" *ngIf="attivita && presenze.length > 0">
+    <table class="table mOf">
+      <thead>
+        <tr class="thTitle center default">
+          <th width="15%">Data</th>
+          <th width="10%">Ore</th>
+          <th width="75%">Diario di bordo</th>
+        </tr>
+      </thead>
+      <tbody class="modify-table-body modify-card-body-height">
+        <tr *ngFor="let event of presenze; let index = index">
+          <td class="custom_tr">
+            <label>
+              <span>{{event.giornata.valueOf()| date:'dd-MM-yy'}} </span>
+              <span> ({{event.giornata.valueOf()| date:'EEE'}})</span>
+            </label>
+          </td>
+          <td class="custom_tr">
+            <span style="display: inline-block;" ngbTooltip="{{setToolTipGiorno(event)}}" placement="bottom">
+              <select class="form-control custom_tr" [disabled]="isArchivio || event.verificata"
+                [(ngModel)]="event.oreSvolte" [ngStyle]="styleOption(event)" (ngModelChange)="edit(event)">
+                <option [value]="0" [ngStyle]="{ 'font-size.px': 16 }">Assente</option>
+                <option [value]="ore" *ngFor="let ore of [1,2,3,4,5,6,7,8,9,10,11,12]">{{ore}}</option>
+              </select>
+            </span>
+          </td>
+          <td class="custom_tr">
+            <textarea [disabled]="isArchivio || event.verificata" class="form-control custom_select"
+              [(ngModel)]="event.attivitaSvolta" (ngModelChange)="edit(event)" [ngStyle]="styleOptionTextArea(event)">
+            </textarea>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
+</div>

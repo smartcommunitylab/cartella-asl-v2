@@ -1,4 +1,4 @@
-<div class="footer d-flex justify-content-between p-5">
+<!-- <div class="footer d-flex justify-content-between p-5">
   <div class="align-self-start footer-images">
     <a target="_blank" href="http://www.provincia.tn.it/" class="mr-5">
       <img src="assets/images/provincia_bianco.png">
@@ -12,7 +12,30 @@
       © 2018 Smart Community
     </div>
     <a href="mailto:cartella-help@smartcommunitylab.it" class="d-inline mr-5">Assistenza</a>
-    <!-- <a href="" class="d-inline">Condizioni e Privacy</a> -->
+    //<a href="" class="d-inline">Condizioni e Privacy</a>
   </div>
 
+</div> -->
+<div [ngClass]="(evn.modificationFlag) ? 'footerModification' : 'footer'" >
+  <div class="row">
+    <div class="col-1">
+      <div class="row">
+        <div class="col-5">
+          <a target="_blank" href="http://www.provincia.tn.it/" >
+            <img src="assets/images/provinciaTN.png" class="footer-imgTN">
+          </a>
+        </div>
+        <div class="col-7">
+          <a target="_blank" href="http://www.fbk.eu/" >
+            <img src="assets/images/fbk.png" class="footer-imgFBK">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-11">
+      <span class="footer-text">Copyright Smart Communities 2020 - Fondazione Bruno Kessler - Provincia Autonoma di Trento - 
+        <a href="mailto:cartella-help@smartcommunitylab.it" class="footer-textUnderline">ASSISTENZA</a>
+      </span>
+    </div>
+  </div>
 </div>

@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from '../core/services/data.service';
+import { config } from '../config';
 
 @Component({
     selector: 'terms-component',
@@ -34,8 +35,8 @@ export class TermsComponent {
     goToMainPage = function () {
         var getUrl = window.location;
         var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-        var aziendaUrl = baseUrl + '/asl-azienda/';
-        window.location.href = aziendaUrl;
+        var scuolaUrl = baseUrl;
+        window.location.href = scuolaUrl;
 
     }
 
@@ -48,11 +49,11 @@ export class TermsComponent {
     };
 
     refusePrivacy = function () {
-
         this.growler.growl('Termini rifiutati.', GrowlerMessageType.Warning);
+        sessionStorage.clear();
         var getUrl = window.location;
-        var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-        var logoutUrl = baseUrl + '/logout?target=' + baseUrl + '/asl-login/';
+        var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
+        var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`; 
         window.location.href = logoutUrl;
         console.log('App closed');
     };

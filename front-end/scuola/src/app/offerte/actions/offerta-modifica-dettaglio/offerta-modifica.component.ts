@@ -308,4 +308,9 @@ export class OffertaDettaglioModificaComponent implements OnInit {
       event.target.value = event.target.value.trim();
     }
   }
+
+  isMyOfferta() {
+    return (this.offerta.istitutoId && this.offerta.istitutoId===this.dataService.istitutoId);
+  }
+
 }

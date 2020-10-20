@@ -40,7 +40,6 @@
       -webkit-transform: translate(-50%, 0%);
               transform: translate(-50%, 0%);
     }
-
     .growler.center-center {
       top: 40%;
       left: 50%;
@@ -51,12 +50,13 @@
     .growl {
       cursor: pointer;
       padding: 5;
-      width: 285px;
-      height: 75px; 
+      width: 516px;
+      height: 100%;
+      min-height: 91px !important; 
       opacity: 0;      
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: left;
+      justify-content: left;
       
       -webkit-transition: opacity 1s;
       -moz-transition: opacity 1s; 
@@ -70,4 +70,37 @@
     
     .growl-message {
 
+    }
+    .alert-message{
+      width: 110%; 
+      height: 100%;
+      margin-top: 2% !important;
+      margin-left: -10% !important;
+    }
+    .alert-warning {
+      background-color: #FFFFFF;
+      background-image: none;
+    }
+    .alert-warning>div>div.bg-image{
+      background-repeat: no-repeat;
+      background-image: url("assets/images/it-warning-circle.svg");
+      margin-bottom: -10px;
+    }
+    .alert-danger{
+      background-color: #FFFFFF;
+      background-image: none;
+    }
+    .alert-danger>div>div.bg-image{
+      background-repeat: no-repeat;
+      background-image: url("assets/images/it-error.svg");
+      margin-bottom: -10px;
+    }
+    .alert-success {
+      background-color: #FFFFFF;
+      background-image: none;
+    }
+    .alert-success>div>div.bg-image{
+      background-repeat: no-repeat;
+      background-image: url("assets/images/it-check-circle.svg");
+      margin-bottom: -10px;
     }
