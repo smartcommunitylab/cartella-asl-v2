@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 
 @Component({
     selector: 'offerte',
@@ -74,8 +73,6 @@ export class OfferteComponent implements OnInit {
 
     }
 
-  
-  
     getOffertePage(page: number) {
         this.dataService.getOffeteForIstitutoAPI(this.filtro, (page - 1), this.pageSize)
             .subscribe((response) => {
@@ -136,7 +133,16 @@ export class OfferteComponent implements OnInit {
         this.getOffertePage(1);
     }
 
-  
+    selectStatoFilter() {
+        this.cmPagination.changePage(1);
+        if (this.stato) {
+            this.filtro.stato = this.stato;
+        } else {
+            this.filtro.stato = null;
+        }
+        this.getOffertePage(1);
+    }
+
     pageChanged(page: number) {
         this.currentpage = page;
         this.getOffertePage(page);
@@ -190,7 +196,18 @@ export class OfferteComponent implements OnInit {
         this.getOffertePage(1);
     }
 
- 
+    setIstitutiLabel(off) {
+        let label = '';
+        if (off.istitutiAssociati.length == 1) {
+            label = off.istitutiAssociati[0].nomeIstituto;    
+        } else if (off.istitutiAssociati.length > 1) {
+            label = off.istitutiAssociati.length + ' istituti';
+        } else if (off.stato == 'bozza') {
+            label = 'Nessun istituto selezionata'
+        }
+        return label;
+    }
+
     
     showTipRiga(ev, off, tp) {
         if (!off.toolTipRiga) {
@@ -214,6 +231,17 @@ export class OfferteComponent implements OnInit {
         return tip;   
     }
 
- 
+    setIndirizzo(off) {
+        let label = '';
+        if (off.luogoSvolgimento) {
+            if (off.luogoSvolgimento.length > 10) {
+                label = off.luogoSvolgimento.substring(0,10) + '...';
+            } else {
+                label = off.off.luogoSvolgimento;
+            }
+        }        
+
+        return label;
+    }
 
 }
