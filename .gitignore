@@ -28,7 +28,7 @@ back-end/.classpath
 back-end/.project
 back-end/.settings/
 back-end/.externalToolBuilders/org.eclipse.wst.common.project.facet.core.builder.launch
-**/segments_1
+**/segments_1/home/ffais/work/API-Manager/dockerfiles/apim/files
 **/write.lock
 **/segments_*
 **/_*.*
@@ -66,3 +66,4 @@ front-end/ruoli/bin
 
 **/front-end/*/.vscode/settings.json
 **/front-end/*/target/
+docker-props/
