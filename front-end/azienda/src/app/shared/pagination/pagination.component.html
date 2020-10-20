@@ -2,31 +2,31 @@
   <ul class="pagination pagination-lg">
     <li class="page-item page-control" [class.disabled]="!previousEnabled" (click)="firstLastPage(-1, $event)">
       <a class="page-link"  aria-label="First">
-        <span aria-hidden="true"><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-left"></use></svg></span>
+        <span aria-hidden="true"><i class="material-icons">first_page</i></span>
       </a>
     </li>
     <li class="page-item page-control" [class.disabled]="!previousEnabled" (click)="previousNext(-1, $event)">
       <a class="page-link"  aria-label="Previous">
-        <span aria-hidden="true"><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-chevron-left"></use></svg></span>
+        <span aria-hidden="true"><i class="material-icons">chevron_left</i></span>
       </a>
     </li>
     <li class="page-item page-control" *ngIf="truncatedLeft" (click)="previousNextTruncated(-1,$event)">
-      <a class="page-link" ><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-more-actions"></use></svg></a>
+      <a class="page-link" ><i class="material-icons">more_horiz</i></a>
     </li>
     <li class="page-item" *ngFor="let page of pages" (click)="changePage(page, $event)" [class.active]="currentPage === page">
       <a class="page-link" >{{ page }}</a>
     </li>
     <li class="page-item page-control" *ngIf="truncatedRight" (click)="previousNextTruncated(1,$event)">
-      <a class="page-link" ><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-more-actions"></use></svg></a>
+      <a class="page-link" ><i class="material-icons">more_horiz</i></a>
     </li>
     <li class="page-item page-control" [class.disabled]="!nextEnabled" (click)="previousNext(1, $event)">
       <a class="page-link"  aria-label="Next">
-        <span aria-hidden="true"><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-chevron-right"></use></svg></span>
+        <span aria-hidden="true"><i class="material-icons">chevron_right</i></span>
       </a>
     </li>
     <li class="page-item page-control" [class.disabled]="!nextEnabled" (click)="firstLastPage(1, $event)">
       <a class="page-link"  aria-label="Last">
-        <span aria-hidden="true"><svg class="icon icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right"></use></svg></span>
+        <span aria-hidden="true"><i class="material-icons">last_page</i></span>
       </a>
     </li>
   </ul>

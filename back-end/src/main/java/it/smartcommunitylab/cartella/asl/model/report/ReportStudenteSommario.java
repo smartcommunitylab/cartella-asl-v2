@@ -4,8 +4,7 @@ public class ReportStudenteSommario {
 	private int oreValidate;
 	private int oreTotali;
 	private int esperienzeConcluse;
-	private int esperienzeInCorso;
-	private int esperienzeNonCompletate;
+	private int espereinzeInCorso;
 	
 	public int getOreValidate() {
 		return oreValidate;
@@ -25,17 +24,10 @@ public class ReportStudenteSommario {
 	public void setEsperienzeConcluse(int esperienzeConcluse) {
 		this.esperienzeConcluse = esperienzeConcluse;
 	}
-	public int getEsperienzeInCorso() {
-		return esperienzeInCorso;
+	public int getEspereinzeInCorso() {
+		return espereinzeInCorso;
 	}
-	public void setEsperienzeInCorso(int esperienzeInCorso) {
-		this.esperienzeInCorso = esperienzeInCorso;
+	public void setEspereinzeInCorso(int espereinzeInCorso) {
+		this.espereinzeInCorso = espereinzeInCorso;
 	}
-	public int getEsperienzeNonCompletate() {
-		return esperienzeNonCompletate;
-	}
-	public void setEsperienzeNonCompletate(int esperienzeNonCompletate) {
-		this.esperienzeNonCompletate = esperienzeNonCompletate;
-	}
-	
 }

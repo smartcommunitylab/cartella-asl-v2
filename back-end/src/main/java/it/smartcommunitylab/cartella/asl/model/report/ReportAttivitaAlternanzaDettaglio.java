@@ -7,7 +7,6 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 
 public class ReportAttivitaAlternanzaDettaglio {
 	private AttivitaAlternanza attivitaAlternanza;
-	private String nomeIstituto;
 	private List<ReportEsperienzaRegistration> esperienze = new ArrayList<ReportEsperienzaRegistration>();
 	
 	public AttivitaAlternanza getAttivitaAlternanza() {
@@ -21,12 +20,6 @@ public class ReportAttivitaAlternanzaDettaglio {
 	}
 	public void setEsperienze(List<ReportEsperienzaRegistration> esperienze) {
 		this.esperienze = esperienze;
-	}
-	public String getNomeIstituto() {
-		return nomeIstituto;
-	}
-	public void setNomeIstituto(String nomeIstituto) {
-		this.nomeIstituto = nomeIstituto;
 	}
 	
 }

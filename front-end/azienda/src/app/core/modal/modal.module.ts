@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { EnsureModuleLoadedOnceGuard } from '../ensureModuleLoadedOnceGuard';
 import { ModalComponent }  from './modal.component';
-import { ModalService } from '../../core/modal/modal.service';
+import { ModalService } from './modal.service';
 
 @NgModule({
   imports: [ CommonModule ],

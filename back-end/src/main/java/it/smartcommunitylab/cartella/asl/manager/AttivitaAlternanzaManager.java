@@ -22,15 +22,12 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
-import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.report.ReportArchiviaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicerca;
-import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaRicercaEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudenti;
-import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaStudentiEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistration;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
@@ -57,8 +54,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	@Autowired
 	CompetenzaManager competenzaManager;
 	@Autowired
-	IstituzioneManager istituzioneManager;
-	@Autowired
 	ErrorLabelManager errorLabelManager;
 	
 	public AttivitaAlternanza saveAttivitaAlternanza(AttivitaAlternanza aa, String istitutoId) 
@@ -72,9 +67,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		} else {
 			if(aaDb.getStato().equals(Stati.archiviata)) {
 				throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
-			}
-			if(!aaDb.getAnnoScolastico().equalsIgnoreCase(Utils.annoScolastico(aa.getDataInizio()))) {
-				throw new BadRequestException(errorLabelManager.get("attivita.error.schoolYear"));
 			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
@@ -126,10 +118,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		documentManager.deleteDocumentsByRisorsaId(aa.getUuid());
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(aa.getUuid());
 		attivitaAlternanzaRepository.deleteById(aa.getId());
-	}
-	
-	public void deleteAttivitaAlternanzaById(Long id) throws Exception {
-		attivitaAlternanzaRepository.deleteById(id);
 	}
 	
 	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
@@ -216,7 +204,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return page;
 	}
 	
-	public Stati getStato(AttivitaAlternanza attivita) {
+	private Stati getStato(AttivitaAlternanza attivita) {
 		if(attivita.getStato() == Stati.archiviata) {
 			return Stati.archiviata;
 		}
@@ -261,10 +249,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
 		report.setAttivitaAlternanza(attivita);
-		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
-		if(istituto != null) {
-			report.setNomeIstituto(istituto.getName());
-		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 		for (EsperienzaSvolta esperienza : esperienze) {
@@ -473,14 +457,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return  result;
 	}
 	
-	public List<PresenzaGiornaliera> validaPresenzeAttivitaByEnte(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
-		List<PresenzaGiornaliera> result = new ArrayList<>();
-		for(PresenzaGiornaliera pg : presenze) {
-			result.add(presenzaGiornalieraManager.validaPresenzaByEnte(pg));
-		}
-		return  result;
-	}
-	
 	public List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppo(AttivitaAlternanza aa, LocalDate dateFrom, 
 			LocalDate dateTo) throws Exception {
 		List<ReportPresenzaGiornalieraGruppo> reportList = new ArrayList<ReportPresenzaGiornalieraGruppo>();
@@ -626,9 +602,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(report != null) {
 				if(pg.getVerificata()) {
 					report.setOreValidate(report.getOreValidate() + pg.getOreSvolte());
-					if(pg.getSmartWorking()) {
-						report.setOreSmartWorking(report.getOreSmartWorking() + pg.getOreSvolte());
-					}
 				} else {
 					report.setOreDaValidare(report.getOreDaValidare() + pg.getOreSvolte());
 				}
@@ -696,119 +669,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		fillReportEsperienzaStudenteWithPresenze(studenteId, reportMap);
 		return reportList;
-	}
-
-	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, String stato,
-			Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
-		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
-		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
-		
-		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
-		}
-		
-		boolean setDataParam = false;
-		if(Utils.isNotEmpty(stato)) {
-			Stati statoEnum = Stati.valueOf(stato);
-			if(statoEnum == Stati.archiviata) {
-				sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
-			} else {
-				sb.append(" AND aa.stato='" + Stati.attiva.toString() + "'");
-				setDataParam = true;
-				if(statoEnum == Stati.in_attesa) {
-					sb.append(" AND aa.dataInizio > (:data)");
-				}
-				if(statoEnum == Stati.revisione) {
-					sb.append(" AND aa.dataFine < (:data)");
-					setDataParam = true;
-				}
-				if(statoEnum == Stati.in_corso) {
-					sb.append(" AND aa.dataInizio <= (:data) AND aa.dataFine >= (:data)");
-					setDataParam = true;
-				}
-			}
-		}
-				
-		sb.append(" ORDER BY aa.dataInizio DESC, aa.titolo ASC");
-		String q = sb.toString();
-
-		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
-		
-		query.setParameter("enteId", enteId);
-		if(Utils.isNotEmpty(text)) {
-			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
-		}
-		if(setDataParam) {
-			LocalDate localDate = LocalDate.now(); 
-			query.setParameter("data", localDate);
-		}
-		
-		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
-		query.setMaxResults(pageRequest.getPageSize());
-		List<AttivitaAlternanza> aaList = query.getResultList();
-		
-		List<ReportAttivitaAlternanzaRicercaEnte> reportList = new ArrayList<>();
-		Map<Long, ReportAttivitaAlternanzaRicercaEnte> reportMap = new HashMap<>();
-		List<Long> aaIdList = new ArrayList<>();
-		for (AttivitaAlternanza aa : aaList) {
-			ReportAttivitaAlternanzaRicercaEnte report = new ReportAttivitaAlternanzaRicercaEnte(aa); 
-			report.setStato(getStato(aa).toString());
-			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
-			if(istituto != null) {
-				report.setNomeIstituto(istituto.getName());
-			}
-			reportMap.put(aa.getId(), report);
-			reportList.add(report);
-			aaIdList.add(aa.getId());
-		}
-		
-		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaIds(aaIdList);
-		for(EsperienzaSvolta es : esperienze) {
-			ReportAttivitaAlternanzaRicercaEnte report = reportMap.get(es.getAttivitaAlternanzaId());
-			if(report != null) {
-				report.getStudenti().add(es.getNominativoStudente());
-			}
-		}
-		
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), query);
-		long total = (Long) cQuery.getSingleResult();
-		
-		Page<ReportAttivitaAlternanzaRicercaEnte> page = new PageImpl<ReportAttivitaAlternanzaRicercaEnte>(reportList, pageRequest, total);
-		return page;
-	}
-
-	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws BadRequestException {
-		AttivitaAlternanza aaDb = getAttivitaAlternanza(aa.getId());
-		if(aaDb == null) {
-			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
-		}
-		if(!enteId.equals(aaDb.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
-		}		
-		if(aaDb.getStato().equals(Stati.archiviata)) {
-			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
-		}
-		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
-		return getAttivitaAlternanza(aa.getId());
-	}
-
-	public ReportAttivitaAlternanzaStudentiEnte getStudentInfoEnte(AttivitaAlternanza attivitaAlternanza) {
-		ReportAttivitaAlternanzaStudentiEnte report = new ReportAttivitaAlternanzaStudentiEnte(attivitaAlternanza);
-		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(attivitaAlternanza, 
-				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
-		for(EsperienzaSvolta esperienza : esperienze) {
-			List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienza.getId());
-			for(PresenzaGiornaliera presenza :  presenze) {
-				if(!presenza.getValidataEnte() && !presenza.getVerificata()) {
-					report.addOreDaValidare(presenza.getOreSvolte());
-				}
-			}
-			if(report.getNumeroOreDaValidare() > 0) {
-				report.addStudenteDaValidare();
-			}
-		}
-		return report;
 	}
 	
 }

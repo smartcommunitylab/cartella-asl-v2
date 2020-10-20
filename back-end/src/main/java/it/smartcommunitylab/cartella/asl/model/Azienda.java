@@ -47,14 +47,6 @@ public class Azienda {
 	private Double longitude;
 	private int idTipoAzienda;
 	
-	private String legaleRappresentante;
-	private String medicoCompetente;
-	private String responsabileSicurezza;
-	private String viaPiazza;
-	private String cap;
-	private String comune;
-	private String provincia;
-	
 	@Transient
 	private boolean estera = false;
 
@@ -210,62 +202,6 @@ public class Azienda {
 
 	public void setEstera(boolean estera) {
 		this.estera = estera;
-	}
-
-	public String getLegaleRappresentante() {
-		return legaleRappresentante;
-	}
-
-	public void setLegaleRappresentante(String legaleRappresentante) {
-		this.legaleRappresentante = legaleRappresentante;
-	}
-
-	public String getMedicoCompetente() {
-		return medicoCompetente;
-	}
-
-	public void setMedicoCompetente(String medicoCompetente) {
-		this.medicoCompetente = medicoCompetente;
-	}
-
-	public String getResponsabileSicurezza() {
-		return responsabileSicurezza;
-	}
-
-	public void setResponsabileSicurezza(String responsabileSicurezza) {
-		this.responsabileSicurezza = responsabileSicurezza;
-	}
-
-	public String getViaPiazza() {
-		return viaPiazza;
-	}
-
-	public void setViaPiazza(String viaPiazza) {
-		this.viaPiazza = viaPiazza;
-	}
-
-	public String getCap() {
-		return cap;
-	}
-
-	public void setCap(String cap) {
-		this.cap = cap;
-	}
-
-	public String getComune() {
-		return comune;
-	}
-
-	public void setComune(String comune) {
-		this.comune = comune;
-	}
-
-	public String getProvincia() {
-		return provincia;
-	}
-
-	public void setProvincia(String provincia) {
-		this.provincia = provincia;
 	}
 
 }

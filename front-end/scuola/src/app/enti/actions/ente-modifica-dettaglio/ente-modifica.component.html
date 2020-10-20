@@ -15,7 +15,7 @@
                     </span>
                 </button>
                 &nbsp;&nbsp;
-                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-success btn-icon btn-xs" placement="bottom" ngbTooltip="Modifica l'attività"
+                <button class="btn btn-success btn-icon btn-xs" placement="bottom" ngbTooltip="Modifica l'attività"
                     (click)="save(myForm)">
                     <span class="row modalButtonTextStyle">
                         <span class="v-center">Salva&nbsp;</span>&nbsp;
@@ -43,7 +43,6 @@
                     <div class="row v-center form-group">
                         <div class="col-sm-5"
                             [class.has-danger]="NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay)">
-                            <label for="nome" *ngIf="ente.nome" class="active">Nome</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.nome" id="nome" name="nome" #NomeInput="ngModel"
                                 placeholder="Nome" required>
                             <div class="invalid-feedback"
@@ -53,7 +52,6 @@
                         <div class="col-2"></div>
                         <div class="col-sm-5"
                             [class.has-danger]="EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay)">
-                            <label for="email" *ngIf="ente.email" class="active">Email</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.email" id="email" name="email"
                                 #EmailInput="ngModel" placeholder="Email">
                         </div>
@@ -61,7 +59,6 @@
                     <div class="row v-center form-group">
                         <div class="col-sm-3" [hidden]="ente.estera"
                             [class.has-danger]="partitaIvaInputLocale.invalid && (partitaIvaInputLocale.dirty || partitaIvaInputLocale.touched || forceErrorDisplay)">
-                            <label for="partitaIva" *ngIf="ente.partita_iva" class="active">Partita Iva</label>
                             <input type="text" class="form-control" pattern="[0-9]*" minlength="11" maxlength="11" 
                                 [(ngModel)]="ente.partita_iva" id="partitaIvaLocale" name="partitaIvaLocale" #partitaIvaInputLocale="ngModel"
                                 placeholder="Partita Iva" required>
@@ -71,7 +68,6 @@
                         </div>
                         <div class="col-sm-3" [hidden]="!ente.estera"
                             [class.has-danger]="partitaIvaInput.invalid && (partitaIvaInput.dirty || partitaIvaInput.touched || forceErrorDisplay)">
-                            <label for="partitaIva" *ngIf="ente.partita_iva" class="active">Partita Iva</label>
                             <input type="text" class="form-control" 
                                 [(ngModel)]="ente.partita_iva" id="partitaIva" name="partitaIva" #partitaIvaInput="ngModel"
                                 placeholder="Partita Iva" required>
@@ -85,7 +81,6 @@
                         <div class="col-sm-2"></div>
                         <div class="col-sm-5"
                             [class.has-danger]="PECInput.invalid && (PECInput.dirty || PECInput.touched || forceErrorDisplay)">
-                            <label for="pec" *ngIf="ente.pec" class="active">PEC</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.pec" id="pec" name="pec" #PECInput="ngModel"
                                 placeholder="PEC">
                         </div>
@@ -94,7 +89,6 @@
     
                         <div class="col-sm-5"
                             [class.has-danger]="idTipoAziendaInput.invalid && (idTipoAziendaInput.dirty || idTipoAziendaInput.touched || forceErrorDisplay)">
-                            <label for="idTipoAzienda" *ngIf="ente.idTipoAzienda" class="active">Tipologia</label>
                             <select class="form-control custom_select" [(ngModel)]="ente.idTipoAzienda" id="idTipoAzienda" name="idTipoAzienda"
                                 #idTipoAziendaInput="ngModel" required>
                                 <option selected="selected">Tipo</option>
@@ -108,58 +102,9 @@
                         <div class="col-2"></div>
                         <div class="col-sm-5"
                             [class.has-danger]="TelefonoInput.invalid && (TelefonoInput.dirty || TelefonoInput.touched || forceErrorDisplay)">
-                            <label for="phone" *ngIf="ente.phone" class="active">Telefono</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.phone" id="phone" name="phone"
                                 #TelefonoInput="ngModel" placeholder="Telefono">
                         </div>
-                    </div>
-                    <div class="row v-center form-group">
-                        <div class="col-sm-5">
-                            <label for="viaPiazza" *ngIf="ente.viaPiazza" class="active">Via / Piazza</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.viaPiazza" id="viaPiazza" name="viaPiazza"
-                                #ViaInput="ngModel" placeholder="Via / Piazza">
-                        </div>
-                        <div class="col-2"></div>
-                        <div class="col-sm-5">
-                            <label for="legaleRappresentante" *ngIf="ente.legaleRappresentante" class="active">Legale Rappresentante</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.legaleRappresentante" id="legaleRappresentante" name="legaleRappresentante"
-                                #LegaleRappresentanteInput="ngModel" placeholder="Legale Rappresentante">
-                        </div>
-                    </div>
-                    <div class="row v-center form-group">
-                        <div class="col-sm-5">
-                            <label for="cap" *ngIf="ente.cap" class="active">CAP</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.cap" id="cap" name="cap"
-                                #CapInput="ngModel" placeholder="CAP">
-                        </div>
-                        <div class="col-2"></div>
-                        <div class="col-sm-5">
-                            <label for="responsabileSicurezza" *ngIf="ente.responsabileSicurezza" class="active">Responsabile della Sicurezza</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.responsabileSicurezza" id="responsabileSicurezza" name="responsabileSicurezza"
-                                #ResponsabileSicurezzaInput="ngModel" placeholder="Responsabile della Sicurezza">
-                        </div>
-                    </div>
-                    <div class="row v-center form-group">
-                        <div class="col-sm-5">
-                            <label for="comune" *ngIf="ente.comune" class="active">Comune</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.comune" id="comune" name="comune"
-                                #ComuneInput="ngModel" placeholder="Comune">
-                        </div>
-                        <div class="col-2"></div>
-                        <div class="col-sm-5">
-                            <label for="medicoCompetente" *ngIf="ente.medicoCompetente" class="active">Medico Competente</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.medicoCompetente" id="medicoCompetente" name="medicoCompetente"
-                                #MedicoCompetenteInput="ngModel" placeholder="Medico Competente">
-                        </div>
-                    </div>
-                    <div class="row v-center form-group">                        
-                        <div class="col-sm-5">
-                            <label for="provincia" *ngIf="ente.provincia" class="active">Provincia</label>
-                            <input type="text" class="form-control" [(ngModel)]="ente.provincia" id="provincia" name="provincia"
-                                #ProvinciaInput="ngModel" placeholder="Provincia">
-                        </div>
-                        <div class="col-2"></div>
-                        <div class="col-sm-5"></div>
                     </div>
     
                     <div class="row v-center form-group">
@@ -176,8 +121,8 @@
                             <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
                                 <span class="sr-only">Caricamento...</span>
                             </small>
-                            <label for="luogoSvolgimento" *ngIf="ente.address" class="active">Posizione</label>
-                            <label for="luogoSvolgimento" *ngIf="!ente.address">Posizione</label>
+                            <label for="luogoSvolgimento" *ngIf="ente.address" class="active">Indirizzo</label>
+                            <label for="luogoSvolgimento" *ngIf="!ente.address">Indirizzo</label>
                             <div class="invalid-feedback" [class.d-block]="forceAddressDisplay">Campo necessario.</div>
                         </div>
                     </div>

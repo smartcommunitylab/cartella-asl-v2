@@ -9,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ReloginModal {
 
   text: any;
-
+  
   constructor(public activeModal: NgbActiveModal) { }
 
   login() {

@@ -4,12 +4,11 @@ import { Subscription } from 'rxjs/Subscription';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
 import { config } from '../../config';
-import { AuthenticationService } from '../services/authentication.service';
 
 @Component({
     selector: 'cm-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit, OnDestroy {
 
@@ -27,13 +26,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, private growler: GrowlerService, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
-    
-    ngOnInit() {
+    constructor(private router: Router, private growler: GrowlerService, private dataService: DataService) { }
 
+
+
+    ngOnInit() {
         this.dataService.getProfile().subscribe(profile => {
 
             if (profile) {
+                this.profile = profile;
+                sessionStorage.setItem('access_token', profile.token)
                 this.profile = profile;
                 if (profile && profile.aziende) {
                     // get azienda ids(keys of map).
@@ -57,7 +59,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                         }
                     }
                         , err => {
-                            console.log('error, no azienda')
+                            console.log('error, no institute')
                         });
 
                 }
@@ -75,7 +77,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.dataService.setAziendaPosition(config.defaultPosition);
         }                           
         this.aziendaName =  this.dataService.aziendaName;       
-        this.router.navigate(['/attivita']);
+        this.router.navigate(['/home']);
 
     }
 
@@ -86,11 +88,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     loginOrOut() {
 
     }
-
     logout() {
-        this.authService.logout();
-    }
+        var getUrl = window.location;
+        var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        var logoutUrl = baseUrl + '/logout?target='+baseUrl+'/asl-login/';
+        window.location.href = logoutUrl;
 
+    }
     redirectToLogin() {
         this.router.navigate(['/login']);
     }
@@ -98,9 +102,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     setLoginLogoutText() {
     }
 
-    isActive(location) {
-        if (this.router.url.includes(location)) {
-            return true;
+    @HostListener("window:scroll", [])
+    onWindowScroll() {
+        var sticky = this.navbarHeaderTop.nativeElement.clientHeight;
+        if (this.isSticky != (window.pageYOffset >= sticky)) {
+            this.isSticky = window.pageYOffset >= sticky;
+            this.isStickyListener.emit(this.isSticky);
         }
     }
 

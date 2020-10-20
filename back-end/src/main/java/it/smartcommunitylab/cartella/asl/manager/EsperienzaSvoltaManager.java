@@ -47,10 +47,6 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 	@Autowired
 	EsperienzaAllineamentoManager EsperienzaAllineamentoManager;
 
-	public EsperienzaSvolta getEsperienzaSvolta(Long id) {
-		return esperienzaSvoltaRepository.findById(id).orElse(null);
-	}
-	
 	public List<EsperienzaSvolta> getEsperienzeByAttivita(AttivitaAlternanza attivitaAlternanza, Sort sort) {
 		return esperienzaSvoltaRepository.findByIstitutoAndAttivita(attivitaAlternanza.getIstitutoId(), 
 				attivitaAlternanza.getId(), sort);

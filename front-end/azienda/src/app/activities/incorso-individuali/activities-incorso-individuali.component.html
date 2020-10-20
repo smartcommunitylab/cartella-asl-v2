@@ -1,0 +1,55 @@
+<div class="card mb-3 list-container md-margin">
+
+    <h3 class="card-header">
+        Attività
+    </h3>
+
+    <div class="card-body">
+        <div *ngIf="esperienzaSvolta.length" class="table list-group">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Persona/Classe</th>
+                        <th>Tipologia</th>
+                        <th>Periodo</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let activity of esperienzaSvolta">
+                        <td class="custom_tr">
+                            <!-- <a [routerLink]="['view', activity.id]" *ngIf="activity.attivitaAlternanza.individuale">{{ activity.studente.name | capitalize}} {{ activity.studente.surname | capitalize}}</a>
+                            <a [routerLink]="['view', activity.id]" *ngIf="!activity.attivitaAlternanza.individuale">Classe {{ activity.attivitaAlternanza.classe}}</a> -->
+                            {{ activity.studente.name | capitalize}} {{ activity.studente.surname | capitalize}}
+                        </td>
+                        <td class="custom_tr">{{ getTipo(activity.attivitaAlternanza.tipologia) }}</td>
+                        <td class="custom_tr">{{ activity.attivitaAlternanza.dataInizio | date: 'dd/MM/yyyy'}} - {{ activity.attivitaAlternanza.dataFine
+                            | date: 'dd/MM/yyyy'}}</td>
+                        <td class="custom_tr">
+                            <div>{{ getStato(activity.stato) }}
+                                <i class="material-icons custom-material-icon" *ngIf="activity.stato==-1">warning</i>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="pull-right">
+                                <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary btn-action" [routerLink]="['view', activity.id]">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;dettaglio
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="center">
+                <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+            </div>
+        </div>
+        <div class="text-center">
+            <label *ngIf="!esperienzaSvolta.length" class="font-14 font-weight-bold">Nessuna attività trovata</label>
+        </div>
+    </div>
+
+</div>

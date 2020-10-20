@@ -1,0 +1,110 @@
+.list-container{
+    margin-top: 40px;
+
+    >.row {
+        margin: 0px;
+    }
+
+    .card-body {
+        >.row {
+            align-items: center;
+            .filter-data {
+                span {
+                    position: absolute;
+                    right: 20px;
+                    bottom: 0px;
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            span {
+                margin: 4px;
+            }
+        }
+    }
+
+    .list-group {
+        margin-top: 40px;
+        .row {
+            align-items: center;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            font-size: 20px;
+        }
+    }
+}
+
+.custom_filter {
+    position: absolute;
+    right: 0px;
+}
+
+
+.filter_style{
+    // font-size: large;
+    position: relative;
+    right: 15px;
+    vertical-align: bottom;
+    
+}
+
+.filter_input {
+    position: relative;
+    right: 20px;
+}
+
+.filter_button {
+    position: relative;
+    right: 20px;
+    // top: 5px;
+}
+
+.middle {
+    vertical-align: text-bottom;
+}
+
+.right {
+    text-align: right;
+}
+
+.custom_select {
+    width: inherit;
+    height: 100%;
+    vertical-align: text-bottom;
+    color: grey;
+  }
+
+.filter {
+    vertical-align: text-bottom;
+    color: grey;
+    text-align: right;
+}
+
+.initial {
+    font-size: initial;
+}
+
+
+.order_position {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.font-14 {
+ font-size: 14px;
+}
+
+.custom_tr {
+    vertical-align: middle;
+}
+
+
+.center {
+    text-align: center;
+}

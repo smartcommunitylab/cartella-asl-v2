@@ -118,7 +118,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let esp of esperienze" [routerLink]="['/studenti/list/detail/', esp.studenteId]">
+                        <tr *ngFor="let esp of esperienze">
                             <td>{{esp.nominativoStudente}}</td>
                             <td>{{esp.cfStudente}}</td>
                             <td>{{esp.classeStudente}}</td>

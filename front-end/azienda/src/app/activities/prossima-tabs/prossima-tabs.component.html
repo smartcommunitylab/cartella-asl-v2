@@ -1,0 +1,14 @@
+<div class="container">
+    <ngb-tabset #subTabsProssima (tabChange)="beforeChange($event)">
+        <ngb-tab id="tab-individuali" title="Attivita Individuali">
+            <ng-template ngbTabContent>
+                <activities-prossima-individuali></activities-prossima-individuali>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-gruppi" title="Attivita Gruppi">
+            <ng-template ngbTabContent>
+                <activities-prossima-gruppi></activities-prossima-gruppi>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>

@@ -1,0 +1,34 @@
+<div class="md-margin home-tiles root-container">
+    <div class="row justify-content-center">
+    <div class="col-3 "></div>
+    <div class="col-3 ">
+      <div class="card">
+        <div class="card-header" (click)="openTile('attivitainterne')">
+          <h1>Attività</h1>
+        </div>
+        <div class="card-body">
+          <i class="material-icons tile-icon">work</i>
+          <p>Gestisci le attivita' di gruppo e individuli gia' programmate.</p>
+          <div class="tile-btn-container">
+            <button class="btn btn-primary" (click)="openTile('/attivita/tabs/incorso')">Entra</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 ">
+      <div class="card">
+        <div class="card-header" (click)="openTile('attivitagiornaliera')">
+          <h1>Offerte</h1>
+        </div>
+        <div class="card-body">
+          <i class="material-icons tile-icon">card_giftcard</i>
+          <p>Gestisce le oppotunita' che la tua azienda mette a disposizione della comunita' scolastica. </p>
+          <div class="tile-btn-container">
+            <button class="btn btn-primary" (click)="openTile('/oppurtunita/list')">Entra</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 "></div>
+  </div>
+</div>

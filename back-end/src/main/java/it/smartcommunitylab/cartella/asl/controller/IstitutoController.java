@@ -1,13 +1,14 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.time.LocalDate;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -97,19 +98,6 @@ public class IstitutoController implements AslController {
 		}
 		return istituto;
 	}
-	
-	@GetMapping(value = "/api/istituto/search")
-	public @ResponseBody Page<Istituzione> searchIstituti(
-			@RequestParam String text, 
-			Pageable pageRequest,
-			HttpServletRequest request) throws Exception {
-		Page<Istituzione> result = istituzioneManager.findIstituti(text, pageRequest);
-		if (logger.isInfoEnabled()) {
-			logger.info(String.format("searchIstituti: %s", text));
-		}		
-		return result;
-	}	
-
 
 	
 }

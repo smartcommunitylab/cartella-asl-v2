@@ -7,13 +7,9 @@ import { DashboardSistemaComponent } from './sistema/sistema.component';
 import { DashboardAttivitaComponent } from './attivita/attivita.component';
 import { DashboardEsperienzeComponent } from './esperienze/esperienze.component';
 import { DashboardRegistrazioniComponent } from './registrazioni/registrazioni.component';
-import { DeleteAttivitaModalModule } from './modals/delete-attivita-modal/delete-attivita-modal.module';
-import { DeleteEsperienzaModalModule } from './modals/delete-esperienza-modal/delete-esperienza-modal.module';
 import { SharedModule } from '../shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
-import { DeleteAttivitaModalComponent } from './modals/delete-attivita-modal/delete-attivita-modal.component';
-import { DeleteEsperienzaModalComponent } from './modals/delete-esperienza-modal/delete-esperienza-modal.component';
 
 @NgModule({
   imports: [
@@ -21,12 +17,9 @@ import { DeleteEsperienzaModalComponent } from './modals/delete-esperienza-modal
     CommonModule,
     NgbModule.forRoot(),
     SubNavbarModule,
-    DashboardRoutingModule,
-    DeleteAttivitaModalModule,
-    DeleteEsperienzaModalModule
+    DashboardRoutingModule
   ],
-  declarations: [DashboardComponent, DashboardSistemaComponent, DashboardAttivitaComponent, 
-    DashboardEsperienzeComponent, DashboardRegistrazioniComponent],
-  entryComponents: [DeleteAttivitaModalComponent, DeleteEsperienzaModalComponent]
+  declarations: [DashboardComponent, DashboardSistemaComponent, DashboardAttivitaComponent, DashboardEsperienzeComponent, DashboardRegistrazioniComponent],
+  entryComponents: []
 })
 export class DashboardModule { }

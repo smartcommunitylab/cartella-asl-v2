@@ -1,7 +1,6 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
-import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.Offerta.Stati;
-import it.smartcommunitylab.cartella.asl.model.OffertaIstituto;
-import it.smartcommunitylab.cartella.asl.repository.OffertaIstitutoRepository;
 import it.smartcommunitylab.cartella.asl.repository.OffertaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -33,13 +28,9 @@ public class OffertaManager extends DataEntityManager {
 	@Autowired
 	OffertaRepository offertaRepository;
 	@Autowired
-	OffertaIstitutoRepository offertaIstitutoRepository;
-	@Autowired
 	CompetenzaManager competenzaManager;
 	@Autowired
 	LocalDocumentManager documentManager;
-	@Autowired
-	AziendaManager aziendaManager;
 	@Autowired
 	ErrorLabelManager errorLabelManager;
 
@@ -74,8 +65,8 @@ public class OffertaManager extends DataEntityManager {
 	public Page<Offerta> findOfferta(String istitutoId, String text, int tipologia,	Boolean ownerIstituto, String stato, 
 			Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
-		/*if(ownerIstituto == null) {
+		sb.append("SELECT off FROM Offerta off WHERE");
+		if(ownerIstituto == null) {
 			sb.append(" (off.istitutoId=(:istitutoId) OR off.istitutoId IS NULL)");
 		} else {
 			if(ownerIstituto) {
@@ -83,7 +74,7 @@ public class OffertaManager extends DataEntityManager {
 			} else {
 				sb.append(" off.istitutoId IS NULL");
 			}
-		}*/
+		}
 		if(tipologia > 0) {
 			sb.append(" AND off.tipologia=(:tipologia)");
 		}
@@ -102,7 +93,9 @@ public class OffertaManager extends DataEntityManager {
 		String q = sb.toString();
 		
 		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
-		query.setParameter("istitutoId", istitutoId);
+		if((ownerIstituto == null) || ownerIstituto) {
+			query.setParameter("istitutoId", istitutoId);
+		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
@@ -121,7 +114,7 @@ public class OffertaManager extends DataEntityManager {
 			o.setStato(getStato(o));
 		});
 		
-		Query cQuery = queryToCount(q.replace("DISTINCT off", "COUNT(DISTINCT off)"), query);
+		Query cQuery = queryToCountQuery(q, query);
 		long total = (Long) cQuery.getSingleResult();
 		
 		Page<Offerta> page = new PageImpl<Offerta>(rows, pageRequest, total);
@@ -136,9 +129,6 @@ public class OffertaManager extends DataEntityManager {
 		if(localDate.isAfter(offerta.getDataFine())) {
 			return Stati.scaduta;
 		}
-		if(offerta.getIstitutiAssociati().size() == 0) {
-			return Stati.bozza;
-		}
 		return Stati.disponibile;
 	}
 	
@@ -147,71 +137,23 @@ public class OffertaManager extends DataEntityManager {
 			Optional<Offerta> optional = offertaRepository.findById(id);
 			if(optional.isPresent()) {
 				Offerta offerta = optional.get();
-				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
 				offerta.setStato(getStato(offerta));
-				completaAssociazioni(offerta);
+				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
 				return offerta;
 			}			
 		}
 		return null;
 	}
 	
-	private void completaAssociazioni(Offerta offerta) {
-		if(offerta != null) {
-			List<OffertaIstituto> list = offertaIstitutoRepository.findByOffertaId(offerta.getId());
-			for(OffertaIstituto o : list) {
-				offerta.getIstitutiAssociati().add(new OffertaIstitutoStub(o));
-			}
-		}
-	}
-
 	public Offerta saveOffertaIstituto(Offerta offerta, String istitutoId) throws Exception {
 		Offerta offertaDb = getOfferta(offerta.getId());
 		if(offertaDb == null) {
-			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
-		} else {
-			OffertaIstituto oi = offertaIstitutoRepository.findByOffertaIdAndIstitutoId(offerta.getId(), istitutoId);
-			if(oi == null) {
-				throw new BadRequestException(errorLabelManager.get("offerta.owner"));
-			}
-			offertaDb.setReferenteScuola(offerta.getReferenteScuola());
-			offertaDb.setReferenteScuolaCF(offerta.getReferenteScuolaCF());
-			offertaDb.setReferenteScuolaTelefono(offerta.getReferenteScuolaTelefono());
-			offertaRepository.update(offertaDb);
-			return offertaDb;
-		}
-	}
-	
-	public Offerta deleteOfferta(Long id, String istitutoId) throws Exception {
-		Offerta offerta = getOfferta(id);
-		if(offerta == null) {
-			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
-		}
-		if(!istitutoId.equals(offerta.getIstitutoId())) {
-			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
-		}
-		if(offerta.getNumeroAttivita() > 0) {
-			throw new BadRequestException(errorLabelManager.get("offerta.used"));
-		}
-		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
-		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
-		offertaRepository.deleteById(offerta.getId());
-		return offerta;
-	}
-
-	public Offerta saveOffertaByEnte(Offerta offerta, String enteId) throws Exception {
-		Offerta offertaDb = getOfferta(offerta.getId());
-		if(offertaDb == null) {
-			offerta.setEnteId(enteId);
-			Azienda azienda = aziendaManager.getAzienda(enteId);
-			if(azienda != null) {
-				offerta.setNomeEnte(azienda.getNome());
-			}
+			offerta.setIstitutoId(istitutoId);
 			offerta.setUuid(Utils.getUUID());
 			offerta.setPostiRimanenti(offerta.getPostiDisponibili());
 			return offertaRepository.save(offerta);
 		} else {
-			if(!enteId.equals(offertaDb.getEnteId())) {
+			if(!istitutoId.equals(offertaDb.getIstitutoId())) {
 				throw new BadRequestException(errorLabelManager.get("offerta.owner"));
 			}
 			int postiOccupati = offertaDb.getPostiDisponibili() - offertaDb.getPostiRimanenti();
@@ -223,117 +165,15 @@ public class OffertaManager extends DataEntityManager {
 			return offerta;
 		}
 	}
-
-	public Offerta deleteOffertaByEnte(Long id, String enteId) throws Exception {
-		Offerta offerta = getOfferta(id);
-		if(offerta == null) {
-			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
-		}
-		if(!enteId.equals(offerta.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
-		}
-		if(offerta.getNumeroAttivita() > 0) {
+	
+	public void deleteOfferta(Offerta offerta) throws Exception {
+		int count = countAttivitaAlternanzaByOfferta(offerta.getId());
+		if(count > 0) {
 			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		documentManager.deleteDocumentsByRisorsaId(offerta.getUuid());
 		competenzaManager.deleteAssociatedCompetenzeByRisorsaId(offerta.getUuid());
 		offertaRepository.deleteById(offerta.getId());
-		return offerta;
 	}
-
-	public void associaIstitutiByEnte(Long id, String enteId, 
-			List<OffertaIstitutoStub> istituti) throws Exception{
-		Offerta offerta = getOfferta(id);
-		if(offerta == null) {
-			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
-		}
-		if(!enteId.equals(offerta.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
-		}
-		if(offerta.getNumeroAttivita() > 0) {
-			throw new BadRequestException(errorLabelManager.get("offerta.used"));
-		}
-		cancellaIstitutiAssociati(id);
-		for(OffertaIstitutoStub o : istituti) {
-			OffertaIstituto entity = new OffertaIstituto();
-			entity.setOffertaId(id);
-			entity.setIstitutoId(o.getIstitutoId());
-			entity.setNomeIstituto(o.getNomeIstituto());
-			offertaIstitutoRepository.save(entity);
-		}
-	}
-
-	private void cancellaIstitutiAssociati(Long offertaId) {
-		List<OffertaIstituto> list = offertaIstitutoRepository.findByOffertaId(offertaId);
-		for(OffertaIstituto o : list) {
-			offertaIstitutoRepository.delete(o);
-		}
-	}
-
-	public Offerta getOffertaByEnte(Long id, String enteId) throws Exception {
-		Offerta offerta = getOfferta(id);
-		if(offerta == null) {
-			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
-		}
-		if(!enteId.equals(offerta.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("offerta.owner"));
-		}
-		return offerta;
-	}
-
-	public Page<Offerta> findOffertaByEnte(String enteId, String text, String stato, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off.id FROM Offerta off LEFT JOIN OffertaIstituto oi ON off.id=oi.offertaId"
-				+ " WHERE off.enteId=(:enteId)");
-		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(oi.nomeIstituto) LIKE (:text))");
-		}
-		boolean bozza = false;
-		if(Utils.isNotEmpty(stato)) {
-			Stati statoEnum = Stati.valueOf(stato);
-			if(statoEnum == Stati.disponibile) {
-				sb.append(" AND off.postiRimanenti > 0 AND off.dataFine >= (:date)");
-			} else if (statoEnum == Stati.bozza) {
-				sb.append(" AND off.postiRimanenti > 0 AND off.dataFine >= (:date)");
-				bozza = true;
-			} else {
-				sb.append(" AND (off.postiRimanenti <= 0 OR off.dataFine < (:date))");
-			}
-		}
-		sb.append(" GROUP BY off.id, oi.offertaId");
-		if(bozza) {
-			sb.append(" HAVING COUNT(oi.offertaId)=0");
-		}
-		sb.append(" ORDER BY off.dataInizio DESC");
-		String q = sb.toString();
-		
-		Query query = em.createQuery(q);
-		query.setParameter("enteId", enteId);
-		if(Utils.isNotEmpty(text)) {
-			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
-		}
-		if(Utils.isNotEmpty(stato)) {
-			LocalDate localDate = LocalDate.now();
-			query.setParameter("date", localDate);
-		}
-		
-		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
-		query.setMaxResults(pageRequest.getPageSize());
-		List<Object> rows = query.getResultList();
-		List<Offerta> list = new ArrayList<>();
-		for (Object obj : rows) {
-			Long offertaId = (Long) obj;
-			Offerta offerta = getOfferta(offertaId);
-			list.add(offerta);
-		}
-		
-		String counterQuery = "SELECT COUNT(off) FROM Offerta off WHERE off.id IN (" + q + ")";
-		Query cQuery = queryToCount(counterQuery, query);
-		long total = (Long) cQuery.getSingleResult();
-		
-		Page<Offerta> page = new PageImpl<Offerta>(list, pageRequest, total);
-		return page;
-	}
-
 
 }

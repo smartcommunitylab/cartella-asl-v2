@@ -1,8 +1,6 @@
 package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
-import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 
 @Entity
 @Table(name = "offerta")
@@ -26,7 +23,7 @@ import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
 public class Offerta {
 
 	public static enum Stati {
-		scaduta, disponibile, bozza
+		scaduta, disponibile
 	}
 
 	@Id
@@ -53,10 +50,8 @@ public class Offerta {
 	private String nomeEnte;
 	private String referenteScuola;
 	private String referenteScuolaCF;
-	private String referenteScuolaTelefono;	
 	private String referenteEsterno;
 	private String referenteEsternoCF;
-	private String referenteEsternoTelefono;	
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -67,8 +62,6 @@ public class Offerta {
 	private int postiRimanenti;
 	@Transient
 	private int numeroAttivita;
-	@Transient
-	List<OffertaIstitutoStub> istitutiAssociati = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -284,30 +277,6 @@ public class Offerta {
 
 	public void setNumeroAttivita(int numeroAttivita) {
 		this.numeroAttivita = numeroAttivita;
-	}
-
-	public String getReferenteEsternoTelefono() {
-		return referenteEsternoTelefono;
-	}
-
-	public void setReferenteEsternoTelefono(String referenteEsternoTelefono) {
-		this.referenteEsternoTelefono = referenteEsternoTelefono;
-	}
-
-	public String getReferenteScuolaTelefono() {
-		return referenteScuolaTelefono;
-	}
-
-	public void setReferenteScuolaTelefono(String referenteScuolaTelefono) {
-		this.referenteScuolaTelefono = referenteScuolaTelefono;
-	}
-
-	public List<OffertaIstitutoStub> getIstitutiAssociati() {
-		return istitutiAssociati;
-	}
-
-	public void setIstitutiAssociati(List<OffertaIstitutoStub> istitutiAssociati) {
-		this.istitutiAssociati = istitutiAssociati;
 	}
 
 }

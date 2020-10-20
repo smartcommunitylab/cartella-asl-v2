@@ -10,7 +10,6 @@ import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } f
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment';
-import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-modifica-dettaglio',
@@ -23,8 +22,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private geoService: GeoService,
-    private growler: GrowlerService) { }
+    private geoService: GeoService) { }
 
   attivita: AttivitaAlternanza;
   esperienze;
@@ -54,8 +52,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceDalle23ErrorDisplay: boolean = false;
   forceAlle23ErrorDisplay: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
-  forceErrorDisplayOraInizio: boolean = false;
-  forceErrorDisplayOraFine: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
@@ -101,8 +97,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     this.evn.modificationFlag=true;
     this.date = {
       dataInizio: moment(),
-      dataFine: moment(),
-      prevDataInizio: moment()
+      dataFine: moment()
     }
 
     this.route.params.subscribe(params => {
@@ -130,7 +125,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           }
           var dataInizio = new Date(this.attivita.dataInizio);
           this.date.dataInizio = moment(dataInizio.getTime());
-          this.date.prevDataInizio = moment(dataInizio.getTime());
           var dataFine = new Date(this.attivita.dataFine);
           this.date.dataFine = moment(dataFine);
 
@@ -164,7 +158,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       });
     });
   }
-
   ngOnDestroy(){
     this.evn.modificationFlag=false;
   }
@@ -213,22 +206,10 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       this.forceTitoloErrorDisplay = true;
     }
 
-    if (!this.attivita.oraInizio) {
-      this.forceErrorDisplayOraInizio = true;
-    } else {
-      this.forceErrorDisplayOraInizio = false;
-    }
-
     if (this.attivita.oraInizio > 23) {
       this.forceDalle23ErrorDisplay = true;
     } else {
       this.forceDalle23ErrorDisplay = false;
-    }
-
-    if (!this.attivita.oraFine) {
-      this.forceErrorDisplayOraFine = true;
-    } else {
-      this.forceErrorDisplayOraFine = false;
     }
 
     if (this.attivita.oraFine > 23) {
@@ -272,8 +253,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
-      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay
-      && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
+      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay) {
  
       (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
       (this.attivita.formatore) ? this.attivita.formatore = this.attivita.formatore.trim() : this.attivita.formatore = null;
@@ -351,7 +331,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   menuContentShow() {
     this.showContent = !this.showContent;
   }
-
   getStatoNome(statoValue) {
     if (this.stati) {
       let rtn = this.stati.find(data => data.value == statoValue);
@@ -370,28 +349,5 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }else if(type == 'trim'){
       event.target.value = event.target.value.trim(); 
     }
-  }
-
-  changeDate(event: any) {
-    if(this.date.dataInizio) {
-      if(!this.date.dataInizio.isSame(this.date.prevDataInizio)) {
-        var nuovoAnnoScolastico = this.getAnnoScolastico(this.date.dataInizio);
-        console.log(nuovoAnnoScolastico);  
-        if(this.attivita.annoScolastico === nuovoAnnoScolastico) {
-          this.date.prevDataInizio = moment(this.date.dataInizio);
-        } else {
-          this.growler.growl("Attenzione, non è possibile cambiare l'anno scolastico!", GrowlerMessageType.Warning, 3000);
-          this.date.dataInizio = moment(this.date.prevDataInizio);
-        }
-      }
-    }    
-  }
-
-  getAnnoScolastico(data: moment.Moment) {
-    var year = data.year();
-    var startAcademicYear = moment().set({'year': year, 'month': 8, 'date': 1});
-    var isNewAcademicYear = data.isSameOrAfter(startAcademicYear);
-    var startYear = isNewAcademicYear ? year : year - 1;
-    return startYear + "-" + (startYear + 1).toString().substring(2, 4);
   }
 }

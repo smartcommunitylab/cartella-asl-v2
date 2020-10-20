@@ -1,0 +1,108 @@
+<div *ngIf="offer">
+  <sub-navbar [titolo]="navTitle" [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+  <div class="sub-navbar-content-below mx-auto" style="max-width: 1200px;">
+    <div class="card md-margin">
+      <div class="card-header">
+        <div class="card-title">Dettaglio Offerta</div>
+        <div class="card-actions">
+          <button class="btn btn-flat" [routerLink]="['/oppurtunita/list/edit', offer.id]"><i class="material-icons">mode_edit</i><span>Modifica</span></button>
+          <button class="btn btn-flat btn-danger" (click)="openDelete(offer)"><i class="material-icons">delete</i><span>Cancella</span></button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <label class="col-sm-4 detail-label">Titolo</label>
+          <div class="col-sm-8">{{ offer.titolo }}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Descrizione</label>
+          <div class="col-sm-8">{{ offer.descrizione }}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Tipologia</label>
+          <div class="col-sm-8">{{ getTitolo(offer.tipologia) }}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Periodo</label>
+          <div class="col-sm-8">{{offer.dataInizio | date: 'dd/MM/yyyy'}} - {{offer.dataFine | date: 'dd/MM/yyyy'}}</div>
+        </div>
+        <div *ngIf="offer.oraInizio && offer.oraFine" class="row">
+          <label class="col-sm-4 detail-label">Ore</label>
+          <div class="col-sm-8">{{offer.oraInizio}} - {{offer.oraFine}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Ore Totali</label>
+          <div class="col-sm-8">{{offer.ore}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Posti Disponibile</label>
+          <div class="col-sm-8">{{offer.postiDisponibili}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Posti Rimanenti</label>
+          <div class="col-sm-8">{{offer.postiRimanenti}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Tutor esterno</label>
+          <div class="col-sm-8">{{offer.referente}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Codice Fiscale (Tutor esterno)</label>
+          <div class="col-sm-8">{{offer.referenteCF}}</div>
+        </div>
+        <div class="row">
+          <label class="col-sm-4 detail-label">Prerequisiti</label>
+          <div class="col-sm-8">{{offer.prerequisiti}}</div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 detail-label">
+            Posizione
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div id="map" style="height:300px;width:100%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card md-margin">
+      <div class="card-header">
+        <div class="card-title">
+          Competenze associate
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-secondary" [routerLink]="['./skills']"><i class="material-icons">add</i> Aggiungi competenze</button>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let competenza of competenze">
+            <div class="row">
+              <div class="col-10">
+                <div class="competenza-title">{{competenza.titolo}}</div>
+                <div class="profilo-description">{{competenza.profilo}}</div>
+              </div>
+              <div class="col-2">
+                <div class="btn-group pull-right">
+                  <button class="btn btn-flat" (click)="openDetailCompetenza(competenza, $event)">
+                    <i class="material-icons">info_outline</i>
+                  </button>
+                  <button class="btn btn-danger btn-flat" (click)="deleteCompetenza(competenza, $event)">
+                    <i class="material-icons">delete</i>
+                  </button>
+                </div>                
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="!offer" class="container">
+    Nessuno offerta trovato
+  </div>

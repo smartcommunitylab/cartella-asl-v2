@@ -18,22 +18,12 @@ public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlte
 	@Query("update AttivitaAlternanza aa0 set titolo=:#{#aa.titolo}, descrizione=:#{#aa.descrizione}, "
 			+ "dataInizio=:#{#aa.dataInizio}, dataFine=:#{#aa.dataFine}, oraInizio=:#{#aa.oraInizio}, "
 			+ "oraFine=:#{#aa.oraFine}, ore=:#{#aa.ore}, offertaId=:#{#aa.offertaId}, titoloOfferta=:#{#aa.titoloOfferta}, "
-			+ "enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, "
-			+ "referenteScuola=:#{#aa.referenteScuola}, referenteScuolaCF=:#{#aa.referenteScuolaCF}, "
-			+ "referenteScuolaTelefono=:#{#aa.referenteScuolaTelefono}, "
-			+ "referenteEsterno=:#{#aa.referenteEsterno}, referenteEsternoCF=:#{#aa.referenteEsternoCF}, "
-			+ "referenteEsternoTelefono=:#{#aa.referenteEsternoTelefono}, "
-			+ "formatore=:#{#aa.formatore}, formatoreCF=:#{#aa.formatoreCF}, "
+			+ "enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, referenteScuola=:#{#aa.referenteScuola}, "
+			+ "referenteScuolaCF=:#{#aa.referenteScuolaCF}, referenteEsterno=:#{#aa.referenteEsterno}, "
+			+ "referenteEsternoCF=:#{#aa.referenteEsternoCF}, formatore=:#{#aa.formatore}, formatoreCF=:#{#aa.formatoreCF}, "
 			+ "luogoSvolgimento=:#{#aa.luogoSvolgimento}, latitude=:#{#aa.latitude}, longitude=:#{#aa.longitude} where id = :#{#aa.id}")
 	public void updateAttivitaAlternanza(@Param("aa") AttivitaAlternanza aa);
 
-	@Modifying
-	@Query("update AttivitaAlternanza aa0 set  "
-			+ "referenteEsterno=:#{#aa.referenteEsterno}, "
-			+ "referenteEsternoCF=:#{#aa.referenteEsternoCF}, referenteEsternoTelefono=:#{#aa.referenteEsternoTelefono}, "
-			+ "luogoSvolgimento=:#{#aa.luogoSvolgimento}, latitude=:#{#aa.latitude}, longitude=:#{#aa.longitude} where id = :#{#aa.id}")
-	public void updateAttivitaAlternanzaByEnte(@Param("aa") AttivitaAlternanza aa);
-	
 	@Query("SELECT COUNT(aa) FROM AttivitaAlternanza aa WHERE aa.uuid IN (:ids)")
 	public int getCountOfAttivitaAlternanza(String[] ids);
 

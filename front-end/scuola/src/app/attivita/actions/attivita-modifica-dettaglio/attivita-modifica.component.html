@@ -73,8 +73,7 @@
                         <div class="row v-center ">
                             <div class="col-1"><span>Dal:</span></div>
                             <div class="col-5">
-                                <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio" (ngModelChange)="changeDate($event)" 
-                                [displayDate]="date.dataInizio" [config]="datePickerConfig"
+                                <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio" [displayDate]="date.dataInizio" [config]="datePickerConfig"
                                 theme="dp-material" id="dataInizio"></dp-date-picker>
                                 <div class="invalid-feedback" [class.d-block]="!date.dataInizio">Data richiesta.</div>
                                 <div class="invalid-feedback" [class.d-block]="date.dataInizio > date.dataFine">La data inizio deve essere anteriore alla data fine</div>
@@ -103,16 +102,14 @@
                                     minlength="1" maxlength="2"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                                     onpaste="return false" #dalleInput="ngModel" />
-                                    <div class="invalid-feedback" [class.d-block]="forceErrorDisplayOraInizio || (dalleInput.invalid && (dalleInput.dirty || dalleInput.touched || forceErrorDisplay))">Campo necessario.</div>
-                                    <div class="invalid-feedback" [class.d-block]="(dalleInput.value > 23) || forceDalle23ErrorDisplay">Massimo ora 23</div>
-                                    <div class="invalid-feedback" [class.d-block]="forceDalleAlleErrorDisplay || (dalleInput.touched && (dalleInput.value > alleInput.value))">La ora fine deve essere posteriore alla ora inizio</div>
+                                <div class="invalid-feedback" [class.d-block]="(dalleInput.value > 23) || forceDalle23ErrorDisplay">Massimo ora 23</div>
+                                <div class="invalid-feedback" [class.d-block]="forceDalleAlleErrorDisplay || (dalleInput.touched && (dalleInput.value > alleInput.value))">La ora fine deve essere posteriore alla ora inizio</div>
                             </div>
                             <div class="col-1"><span>Alle:</span></div>
                             <div class="col-3"><input placeholder="Ora fine" [(ngModel)]="attivita.oraFine" type="text" pattern="[0-9][0-9]"
                                     minlength="1" maxlength="2"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                                     onpaste="return false" #alleInput="ngModel" />
-                                    <div class="invalid-feedback" [class.d-block]="forceErrorDisplayOraFine || (alleInput.invalid && (alleInput.dirty || alleInput.touched || forceErrorDisplay))">Campo necessario.</div>
                                     <div class="invalid-feedback" [class.d-block]="(alleInput.value > 23) || forceAlle23ErrorDisplay">Massimo ora 23</div>
                                     <div class="invalid-feedback" [class.d-block]="forceDalleAlleErrorDisplay || (alleInput.touched && (dalleInput.value > alleInput.value))">La ora fine deve essere posteriore alla ora inizio</div>
                             </div>
@@ -135,7 +132,7 @@
                     <div class="col-2"></div>
                     <div class="col-5">
                         <input disabled type="text" class="form-control" [(ngModel)]="attivita.annoScolastico" >
-                        <label class="active">Anno scolastico</label>
+                        <label class="active">Anno accademico</label>
                     </div>
                 </div>
                 <div class="row v-center form-group">

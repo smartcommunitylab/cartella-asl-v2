@@ -7,13 +7,8 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor() {}
  
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.url.indexOf('/cartella-asl/api') > 0) {
-      const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
-      const authReq = req.clone({ headers: req.headers.set('Authorization', authHeader) });
-      return next.handle(authReq);
-    } else {
-      return next.handle(req);
-    }
-      
+    const authHeader =`Bearer ${sessionStorage.getItem('access_token')}`;
+    const authReq = req.clone({headers: req.headers.set('Authorization', authHeader)});
+    return next.handle(authReq);
   }
 }

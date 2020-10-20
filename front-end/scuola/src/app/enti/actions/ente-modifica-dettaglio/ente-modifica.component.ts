@@ -184,15 +184,14 @@ export class EnteDettaglioModificaComponent implements OnInit {
       zoom: 8
     }).addTo(this.map);
 
-    if (this.ente.coordinate && this.ente.coordinate.latitude && this.ente.coordinate.longitude) {
+    if (this.ente.coordinate) {
       this.place = {};
       this.place.name = this.ente.address;
       this.place.location = [this.ente.coordinate.latitude, this.ente.coordinate.longitude];
       this.selectedLocationMarker = Leaflet.marker([this.ente.coordinate.latitude, this.ente.coordinate.longitude]).addTo(this.map);
       this.map.setView(this.selectedLocationMarker.getLatLng(), 14);
     } else {
-      this.selectedLocationMarker = Leaflet.marker([46.067407, 11.121414]).addTo(this.map);
-      this.map.setView(this.selectedLocationMarker.getLatLng(), 14);
+      this.map.locate({ setView: true });
     }
 
     function onLocationFound(e) {

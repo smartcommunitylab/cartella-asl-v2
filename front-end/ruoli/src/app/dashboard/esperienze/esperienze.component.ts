@@ -3,7 +3,6 @@ import { DataService } from '../../core/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
-import { DeleteEsperienzaModalComponent } from '../modals/delete-esperienza-modal/delete-esperienza-modal.component';
 import { ngCopy } from 'angular-6-clipboard';
 import * as moment from 'moment';
 
@@ -102,19 +101,4 @@ export class DashboardEsperienzeComponent implements OnInit {
       document.body.removeChild(downloadLink);  
     });
   }
-
-  deleteEsperienza(esp: any) {
-    const modalRef = this.modalService.open(DeleteEsperienzaModalComponent);
-    modalRef.componentInstance.titoloEsperienza = esp.titolo;
-    modalRef.componentInstance.nominativoStudente = esp.nominativoStudente;
-    modalRef.componentInstance.onDelete.subscribe(res => {
-      console.log('deleteEsperienza');
-      this.dataService.deleteEsperienza(esp.esperienzaId).subscribe(r => {
-        if(r) {
-          this.getReport();
-        }
-      });
-    });
-  }
-
 }

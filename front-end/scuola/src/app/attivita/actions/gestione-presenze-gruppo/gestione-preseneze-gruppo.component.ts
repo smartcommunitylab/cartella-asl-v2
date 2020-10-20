@@ -310,8 +310,6 @@ export class GestionePresenzeGruppoComponent implements OnInit {
     for (var key in this.presenzaStudenti) {
       this.presenzaStudenti[key][dayIndex].oreSvolte = this.defaultHour;
       this.presenzaStudenti[key][dayIndex].verificata = false;
-      this.presenzaStudenti[key][dayIndex].validataEnte = false;
-      this.presenzaStudenti[key][dayIndex].isModifiedState = true;
     }
 
   }
@@ -325,46 +323,20 @@ export class GestionePresenzeGruppoComponent implements OnInit {
       event.oreSvolte = new Number(12);
     }
     event.verificata = false;
-    event.validataEnte = false;
     event.isModifiedState = true;
     this.toolTipSave = 'Valida ore studenti';
   }
 
   styleOption(giornata) {
     var style = {
-      'color': '#707070',
+      'color': '#F83E5A',
       'font-size.px': 18
     };
-    if (!giornata.verificata && !giornata.validataEnte) {
-      style['color'] = '#F83E5A';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      style['color'] = '#7A73FF';
-    }      
+    if (giornata.verificata) 
+      style['color'] = '#435a70';
     if (giornata.oreSvolte == 0)
       style['font-size.px'] = 16;
     return style;
-  }
-
-  styleOptionTextArea(giornata) {
-    var style = {
-      'color': '#707070',
-    };
-    if (!giornata.verificata && !giornata.validataEnte) {
-      style['color'] = '#F83E5A';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      style['color'] = '#7A73FF';
-    }      
-    return style;
-  }
-
-  setToolTipGiorno(giornata) {
-    if (!giornata.verificata && !giornata.validataEnte) {
-      return 'Questa riga deve essere validata o, se errata, corretta e validata';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      return 'Presenze validate da ente';
-    } else {
-      return 'Presenze validate da istituto';
-    }
   }
 
   savePresences() {
@@ -402,9 +374,7 @@ export class GestionePresenzeGruppoComponent implements OnInit {
       //merge presenza with giornate
       for (var i = 0; i < this.presenzaStudenti[key].length; i++) {
         var index = this.studenti[key].presenze.map(day => day.giornata).indexOf(this.presenzaStudenti[key][i].giornata)
-        if (index >= 0 &&
-          (this.presenzaStudenti[key][i].isModifiedState || this.presenzaStudenti[key][i].validataEnte || this.presenzaStudenti[key][i].oreSvolte != null)
-        ) {
+        if (index >= 0) {
           var save = JSON.parse(JSON.stringify(this.presenzaStudenti[key][i]))
           save.verificata = true;
           save.giornata = moment(this.presenzaStudenti[key][i].giornata, 'YYYY-MM-DD').valueOf();

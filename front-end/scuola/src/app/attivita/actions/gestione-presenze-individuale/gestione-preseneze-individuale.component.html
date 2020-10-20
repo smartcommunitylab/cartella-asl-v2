@@ -69,12 +69,6 @@
     </span>
   </div>
   <br>
-  <br>
-  <div *ngIf="report" class="row v-center">
-    <span class="box red"></span>&nbsp;= ore da validare&nbsp;&nbsp;&nbsp;<span class="box purple"></span>&nbsp;= ore
-    validate da ente&nbsp;&nbsp;&nbsp;<span class="box grey"></span>&nbsp;= ore validate dall'istituto di riferimento (modificabili)
-  </div>
-  <br>
   <div class="row" *ngIf="attivita">
     <span class="col-6 pTop">
       <label class="titleDate">Data inizio</label>&nbsp;
@@ -131,18 +125,19 @@
             </label>
           </td>
           <td class="custom_tr">
-            <span style="display: inline-block;" ngbTooltip="{{setToolTipGiorno(event)}}" placement="bottom">
-              <select class="form-control custom_tr" [disabled]="isArchivio" [(ngModel)]="event.oreSvolte"
-                [ngStyle]="styleOption(event)" (ngModelChange)="edit(event)">
-                <option [value]="0" [ngStyle]="{ 'font-size.px': 16 }">Assente</option>
-                <option [value]="ore" *ngFor="let ore of [1,2,3,4,5,6,7,8,9,10,11,12]">{{ore}}</option>
-              </select>
-            </span>
+            <select class="form-control custom_tr"
+              [disabled]="isArchivio"
+              [(ngModel)]="event.oreSvolte"
+              [ngStyle]="styleOption(event)"
+              (ngModelChange)="edit(event)">
+              <option [value]="0" [ngStyle]="{ 'font-size.px': 16 }">Assente</option>
+              <option [value]="ore" *ngFor="let ore of [1,2,3,4,5,6,7,8,9,10,11,12]">{{ore}}</option>
+            </select>
           </td>
           <td class="custom_tr">
             <textarea [disabled]="isArchivio" class="form-control custom_select" [(ngModel)]="event.attivitaSvolta"
               (ngModelChange)="edit(event)"
-              [ngStyle]="styleOptionTextArea(event)"></textarea>
+              [ngStyle]="(event.verificata) ? { 'color': 'black' } : { 'color': 'red' }"></textarea>
           </td>
         </tr>
       </tbody>

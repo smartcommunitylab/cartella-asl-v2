@@ -5,7 +5,7 @@ export class GrowlerService {
     
     constructor() { }
 
-    growl: (message: string, growlType: GrowlerMessageType, timeout?:number) => number;
+    growl: (message: string, growlType: GrowlerMessageType) => number;
 
 }
 

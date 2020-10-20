@@ -8,12 +8,7 @@ import { GrowlerService, GrowlerMessageType } from './growler.service';
     <div [ngClass]="position" class="growler">
       <div *ngFor="let growl of growls" [ngClass]="{active: growl.enabled}" 
           class="growl alert {{ growl.messageType }}">
-          <div class="row alert-message">
-            <div class="col-2 bg-image">
-            </div>
-            <div class="col-10"><span class="growl-message">{{ growl.message }}</span></div>
-          </div>
-          <!-- <span class="growl-message">{{ growl.message }}</span> -->
+          <span class="growl-message">{{ growl.message }}</span>
       </div>
     </div>
   `,
@@ -40,13 +35,12 @@ export class GrowlerComponent implements OnInit {
   * @param {GrowlMessageType} growlType - The type of message to display (a GrowlMessageType enumeration)
   * @return {number} id - Returns the ID for the generated growl
   */
-  growl(message: string, growlType: GrowlerMessageType, timeout?:number) : number {  
+  growl(message: string, growlType: GrowlerMessageType) : number {  
      this.growlCount++;
      const bootstrapAlertType = GrowlerMessageType[growlType].toLowerCase();
      const messageType = `alert-${ bootstrapAlertType }`;     
      
-     if (!timeout) timeout = this.timeout;
-     const growl = new Growl(this.growlCount, message, messageType, timeout, this);
+     const growl = new Growl(this.growlCount, message, messageType, this.timeout, this);
      this.growls.push(growl);
      return growl.id;
   }
@@ -92,7 +86,7 @@ class Growl {
     this.enabled = false;
     window.setTimeout(() => {
       this.growlerContainer.removeGrowl(this.id);
-    }, 0);
+    }, this.timeout);
   }
   
 }

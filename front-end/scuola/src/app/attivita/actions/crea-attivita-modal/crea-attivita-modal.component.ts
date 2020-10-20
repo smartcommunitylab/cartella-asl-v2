@@ -38,8 +38,6 @@ export class CreaAttivitaModalComponent implements OnInit {
   referenteScuola: string;
   referenteEsterno: string;
   ore;
-  oraInizio;
-  oraFine;
   fieldsError: string;
   tipologia: any = 'Tipologie';
   date;
@@ -58,10 +56,6 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceErrorDisplayTitolo: boolean = false;
   forceErrorDisplayRS: boolean = false;
   forceErrorDisplayRE: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
-  forceErrorDisplayOraInizio: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
-  forceErrorDisplayOraFine: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -107,8 +101,6 @@ export class CreaAttivitaModalComponent implements OnInit {
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
         ore: this.ore,
-        oraInizio: this.oraInizio,
-        oraFine: this.oraFine,
         nomeEnte: this.tipoInterna?null:this.azienda.nome,
         enteId: this.tipoInterna?null:this.azienda.id,
         dataInizio: moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf(),
@@ -118,26 +110,6 @@ export class CreaAttivitaModalComponent implements OnInit {
       this.activeModal.dismiss('create')
     } else {
       this.forceErrorDisplay = true;
-      if (!this.oraInizio) {
-        this.forceErrorDisplayOraInizio = true;
-      } else {
-        this.forceErrorDisplayOraInizio = false;
-      }
-      if (this.oraInizio > 23) {
-        this.forceDalle23ErrorDisplay = true;
-      } else {
-        this.forceDalle23ErrorDisplay = false;
-      }
-      if (!this.oraFine) {
-        this.forceErrorDisplayOraFine = true;
-      } else {
-        this.forceErrorDisplayOraFine = false;
-      }
-      if (this.oraFine > 23) {
-        this.forceAlle23ErrorDisplay = true;
-      } else {
-        this.forceAlle23ErrorDisplay = false;
-      }
       if (this.azienda) {
         this.forceEnteDisplay = false;
       } else {
@@ -154,7 +126,6 @@ export class CreaAttivitaModalComponent implements OnInit {
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
         && (this.tipologia && this.tipologia != 'Tipologie')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );  
@@ -164,7 +135,6 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
         && (this.azienda.id != '')
         && (this.tipologia && this.tipologia != 'Tipologie')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)

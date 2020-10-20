@@ -171,19 +171,6 @@ public class CompetenzaController implements AslController {
 		return competenzaManager.getRisorsaCompetenze(uuid);
 	}
 	
-	@GetMapping("/api/risorsa/{uuid}/competenze/ente/{enteId}")
-	public List<Competenza> getRisorsaCompetenzeEnte(
-			@PathVariable String uuid, 
-			@PathVariable String enteId, 
-			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getRisorsaCompetenzeEnte(%s", uuid + ")"));
-		}
-		return competenzaManager.getRisorsaCompetenze(uuid);
-	}
-	
 	@PutMapping("/api/risorsa/{uuid}/competenze/istituto/{istitutoId}")
 	public Boolean updateCompetenzeToRisorsa(@PathVariable String uuid, @PathVariable String istitutoId, @RequestBody List<Long> ids, HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));

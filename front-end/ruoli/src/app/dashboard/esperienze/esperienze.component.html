@@ -66,15 +66,11 @@
                     <td>
                         <i *ngIf="esp.stato=='valida' && esp.allineato" class="material-icons ok"
                         ngbTooltip="esperienza allineata">check_circle_outline</i> 
-                        <i *ngIf="esp.stato=='valida' && (esp.numeroTentativi == 0)" class="material-icons"
-                        ngbTooltip="esperienza da allineare">arrow_circle_up</i> 
-                        <i *ngIf="esp.stato=='valida' && !esp.allineato && (esp.numeroTentativi > 0)" class="material-icons error"
+                        <i *ngIf="esp.stato=='valida' && !esp.allineato" class="material-icons error"
                         ngbTooltip="errore nell'allineamento">highlight_off</i>
                         &nbsp;
                         <i *ngIf="esp.stato=='valida' && esp.errore" class="material-icons pointer" 
                         ngbTooltip="copia errore nella clipboard" (click)="copyText(esp.errore)">content_copy</i>
-                        <i class="material-icons pointer error" ngbTooltip="cancella esperienza"
-                        (click)="deleteEsperienza(esp)">delete_forever</i> 
                     </td>
                 </tr>
             </tbody>

@@ -1,0 +1,115 @@
+.grid-container  div {
+    padding-left: 0px;
+}
+
+.grid-container td {
+    vertical-align: middle;
+}
+
+.grid-image {
+    height:50px;width:50px;margin-top:10px;
+}
+
+.icon-image {
+    height:25px;width:25px;
+}
+
+.tipologyDiv {
+    border: 1px solid lightgray;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.custom-material-icon {
+    font-size: 24px;
+    color: red;
+    position: relative;
+    top: 4px;
+    left: 5px;
+}
+
+.font-14 {
+    font-size: 14px;
+}
+
+.custom_tr {
+    vertical-align: middle;
+}
+
+.text-center {
+    text-align: center !important;
+  }
+
+.cm-pagination {
+    text-align: center;
+}
+
+
+
+.list-container{
+    margin-top: 20px;
+
+    >.row {
+        margin: 0px;
+    }
+
+    .card-body {
+        >.row {
+            align-items: center;
+            .filter-data {
+                span {
+                    position: absolute;
+                    right: 20px;
+                    bottom: 0px;
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            span {
+                margin: 4px;
+            }
+        }
+    }
+
+    .list-group {
+        margin-top: 40px;
+        .row {
+            align-items: center;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            font-size: 20px;
+        }
+    }
+}
+
+.custom_select {
+    width: inherit;
+    height: inherit;
+    vertical-align: text-bottom;
+    color: grey;
+  }
+
+  .middle {
+    vertical-align: text-bottom;
+}
+
+.right {
+    text-align: right;
+}
+
+.initial {
+    font-size: initial;
+}
+
+.custom_tr {
+    vertical-align: middle;
+}
+
+.center {
+    text-align: center;
+}

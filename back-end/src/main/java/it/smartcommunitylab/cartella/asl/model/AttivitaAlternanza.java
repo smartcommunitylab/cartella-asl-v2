@@ -57,10 +57,8 @@ public class AttivitaAlternanza {
 	private String nomeEnte;
 	private String referenteScuola;
 	private String referenteScuolaCF;
-	private String referenteScuolaTelefono;
 	private String referenteEsterno;
 	private String referenteEsternoCF;
-	private String referenteEsternoTelefono;
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -92,10 +90,8 @@ public class AttivitaAlternanza {
 		aa.setOre(ore);
 		aa.setReferenteEsterno(referenteEsterno);
 		aa.setReferenteEsternoCF(referenteEsternoCF);
-		aa.setReferenteEsternoTelefono(referenteEsternoTelefono);
 		aa.setReferenteScuola(referenteScuola);
 		aa.setReferenteScuolaCF(referenteScuolaCF);
-		aa.setReferenteScuolaTelefono(referenteScuolaTelefono);
 		aa.setStato(stato);
 		aa.setTipologia(tipologia);
 		aa.setTitolo(titolo);
@@ -348,21 +344,5 @@ public class AttivitaAlternanza {
 
 	public void setDataArchiviazione(LocalDate dataArchiviazione) {
 		this.dataArchiviazione = dataArchiviazione;
-	}
-
-	public String getReferenteScuolaTelefono() {
-		return referenteScuolaTelefono;
-	}
-
-	public void setReferenteScuolaTelefono(String referenteScuolaTelefono) {
-		this.referenteScuolaTelefono = referenteScuolaTelefono;
-	}
-
-	public String getReferenteEsternoTelefono() {
-		return referenteEsternoTelefono;
-	}
-
-	public void setReferenteEsternoTelefono(String referenteEsternoTelefono) {
-		this.referenteEsternoTelefono = referenteEsternoTelefono;
 	}
 }

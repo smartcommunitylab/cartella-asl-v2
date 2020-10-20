@@ -30,7 +30,6 @@ public class ReportDashboardEsperienza {
 	private int oreValidate;
 	private int oreTotali;
 	private boolean allineato;
-	private int numeroTentativi;
 	private String errore;
 	
 	public Long getEsperienzaId() {
@@ -116,11 +115,5 @@ public class ReportDashboardEsperienza {
 	}
 	public void setDataFine(LocalDate dataFine) {
 		this.dataFine = dataFine;
-	}
-	public int getNumeroTentativi() {
-		return numeroTentativi;
-	}
-	public void setNumeroTentativi(int numeroTentativi) {
-		this.numeroTentativi = numeroTentativi;
 	}
 }

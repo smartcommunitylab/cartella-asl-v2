@@ -1,0 +1,17 @@
+<nav class="sub-navbar">
+    <div class="row">
+        <div class="col-12 v-center">
+            <button class="btn btn-secondary btn-round btn-flat subnav-back" (click)="backBtnClick()">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            {{titolo}}
+        </div>
+    </div>
+    <!--<div class="row">
+        <div class="col-12 v-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" *ngFor="let item of breadcrumbItems"><a [routerLink]="[item.location]" [queryParams]="item.queryParams" (click)="customAction(item)">{{item.title}}</a></li>
+            </ol>
+        </div>
+    </div>-->
+</nav>

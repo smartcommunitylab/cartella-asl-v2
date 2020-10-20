@@ -1,0 +1,64 @@
+.button-right {
+    float: right;
+}
+
+.color {
+    background-color: #F59C19;
+    color: #000;
+}
+
+.month {
+    color:grey;
+    font-size: 16px
+}
+
+.oggi {
+    font-size: 10px;
+}
+
+.custom_select {
+    // color: grey;
+    font-size: 13px
+}
+
+.icon-size {
+    font-size: 16px;
+}
+
+
+input[type="checkbox"]:checked {
+    box-shadow: none;
+    margin-bottom: none;
+}
+
+input[type="checkbox"]:focus {
+    box-shadow: none;
+    margin-bottom: none;
+}
+
+.no-shadow {
+    box-shadow: none;
+    margin-bottom: none;
+}
+
+.custom_button {
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+
+.center {
+    text-align: center;
+}
+
+.custom_tr {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }

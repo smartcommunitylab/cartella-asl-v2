@@ -1,0 +1,47 @@
+<div class="card mb-3 list-container md-margin">
+
+    <h3 class="card-header">
+        Attività
+    </h3>
+
+    <div class="card-body">
+        <div *ngIf="attivitaAlternanzaList.length" class="table list-group">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Classe</th>
+                        <th>Tipologia</th>
+                        <th>Periodo</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let activity of attivitaAlternanzaList">
+                        <td class="custom_tr">
+                            <!-- <a [routerLink]="['viewAA', activity.id]">{{ activity.classe }}</a> -->
+                            {{ activity.classe }}
+                        </td>
+                        <td class="custom_tr">{{ getTipo(activity.tipologia) }}</td>
+                        <td class="custom_tr">{{ activity.dataInizio | date: 'dd/MM/yyyy'}} - {{ activity.dataFine | date: 'dd/MM/yyyy'}}</td>
+                        <td>
+                            <div class="pull-right">
+                                <div class="btn-group pull-right" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary btn-action" [routerLink]="['viewAA', activity.id]">
+                                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;dettaglio
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="center">
+                <cm-pagination #cmPagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+            </div>
+        </div>
+        <div class="text-center">
+            <label *ngIf="!attivitaAlternanzaList.length" class="font-14  font-weight-bold">Nessuna attività trovata</label>
+        </div>
+    </div>
+
+</div>

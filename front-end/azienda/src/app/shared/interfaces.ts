@@ -1,11 +1,24 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes } from '@angular/router';
 import { Moment } from 'moment';
-import { AttivitaAlternanza } from './classes/AttivitaAlternanza.class';
-import { Studente } from './classes/Studente.class';
+
+export interface ICustomer {
+    id: number;
+    firstName: string;
+    lastName: string;
+    gender: string;
+    address: string;
+    city: string;
+    state: IState;
+    orders?: IOrder[];
+    orderTotal?: number;
+    latitude?: number,
+    longitude?: number
+}
+
 
 export class EsperienzaSvolta {
-    id: string;
+    id: number;
     stato: number;
     noteStudente: string;
     noteAzienda: string;
@@ -37,6 +50,25 @@ export class Valutazione {
     type?: string;
 }
 
+export class AttivitaAlternanza {
+    titolo: string;
+    istituto: string;
+    annoScolastico: string;
+    annoCorso: number;
+    interna: boolean;
+    tipologia: number;
+    individuale: boolean;
+    ore: number;
+    dataInizio: number;
+    dataFine: number;
+    oreInizio: string;
+    OraFine: string;
+    classe: string[];
+    opportunita: IOffer;
+    constructor() {}
+    
+}
+
 export interface IPagedAA { 
 
     totalPages: number;
@@ -47,8 +79,24 @@ export interface IPagedAA {
 
 export class Documento {
     id: number;
-    nome: string;
-    url: string;
+    nome: string
+    constructor() {}
+}
+
+export class Studente {
+    id:string;
+    origin?:string;
+    extId?:string;
+    name:string;
+    surname:string;
+    imageUrl:string;
+    cf:string;
+    birthdate:string;
+    address:string;
+    phone:string;
+    mobilePhone:string;
+    email:string;
+    socialMap: any = {};
     constructor() {}
 }
 
@@ -61,7 +109,7 @@ export interface IOffer {
     dataFine: number;
     oraInizio: string;
     oraFine: string;
-    ore: number;    
+    ore: number;
     postiDisponibili: number;
     postiRimanenti: number;
     referenteAzienda?: Riferente;
@@ -73,6 +121,7 @@ export interface IOffer {
     referente: string;
     referenteCF: string;
     coordinate;
+
 }
 
 export interface IPagedOffers { 
@@ -93,19 +142,15 @@ export interface IPagedCompetenze {
 
 export class Azienda {
     id;
-    address?: string;
-    description?: string;
-    email?: string;
-    latitude: number;
-    longitude: number;
     nome?: string;
-    origin?: string;
-    partita_iva?: string;
-    pec?: string;
-    phone?: string;
-    idTipoAzienda;
-    coordinate;
+    convenzione?: Convenzione;
+    referentiAzienda?: Riferente[];
 }
+
+export class Convenzione{
+    convenzionePAT: {};
+    convenzioneIstituto: {}
+  }
 
 export class Competenza {
     id: string;
@@ -132,12 +177,20 @@ export class AbilitaCompetenza {
     constructor() {}
 }
 
+export class ProfiloCompetenza {
+    id_profilo: string;
+    titolo: string;
+    descrizione: string;
+    constructor() {}
+}
+
 export class Riferente {
     id: string;
     nome?: string;
     imageLink?: string;
     selected?: boolean;
 }
+
 
 export class DiarioDiBordo {
     id: number;
@@ -148,16 +201,37 @@ export class DiarioDiBordo {
 export class Giornate {
     id: number;
     attivitaSvolta: string;
-    oreSvolte: Number;
 	data: Date;
 	verificata: boolean;
     presenza: boolean;
     isModifiedState: boolean;
 }
 
+
+export interface IState {
+    abbreviation: string;
+    name: string;
+}
+
+export interface IOrder {
+    productName: string;
+    itemCost: number;
+}
+
+export interface IOrderItem {
+    id: number;
+    productName: string;
+    itemCost: number;
+}
+
 export interface IPagedResults<T> {
     totalRecords: number;
     results: T;
+}
+
+export interface IUserLogin {
+    email: string;
+    password: string;
 }
 
 export interface IApiResponse {
@@ -176,14 +250,4 @@ export class Stato {
     id: number;
     titolo: string;
     selected?: boolean
-}
-
-export interface IPagedResults<T> {
-    totalRecords: number;
-    results: T;
-}
-
-export interface IApiResponse {
-    status: boolean;
-    error?: string;
 }

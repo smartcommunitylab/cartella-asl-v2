@@ -43,6 +43,5 @@
 	"offerta.used": "L'Offerta è utilizzata",
 	"offerta.notfound": "Offerta non trovata",
 	"esperienza.notfound": "Esperienza Svlota non trovata",
-	"attivita.noteditable": "Attività Alternanza non modificabile",
-	"attivita.error.schoolYear": "L'anno scolastico non corrisponde a quello salvato. Verificate le date dell'attività"
+	"attivita.noteditable": "Attività Alternanza non modificabile"
 }

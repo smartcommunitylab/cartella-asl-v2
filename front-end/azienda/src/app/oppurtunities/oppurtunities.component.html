@@ -1,0 +1,23 @@
+<div class="container root-container">
+    <div class="row">
+        <div class="col-2 navigation-menu-left card">
+            <h2>Offerte</h2>
+            <ul class="navigation-left">
+                <li class="nav-item btn-secondary" routerLinkActive="active">
+                    <a class="nav-link" routerLink="./list">Lista offerte</a>
+                </li>
+                <!-- <li class="nav-item btn-secondary" routerLinkActive="active">
+                    <a class="nav-link" routerLink="./archivo">Storico offerte</a>
+                </li> -->
+                <li class="nav-item btn-secondary nav-item-guide" routerLinkActive="active">
+                    <a class="nav-link v-center" routerLink="./guida">
+                        <!-- <i class="material-icons">book</i> -->Guida
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-10 navigation-content-right">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

@@ -193,62 +193,23 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
       event.oreSvolte = new Number(12);
     }
     event.verificata = false;
-    event.validataEnte = false;
     event.isModifiedState = true;
     this.toolTipSave = 'Valida ore studenti';
 
   }
 
-  // styleOption(giornata) {
-  //   var style = {
-  //     'color': '#F83E5A',
-  //     'font-size.px': 18
-  //   };
-  //   if (giornata.verificata) 
-  //     style['color'] = '#435a70';
-  //   if (giornata.oreSvolte == 0)
-  //     style['font-size.px'] = 16;
-  //   return style;
-  // }
-
-  
   styleOption(giornata) {
     var style = {
-      'color': '#707070',
+      'color': '#F83E5A',
       'font-size.px': 18
     };
-    if (!giornata.verificata && !giornata.validataEnte) {
-      style['color'] = '#F83E5A';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      style['color'] = '#7A73FF';
-    }      
+    if (giornata.verificata) 
+      style['color'] = '#435a70';
     if (giornata.oreSvolte == 0)
       style['font-size.px'] = 16;
     return style;
   }
-
-  styleOptionTextArea(giornata) {
-    var style = {
-      'color': '#707070',
-    };
-    if (!giornata.verificata && !giornata.validataEnte) {
-      style['color'] = '#F83E5A';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      style['color'] = '#7A73FF';
-    }      
-    return style;
-  }
-
-  setToolTipGiorno(giornata) {
-    if (!giornata.verificata && !giornata.validataEnte) {
-      return 'Questa riga deve essere validata o, se errata, corretta e validata';
-    } else if (giornata.validataEnte && !giornata.verificata) {
-      return 'Presenze validate da ente';
-    } else {
-      return 'Presenze validate da istituto';
-    }
-  }
-    
+  
   savePresenze() {
     let toBeSaved = this.prepareSaveArray();
 
@@ -269,7 +230,7 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
     var toBeSaved = [];
 
     this.presenze.forEach(ps => {
-      if (ps.isModifiedState || ps.validataEnte || ps.oreSvolte!=null ) {
+      if (ps.isModifiedState || !ps.verificata ) {
         var save = JSON.parse(JSON.stringify(ps))
         save.verificata = true;
         save.giornata = moment(ps.giornata, 'YYYY-MM-DD').valueOf();

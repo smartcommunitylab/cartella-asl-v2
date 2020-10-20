@@ -1,0 +1,14 @@
+<div class="container">
+    <ngb-tabset #subTabsIncorso (tabChange)="beforeChange($event)">
+        <ngb-tab id="tab-individuali"  title="Attivita Individuali">
+            <ng-template ngbTabContent>
+                <activities-incorso-individuali></activities-incorso-individuali>
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab id="tab-gruppi" title="Attivita Gruppi">
+            <ng-template ngbTabContent>
+                <activities-incorso-gruppi></activities-incorso-gruppi>
+            </ng-template>
+        </ngb-tab>
+    </ngb-tabset>
+</div>

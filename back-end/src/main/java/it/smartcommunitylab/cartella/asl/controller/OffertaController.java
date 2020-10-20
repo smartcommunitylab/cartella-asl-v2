@@ -1,7 +1,5 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
-import it.smartcommunitylab.cartella.asl.beans.OffertaIstitutoStub;
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.OffertaManager;
@@ -80,7 +78,14 @@ public class OffertaController implements AslController {
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Offerta offerta = offertaManager.deleteOfferta(id, istitutoId);
+		Offerta offerta = offertaManager.getOfferta(id);
+		if(offerta == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if((offerta.getIstitutoId() == null) || !offerta.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istitutoId not corresponding");
+		}
+		offertaManager.deleteOfferta(offerta);
 		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -102,84 +107,6 @@ public class OffertaController implements AslController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("saveOfferta:%s / %s", result.getId(), istitutoId));
 		}		
-		return result;
-	}
-
-	@PostMapping("/api/offerta/ente")
-	public @ResponseBody Offerta saveOffertaByEnte(
-			@RequestParam String enteId,
-			@RequestBody Offerta offerta,
-			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		Offerta result = offertaManager.saveOffertaByEnte(offerta, enteId);
-		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, offerta.getId(), user, new Object(){});
-		auditManager.save(audit);			
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("saveOffertaByEnte:%s / %s", result.getId(), enteId));
-		}		
-		return result;
-	}
-
-	@DeleteMapping("/api/offerta/{id}/ente")
-	public @ResponseBody Offerta deleteOffertaByEnte(
-			@PathVariable Long id,
-			@RequestParam String enteId,
-			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		Offerta offerta = offertaManager.deleteOffertaByEnte(id, enteId);
-		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
-		auditManager.save(audit);			
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("deleteOffertaByEnte:%s / %s", id, enteId));
-		}		
-		return offerta;
-	}
-	
-	@PostMapping("/api/offerta/{id}/istituti")
-	public void associaIstitutiByEnte(
-			@PathVariable Long id,
-			@RequestParam String enteId,
-			@RequestBody List<OffertaIstitutoStub> istituti,
-			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		offertaManager.associaIstitutiByEnte(id, enteId, istituti);
-		AuditEntry audit = new AuditEntry(request.getMethod(), Offerta.class, id, user, new Object(){});
-		auditManager.save(audit);			
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("associaIstitutiByEnte:%s / %s", id, enteId));
-		}		
-	}
-
-	@GetMapping("/api/offerta/{id}/ente")
-	public @ResponseBody Offerta getOffertaByEnte(
-			@PathVariable Long id,
-			@RequestParam String enteId,
-			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		Offerta offerta = offertaManager.getOffertaByEnte(id, enteId);
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getOffertaByEnte:%s / %s", id, enteId));
-		}
-		return offerta;
-	}
-	
-	@GetMapping("/api/offerta/search/ente")
-	public @ResponseBody Page<Offerta> searchOffertaByEnte(
-			@RequestParam String enteId,
-			@RequestParam(required = false) String text,
-			@RequestParam(required = false) String stato,
-			Pageable pageRequest, 
-			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		Page<Offerta> result = offertaManager.findOffertaByEnte(enteId, text, stato, pageRequest);
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("searchOffertaByEnte:%s / %s /", enteId, text));
-		}
 		return result;
 	}
 

@@ -1,11 +1,9 @@
 .footer {
     position: relative;
-    /* background-color: #4D4D4D; */
-    background-color: transparent;
+    background-color: #4D4D4D;
     z-index: 999;
     color: white;
-    margin: 58px 16px 36px 16px;
-    /* margin-top: 58px; //Necessary because .sub-navbar-content-below moves content 58px down */
+    margin-top: 58px; /*Necessary because .sub-navbar-content-below moves content 58px down */
 }
 .footer .footer-images img {
     max-height: 80px;
@@ -13,31 +11,4 @@
 .footer .footer-content a {
     color: white;
     text-decoration: underline;
-}
-.footer-text{
-    text-align: left;
-    font-family: Titillium Web;
-    font-size: 20px;
-    font-weight: normal;
-    letter-spacing: 0;
-    color: #0066CC;
-}
-.footer-imgTN{
-    max-width: 30px !important;
-    max-height: 48px !important;
-}
-.footer-imgFBK{
-    margin-top: 7%;
-    max-width: 46px !important;
-    max-height: 39px !important;
-}
-.footer-textUnderline{
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.footerModification{
-    background-color: #F0F6FC !important;
-    margin: -18px 0px 0px 0px!important;
-    padding: 58px 16px 36px 16px !important;
 }
