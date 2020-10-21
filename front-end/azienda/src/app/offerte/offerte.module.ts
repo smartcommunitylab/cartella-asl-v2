@@ -9,6 +9,7 @@ import { DesignAngularKitModule } from 'design-angular-kit'
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -25,7 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   providers: [
     NgbActiveModal,
   ],
-  entryComponents: [],
+  entryComponents: [
+    CreaOffertaModalComponent,
+   ],
 declarations: [OfferteRoutingModule.components]
 })
 export class OfferteModule { }
