@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { OfferteComponent } from './offerte.component';
 import { OfferteContainerComponent } from './offerte-container.component';
+import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 
 const routes: Routes = [
   {
@@ -21,7 +22,8 @@ const routes: Routes = [
 export class OfferteRoutingModule { 
   static components = [
     OfferteContainerComponent,
-    OfferteComponent
+    OfferteComponent,
+    CreaOffertaModalComponent,
   ];
 }
 
