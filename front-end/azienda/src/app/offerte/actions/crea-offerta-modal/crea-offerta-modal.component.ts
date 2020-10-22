@@ -84,7 +84,8 @@ export class CreaOffertaModalComponent implements OnInit {
         dataInizio: moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf(),
         dataFine: moment(this.date.dataFine, 'YYYY-MM-DD').valueOf(),
         nomeEnte: this.dataService.aziendaName,
-        enteId: this.dataService.aziendaId
+        enteId: this.dataService.aziendaId,
+        annoScolastico: this.dataService.getAnnoScolstico(moment(this.date.dataInizio))
       }
       this.newOffertaListener.emit(offerta);
       this.activeModal.dismiss('create')

@@ -84,10 +84,46 @@ export class IstitutiSelectorComponent implements OnInit {
     
   }
 
+  searchistituto() {
+    this.cmPagination.changePage(1);
+    this.getIstituti(1);
+  }
+
+  searchistitutoAssociate() {
+    this.cmPaginationAssociate.changePage(1);
+    this.getIstitutiAssociate(1);
+  }
+
+  toggleistituto(istituto) {    
+    if (this.attachedIstituti.indexOf(istituto) < 0) {
+      // stub fields.
+      istituto.nomeIstituto = istituto.name;
+      istituto.istitutoId = istituto.id;
+      
+      this.attachedIstituti.push(istituto);
+      this.getIstitutiAssociate(1);
+    }
+    this.istitute.forEach(element => {
+      if (element.id == istituto.id) {
+        element['disabled'] = true;
+      }
+    });
+
+  }
+
   addIstituti() {
     this.onNewIstitutiAddedListener.emit(this.attachedIstituti);
     // this.getCompetenzeAssociate(1);
   }
 
-  
+  deleteistituto(istituto) {
+    this.attachedIstituti.splice(this.attachedIstituti.indexOf(istituto), 1);
+    this.istitute.forEach(element => {
+      if (element.id == istituto.id) {
+        element['disabled'] = false;
+      }
+    })
+    this.getIstitutiAssociate(1);
+  }
+
 }

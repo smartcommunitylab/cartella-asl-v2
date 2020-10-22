@@ -12,6 +12,7 @@ import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.clas
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -772,10 +773,12 @@ export class DataService {
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
-    // if (filterText) {
+    if (!filterText) {
+      filterText = '';
+    }
     params = params.append('text', filterText);
-    // }
 
+    
     return this.http.get<IPagedIstituto>(
       url,
       {
@@ -959,6 +962,18 @@ export class DataService {
         catchError(this.handleError))
   }
 
+
+  getAnnoScolstico(now) {
+    var annoScolastico;
+    var lastDay = moment().month(8).date(1);
+    if (now.isBefore(lastDay)) {
+      annoScolastico = moment().year(now.year() - 1).format('YYYY') + '-' + now.format('YY');
+    } else {
+      annoScolastico = now.format('YYYY') + '-' + moment().year(now.year() + 1).format('YY');
+    }
+    return annoScolastico;
+  }
+ 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 
