@@ -49,6 +49,7 @@ public class Offerta {
 	private String oraInizio;
 	private String oraFine;
 	private int ore;
+	private String annoScolastico;
 	private String enteId;
 	private String nomeEnte;
 	private String referenteScuola;
@@ -308,6 +309,14 @@ public class Offerta {
 
 	public void setIstitutiAssociati(List<OffertaIstitutoStub> istitutiAssociati) {
 		this.istitutiAssociati = istitutiAssociati;
+	}
+
+	public String getAnnoScolastico() {
+		return annoScolastico;
+	}
+
+	public void setAnnoScolastico(String annoScolastico) {
+		this.annoScolastico = annoScolastico;
 	}
 
 }
