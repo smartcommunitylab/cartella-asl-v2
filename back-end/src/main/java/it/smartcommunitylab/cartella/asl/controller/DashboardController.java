@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -134,6 +135,20 @@ public class DashboardController {
 			logger.info(String.format("deleteEsperienza:%s", esperienzaId));
 		}	
 		return esperienza;
-	}	
+	}
+	
+	@GetMapping("/api/dashboard/attivita/attiva")
+	public AttivitaAlternanza activateAttivita(
+			@RequestParam Long attivitaId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
+		AttivitaAlternanza aa = dashboardManager.activateAttivita(attivitaId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, attivitaId, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("activateAttivita:%s", attivitaId));
+		}	
+		return aa;
+	}
 
 }

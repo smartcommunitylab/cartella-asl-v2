@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteAttivitaModalComponent } from '../modals/delete-attivita-modal/delete-attivita-modal.component';
+import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-modal/activate-attivita-modal.component';
 import * as moment from 'moment';
 
 @Component({
@@ -98,6 +99,19 @@ export class DashboardAttivitaComponent implements OnInit {
     modalRef.componentInstance.onDelete.subscribe(res => {
       console.log('deleteAttivita');
       this.dataService.deleteAttivita(aa.id).subscribe(r => {
+        if(r) {
+          this.getAttivita();
+        }
+      });
+    });
+  }
+
+  activateAttivita(aa: any) {
+    const modalRef = this.modalService.open(ActivateAttivitaModalComponent);
+    modalRef.componentInstance.titolo = aa.titolo;
+    modalRef.componentInstance.onActivate.subscribe(res => {
+      console.log('activateAttivita');
+      this.dataService.activateAttivita(aa.id).subscribe(r => {
         if(r) {
           this.getAttivita();
         }

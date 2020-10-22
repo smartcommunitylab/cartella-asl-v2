@@ -353,6 +353,23 @@ export class DataService {
       );    
   }
 
+  activateAttivita(attivitaId): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('attivitaId', attivitaId);
+    return this.http.get<any>(
+      this.host + '/dashboard/attivita/attiva',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
   getReportRegistrazioni(istitutoId, cf):  Observable<any> {
     let params = new HttpParams();
     params = params.append('istitutoId', istitutoId);

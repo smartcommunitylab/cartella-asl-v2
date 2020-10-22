@@ -357,6 +357,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivitaAlternanzaRepository.updateStato(aa.getId(), Stati.archiviata);
 		attivitaAlternanzaRepository.updateDataArchiviazione(aa.getId(), aa.getDataArchiviazione());
 	}
+	
+	public AttivitaAlternanza activateAttivitaAlternanza(Long id) throws Exception {
+		AttivitaAlternanza aa = getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));
+		}
+		if(!aa.getStato().equals(Stati.archiviata)) {
+			throw new BadRequestException(errorLabelManager.get("attivita.error.activate"));
+		}
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+		for(EsperienzaSvolta es : esperienze) {
+			esperienzaSvoltaManager.apriEsperienza(es.getId());
+		}
+		aa.setDataArchiviazione(null);
+		aa.setStato(Stati.attiva);
+		attivitaAlternanzaRepository.updateStato(id, Stati.attiva);
+		attivitaAlternanzaRepository.updateDataArchiviazione(id, null);
+		return aa;
+	}
 
 	public List<ReportArchiviaEsperienza> getArchiveAttivitaAlternanza(AttivitaAlternanza aa) {
 		List<ReportArchiviaEsperienza> result = new ArrayList<>();
