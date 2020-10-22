@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { Chart } from 'chart.js';
+import * as moment from 'moment';
 
 @Component({
   selector: 'cm-dashboard-sistema',
@@ -55,6 +56,17 @@ export class DashboardSistemaComponent implements OnInit {
       }, err => {
         console.log('error, no institute')
       });
+      this.getAnnoScolstico();
+    }
+
+    getAnnoScolstico() {
+      var now = moment();
+      var lastDay = moment().month(8).date(1);
+      if(now.isBefore(lastDay)) {
+        this.annoScolastico = moment().year(now.year()-1).format('YYYY') + '-' + now.format('YY');
+      } else {
+        this.annoScolastico = now.format('YYYY') + '-' + moment().year(now.year()+1).format('YY');
+      }
     }
 
   getIstituti() {

@@ -354,5 +354,10 @@ public class DashboardManager extends DataEntityManager {
 		esperienzaSvoltaManager.deleteEsperienza(es);
 		return es;
 	}
+
+	public AttivitaAlternanza activateAttivita(Long attivitaId) throws Exception {
+		AttivitaAlternanza aa = attivitaAlternanzaManager.activateAttivitaAlternanza(attivitaId);
+		return aa;
+	}
 	
 }

@@ -5,8 +5,7 @@
             <div class="col col-6">
                 <div class="form-group">
                     <label for="istitutoId">Istituto</label>
-                    <select class="form-control" id="istitutoId" 
-                        [(ngModel)]="istitutoId" (ngModelChange)="getReport()">
+                    <select class="form-control" id="istitutoId" [(ngModel)]="istitutoId">
                         <option [value]="istituto.id" *ngFor="let istituto of getIstituti()">{{istituto.name}}</option>
                     </select>
                 </div>
