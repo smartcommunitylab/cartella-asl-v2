@@ -7,9 +7,11 @@ import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs/observable/from';
 import { DesignAngularKitModule } from 'design-angular-kit' 
 import { DpDatePickerModule } from 'ng2-date-picker';
+import { IstitutiSelectorModule } from '../shared/istituti-selector/istituti-selector.module';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
+import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -20,6 +22,7 @@ import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-off
     CommonModule,
     FormsModule,
     DesignAngularKitModule,
+    IstitutiSelectorModule,
     SubNavbarModule,
     ReactiveFormsModule
   ],
@@ -28,6 +31,7 @@ import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-off
   ],
   entryComponents: [
     CreaOffertaModalComponent,
+    OffertaCancellaModal
    ],
 declarations: [OfferteRoutingModule.components]
 })
