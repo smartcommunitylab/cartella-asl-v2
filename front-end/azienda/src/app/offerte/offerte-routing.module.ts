@@ -5,6 +5,7 @@ import { OfferteComponent } from './offerte.component';
 import { OfferteContainerComponent } from './offerte-container.component';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 import { OfferteDettaglioComponent } from './actions/offerte-dettaglio/offerte-dettaglio.component';
+import { OffertaModificaIstitutiComponent } from './actions/offerta-modifica-istituti/offerta-modifica-istituti.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
     children: [
       { path: 'list', component: OfferteComponent },
       { path: 'detail/:id', component: OfferteDettaglioComponent },
+      { path: 'detail/:id/modifica/istituti', component: OffertaModificaIstitutiComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -27,6 +29,7 @@ export class OfferteRoutingModule {
     OfferteComponent,
     CreaOffertaModalComponent,
     OfferteDettaglioComponent,
+    OffertaModificaIstitutiComponent,
   ];
 }
 
