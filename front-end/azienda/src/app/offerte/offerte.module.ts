@@ -11,7 +11,6 @@ import { IstitutiSelectorModule } from '../shared/istituti-selector/istituti-sel
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
-import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -30,8 +29,7 @@ import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-c
     NgbActiveModal,
   ],
   entryComponents: [
-    CreaOffertaModalComponent,
-    OffertaCancellaModal
+    CreaOffertaModalComponent
    ],
 declarations: [OfferteRoutingModule.components]
 })
