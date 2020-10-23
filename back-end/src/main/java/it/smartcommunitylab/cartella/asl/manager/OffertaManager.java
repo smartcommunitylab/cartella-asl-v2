@@ -148,8 +148,8 @@ public class OffertaManager extends DataEntityManager {
 			if(optional.isPresent()) {
 				Offerta offerta = optional.get();
 				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
-				offerta.setStato(getStato(offerta));
 				completaAssociazioni(offerta);
+				offerta.setStato(getStato(offerta));
 				return offerta;
 			}			
 		}
