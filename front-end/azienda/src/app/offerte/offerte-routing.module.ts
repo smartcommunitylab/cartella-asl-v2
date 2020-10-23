@@ -6,6 +6,7 @@ import { OfferteContainerComponent } from './offerte-container.component';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 import { OfferteDettaglioComponent } from './actions/offerte-dettaglio/offerte-dettaglio.component';
 import { OffertaModificaIstitutiComponent } from './actions/offerta-modifica-istituti/offerta-modifica-istituti.component';
+import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 import { OffertaDettaglioModificaComponent } from './actions/offerta-modifica-dettaglio/offerta-modifica.component';
 
 const routes: Routes = [
@@ -33,6 +34,7 @@ export class OfferteRoutingModule {
     OfferteDettaglioComponent,
     OffertaDettaglioModificaComponent,
     OffertaModificaIstitutiComponent,
+    OffertaCancellaModal
   ];
 }
 

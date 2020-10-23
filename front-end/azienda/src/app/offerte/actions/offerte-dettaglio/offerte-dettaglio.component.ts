@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
+import { OffertaCancellaModal } from '../cancella-offerta-modal/offerta-cancella-modal.component';
 import localeIT from '@angular/common/locales/it'
 registerLocaleData(localeIT);
 
@@ -68,7 +69,6 @@ export class OfferteDettaglioComponent implements OnInit {
     this.router.navigate(['modifica/offerta/'], { relativeTo: this.route });
   }
 
-
   getTipologiaString(tipologiaId) {
     if (this.tipologie) {
       let rtn = this.tipologie.find(data => data.id == tipologiaId);
@@ -78,7 +78,6 @@ export class OfferteDettaglioComponent implements OnInit {
       return tipologiaId;
     }
   }
-
 
   uploadDocument(fileInput) {
     // if (fileInput.target.files && fileInput.target.files[0]) {
@@ -121,12 +120,20 @@ export class OfferteDettaglioComponent implements OnInit {
     this.router.navigate(['associa/offerta'], { relativeTo: this.route });
   }
 
+  delete() {
+    const modalRef = this.modalService.open(OffertaCancellaModal, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.offerta = this.offerta;
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      this.dataService.deleteOfferta(this.offerta.id).subscribe((res) => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      });
+    })
+  }
 
   menuContentShow() {
     this.showContent = !this.showContent;
   }
 
-  
   setIstitutiLabel(off) {
     let label = '';
     if (off.istitutiAssociati.length == 1) {
