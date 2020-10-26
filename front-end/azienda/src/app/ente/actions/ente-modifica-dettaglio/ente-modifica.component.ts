@@ -35,6 +35,8 @@ export class EnteDettaglioModificaComponent implements OnInit {
   forceAddressDisplay: boolean = false;;
   showContent: boolean = false;
   tipoInterna: boolean = false;
+  codiceAteco: string = '';
+  descAteco: string = '';
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
 
@@ -53,6 +55,16 @@ export class EnteDettaglioModificaComponent implements OnInit {
   ngOnInit() {
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
+      if(this.ente.atecoCode) {
+        if(this.ente.atecoCode.length > 0) {
+          this.codiceAteco = this.ente.atecoCode[0];
+        }
+      }
+      if(this.ente.atecoDesc) {
+        if(this.ente.atecoDesc.length > 0) {
+          this.descAteco = this.ente.atecoDesc[0];
+        }
+      }
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -85,11 +97,20 @@ export class EnteDettaglioModificaComponent implements OnInit {
       (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
       (this.ente.phone) ? this.ente.phone = this.ente.phone.trim() : this.ente.phone = null;
 
+      if(!this.ente.atecoCode) {
+        this.ente.atecoCode = [];
+      }
+      if(!this.ente.atecoDesc) {
+        this.ente.atecoDesc = [];
+      }
+      this.ente.atecoCode[0] = this.codiceAteco;
+      this.ente.atecoDesc[0] = this.descAteco;
+
       this.dataService.addAzienda(this.ente).subscribe((res) => {
-        this.router.navigate(['../detail', res.id], { relativeTo: this.route });
+        this.router.navigate(['../../'], { relativeTo: this.route });
       },
         (err: any) => console.log(err),
-        () => console.log('get piani attivi'));
+        () => console.log('getAttivita'));
 
     } else {
       this.forceErrorDisplay = true;

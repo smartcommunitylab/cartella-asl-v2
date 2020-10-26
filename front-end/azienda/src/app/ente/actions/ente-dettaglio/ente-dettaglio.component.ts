@@ -40,12 +40,24 @@ export class EnteDettaglioComponent implements OnInit {
   pianoTipologie = {};
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
+  codiceAteco: string = '';
+  descAteco: string = '';
   menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati.";
   showContent: boolean = false;
 
   ngOnInit() {
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
+      if(this.ente.atecoCode) {
+        if(this.ente.atecoCode.length > 0) {
+          this.codiceAteco = this.ente.atecoCode[0];
+        }
+      }
+      if(this.ente.atecoDesc) {
+        if(this.ente.atecoDesc.length > 0) {
+          this.descAteco = this.ente.atecoDesc[0];
+        }
+      }
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -54,25 +66,13 @@ export class EnteDettaglioComponent implements OnInit {
       () => console.log('getAttivita'));
   }
 
-  openDetailCompetenza(competenza, $event) {
-    // if ($event) $event.stopPropagation();
-    // const modalRef = this.modalService.open(CompetenzaDetailModalComponent, { size: "lg" });
-    // modalRef.componentInstance.competenza = competenza;
-  }
-
-  openDetail(ente) {
-    this.router.navigate([ente.id], { relativeTo: this.route });
-  }
-
   modifica() {
     this.router.navigate(['modifica/dati/'], { relativeTo: this.route });
   }
 
-
   menuContentShow() {
     this.showContent = !this.showContent;
   }
-
 
   drawMap(): void {
     this.map = Leaflet.map('map');

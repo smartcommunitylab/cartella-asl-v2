@@ -159,7 +159,16 @@
                                 #ProvinciaInput="ngModel" placeholder="Provincia">
                         </div>
                         <div class="col-2"></div>
-                        <div class="col-sm-5"></div>
+                        <div class="col-sm-1">
+                            <label for="codiceAteco" *ngIf="codiceAteco" class="active">Codice ATECO</label>
+                            <input type="text" class="form-control" [(ngModel)]="codiceAteco" id="codiceAteco" name="codiceAteco"
+                                #CodiceAtecoInput="ngModel" placeholder="Codice ATECO">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="descAteco" *ngIf="descAteco" class="active">Descrizione Codice ATECO</label>
+                            <input type="text" class="form-control" [(ngModel)]="descAteco" id="descAteco" name="descAteco"
+                                #DescAtecoInput="ngModel" placeholder="Descrizione Codice ATECO">
+                        </div>
                     </div>
     
                     <div class="row v-center form-group">

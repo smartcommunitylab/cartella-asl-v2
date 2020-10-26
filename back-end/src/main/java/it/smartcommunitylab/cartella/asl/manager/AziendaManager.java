@@ -330,6 +330,13 @@ public class AziendaManager extends DataEntityManager {
 			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
 				throw new BadRequestException("ente non modificabile");
 			}
+			List<Azienda> list = aziendaRepository.findByPartitaIva(azienda.getPartita_iva());
+			if(!azienda.getPartita_iva().equals(aziendaDb.getPartita_iva())) {
+				if(list.size() > 0) {
+					throw new BadRequestException("partita iva already exists");
+				}							
+			}
+			aziendaDb.setPartita_iva(azienda.getPartita_iva());
 			aziendaDb.setNome(azienda.getNome());
 			aziendaDb.setDescription(azienda.getDescription());
 			aziendaDb.setEmail(azienda.getEmail());
@@ -345,6 +352,7 @@ public class AziendaManager extends DataEntityManager {
 			aziendaDb.setComune(azienda.getComune());
 			aziendaDb.setProvincia(azienda.getProvincia());
 			aziendaDb.setAddress(azienda.getAddress());
+			allineaAziendaEstera(aziendaDb.getPartita_iva(), azienda.getPartita_iva(), azienda.isEstera());
 			aziendaRepository.update(aziendaDb);
 			return aziendaDb;
 		}

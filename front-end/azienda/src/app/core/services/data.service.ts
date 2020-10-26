@@ -820,48 +820,9 @@ export class DataService {
       )
   }
 
-  // searchEnte(term: string) {
-  //   // if (term === '') {
-  //   //   return of([]);
-  //   // }
-
-  //   let url = this.host + "/azienda/search";
-  //   let params = new HttpParams();
-  //   params = params.append('page', '0');
-  //   params = params.append('size', '20');
-
-  //   if (term) {
-  //     params = params.append('text', term);
-  //   }
-
-  //   // return this.http
-  //   //   .get(WIKI_URL, {params: PARAMS.set('search', term)}).pipe(
-  //   //     map(response => response[1])
-  //   //   );
-
-  //   environment.globalSpinner = false;
-  //   return this.http.get<any>(url,
-  //     {
-  //       observe: 'response',
-  //       params: params
-  //     })
-  //     .timeout(this.timeout)
-  //     .pipe(
-  //       map(res => {
-  //         environment.globalSpinner = true;
-  //         return (res.body.content)
-  //       }),
-  //       catchError((err) => {
-  //         environment.globalSpinner = true;
-  //         return this.handleError(err);
-  //       })
-  //     );
-
-  // }
-
   // GET /azienda/{id}
   getAzienda() {
-    let url = this.host + "/azienda/" + this.aziendaId;
+    let url = this.host + "/azienda/" + this.aziendaId + "/ente";
 
     return this.http.get<Azienda>(url,
       {
@@ -896,23 +857,6 @@ export class DataService {
         }
         ),
         catchError(this.handleError))
-  }
-
-  deleteAzienda(id: number): Observable<any> {
-    let url = this.host + "/azienda/" + id;
-    return this.http.delete<IApiResponse>(
-      url,
-      { observe: 'response', })
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          if (res.ok)
-            return true;
-          else
-            return res;
-        }),
-        catchError(this.handleError)
-      );
   }
 
   getAziende(page, pageSize, filters) {
