@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { registerLocaleData } from '@angular/common';
 import { OffertaCancellaModal } from '../cancella-offerta-modal/offerta-cancella-modal.component';
 import localeIT from '@angular/common/locales/it'
+import { DuplicaOffertaModalComponent } from '../duplica-offerta-modal/duplica-offerta-modal.component';
 registerLocaleData(localeIT);
 
 declare var moment: any;
@@ -144,6 +145,23 @@ export class OfferteDettaglioComponent implements OnInit {
         label = 'Nessun istituto associato'
     }
     return label;
+  }
+
+  duplicaOfferta() {
+    const modalRef = this.modalService.open(DuplicaOffertaModalComponent, { windowClass: "myCustomModalClass" });
+    let enteTipologie = this.tipologie.filter(f => !f.interna);
+    let duplicaOfferta = JSON.parse(JSON.stringify(this.offerta));
+    duplicaOfferta.titolo = duplicaOfferta.titolo + '- copia';
+    modalRef.componentInstance.tipologie = enteTipologie;
+    modalRef.componentInstance.offerta = duplicaOfferta;
+    modalRef.componentInstance.onDupicateConfirm.subscribe((offerta) => {
+      this.dataService.createOfferta(offerta).subscribe((response) => {
+        this.router.navigateByUrl('/offerte/detail/' + response.id + '/modifica/istituti');
+    //     // this.router.navigate(['../detail', response.id + '/modifica/istituti'], { relativeTo: this.route });
+     },
+         (err: any) => console.log(err),
+         () => console.log('duplicaAttivitaAlternanza'));
+    });
 }
 
 }

@@ -12,6 +12,7 @@ import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
+import { DuplicaOffertaModalComponent } from './actions/duplica-offerta-modal/duplica-offerta-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -31,7 +32,8 @@ import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-c
   ],
   entryComponents: [
     CreaOffertaModalComponent,
-    OffertaCancellaModal
+    OffertaCancellaModal,
+    DuplicaOffertaModalComponent
    ],
 declarations: [OfferteRoutingModule.components]
 })

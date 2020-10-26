@@ -8,6 +8,7 @@ import { OfferteDettaglioComponent } from './actions/offerte-dettaglio/offerte-d
 import { OffertaModificaIstitutiComponent } from './actions/offerta-modifica-istituti/offerta-modifica-istituti.component';
 import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 import { OffertaDettaglioModificaComponent } from './actions/offerta-modifica-dettaglio/offerta-modifica.component';
+import { DuplicaOffertaModalComponent } from './actions/duplica-offerta-modal/duplica-offerta-modal.component';
 
 const routes: Routes = [
   {
@@ -34,7 +35,8 @@ export class OfferteRoutingModule {
     OfferteDettaglioComponent,
     OffertaDettaglioModificaComponent,
     OffertaModificaIstitutiComponent,
-    OffertaCancellaModal
+    OffertaCancellaModal,
+    DuplicaOffertaModalComponent
   ];
 }
 
