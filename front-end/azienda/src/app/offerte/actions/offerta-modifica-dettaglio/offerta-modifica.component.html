@@ -185,10 +185,6 @@
                         <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Referente
                             scolastico</label>
                         <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Referente scolastico</label>
-                        <div class="invalid-feedback"
-                            [class.d-block]="!referenteScuolaInput.value || forceReferenteScuolaErrorDisplay">
-                            Campo necessario.
-                        </div>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">
@@ -257,9 +253,6 @@
                         id="referenteScuolaTelefono" #referenteScuolaTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')">
                        <label for="referenteScuolaTelefono" *ngIf="offerta.referenteScuolaTelefono" class="active">Telefono tutor scolastico</label>
                        <label for="referenteScuolaTelefono" *ngIf="!offerta.referenteScuolaTelefono">Telefono tutor scolastico</label>
-                       <div class="invalid-feedback"
-                           [class.d-block]="referenteScuolaTelefonoInput.invalid && (referenteScuolaTelefonoInput.dirty || referenteScuolaTelefonoInput.touched)">
-                               Campo necessario (12 numeri).</div>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">
