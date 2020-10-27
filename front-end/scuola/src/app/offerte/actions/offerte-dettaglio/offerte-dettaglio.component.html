@@ -64,26 +64,26 @@
         <br>
         <div class="p-1 middle-div row">
             <div class="col-6">
-                <span class="row">Titolo: {{offerta.titolo}}</span>
-                <span class="row">Descrizione: {{offerta.descrizione}}</span>
-                <span class="row">Tipologia: {{ getTipologiaString(offerta.tipologia) }}</span>
-                <span *ngIf="!tipoInterna" class="row">Ente: {{offerta.nomeEnte}}</span>
-                <span class="row">Formatore: {{offerta.formatore}}</span>
-                <span class="row">CF Formatore: {{offerta.formatoreCF}}</span>
-                <span class="row">Tutor scolastico: {{offerta.referenteScuola}}</span>
-                <span class="row">CF tutor scolastico: {{offerta.referenteScuolaCF}}</span>
-                <span class="row">Telefono tutor scolastico: {{offerta.referenteScuolaTelefono}}</span>
+                <span class="row"><span class="text-semibold">Titolo:&nbsp;</span>{{offerta.titolo}}</span>
+                <span class="row"><span class="text-semibold">Descrizione:&nbsp;</span>{{offerta.descrizione}}</span>
+                <span class="row"><span class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(offerta.tipologia) }}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Ente:&nbsp;</span>{{offerta.nomeEnte}}</span>
+                <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{offerta.formatore}}</span>
+                <span class="row"><span class="text-semibold">CF Formatore:&nbsp;</span>{{offerta.formatoreCF}}</span>
+                <span class="row"><span class="text-semibold">Tutor scolastico:&nbsp;</span>{{offerta.referenteScuola}}</span>
+                <span class="row"><span class="text-semibold">CF tutor scolastico:&nbsp;</span>{{offerta.referenteScuolaCF}}</span>
+                <span class="row"><span class="text-semibold">Telefono tutor scolastico:&nbsp;</span>{{offerta.referenteScuolaTelefono}}</span>
             </div>
             <div class="col-6">
                 <span class="row"> </span>
-                <span class="row">Dal: {{offerta.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;Al: {{offerta.dataFine | date: 'dd/MM/yyyy'}}</span>
-                <span class="row">Dalle: {{offerta.oraInizio}} &nbsp; Alle: {{offerta.oraFine}}</span>
-                <span class="row">Posti disponibili: {{ offerta.postiDisponibili }} &nbsp;Posti rimanenti: {{offerta.postiRimanenti}}</span>
-                <span class="row">Ore totali: {{offerta.ore}}</span>
-                <span class="row">Indirizzo: {{ offerta.luogoSvolgimento }}</span>
-                <span *ngIf="!tipoInterna" class="row">Tutor esterno: {{offerta.referenteEsterno}}</span>
-                <span *ngIf="!tipoInterna" class="row">CF tutor esterno: {{offerta.referenteEsternoCF}}</span>
-                <span *ngIf="!tipoInterna" class="row">Telefono tutor esterno: {{offerta.referenteEsternoTelefono}}</span>
+                <span class="row"><span class="text-semibold">Dal:&nbsp;</span>{{offerta.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;<span class="text-semibold">Al:&nbsp;</span>{{offerta.dataFine | date: 'dd/MM/yyyy'}}</span>
+                <span class="row"><span class="text-semibold">Dalle:&nbsp;</span>{{offerta.oraInizio}} &nbsp; <span class="text-semibold">Alle:&nbsp;</span>{{offerta.oraFine}}</span>
+                <span class="row"><span class="text-semibold">Posti disponibili:&nbsp;</span>{{ offerta.postiDisponibili }} &nbsp;<span class="text-semibold">Posti rimanenti:&nbsp;</span>{{offerta.postiRimanenti}}</span>
+                <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{offerta.ore}}</span>
+                <span class="row"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ offerta.luogoSvolgimento }}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor esterno:&nbsp;</span>{{offerta.referenteEsterno}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor esterno:&nbsp;</span>{{offerta.referenteEsternoCF}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Telefono tutor esterno:&nbsp;</span>{{offerta.referenteEsternoTelefono}}</span>
             </div>    
         </div>
         <br/>
