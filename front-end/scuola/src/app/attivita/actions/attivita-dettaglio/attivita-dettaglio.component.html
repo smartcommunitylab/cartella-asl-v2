@@ -71,24 +71,24 @@
         </div>
         <div class="p-1 middle-div row">
             <div class="col-6">
-                <span class="row">Titolo: {{attivita.titolo}}</span>
-                <span class="row">Descrizione: {{attivita.descrizione}}</span>
-                <span class="row">Tipologia: {{ getTipologiaString(attivita.tipologia) }}</span>
-                <span *ngIf="!tipoInterna" class="row">Ente: {{attivita.nomeEnte}}</span>
-                <span class="row">Formatore: {{attivita.formatore}}</span>
-                <span class="row">Tutor scolastico: {{attivita.referenteScuola}}</span>
-                <span *ngIf="!tipoInterna" class="row">Tutor esterno: {{attivita.referenteEsterno}}</span>
+                <span class="row"><span class="text-semibold">Titolo:&nbsp;</span>{{attivita.titolo}}</span>
+                <span class="row"><span class="text-semibold">Descrizione:&nbsp;</span>{{attivita.descrizione}}</span>
+                <span class="row"><span class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Ente:&nbsp;</span>{{attivita.nomeEnte}}</span>
+                <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
+                <span class="row"><span class="text-semibold">Tutor scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor esterno:&nbsp;</span>{{attivita.referenteEsterno}}</span>
             </div>
             <div class="col-6">
                 <span class="row"> </span>
-                <span class="row">Dal: {{attivita.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;Al: {{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
-                <span class="row">Dalle: {{attivita.oraInizio}} &nbsp; Alle: {{attivita.oraFine}}</span>
-                <span class="row">Anno accademico: {{ attivita.annoScolastico }}</span>
-                <span class="row">Indirizzo: {{ attivita.luogoSvolgimento }}</span>
-                <span class="row">CF Formatore: {{attivita.formatoreCF}}</span>
-                <span class="row">CF tutor scolastico: {{attivita.referenteScuolaCF}}</span>
-                <span *ngIf="!tipoInterna" class="row">CF tutor esterno: {{attivita.referenteEsternoCF}}</span>
-                <span class="row">Ore totali: {{attivita.ore}}</span>
+                <span class="row"><span class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;<span class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
+                <span class="row"><span class="text-semibold">Dalle:&nbsp;</span>{{attivita.oraInizio}} &nbsp; <span class="text-semibold">Alle:&nbsp;</span>{{attivita.oraFine}}</span>
+                <span class="row"><span class="text-semibold">Anno accademico:&nbsp;</span>{{ attivita.annoScolastico }}</span>
+                <span class="row"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
+                <span class="row"><span class="text-semibold">CF Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
+                <span class="row"><span class="text-semibold">CF tutor scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor esterno:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{attivita.ore}}</span>
             </div>    
         </div>
         <br/>

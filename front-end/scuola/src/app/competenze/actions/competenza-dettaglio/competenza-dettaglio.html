@@ -55,15 +55,15 @@
 
         <div class="middle-div">
             <div class="row">
-                <label class="col-sm-2 detail-label">Nome competenza:</label>
+                <label class="col-sm-2 detail-label text-semibold">Nome competenza:</label>
                 <div class="col-sm-8">{{competenza.titolo}}</div>
             </div>
             <div class="row">
-                <label class="col-sm-2 detail-label">Livello EQF:</label>
+                <label class="col-sm-2 detail-label text-semibold">Livello EQF:</label>
                 <div class="col-sm-8">{{competenza.livelloEQF}}</div>
             </div>
             <div *ngIf="competenza.classificationCode" class="row">
-                <label class="col-sm-2 detail-label">Creato da:</label>
+                <label class="col-sm-2 detail-label text-semibold">Creato da:</label>
                 <div class="col-sm-8">{{competenza.ownerName}}</div>
             </div>
         </div>
