@@ -717,12 +717,14 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return reportList;
 	}
 
-	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, String stato,
-			Pageable pageRequest) {
+	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, 
+			String stato, String istitutoId, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
 		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
 		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
-		
+		if(Utils.isNotEmpty(istitutoId)) {
+			sb.append(" AND aa.istitutoId=(:istitutoId)");
+		}
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
 		}
@@ -755,6 +757,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("enteId", enteId);
+		if(Utils.isNotEmpty(istitutoId)) {
+			query.setParameter("istitutoId", istitutoId);
+		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
