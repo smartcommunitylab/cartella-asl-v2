@@ -28,67 +28,72 @@
     <br>
   <div class="row" *ngIf="studente">
     
-    <div class="row square col-6">
-        <svg class="custom icon icon-xl">
-                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user">
-                </use>
-        </svg>
-        &nbsp;&nbsp;&nbsp;
-        <span class="sub-div col-8">
-            <span class="row">{{studente.name}} {{studente.surname}}</span>
-            <span class="row">{{studente.birthdate}}</span>
-            <span class="row">{{studente.cf}}</span>
-            <span class="row">{{studente.classroom}}</span>
-            <span class="row">{{studente.phone}}</span>
-            <span class="row">{{studente.email}}</span>
-        </span>
-    </div>
-    
-    <div class="col-4">
-        <div class="sub-div-circle">
-            <circle-progress 
-            [percent]="percentage"
-            [radius]="100"
-            [outerStrokeWidth]="30"
-            [innerStrokeWidth]="50"
-            [space] = "-30"
-            [outerStrokeColor]="'#4882c2'"
-            [innerStrokeColor]="'#e7e8ea'"
-            [titleFontSize]= "30"
-            [unitsFontSize]= "24"
-            [showSubtitle] = "true"
-            [animation]="true"
-            [animationDuration]="300"
-            [startFromZero]="false"
-            [responsive]="true"
-            [subtitle]="getSubTitle()"
-            [subtitleFontSize]="20"></circle-progress>
-            <!-- <span class="row">{{oreValidate}} / {{oreTotali}} h</span> -->
+    <div class="row square">
+        <div class="col-6">
+            <span class="row">
+                <svg class="custom icon icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user">
+                    </use>
+                </svg>
+                &nbsp;&nbsp;
+                <span class="sub-div-data">
+                    <span class="row"><span class="text-semibold">Nome:</span>&nbsp;{{studente.name}} {{studente.surname}}</span>
+                    <span class="row"><span class="text-semibold">Data di nascita:</span>&nbsp;{{studente.birthdate}}</span>
+                    <span class="row"><span class="text-semibold">Codice Fiscale:</span>&nbsp;{{studente.cf}}</span>
+                    <span class="row"><span class="text-semibold">Classe:</span>&nbsp;{{studente.classroom}}</span>
+                    <span class="row"><span class="text-semibold">Telefono:</span>&nbsp;{{studente.phone}}</span>
+                    <span class="row"><span class="text-semibold">Mail:</span>&nbsp;{{studente.email}}</span>
+                </span>
+            </span>            
+        </div>
+        <div class="col-4">
+            <div class="sub-div-circle">
+                <circle-progress 
+                [percent]="percentage"
+                [radius]="100"
+                [outerStrokeWidth]="30"
+                [innerStrokeWidth]="50"
+                [space] = "-30"
+                [outerStrokeColor]="'#4882c2'"
+                [innerStrokeColor]="'#e7e8ea'"
+                [titleFontSize]= "30"
+                [unitsFontSize]= "24"
+                [showSubtitle] = "true"
+                [animation]="true"
+                [animationDuration]="300"
+                [startFromZero]="false"
+                [responsive]="true"
+                [subtitle]="getSubTitle()"
+                [subtitleFontSize]="20"></circle-progress>
+                <!-- <span class="row">{{oreValidate}} / {{oreTotali}} h</span> -->
+            </div>
+        </div>
+        
+        <div class="col-2 sub-div">
+            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
+            placement="bottom" ngbTooltip="Esporta le attività dello studente">
+                CSV dati studente
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                </svg>
+            </label>
+            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
+            placement="bottom" ngbTooltip="Esporta le attività della classe">
+                CSV dati classe
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                </svg>
+            </label>
         </div>
     </div>
     
-    <div class="col-2">
-        <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
-        placement="bottom" ngbTooltip="Esporta le attività dello studente">
-            CSV dati studente
-            <svg class="icon icon-white icon-sm">
-                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
-            </svg>
-        </label>
-        <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
-        placement="bottom" ngbTooltip="Esporta le attività della classe">
-            CSV dati classe
-            <svg class="icon icon-white icon-sm">
-                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
-            </svg>
-        </label>
-    </div>
+    
      
 </div>
 
 <div class="card-body" >
     <span class="title">Piano attivo:</span>
-    <span class="piano" *ngIf="pianoId">{{titoloPiano}}</span>
+    <span class="piano" *ngIf="pianoId" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
     <span class="nopiano" *ngIf="!pianoId">Attenzione: non ci sono piani associati a questo corso di studio!</span>
 </div>
 
