@@ -70,7 +70,7 @@
   </div>
   <br>
   <br>
-  <div *ngIf="report" class="row v-center">
+  <div *ngIf="report && !tipoInterna" class="row v-center">
     <span class="box red"></span>&nbsp;= ore da validare&nbsp;&nbsp;&nbsp;<span class="box purple"></span>&nbsp;= ore
     validate da ente&nbsp;&nbsp;&nbsp;<span class="box grey"></span>&nbsp;= ore validate dall'istituto di riferimento (modificabili)
   </div>
