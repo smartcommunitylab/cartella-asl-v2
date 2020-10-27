@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.google.common.collect.Lists;
 
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
+import it.smartcommunitylab.cartella.asl.model.report.ReportIstitutoEnte;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
 import it.smartcommunitylab.cartella.asl.util.Utils;
@@ -113,5 +116,40 @@ public class IstituzioneManager extends DataEntityManager {
 		return page;
 	}	
 
+	public Page<ReportIstitutoEnte> findIstitutiByEnte(String enteId, String text, Pageable pageRequest) {
+		StringBuilder sb = new StringBuilder("SELECT i.id, COUNT(aa.id) FROM Istituzione i LEFT JOIN"
+				+ " AttivitaAlternanza aa ON i.id=aa.istitutoId AND aa.enteId=(:enteId) AND aa.dataInizio<=(:date) AND aa.dataFine>=(:date)");
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+		}
+		sb.append(" GROUP BY i.id ORDER BY COUNT(aa.id) DESC");
+		String q = sb.toString();
+		
+		Query query = em.createQuery(q);
+		query.setParameter("enteId", enteId);
+		LocalDate localDate = LocalDate.now();
+		query.setParameter("date", localDate);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Object[]> rows = query.getResultList();
+		List<ReportIstitutoEnte> list = new ArrayList<>();
+		for (Object[] obj : rows) {
+			String istitutoId = (String) obj[0];
+			Istituzione istituto = getIstituto(istitutoId);
+			Long attivita = (Long) obj[1];
+			ReportIstitutoEnte report = new ReportIstitutoEnte();
+			report.setIstituto(istituto);
+			report.setAttivitaInCorso(attivita);
+			list.add(report);
+		}
 
+		String counterQuery = "SELECT COUNT(i) FROM Istituzione i";
+		Query cQuery = em.createQuery(counterQuery, Long.class);
+		long total = (Long) cQuery.getSingleResult();
+		Page<ReportIstitutoEnte> page = new PageImpl<ReportIstitutoEnte>(list, pageRequest, total);
+		return page;
+	}
 }

@@ -24,6 +24,7 @@ import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.IstituzioneManager;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
+import it.smartcommunitylab.cartella.asl.model.report.ReportIstitutoEnte;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -108,8 +109,21 @@ public class IstitutoController implements AslController {
 			logger.info(String.format("searchIstituti: %s", text));
 		}		
 		return result;
-	}	
-
-
+	}
+	
+	@GetMapping(value = "/api/istituto/search/ente")
+	public @ResponseBody Page<ReportIstitutoEnte> searchIstitutiByEnte(
+			@RequestParam String enteId,
+			@RequestParam(required = false) String text,
+			Pageable pageRequest, 
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<ReportIstitutoEnte> result = istituzioneManager.findIstitutiByEnte(enteId, text, pageRequest);
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("searchIstitutiByEnte: %s - %s", enteId, text));
+		}		
+		return result;		
+	}
 	
 }
