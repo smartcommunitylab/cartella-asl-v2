@@ -35,8 +35,8 @@ export class EnteDettaglioModificaComponent implements OnInit {
   forceAddressDisplay: boolean = false;;
   showContent: boolean = false;
   tipoInterna: boolean = false;
-  codiceAteco: string = '';
-  descAteco: string = '';
+  ateco: {codice: string, descrizione: string};
+  atecoEntry: any;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
 
@@ -53,16 +53,20 @@ export class EnteDettaglioModificaComponent implements OnInit {
   @ViewChild('enteForm') enteForm: FormGroup;
 
   ngOnInit() {
+    this.ateco = {codice: '', descrizione: ''};
+    this.atecoEntry = {codice: '', descrizione: ''};
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
       if(this.ente.atecoCode) {
         if(this.ente.atecoCode.length > 0) {
-          this.codiceAteco = this.ente.atecoCode[0];
+          this.ateco.codice = this.ente.atecoCode[0];
+          this.atecoEntry.codice = this.ente.atecoCode[0];
         }
       }
       if(this.ente.atecoDesc) {
         if(this.ente.atecoDesc.length > 0) {
-          this.descAteco = this.ente.atecoDesc[0];
+          this.ateco.descrizione = this.ente.atecoDesc[0];
+          this.atecoEntry.descrizione = this.ente.atecoDesc[0];
         }
       }
       setTimeout(() => { //ensure that map div is rendered
@@ -103,8 +107,8 @@ export class EnteDettaglioModificaComponent implements OnInit {
       if(!this.ente.atecoDesc) {
         this.ente.atecoDesc = [];
       }
-      this.ente.atecoCode[0] = this.codiceAteco;
-      this.ente.atecoDesc[0] = this.descAteco;
+      this.ente.atecoCode[0] = this.ateco.codice;
+      this.ente.atecoDesc[0] = this.ateco.descrizione;
 
       this.dataService.addAzienda(this.ente).subscribe((res) => {
         this.router.navigate(['../../'], { relativeTo: this.route });
@@ -185,6 +189,43 @@ export class EnteDettaglioModificaComponent implements OnInit {
     )
 
   formatterAddress = (x: { name: string }) => x.name;
+
+  searchingAteco = false;
+  searchAtecoFailed = false;
+
+  getAteco = (text$: Observable<string>) => 
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingAteco = true),
+      switchMap(term => this.dataService.getAteco(term).pipe(
+        map(result => {
+          let entries = [];
+          if(result.Entries && result.Entries.Entry) {            
+            result.Entries.Entry.forEach(element => {
+              entries.push(element);
+            });
+          }
+          return entries;
+        }),
+        tap(() => this.searchAtecoFailed = false),
+        catchError((error) => {
+          console.log(error);
+          this.searchAtecoFailed = true;
+          return of([]);
+        })
+      )),
+      tap(() => this.searchingAteco = false)
+  )
+
+  formatterAteco = (x: {codice: string, descrizione: string}) => x.codice;
+
+  selectAteco(entry: any) {
+    if(entry && entry.codice && entry.descrizione) {
+      this.ateco.codice = entry.codice;
+      this.ateco.descrizione = entry.descrizione;
+    }    
+  }
 
   menuContentShow() {
     this.showContent = !this.showContent;

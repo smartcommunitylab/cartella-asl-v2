@@ -160,14 +160,24 @@
                         </div>
                         <div class="col-2"></div>
                         <div class="col-sm-1">
-                            <label for="codiceAteco" *ngIf="codiceAteco" class="active">Codice ATECO</label>
-                            <input type="text" class="form-control" [(ngModel)]="codiceAteco" id="codiceAteco" name="codiceAteco"
-                                #CodiceAtecoInput="ngModel" placeholder="Codice ATECO">
+                            <ng-template #rtAteco let-r="result" let-t="term">
+                                <div class="row">
+                                    <ngb-highlight [result]="r.codice + ' - ' + r.descrizione" [term]="t"></ngb-highlight>
+                                </div>
+                            </ng-template>
+                            <label for="codiceAteco" *ngIf="ateco.codice" class="active">Codice ATECO</label>
+                            <input type="text" class="form-control" [(ngModel)]="atecoEntry" value="atecoEntry.codice"
+                                id="codiceAteco" name="codiceAteco" 
+                                [ngbTypeahead]="getAteco" [resultTemplate]="rtAteco" [inputFormatter]="formatterAteco"
+                                (ngModelChange)="selectAteco(atecoEntry)" placeholder="Codice ATECO">
+                            <small *ngIf="searchingAteco" class="progress-spinner progress-spinner-active size-sm">
+                                <span class="sr-only">Caricamento...</span>
+                            </small>
                         </div>
                         <div class="col-sm-4">
-                            <label for="descAteco" *ngIf="descAteco" class="active">Descrizione Codice ATECO</label>
-                            <input type="text" class="form-control" [(ngModel)]="descAteco" id="descAteco" name="descAteco"
-                                #DescAtecoInput="ngModel" placeholder="Descrizione Codice ATECO">
+                            <label for="descAteco" *ngIf="ateco.descrizione" class="active">Descrizione Codice ATECO</label>
+                            <input disabled type="text" class="form-control" [(ngModel)]="ateco.descrizione" id="descAteco" 
+                                name="descAteco" placeholder="Descrizione Codice ATECO">
                         </div>
                     </div>
     
@@ -179,7 +189,7 @@
                                 </div>
                             </ng-template>
                             <input type="text" class="form-control" [(ngModel)]="place" value="place.name" 
-                                id="luogoSvolgimento" name="luogoSvolgimento"
+                                id="luogoSvolgimento" name="luogoSvolgimento" 
                                 [ngbTypeahead]="getAddresses" [resultTemplate]="rtAddress" [inputFormatter]="formatterAddress"
                                 (ngModelChange)="selectPlace(place)" required>
                             <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
