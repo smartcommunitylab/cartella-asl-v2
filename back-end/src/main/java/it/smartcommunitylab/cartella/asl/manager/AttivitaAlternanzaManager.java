@@ -834,5 +834,16 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		return report;
 	}
+
+	public List<AttivitaAlternanza> findAttivitaByStudenteAndEnte(String studenteId, String enteId) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es");
+		sb.append(" WHERE es.attivitaAlternanzaId=aa.id AND aa.enteId=(:enteId) AND es.studenteId=(:studenteId)");
+		sb.append(" ORDER BY aa.dataInizio DESC");
+
+		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("studenteId", studenteId);
+		return query.getResultList();
+	}
 	
 }

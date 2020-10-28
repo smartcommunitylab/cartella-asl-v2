@@ -29,6 +29,7 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudioBean;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.NotificheStudente;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
@@ -37,6 +38,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
@@ -67,6 +69,8 @@ public class StudenteManager extends DataEntityManager {
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
 	@Autowired
 	private CompetenzaManager competenzaManager;
+	@Autowired
+	private IstituzioneManager istituzioneManager;
 	@Autowired
 	private NotificheStudenteRepository notificheStudenteRepository;
 	@Autowired
@@ -580,6 +584,69 @@ public class StudenteManager extends DataEntityManager {
 		studenteDB.setPhone(studente.getPhone());
 		studenteRepository.save(studenteDB);
 		return studenteDB;
+	}
+
+	public Page<ReportStudenteEnte> findStudentiByEnte(String enteId, String text, Pageable pageRequest) {
+		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder("SELECT s.id FROM AttivitaAlternanza aa, EsperienzaSvolta es, Studente s, Istituzione i");
+		sb.append(" WHERE aa.id=es.attivitaAlternanzaId AND es.studenteId=s.id AND aa.istitutoId=i.id");
+		sb.append(" AND aa.enteId=(:enteId)");
+		if (Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(es.classeStudente) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
+		}
+		sb.append(" GROUP BY s.id ORDER BY MAX(aa.dataInizio) DESC");
+		
+		TypedQuery<String> query = em.createQuery(sb.toString(), String.class);
+		query.setParameter("enteId", enteId);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+
+		List<String> rows = query.getResultList();
+		List<ReportStudenteEnte> list = new ArrayList<>();
+		for (String studenteId : rows) {
+			ReportStudenteEnte report = new ReportStudenteEnte();
+			Studente studente = findStudente(studenteId);
+			report.setStudente(studente);
+			List<AttivitaAlternanza> attivitaList = attivitaAlternanzaManager.findAttivitaByStudenteAndEnte(studenteId, enteId);
+			if(attivitaList.size() > 0) {
+				report.setAttivitaAlternanza(attivitaList.get(0));
+				Istituzione istituto = istituzioneManager.getIstituto(attivitaList.get(0).getIstitutoId());
+				report.setIstituto(istituto);
+			}
+			report.setStato(getStatoStudenteByEnte(attivitaList));
+			list.add(report);
+		}
+		
+		String counterQuery = sb.toString().replace("SELECT s.id", "SELECT COUNT(DISTINCT s.id)")
+				.replace("GROUP BY s.id ORDER BY MAX(aa.dataInizio) DESC", "");
+		Query cQuery = queryToCount(counterQuery,query);
+		long total = (Long) cQuery.getSingleResult();
+		Page<ReportStudenteEnte> page = new PageImpl<ReportStudenteEnte>(list, pageRequest, total);
+		return page;
+	}
+
+	private String getStatoStudenteByEnte(List<AttivitaAlternanza> list) {
+		boolean attivo = false;
+		boolean inAttesa = false;
+		LocalDate today = LocalDate.now();
+		for(AttivitaAlternanza aa : list) {
+			if(aa.getDataInizio().isBefore(today) && aa.getDataFine().isAfter(today)) {
+				attivo = true;
+			}
+			if(aa.getDataInizio().isAfter(today)) {
+				inAttesa = true;
+			}
+		}
+		if(attivo) {
+			return "attivo";
+		}
+		if(inAttesa) {
+			return "in_attesa";
+		}
+		return "inattivo";
 	}
 
 }
