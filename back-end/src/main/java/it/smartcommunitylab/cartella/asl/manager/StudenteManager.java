@@ -457,6 +457,7 @@ public class StudenteManager extends DataEntityManager {
 		Optional<PianoAlternanza> pianoForClassrom = pianoForClassrom(studente.getIstitutoId(), 
 				studente.getCorsoDiStudio().getCourseId(), studente.getClassroom(), studente.getAnnoScolastico());
 		if(pianoForClassrom.isPresent()) {
+			report.setPianoId(pianoForClassrom.get().getId());
 			report.setOreTotali(pianoForClassrom.get().getOreTerzoAnno() + 
 					pianoForClassrom.get().getOreQuartoAnno() + 
 					pianoForClassrom.get().getOreQuintoAnno());
