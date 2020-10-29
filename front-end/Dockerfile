@@ -19,8 +19,15 @@ COPY docker-props/login/config.ts /tmp/login/src/app/config.ts
 WORKDIR /tmp/login
 RUN mvn clean install -Dmaven.test.skip=true
 
+COPY front-end/azienda /tmp/azienda
+COPY docker-props/azienda/config.ts /tmp/azienda/src/app/config.ts
+COPY docker-props/azienda/serverAPIConfig.ts /tmp/azienda/src/app/core/serverAPIConfig.ts
+WORKDIR /tmp/azienda
+RUN mvn clean install -Dmaven.test.skip=true
+
 FROM nginx:alpine
 COPY --from=frontend-build /tmp/scuola/dist /usr/share/nginx/html/asl-scuola-v2
 COPY --from=frontend-build /tmp/ruoli/dist /usr/share/nginx/html/asl-ruoli-v2
 COPY --from=frontend-build /tmp/login/dist /usr/share/nginx/html/asl-login
-RUN rm /usr/share/nginx/html/50x.html /usr/share/nginx/html/index.html  
+COPY --from=frontend-build /tmp/azienda/dist /usr/share/nginx/html/asl-azienda-v2
+RUN rm /usr/share/nginx/html/50x.html /usr/share/nginx/html/index.html
