@@ -931,7 +931,35 @@ export class DataService {
     }
     return annoScolastico;
   }
- 
+
+   /* istituti */
+   getPagedIstitutiOrderByIstitutoId(filtro: any, page, pageSize) {
+    let url = this.host + "/istituto/search/ente";
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
+
+    if (filtro.filterText)
+      params = params.append('text', filtro.filterText);
+   
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+
+  }
+  
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 
