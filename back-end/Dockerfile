@@ -25,4 +25,5 @@ COPY --chown=dev:dev --from=backend-build /tmp/target/cartella-asl-2.0.jar ${USE
 RUN apk add --no-cache tzdata
 USER dev
 ENV TZ=Europe/Rome
+RUN mkdir -p tmp/cartella-documents/
 ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar ${APP}"]
