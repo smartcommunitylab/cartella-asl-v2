@@ -148,8 +148,8 @@ public class OffertaManager extends DataEntityManager {
 			if(optional.isPresent()) {
 				Offerta offerta = optional.get();
 				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
-				offerta.setStato(getStato(offerta));
 				completaAssociazioni(offerta);
+				offerta.setStato(getStato(offerta));
 				return offerta;
 			}			
 		}
@@ -283,7 +283,7 @@ public class OffertaManager extends DataEntityManager {
 
 	public Page<Offerta> findOffertaByEnte(String enteId, String text, String stato, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off.id FROM Offerta off LEFT JOIN OffertaIstituto oi ON off.id=oi.offertaId"
+		sb.append("SELECT off.id, off.dataInizio FROM Offerta off LEFT JOIN OffertaIstituto oi ON off.id=oi.offertaId"
 				+ " WHERE off.enteId=(:enteId)");
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(off.titolo) LIKE (:text) OR UPPER(oi.nomeIstituto) LIKE (:text))");
@@ -300,7 +300,7 @@ public class OffertaManager extends DataEntityManager {
 				sb.append(" AND (off.postiRimanenti <= 0 OR off.dataFine < (:date))");
 			}
 		}
-		sb.append(" GROUP BY off.id, oi.offertaId");
+		sb.append(" GROUP BY off.id, off.dataInizio, oi.offertaId");
 		if(bozza) {
 			sb.append(" HAVING COUNT(oi.offertaId)=0");
 		}
@@ -319,15 +319,17 @@ public class OffertaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
-		List<Object> rows = query.getResultList();
+		List<Object[]> rows = query.getResultList();
 		List<Offerta> list = new ArrayList<>();
-		for (Object obj : rows) {
-			Long offertaId = (Long) obj;
+		for (Object[] obj : rows) {
+			Long offertaId = (Long) obj[0];
 			Offerta offerta = getOfferta(offertaId);
 			list.add(offerta);
 		}
 		
-		String counterQuery = "SELECT COUNT(off) FROM Offerta off WHERE off.id IN (" + q + ")";
+		String counterQuery = "SELECT COUNT(off) FROM Offerta off WHERE off.id IN (" 
+				+ q.replace("SELECT off.id, off.dataInizio", "SELECT off.id").replace("ORDER BY off.dataInizio DESC", "")
+				+ ")";
 		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();
 		

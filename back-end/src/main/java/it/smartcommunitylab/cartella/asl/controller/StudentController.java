@@ -30,6 +30,7 @@ import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
@@ -198,6 +199,22 @@ public class StudentController implements AslController {
 			logger.info(String.format("updateProfilo:%s", studenteId));
 		}	
 		return result;
+	}
+	
+	@GetMapping("/api/studente/ricerca/{enteId}/ente")
+	public Page<ReportStudenteEnte> getStudentsByEnte(
+			@PathVariable String enteId,
+			@RequestParam(required = false) String text,
+			Pageable pageRequest,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<ReportStudenteEnte> page = studentManager.findStudentiByEnte(enteId, text, pageRequest);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getStudentsByEnte:%s / %s", enteId, text));
+		}
+		return page; 
+
 	}
 
 }

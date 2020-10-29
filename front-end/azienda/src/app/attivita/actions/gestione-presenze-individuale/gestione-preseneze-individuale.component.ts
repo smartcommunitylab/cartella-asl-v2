@@ -257,7 +257,7 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
     var toBeSaved = [];
 
     this.presenze.forEach(ps => {
-      if (ps.isModifiedState && !ps.verificata ) {
+      if (!ps.verificata && (ps.isModifiedState || ps.oreSvolte!=null) ) {
         var save = JSON.parse(JSON.stringify(ps))
         // save.verificata = true;
         save.giornata = moment(ps.giornata, 'YYYY-MM-DD').valueOf();

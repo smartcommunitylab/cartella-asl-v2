@@ -9,7 +9,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SkillsSelectorModule } from './shared/skills-selector/skills-selector.module';
+import { IstitutiSelectorModule } from './shared/istituti-selector/istituti-selector.module';
 import { AppLoadService } from './app-load.service';
 import { AuthenticationService } from './core/services/authentication.service';
 import { AuthGuard } from './core/services/auth.guard';
@@ -41,7 +41,7 @@ export function init_app(appLoadService: AppLoadService) {
     CoreModule,           //Singleton objects (services, components that are loaded only once, etc.)
     SharedModule,          //Shared (multi-instance) objects
     NgbModule.forRoot(),
-    SkillsSelectorModule,
+    IstitutiSelectorModule,
   
   ],
   declarations: [AppComponent],

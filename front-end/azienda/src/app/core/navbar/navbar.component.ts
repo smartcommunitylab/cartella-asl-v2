@@ -16,7 +16,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     isCollapsed: boolean;
     loginLogoutText: string = 'Login';
     sub: Subscription;
-    aziendaName: string;
     isSticky: boolean = false;
     profile;
     aziende;
@@ -46,7 +45,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             this.aziende = aziende;
                             this.dataService.setAziendaId(this.aziende[0].id);
                             this.dataService.setAziendaName(this.aziende[0].nome);
-                            this.aziendaName = this.dataService.aziendaName;
                             if (this.aziende[0].coordinate && this.aziende[0].coordinate.latitude && this.aziende[0].coordinate.longitude) {
                                 this.dataService.setAziendaPosition(this.aziende[0].coordinate);
                             } else {
@@ -68,13 +66,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     onAziendaChange(azienda) {
         this.actualAzienda = azienda;
         this.dataService.setAziendaId(azienda.id);
-        this.dataService.setAziendaName(this.aziende[0].nome);
+        this.dataService.setAziendaName(azienda.nome);
         if (azienda.coordinate && azienda.coordinate.latitude && azienda.coordinate.longitude) {
             this.dataService.setAziendaPosition(azienda.coordinate);
         } else {
             this.dataService.setAziendaPosition(config.defaultPosition);
         }                           
-        this.aziendaName =  this.dataService.aziendaName;       
         this.router.navigate(['/attivita']);
 
     }

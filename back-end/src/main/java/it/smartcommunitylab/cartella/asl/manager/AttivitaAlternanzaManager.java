@@ -357,6 +357,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivitaAlternanzaRepository.updateStato(aa.getId(), Stati.archiviata);
 		attivitaAlternanzaRepository.updateDataArchiviazione(aa.getId(), aa.getDataArchiviazione());
 	}
+	
+	public AttivitaAlternanza activateAttivitaAlternanza(Long id) throws Exception {
+		AttivitaAlternanza aa = getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));
+		}
+		if(!aa.getStato().equals(Stati.archiviata)) {
+			throw new BadRequestException(errorLabelManager.get("attivita.error.activate"));
+		}
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+		for(EsperienzaSvolta es : esperienze) {
+			esperienzaSvoltaManager.apriEsperienza(es.getId());
+		}
+		aa.setDataArchiviazione(null);
+		aa.setStato(Stati.attiva);
+		attivitaAlternanzaRepository.updateStato(id, Stati.attiva);
+		attivitaAlternanzaRepository.updateDataArchiviazione(id, null);
+		return aa;
+	}
 
 	public List<ReportArchiviaEsperienza> getArchiveAttivitaAlternanza(AttivitaAlternanza aa) {
 		List<ReportArchiviaEsperienza> result = new ArrayList<>();
@@ -698,12 +717,14 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return reportList;
 	}
 
-	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, String stato,
-			Pageable pageRequest) {
+	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, 
+			String stato, String istitutoId, Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
 		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
 		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
-		
+		if(Utils.isNotEmpty(istitutoId)) {
+			sb.append(" AND aa.istitutoId=(:istitutoId)");
+		}
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(i.name) LIKE (:text))");
 		}
@@ -736,6 +757,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("enteId", enteId);
+		if(Utils.isNotEmpty(istitutoId)) {
+			query.setParameter("istitutoId", istitutoId);
+		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
@@ -809,6 +833,17 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			}
 		}
 		return report;
+	}
+
+	public List<AttivitaAlternanza> findAttivitaByStudenteAndEnte(String studenteId, String enteId) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es");
+		sb.append(" WHERE es.attivitaAlternanzaId=aa.id AND aa.enteId=(:enteId) AND es.studenteId=(:studenteId)");
+		sb.append(" ORDER BY aa.dataInizio DESC");
+
+		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("studenteId", studenteId);
+		return query.getResultList();
 	}
 	
 }

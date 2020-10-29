@@ -12,10 +12,6 @@ import { TrimPipe } from './pipes/trim.pipe';
 import { SortByDirective } from './directives/sortby.directive';
 
 import { registerLocaleData } from '@angular/common';
-
-import { StudentsSelectorModule } from './students-selector/students-selector.module';
-import { OfferteSelectorModule } from './offerte-selector/offerte-selector.module';
-
 import localeIt from '@angular/common/locales/it';
 import localeItExtra from '@angular/common/locales/extra/it';
 
@@ -23,9 +19,9 @@ registerLocaleData(localeIt, 'it-IT', localeItExtra);
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 
 @NgModule({
-  imports: [CommonModule, MapModule, PaginationModule ,SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
+  imports: [CommonModule, MapModule, PaginationModule ,SubNavbarModule],
   exports: [ CommonModule, FormsModule, CapitalizePipe, TrimPipe, LocalizedDatePipe, CalendarDatePipe, SortByDirective, 
-             MapModule, PaginationModule, SubNavbarModule, StudentsSelectorModule, OfferteSelectorModule],
+             MapModule, PaginationModule, SubNavbarModule],
   declarations: [ CapitalizePipe, TrimPipe, LocalizedDatePipe, CalendarDatePipe, SortByDirective],
   providers: [
     { provide: LOCALE_ID, useValue: "it-IT" }, //replace "en-US" with your locale

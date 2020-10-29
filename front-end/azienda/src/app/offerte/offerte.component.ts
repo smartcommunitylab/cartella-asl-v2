@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 
 @Component({
     selector: 'offerte',
@@ -71,6 +72,25 @@ export class OfferteComponent implements OnInit {
             (err: any) => console.log(err),
             () => console.log('getAttivitaTipologie'));
 
+    }
+
+    openDetail(off) {
+        this.router.navigate(['../detail', off.id], { relativeTo: this.route });
+    }
+
+    creaOfferta() {
+        const modalRef = this.modalService.open(CreaOffertaModalComponent, { windowClass: "creaAttivitaModalClass" });
+        let enteTipologie = this.tipologie.filter(f => !f.interna);
+        modalRef.componentInstance.tipologie = enteTipologie;
+        modalRef.componentInstance.newOffertaListener.subscribe((offerta) => {
+            this.dataService.createOfferta(offerta).subscribe((response) => {
+                this.router.navigateByUrl('/offerte/detail/' + response.id + '/modifica/istituti');
+                // this.router.navigate(['../detail', response.id + '/modifica/istituti'], { relativeTo: this.route });
+             },
+                 (err: any) => console.log(err),
+                 () => console.log('createAttivitaAlternanza'));
+
+        });
     }
 
     getOffertePage(page: number) {

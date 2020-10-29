@@ -82,47 +82,47 @@
 
         <div class="middle-div">
             <div class="row">
-                <label class="col-sm-4 detail-label">Titolo:</label>
+                <label class="col-sm-4 detail-label text-semibold">Titolo:</label>
                 <div class="col-sm-8">{{piano.titolo}}</div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Stato:</label>
+                <label class="col-sm-4 detail-label text-semibold">Stato:</label>
                 <div class="col-sm-8">{{getStatoNome(piano.stato)}}</div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Corso studi:</label>
+                <label class="col-sm-4 detail-label text-semibold">Corso studi:</label>
                 <div class="col-sm-8">{{ getCorsoDiStudioString(piano.corsoDiStudio) }}</div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Anni riferimento:</label>
+                <label class="col-sm-4 detail-label text-semibold">Anni riferimento:</label>
                 <div class="col-sm-8">{{piano.periodo}}</div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Monte ore 3º anno:</label>
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 3º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreTerzoAnno}}
                 </div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Monte ore 4º anno:</label>
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 4º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreQuartoAnno}}
                 </div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Monte ore 5º anno:</label>
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 5º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreQuintoAnno}}
                 </div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Ore totali:</label>
+                <label class="col-sm-4 detail-label text-semibold">Ore totali:</label>
                 <div class="col-sm-8">
                     {{piano.oreTerzoAnno + piano.oreQuartoAnno + piano.oreQuintoAnno}}
                 </div>
             </div>
             <div class="row">
-                <label class="col-sm-4 detail-label">Note:</label>
+                <label class="col-sm-4 detail-label text-semibold">Note:</label>
                 <div class="col-sm-8">{{ piano.note }}</div>
             </div>
         </div>

@@ -168,7 +168,7 @@
                         <label for="referenteEsterno" *ngIf="attivita.referenteEsterno" class="active">Tutor aziendale</label>
                         <label for="referenteEsterno" *ngIf="!attivita.referenteEsterno">Tutor aziendale</label>
                         <div class="invalid-feedback"
-                            [class.d-block]="!tipoInterna && (!referenteEsternoInput.value || forceReferenteEsternoErrorDisplay)">
+                            [class.d-block]="(!referenteEsternoInput.value || forceReferenteEsternoErrorDisplay)">
                             Campo necessario.</div>
                     
                     </div>
@@ -183,7 +183,8 @@
                 <div class="row v-center form-group">
                     <div class="col-5">
                         <input type="text"  pattern="[0-9]*" minlength="12" maxlength="15" class="form-control" [(ngModel)]="attivita.referenteEsternoTelefono"
-                         id="referenteEsternoTelefono" #referenteEsternoTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')">
+                         id="referenteEsternoTelefono" #referenteEsternoTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')"
+                         onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" onpaste="return false" >
                         <label for="referenteEsternoTelefono" *ngIf="attivita.referenteEsternoTelefono" class="active">Telefono tutor aziendale</label>
                         <label for="referenteEsternoTelefono" *ngIf="!attivita.referenteEsternoTelefono">Telefono tutor aziendale</label>
                         <div class="invalid-feedback"

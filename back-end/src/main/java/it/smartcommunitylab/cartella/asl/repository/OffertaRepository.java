@@ -15,7 +15,7 @@ public interface OffertaRepository extends JpaRepository<Offerta, Long> {
 	
 	@Modifying
 	@Query("UPDATE Offerta off0 SET titolo=:#{#off.titolo}, descrizione=:#{#off.descrizione}, dataInizio=:#{#off.dataInizio}, dataFine=:#{#off.dataFine},"
-			+ " oraInizio=:#{#off.oraInizio}, oraFine=:#{#off.oraFine},"
+			+ " oraInizio=:#{#off.oraInizio}, oraFine=:#{#off.oraFine}, annoScolastico=:#{#off.annoScolastico},"
 			+ " referenteScuola=:#{#off.referenteScuola}, referenteScuolaCF=:#{#off.referenteScuolaCF}, referenteScuolaTelefono=:#{#off.referenteScuolaTelefono},"
 			+ " referenteEsterno=:#{#off.referenteEsterno}, referenteEsternoCF=:#{#off.referenteEsternoCF}, referenteEsternoTelefono=:#{#off.referenteEsternoTelefono},"
 			+ " formatore=:#{#off.formatore}, formatoreCF=:#{#off.formatoreCF},"

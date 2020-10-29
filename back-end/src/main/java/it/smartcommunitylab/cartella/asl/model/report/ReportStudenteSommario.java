@@ -6,6 +6,7 @@ public class ReportStudenteSommario {
 	private int esperienzeConcluse;
 	private int esperienzeInCorso;
 	private int esperienzeNonCompletate;
+	private Long pianoId;
 	
 	public int getOreValidate() {
 		return oreValidate;
@@ -36,6 +37,12 @@ public class ReportStudenteSommario {
 	}
 	public void setEsperienzeNonCompletate(int esperienzeNonCompletate) {
 		this.esperienzeNonCompletate = esperienzeNonCompletate;
+	}
+	public Long getPianoId() {
+		return pianoId;
+	}
+	public void setPianoId(Long pianoId) {
+		this.pianoId = pianoId;
 	}
 	
 }

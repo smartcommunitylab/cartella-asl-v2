@@ -395,11 +395,13 @@ public class AttivitaAlternanzaController implements AslController {
 			@RequestParam String enteId,
 			@RequestParam(required = false) String text,
 			@RequestParam(required = false) String stato,
+			@RequestParam(required = false) String istitutoId,
 			Pageable pageRequest, 
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		Page<ReportAttivitaAlternanzaRicercaEnte> result = attivitaAlternanzaManager.findAttivitaByEnte(enteId, text, stato, pageRequest);
+		Page<ReportAttivitaAlternanzaRicercaEnte> result = attivitaAlternanzaManager.findAttivitaByEnte(enteId, text, stato, 
+				istitutoId, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchAttivitaAlternanzaByEnte:%s", text));
 		}

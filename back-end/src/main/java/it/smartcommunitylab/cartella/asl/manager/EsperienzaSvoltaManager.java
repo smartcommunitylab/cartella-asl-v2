@@ -45,7 +45,7 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 	@Autowired
 	TeachingUnitManager tuManager;
 	@Autowired
-	EsperienzaAllineamentoManager EsperienzaAllineamentoManager;
+	EsperienzaAllineamentoManager esperienzaAllineamentoManager;
 
 	public EsperienzaSvolta getEsperienzaSvolta(Long id) {
 		return esperienzaSvoltaRepository.findById(id).orElse(null);
@@ -122,8 +122,16 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 			Stati stato = valida ? Stati.valida : Stati.annullata;
 			updateStato(id, stato);
 			if(valida) {
-				EsperienzaAllineamentoManager.addEsperienzaSvoltaAllineamento(id);
+				esperienzaAllineamentoManager.addEsperienzaSvoltaAllineamento(id);
 			}
+		}
+	}
+	
+	public void apriEsperienza(Long id) {
+		EsperienzaSvolta es = findById(id);
+		if(es != null) {
+			updateStato(id, Stati.da_definire);
+			esperienzaAllineamentoManager.deleteEsperienzaSvoltaAllineamento(id);
 		}
 	}
 	

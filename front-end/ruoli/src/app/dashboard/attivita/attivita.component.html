@@ -95,12 +95,16 @@
             </thead>
             <tbody>
                 <tr *ngFor="let aa of attivitaList">
-                    <td><div ngbTooltip="{{aa.descrizione}}">{{aa.titolo}}</div></td>
+                    <td><div [ngbTooltip]="aa.descrizione">{{aa.titolo}}</div></td>
                     <td>{{getTipologia(aa.tipologia)}}</td>
                     <td>{{aa.dataInizio}} <br/> {{aa.dataFine}}</td>
-                    <td>{{aa.stato}}</td>
-                    <td><div ngbTooltip="{{getStudentiTip(aa)}}">{{getNumStudentiTip(aa)}}</div></td>
                     <td>
+                        <div [ngbTooltip]="aa.dataArchiviazione">{{aa.stato}}</div>
+                    </td>
+                    <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
+                    <td>
+                        <i class="material-icons pointer ok" ngbTooltip="attiva attività"
+                        *ngIf="aa.stato=='archiviata'" (click)="activateAttivita(aa)">unarchive</i> 
                         <i class="material-icons pointer error" ngbTooltip="cancella attività"
                         (click)="deleteAttivita(aa)">delete_forever</i> 
                     </td>

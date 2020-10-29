@@ -1,0 +1,59 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row m-left" *ngIf="ente">
+        <div class="col-6 v-center">
+            <span class="title">Scheda ente</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="card-body m-16" *ngIf="ente">
+        <div class="title">
+            Dati ente <br/>
+            <button class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questa attività" (click)="modifica()">
+                Modifica dati ente&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+        </div>
+        <br>
+        <div class="p-1 middle-div row">
+            <div class="col-6">
+                <span class="row "><strong>Nome ente:</strong>{{ente.nome}}</span>
+                <span class="row"><strong>Partita Iva:</strong>{{ente.partita_iva}}</span>
+                <span class="row"><strong>Indirizzo:</strong>{{ente.viaPiazza}}</span>
+                <span class="row"><strong>CAP:</strong>{{ente.cap}}</span>
+                <span class="row"><strong>Comune:</strong>{{ente.comune}}</span>
+                <span class="row"><strong>Provincia:</strong>{{ente.provincia}}</span>
+            </div>
+            <div class="col-6">
+                <span class="row"><strong>Email:</strong>{{ ente.email }}</span>
+                <span class="row"><strong>PEC:</strong>{{ente.pec}}</span>
+                <span class="row"><strong>Telefono:</strong>{{ente.phone}}</span>
+                <span class="row"><strong>Legale rappresentante:</strong>{{ente.legaleRappresentante}}</span>
+                <span class="row"><strong>Responsabile della sicurezza:</strong>{{ente.responsabileSicurezza}}</span>
+                <span class="row"><strong>Medico competente:</strong>{{ente.medicoCompetente}}</span>
+            </div>    
+        </div>
+        <div class="p-1 middle-div row">
+            <div class="col-12">
+                <span class="row "><strong>Codice ATECO:</strong>{{codiceAteco}} - {{descAteco}}</span>
+            </div>
+        </div>
+        <br>
+        <div class="p-1 middle-div row" *ngIf="hasCoordinate()">
+            <div class="col">
+              <div id="map" style="height:300px;width:100%;"></div>
+            </div>
+          </div>
+  </div>

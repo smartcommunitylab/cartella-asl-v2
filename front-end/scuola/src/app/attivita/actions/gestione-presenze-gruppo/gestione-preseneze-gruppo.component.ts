@@ -55,7 +55,9 @@ export class GestionePresenzeGruppoComponent implements OnInit {
   isArchivio: boolean;
   toolTipSave;
   evn = environment;
-
+  tipologie;
+  tipoInterna: boolean = false;
+  
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo'  
@@ -139,6 +141,16 @@ export class GestionePresenzeGruppoComponent implements OnInit {
       this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
         this.setCalendar(moment(this.attivita.dataInizio));
+
+        this.dataService.getAttivitaTipologie().subscribe((res) => {
+          this.tipologie = res;
+          this.tipologie.filter(tipo => {
+            if (tipo.id == this.attivita.tipologia) {
+              this.tipoInterna = tipo.interna;
+            }
+          })
+        });
+
         this.dataService.getAttivitaPresenzeGruppoReport(id).subscribe((res => {
           this.report = res;
 

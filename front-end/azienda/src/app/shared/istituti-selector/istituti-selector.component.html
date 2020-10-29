@@ -1,0 +1,95 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below">
+    <div class="row">
+        <!-- left column -->
+        <div class="col-6 card broderRight modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
+                    <div class="col-4">
+                        <label class="complementary-3-color-a6 font-weight-bold" >Istituti associabili: {{totalRecords}}</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-6 input-group">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaistitutoTxt" class="form-control search-input"
+                                [(ngModel)]="searchistitutoTxt" (keyup.enter)="searchistituto()">
+                            <label for="cercaistitutoTxt" >Cerca istituti da associare</label>
+                        </div>
+                        <button class="btn btn-icon v-center-inline" (click)="searchistituto()">
+                            <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-hover">
+                    <thead class="bg-white">
+                        <tr>
+                            <th>Nome istituto</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let istituto of istitute" [class.disabled]="istituto.disabled">
+                            <td class="align-middle">{{istituto.name}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-primary iconPrimaryColor icon-sm pointer" *ngIf="!istituto.disabled" (click)="toggleistituto(istituto)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row empty-list" *ngIf="!istitute || istitute.length==0">
+                    <div class="col">
+                        Nessuna istituto trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5" [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+        </div>
+
+        <!-- right column -->
+        <div class="card col-6 broderLeft modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
+                    <div class="col-4">
+                        <label class="primary-color font-weight-bold">Istituti associate: {{attachedIstituti.length}}</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-6 input-group">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaistitutoAssociateTxt" class="form-control search-input"
+                                [(ngModel)]="searchistitutoAssociateTxt" (keyup.enter)="searchistitutoAssociate()">
+                            <label for="cercaistitutoAssociateTxt" >Cerca istituti associate</label>
+                        </div>
+                        <button class="btn btn-icon v-center-inline" (click)="searchistitutoAssociate()">
+                            <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+                        </button>
+                    </div>                  
+                </div>
+                <table class="table table-hover">
+                    <thead class="bg-white">
+                        <tr>
+                            <th>Nome istituto</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let istituto of istituteAssociateWindow">
+                            <td class="align-middle">{{istituto.nomeIstituto}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-danger iconDangerColor icon-sm pointer" (click)="deleteistituto(istituto)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row empty-list" *ngIf="!istituteAssociateWindow || istituteAssociateWindow.length==0">
+                    <div class="col">
+                        Nessuna istituto trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPaginationAssociate [maxPages]="5" [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)"></cm-pagination>
+        </div>
+    </div>
+</div>

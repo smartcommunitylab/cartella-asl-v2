@@ -20,23 +20,12 @@
                     </div>
                     <div class="menu-wrapper">
                         <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" [ngClass]="{ active: isActive('/piani/') }" href="./#/piani/list">
-                                    <span>Piani</span>
-                                    <span class="sr-only">current</span>
-                                </a>
-                            </li>
+                            <!-- ./#/attivita -->
                             <li class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/attivita') }" href="./#/attivita/list">
                                     <span>Attività</span>
                                     <span class="sr-only">current</span>
                                 </a>
-                            </li>
-                            <!-- ./#/offerte/list -->
-                            <li class="nav-item">
-                                <a class="nav-link"  [ngClass]="{ active: isActive('/offerte') }" href="./#/offerte/list">
-                                    <span>Offerte</span>
-                                    <span class="sr-only">current</span></a>
                             </li>
                             <!-- ./#/studenti -->
                             <li class="nav-item">
@@ -49,6 +38,19 @@
                             <li class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/enti') }" href="./#/enti/list">
                                     <span>Enti</span>
+                                    <span class="sr-only">current</span>
+                                </a>
+                            </li>
+                            <!-- ./#/offerte/list -->
+                            <li class="nav-item">
+                                <a class="nav-link"  [ngClass]="{ active: isActive('/offerte') }" href="./#/offerte/list">
+                                    <span>Offerte</span>
+                                    <span class="sr-only">current</span></a>
+                            </li>
+                            <!-- ./#/piani -->
+                            <li class="nav-item">
+                                <a class="nav-link" [ngClass]="{ active: isActive('/piani/') }" href="./#/piani/list">
+                                    <span>Piani</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>

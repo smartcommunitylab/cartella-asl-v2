@@ -16,7 +16,11 @@ export class HomeComponent implements OnInit {
   type: string = '';
   errMsg: string = '';
   actualOption;
-  options = [{ "id": 1, "name": "Scuola", "prefix": config.prefixScuola, "disabled": false }, { "id": 2, "name": "Studente", "prefix": config.prefixStudente, "disabled": false }, { "id": 3, "name": "Ente Ospitante", "prefix": config.prefixEnte, "disabled": true }];
+  options = [
+    { "id": 1, "name": "Scuola", "prefix": config.prefixScuola, "disabled": false }, 
+    { "id": 2, "name": "Studente", "prefix": config.prefixStudente, "disabled": false }, 
+    { "id": 3, "name": "Ente Ospitante", "prefix": config.prefixEnte, "disabled": false }
+  ];
 
   constructor(
     private router: Router,
@@ -44,7 +48,7 @@ export class HomeComponent implements OnInit {
   entra() {
     var getUrl = window.location;
     var baseUrl = getUrl.protocol + "//" + getUrl.host + "/"; //+ getUrl.pathname.split('/')[1]
-    window.location.href = baseUrl + '/' + this.type + '/';
+    window.location.href = baseUrl + this.type + '/';
   }
 
   onChange(option) {

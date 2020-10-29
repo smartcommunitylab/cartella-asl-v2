@@ -12,6 +12,7 @@ import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.clas
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -772,10 +773,12 @@ export class DataService {
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
-    // if (filterText) {
+    if (!filterText) {
+      filterText = '';
+    }
     params = params.append('text', filterText);
-    // }
 
+    
     return this.http.get<IPagedIstituto>(
       url,
       {
@@ -817,48 +820,9 @@ export class DataService {
       )
   }
 
-  // searchEnte(term: string) {
-  //   // if (term === '') {
-  //   //   return of([]);
-  //   // }
-
-  //   let url = this.host + "/azienda/search";
-  //   let params = new HttpParams();
-  //   params = params.append('page', '0');
-  //   params = params.append('size', '20');
-
-  //   if (term) {
-  //     params = params.append('text', term);
-  //   }
-
-  //   // return this.http
-  //   //   .get(WIKI_URL, {params: PARAMS.set('search', term)}).pipe(
-  //   //     map(response => response[1])
-  //   //   );
-
-  //   environment.globalSpinner = false;
-  //   return this.http.get<any>(url,
-  //     {
-  //       observe: 'response',
-  //       params: params
-  //     })
-  //     .timeout(this.timeout)
-  //     .pipe(
-  //       map(res => {
-  //         environment.globalSpinner = true;
-  //         return (res.body.content)
-  //       }),
-  //       catchError((err) => {
-  //         environment.globalSpinner = true;
-  //         return this.handleError(err);
-  //       })
-  //     );
-
-  // }
-
   // GET /azienda/{id}
   getAzienda() {
-    let url = this.host + "/azienda/" + this.aziendaId;
+    let url = this.host + "/azienda/" + this.aziendaId + "/ente";
 
     return this.http.get<Azienda>(url,
       {
@@ -893,23 +857,6 @@ export class DataService {
         }
         ),
         catchError(this.handleError))
-  }
-
-  deleteAzienda(id: number): Observable<any> {
-    let url = this.host + "/azienda/" + id;
-    return this.http.delete<IApiResponse>(
-      url,
-      { observe: 'response', })
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          if (res.ok)
-            return true;
-          else
-            return res;
-        }),
-        catchError(this.handleError)
-      );
   }
 
   getAziende(page, pageSize, filters) {
@@ -959,6 +906,32 @@ export class DataService {
         catchError(this.handleError))
   }
 
+  getAteco(code: string): Observable<any> {
+    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
+    return this.http.get(url,
+      {
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getAnnoScolstico(now) {
+    var annoScolastico;
+    var lastDay = moment().month(8).date(1);
+    if (now.isBefore(lastDay)) {
+      annoScolastico = moment().year(now.year() - 1).format('YYYY') + '-' + now.format('YY');
+    } else {
+      annoScolastico = now.format('YYYY') + '-' + moment().year(now.year() + 1).format('YY');
+    }
+    return annoScolastico;
+  }
+ 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 

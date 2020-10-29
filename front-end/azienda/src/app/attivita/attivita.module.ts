@@ -6,9 +6,7 @@ import { AttivitaRoutingModule } from './attivita-routing.module';
 import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs/observable/from';
 import { DesignAngularKitModule } from 'design-angular-kit' 
-// import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 import { DpDatePickerModule } from 'ng2-date-picker';
-import { IstitutiSelectorModule } from '../shared/istituti-selector/istituti-selector.module';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -22,7 +20,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     DesignAngularKitModule,
-    IstitutiSelectorModule,
     SubNavbarModule,
     ReactiveFormsModule
   ],
@@ -30,7 +27,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbActiveModal,
   ],
   entryComponents: [
-    // DocumentoCancellaModal
   ],
 declarations: [AttivitaRoutingModule.components]
 })

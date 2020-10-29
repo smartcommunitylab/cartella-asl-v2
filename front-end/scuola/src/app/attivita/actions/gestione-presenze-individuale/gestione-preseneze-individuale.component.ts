@@ -49,7 +49,9 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
   toolTipSave;
   isArchivio: boolean;
   evn = environment;
-
+  tipologie;
+  tipoInterna: boolean = false;
+  
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo'
@@ -114,6 +116,16 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
         this.nomeStudente = this.esperienza.nominativoStudente;
         if (this.breadcrumbItems[2].title.indexOf(this.nomeStudente) < 0)
           this.breadcrumbItems[2].title = this.breadcrumbItems[2].title + " di " + this.nomeStudente;
+
+        this.dataService.getAttivitaTipologie().subscribe((res) => {
+          this.tipologie = res;
+          this.tipologie.filter(tipo => {
+            if (tipo.id == this.attivita.tipologia) {
+              this.tipoInterna = tipo.interna;
+            }
+          })
+        });
+        
         this.dataService.getAttivitaPresenzeIndividualeReport(id).subscribe((res => {
           this.report = res;
 
