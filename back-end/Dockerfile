@@ -22,5 +22,7 @@ RUN  addgroup -g ${USER_GROUP_ID} ${USER_GROUP}; \
 
 WORKDIR ${USER_HOME}
 COPY --chown=dev:dev --from=backend-build /tmp/target/cartella-asl-2.0.jar ${USER_HOME}
+RUN apk add --no-cache tzdata
 USER dev
+ENV TZ=Europe/Rome
 ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar ${APP}"]

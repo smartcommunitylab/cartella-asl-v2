@@ -30,4 +30,6 @@ COPY --from=frontend-build /tmp/scuola/dist /usr/share/nginx/html/asl-scuola-v2
 COPY --from=frontend-build /tmp/ruoli/dist /usr/share/nginx/html/asl-ruoli-v2
 COPY --from=frontend-build /tmp/login/dist /usr/share/nginx/html/asl-login
 COPY --from=frontend-build /tmp/azienda/dist /usr/share/nginx/html/asl-azienda-v2
+RUN apk add --no-cache tzdata
+ENV TZ=Europe/Rome
 RUN rm /usr/share/nginx/html/50x.html /usr/share/nginx/html/index.html
