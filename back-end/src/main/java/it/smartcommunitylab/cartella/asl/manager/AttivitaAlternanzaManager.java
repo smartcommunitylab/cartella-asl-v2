@@ -843,7 +843,14 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("studenteId", studenteId);
-		return query.getResultList();
+		List<AttivitaAlternanza> list = query.getResultList();
+		List<AttivitaAlternanza> result = new ArrayList<>();
+		for(AttivitaAlternanza aa : list) {
+			AttivitaAlternanza attivita = aa.clona();
+			attivita.setStato(getStato(aa));
+			result.add(attivita);
+		}
+		return result;
 	}
 	
 }
