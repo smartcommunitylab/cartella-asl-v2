@@ -960,6 +960,27 @@ export class DataService {
 
   }
   
+  getistitutoDettaglio(id: any): Observable<any> {
+    let url = this.host + "/istituto/" + id;
+    let params = new HttpParams();
+    // params = params.append('enteId', this.aziendaId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 
