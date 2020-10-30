@@ -1,0 +1,62 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row m-left" *ngIf="istituto">
+        <div class="col-6 v-center">
+            <span class="title">{{istituto.name}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+            </span>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <br>
+    <div class="row" *ngIf="istituto">
+        <div class="row square">
+            <span class="sub-div-data col-10">
+                <span class="row"><span class="text-semibold">Istituto::</span>&nbsp;{{istituto.name}}</span>
+                <span class="row"><span class="text-semibold">Telefono:</span>&nbsp;{{istituto.phone}}</span>
+                <span class="row"><span class="text-semibold">Mail:</span>&nbsp;{{istituto.email}}</span>
+                <span class="row"><span class="text-semibold">Indirizzo:</span>&nbsp;{{istituto.address}}</span>
+            </span>
+            <span class="sub-div-data col-2">
+                <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv"
+                    (click)="getEsperienzeistitutoCsv()" placement="bottom"
+                    ngbTooltip="Esporta le attività dello istituto">
+                    CSV dati istituto
+                    <svg class="icon icon-white icon-sm">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                    </svg>
+                </label>
+            </span>
+        </div>
+    </div>
+    <br/>
+    
+</div>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+            #cmPagination></cm-pagination>
+    </div>
+</div>
