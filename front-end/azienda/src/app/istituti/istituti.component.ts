@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../core/services/data.service'
-import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
@@ -27,10 +25,7 @@ export class IstitutiComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
-    private router: Router,
-    private modalService: NgbModal,
-    private growler: GrowlerService
-  ) {
+    private router: Router) {
     this.filtro = {
       filterText: null
     }
@@ -39,7 +34,6 @@ export class IstitutiComponent implements OnInit {
   ngOnInit(): void {
     this.title = 'Lista Istituti';
     this.getIstitutiPage(1);
-
   }
 
   getIstitutiPage(page: number) {
@@ -85,7 +79,6 @@ export class IstitutiComponent implements OnInit {
   refresh() {
     this.filtro.filterText = null;
     this.getIstitutiPage(1);
-    // this.router.navigate(['/competenza/list'], { relativeTo: this.route });
   }
 
   styleOption(istObj) {

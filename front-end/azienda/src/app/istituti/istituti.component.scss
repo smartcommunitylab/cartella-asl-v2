@@ -1,12 +1,9 @@
-
 .list-container{
     margin-top: 40px;
     padding: 16px;
-
     >.row {
         margin: 0px;
     }
-
     .btn-txt {
         color: white;
         font-size: 16px;
@@ -15,7 +12,6 @@
     .fill-darkblue {
         fill: #06c;
     }
-
     .title{
         text-align: left;
         letter-spacing: 0;
@@ -25,15 +21,11 @@
         font-size: 35px;
         font-weight: bold;
     }
-
     .table-head {
         white-space: nowrap;
         font-size: larger;
     }
-    
-
 }
-
 .errorIconPaddingTop{
     padding-top: 7%;
 }
@@ -55,7 +47,6 @@
     color: #F83E5A;
     opacity: 1;
 }
-
 .center-formGroup{
     margin-top: 0.5rem;
 }
