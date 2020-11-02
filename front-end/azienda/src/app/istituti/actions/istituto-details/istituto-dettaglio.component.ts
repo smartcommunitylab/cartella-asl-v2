@@ -19,7 +19,6 @@ export class IstitutoDettaglioComponent implements OnInit {
   navTitle: string = "Dettaglio istituto";
   currentpage: number = 0;
   tipologie;
-  stato;
   totalRecords: number = 0;
   pageSize: number = 10;
   showContent: boolean = false;
@@ -47,7 +46,7 @@ export class IstitutoDettaglioComponent implements OnInit {
     private dataService: DataService) {
     this.filtro = {
       titolo: '',
-      stato: ''
+      stato: undefined
     }
   }
 
@@ -99,7 +98,157 @@ export class IstitutoDettaglioComponent implements OnInit {
     this.showContent = !this.showContent;
   }
 
- 
+  cerca() {
+    this.cmPagination.changePage(1);
+    this.getAttivitaAltPage(1);
+  }
+
+  selectTipologiaFilter() {
+    this.cmPagination.changePage(1);
+    this.getAttivitaAltPage(1);
+  }
+
+  selectStatoFilter() {
+    this.cmPagination.changePage(1);
+    this.getAttivitaAltPage(1);
+  }
+
+  pageChanged(page: number) {
+    this.currentpage = page;
+    this.getAttivitaAltPage(page);
+  }
+
+  showTipStatoRiga(ev, aa, tp) {
+    if (!aa.toolTipoStatoRiga) {
+      if (aa.stato == 'archiviata') {
+        this.setTipStatoRiga(aa);
+      } else if (aa.stato == 'revisione') {
+        let labelRevisione = 'In questa attività ci sono ancora ore da validare!';
+        aa.toolTipoStatoRiga = labelRevisione;
+      } else if (aa.stato == 'in_attesa') {
+        aa.toolTipoStatoRiga = 'L’attività non è ancora iniziata.';
+      }
+    }
+  }
+
+  hideTipStatoRiga(ev, aa, tp) {
+    aa.startTimeoutTipStato = false;
+    aa.fetchingToolTipRiga = false;
+  }
+
+  setTipStatoRiga(aa) {
+    var dateArchivazione = new Date(aa.dataArchiviazione);
+    let labelArchiviata = 'Questa attività si è conclusa il gg/mm/aaaa';
+    labelArchiviata = labelArchiviata.replace("gg/mm/aaaa", dateArchivazione.getDate() + '/' + (dateArchivazione.getMonth() + 1) + '/' + dateArchivazione.getFullYear());
+    aa.toolTipoStatoRiga = labelArchiviata;
+  }
+
+  showTipRiga(ev, aa, tp) {
+    console.log(ev.target.title);
+    if (!aa.toolTipRiga) {
+      aa.toolTipRiga = this.setTipRiga(aa);
+    }
+  }
+
+  setTipRiga(aa) {
+    let tip = '';
+    for (let i = 0; i < aa.studenti.length; i++) {
+      tip = tip + aa.studenti[i] + '\n';
+      if (i == 15) {
+        break;
+      }
+    }
+    return tip;
+  }
+
+  setAssegnatoLabel(aa) {
+    let label = '';
+    if (aa.studenti.length == 1) {
+      label = aa.studenti[0];
+    } else if (aa.studenti.length > 1) {
+      label = aa.studenti.length + ' studenti';
+    }
+    return label;
+  }
+
+  showTipButton(ev, aa, tp) {
+    if (!aa.toolTipButton) {
+      if (!aa.report) {
+        aa.startTimeoutTipButton = true;
+        setTimeout(() => {
+          if (aa.startTimeoutTipButton == true) {
+            this.env.globalSpinner = false;
+            aa.fetchingToolTipButton = true;
+            this.dataService.getAttivitaReportStudenti(aa.id).subscribe((report) => {
+              aa.report = report;
+              this.setTipButton(aa);
+              aa.fetchingToolTipButton = false;
+              this.env.globalSpinner = true;
+              if (aa.startTimeoutTipButton == true) {
+                tp.ngbTooltip = aa.toolTipButton;
+                tp.open();
+              }
+              aa.startTimeoutTipButton = false;
+            });
+          }
+        }, this.timeoutTooltip);
+      } else {
+        this.setTipButton(aa);
+      }
+    }
+  }
+
+  setTipButton(aa) {
+    aa.toolTipButton = 'Ci sono *nO* ore da validare per *nS* studenti'
+    aa.toolTipButton = aa.toolTipButton.replace("*nO*", aa.report.numeroOreDaValidare);
+    aa.toolTipButton = aa.toolTipButton.replace("*nS*", aa.report.numeroStudentiDaValidare);
+  }
+
+  hideTipButton(ev, aa, tp) {
+    aa.startTimeoutTipButton = false;
+    aa.fetchingToolTipButton = false;
+  }
+
+  onUnovering(event) {
+    console.log(event);
+  }
+
+  openDetail(aa) {
+    this.router.navigateByUrl('/attivita/detail/' + aa.id);
+  }
+  
+  gestionePresenze(aa) {
+    this.tipologie.filter(tipo => {
+      if (tipo.id == aa.tipologia) {
+        aa.individuale = tipo.individuale;
+      }
+    })
+    if (aa.individuale) {
+      this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/individuale');
+    } else {
+      // this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/gruppo');
+      this.router.navigateByUrl('/attivita/detail/' + aa.id);
+    }
+  }
+
+  getStatoNome(statoValue) {
+    if (this.stati) {
+      let rtn = this.stati.find(data => data.value == statoValue);
+      if (rtn) return rtn.name;
+      return statoValue;
+    }
+  }
+
+  refreshAttivita() {
+    this.filtro.titolo = '';
+    this.filtro.stato = undefined;
+    this.getAttivitaAltPage(1);
+  }
+
+  annoScolastico(aa) {
+    return this.dataService.getAnnoScolstico(moment(aa.dataInizio));
+  }
+
   getEsperienzeistitutoCsv() {
     // this.dataService.getEsperienzeistitutoCsv(this.istituto).subscribe((doc) => {
     //   const downloadLink = document.createElement("a");
