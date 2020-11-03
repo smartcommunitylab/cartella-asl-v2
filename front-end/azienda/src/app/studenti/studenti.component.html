@@ -1,0 +1,115 @@
+<div class="mb-3 list-container md-margin">
+  <div class="row">
+    <div class="col-4">
+      <div class="row v-center">
+        <span class="title m-left2">{{titolo}}</span>&nbsp;&nbsp;
+        <span (click)="menuContentShow()">
+          <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+          </svg>
+          <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+        </span>
+      </div>
+    </div>
+  </div>
+  <hr class="hr" />
+  <div *ngIf="showContent" class="row rectangle v-center-inline">
+    <div class="col-1 helpMessageIcon-mRight">
+        <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+    </div>
+    <div class="col-10 helpMessage-mLeft">
+        <span>{{menuContent}}</span>
+    </div>
+    <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+  </div>
+  <br />
+  <br />
+  <div class="row">
+    <div class="col-4 v-center-inline">
+      <div class="form-group center-formGroup">
+        <input type="text" id="cercaStudenti" class="form-control search-input"
+            [(ngModel)]="filtro.text" (keyup.enter)="cerca()">
+        <label for="cercaStudenti" >Cerca studente o classe</label>
+      </div>
+      <it-button class="v-center-inline" (click)="cerca()">
+          <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+      </it-button>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+  </div>
+  <br />
+  <div class="table list-group" *ngIf="studenti && studenti.length">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Studente</th>
+          <th>Classe</th>
+          <th>Istituto</th>
+          <th>Ultima attività</th>
+          <th>Stato</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let studente of studenti" (click)="openDetail(studente)">
+          <td class="pointer">
+            <span>
+              {{studente.studente.surname}} {{studente.studente.name}}
+            </span>
+          </td>
+          <td class="pointer">
+            <span>
+              {{studente.studente.classroom}}
+            </span>
+          </td>
+          <td class="pointer">
+            <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{studente.istituto.name}}" class="align-middle">{{ setIstitutoName(studente) }}</span>
+          </td>
+          <td class="pointer">
+            <span #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studente.toolTipRiga}}" (mouseenter)="showTipRiga($event, studente, '3');">
+              {{ studente.attivitaAlternanza.dataInizio | date: 'dd/MM/yy'}} - {{ studente.attivitaAlternanza.dataFine | date: 'dd/MM/yy'}}
+            </span>
+          </td>
+          <td class="pointer">
+            <span class="{{studente.stato}}">
+              {{ getStatoNome(studente.stato) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="!studenti?.length" class="font-14 text-center font-weight-bold">
+    <div class="row">
+      <div class="col-xl-12 text-center errorIconPaddingTop">
+          <svg class="icon icon-danger icon-xl">
+              <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+          </svg>
+      </div>
+      <div class="col-xl-12 text-center">
+          <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+      </div>
+      <div class="col-sm-12 text-center">
+          <button type="button" class="btn" (click)='refreshStudenti()'>
+              
+              <span class="resetFilterBtn" >
+                  <div class="row">
+                      <div class="col-sm-2 text-center">
+                          <svg class="icon icon-danger">
+                              <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                          </svg>
+                      </div>
+                      <div class="col-sm-10 ">Resetta filtri</div>
+                  </div>
+              </span>
+          </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)" #cmPagination>
+    </cm-pagination>
+  </div>
+</div>

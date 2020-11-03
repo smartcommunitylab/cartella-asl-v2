@@ -1,0 +1,66 @@
+
+.list-container{
+    margin-top: 40px;
+    padding: 12px;
+
+    >.row {
+        margin: 0px;
+    }
+
+    .btn-txt {
+        color: white;
+        font-size: 16px;
+    }
+
+    .fill-darkblue {
+        fill: #06c;
+    }
+
+    .title{
+        text-align: left;
+        letter-spacing: 0;
+        color: #5A6772;
+        opacity: 1;
+        font-size: 35px;
+        font-weight: bold;
+    }
+
+    .table-head {
+        white-space: nowrap;
+        font-size: larger;
+    }
+
+    .progress {
+        border-radius: 10px;
+    }
+
+
+}
+.ngbpBar{
+    position: relative;
+
+    .ngbpBar-text-notComplete{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        color: #393939;
+        font-size: 15px;
+        font-weight: normal;
+        font-family: Titillium Web;
+    }
+
+    .ngbpBar-text-complete{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        
+        color: #FFFFFF;
+        font-size: 15px;
+        font-weight: bold;
+        font-family: Titillium Web;
+    }
+}
+
