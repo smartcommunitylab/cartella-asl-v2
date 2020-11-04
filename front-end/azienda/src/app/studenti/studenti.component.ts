@@ -54,8 +54,7 @@ export class StudentiComponent implements OnInit {
       .subscribe((response) => {
         this.totalRecords = response.totalElements;
         this.studenti = response.content;
-      }
-        ,
+      },
         (err: any) => console.log(err),
         () => console.log('get lista studenti'));
   }
@@ -80,21 +79,21 @@ export class StudentiComponent implements OnInit {
   setIstitutoName(student) {
     let label = '';
     if (student.istituto.name) {
-        if (student.istituto.name.length > 10) {
-            label = student.istituto.name.substring(0,10) + '...';
-        } else {
-            label = student.istituto.name;
-        }
-    }        
+      if (student.istituto.name.length > 10) {
+        label = student.istituto.name.substring(0, 10) + '...';
+      } else {
+        label = student.istituto.name;
+      }
+    }
 
     return label;
   }
 
   getStatoNome(statoValue) {
     if (this.stati) {
-        let rtn = this.stati.find(data => data.value == statoValue);
-        if (rtn) return rtn.name;
-        return statoValue;
+      let rtn = this.stati.find(data => data.value == statoValue);
+      if (rtn) return rtn.name;
+      return statoValue;
     }
   }
 
