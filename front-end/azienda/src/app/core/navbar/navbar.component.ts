@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
 import { config } from '../../config';
 import { AuthenticationService } from '../services/authentication.service';
@@ -21,13 +20,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     aziende;
     actualAzienda;
     profileDropdownVisible;
-    @ViewChild('navbar') private navbarToStick;
-    @ViewChild('navbarHeaderTop') private navbarHeaderTop;
-
+  
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, private growler: GrowlerService, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
-    
+    constructor(private router: Router, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
+
     ngOnInit() {
 
         this.dataService.getProfile().subscribe(profile => {
@@ -49,7 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                                 this.dataService.setAziendaPosition(this.aziende[0].coordinate);
                             } else {
                                 this.dataService.setAziendaPosition(config.defaultPosition);
-                            }                           
+                            }
                             this.actualAzienda = this.aziende[0];
                             this.dataService.setListId(this.aziende);
                         }
@@ -71,7 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.dataService.setAziendaPosition(azienda.coordinate);
         } else {
             this.dataService.setAziendaPosition(config.defaultPosition);
-        }                           
+        }
         this.router.navigate(['/attivita']);
 
     }
