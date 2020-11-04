@@ -848,6 +848,17 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		for(AttivitaAlternanza aa : list) {
 			AttivitaAlternanza attivita = aa.clona();
 			attivita.setStato(getStato(aa));
+			int oreSvolte = 0;
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaAndStudente(aa.getId(), studenteId);
+			if(esperienze.size() > 0) {
+				List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienze.get(0).getId());
+				for(PresenzaGiornaliera pg : presenze) {
+					if(pg.getVerificata() || pg.getValidataEnte()) {
+						oreSvolte += pg.getOreSvolte();
+					}
+				}
+			}
+			attivita.setOreSvolte(oreSvolte);
 			result.add(attivita);
 		}
 		return result;
