@@ -6,8 +6,8 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 
 @Component({
   selector: 'istituti',
-  templateUrl: './Istituti.component.html',
-  styleUrls: ['./Istituti.component.scss']
+  templateUrl: './istituti.component.html',
+  styleUrls: ['./istituti.component.scss']
 })
 
 export class IstitutiComponent implements OnInit {
