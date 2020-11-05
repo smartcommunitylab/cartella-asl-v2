@@ -33,6 +33,7 @@
         <div class="row v-center form-group">
             <div class="col-sm-4"
                 [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
+                <label for="titolo" *ngIf="titolo" class="active">Titolo</label>
                 <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
                     placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
                 <div class="invalid-feedback"
@@ -42,7 +43,8 @@
             </div>
             <div class="col-sm-4"
                 [class.has-danger]="numeroPostiInput.invalid && (numeroPostiInput.dirty || numeroPostiInput.touched || forceErrorDisplay)">
-                <input type="number" min="0" class="form-control" [(ngModel)]="numeroPosti" id="ente" #numeroPostiInput="ngModel"
+                <label for="numeroPosti" *ngIf="numeroPosti" class="active">Numero posti</label>
+                <input type="number" min="0" class="form-control" [(ngModel)]="numeroPosti" id="numeroPosti" #numeroPostiInput="ngModel"
                     placeholder="Numero posti" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayNumeroPosti || (numeroPostiInput.invalid && (numeroPostiInput.dirty || numeroPostiInput.touched || forceErrorDisplay))">
@@ -50,6 +52,7 @@
             </div>
             <div class="col-sm-4"
                 [class.has-danger]="referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched || forceErrorDisplay)">
+                <label for="referenteEsterno" *ngIf="referenteEsterno" class="active">Tutor aziendale</label>
                 <input type="text" class="form-control" [(ngModel)]="referenteEsterno"
                     id="referenteEsterno" #referenteEsternoInput="ngModel" placeholder="Tutor aziendale" (keyup)="trimValue($event, 'esterno')"  (focusout)="trimValue($event, 'trim')" required>
                 <div class="invalid-feedback"
@@ -70,7 +73,8 @@
             </div>
             <div class="col-sm-4"
                 [class.has-danger]="oreInput.invalid && (oreInput.dirty || oreInput.touched || forceErrorDisplay)">
-                <input type="number" min="0" class="form-control" [(ngModel)]="ore" id="ente" #oreInput="ngModel"
+                <label for="ore" *ngIf="ore" class="active">Ore totali</label>
+                <input type="number" min="0" class="form-control" [(ngModel)]="ore" id="ore" #oreInput="ngModel"
                     placeholder="Ore totali" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayOre || (oreInput.invalid && (oreInput.dirty || oreInput.touched || forceErrorDisplay))">
@@ -97,7 +101,8 @@
                 <div class="invalid-feedback" [class.d-block]="!date.dataFine || date.dataFine < date.dataInizio">La data fine deve essere posteriore alla data inizio</div>
             </div>
             <div class="col-sm-3">
-                <input placeholder="Dalle:" [(ngModel)]="oraInizio" type="text" pattern="[0-9][0-9]" minlength="1" maxlength="2"
+                <label for="oraInizio" *ngIf="oraInizio" class="active">Ora inizio (00-23)</label>
+                <input id="oraInizio" placeholder="Ora inizio (00-23)" [(ngModel)]="oraInizio" type="text" pattern="[0-9][0-9]" minlength="1" maxlength="2"
                     onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                     onpaste="return false" #dalleInput="ngModel" />
                 <div class="invalid-feedback" [class.d-block]="forceErrorDisplayOraInizio || (dalleInput.invalid && (dalleInput.dirty || dalleInput.touched || forceErrorDisplay))">Campo necessario.</div>
@@ -105,7 +110,8 @@
                 <div class="invalid-feedback" [class.d-block]="forceDalleAlleErrorDisplay || (dalleInput.touched && (dalleInput.value > alleInput.value))">La ora fine deve essere posteriore alla ora inizio</div>
             </div>
             <div class="col-sm-3">
-                <input placeholder="Alle:" [(ngModel)]="oraFine" type="text" pattern="[0-9][0-9]" minlength="1" maxlength="2"
+                <label for="oraFine" *ngIf="oraFine" class="active">Ora fine (00-23)</label>
+                <input id="oraFine" placeholder="Ora fine (00-23)" [(ngModel)]="oraFine" type="text" pattern="[0-9][0-9]" minlength="1" maxlength="2"
                     onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                     onpaste="return false" #alleInput="ngModel" />
                     <div class="invalid-feedback" [class.d-block]="forceErrorDisplayOraFine || (alleInput.invalid && (alleInput.dirty || alleInput.touched || forceErrorDisplay))">Campo necessario.</div>
