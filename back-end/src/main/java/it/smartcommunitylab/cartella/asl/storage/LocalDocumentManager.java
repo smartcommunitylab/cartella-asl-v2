@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Documento;
+import it.smartcommunitylab.cartella.asl.model.Documento.TipoDoc;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.DocumentoRepository;
@@ -93,19 +94,18 @@ public class LocalDocumentManager {
 	}
 
 
-	public Documento addDocumentToRisorsa(String uuid, MultipartFile data, HttpServletRequest request) throws Exception {
+	public Documento addDocumentToRisorsa(String uuid, TipoDoc tipo, MultipartFile data, HttpServletRequest request) throws Exception {
 		Documento doc = new Documento();
 		doc.setUuid(UUID.randomUUID().toString());
 		doc.setRisorsaId(uuid);
 		doc.setFormatoDocumento(data.getContentType());
 		doc.setNomeFile(data.getOriginalFilename());
 		doc.setDataUpload(LocalDate.now());
+		doc.setTipo(tipo);
 		if (data != null) {
 			saveFile(data, doc.getUuid());
 		}
-
 		documentoRepository.save(doc);
-
 		return doc;
 	}
 
