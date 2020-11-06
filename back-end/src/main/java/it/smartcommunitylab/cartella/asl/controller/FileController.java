@@ -73,7 +73,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("downloadFileIstituto(%s", uuid + ")"));
 		}
-		downloadContent(uuid, response);
+		downloadContent(uuid, response, null);
 	}
 
 	@GetMapping("/api/download/document/{uuid}/studente/{studenteId}")
@@ -87,7 +87,7 @@ public class FileController {
 			logger.info(String.format("downloadFileStudente(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		downloadContent(uuid, response);
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_ente));
 	}
 
 	@GetMapping("/api/download/document/{uuid}/ente/{enteId}")
@@ -101,8 +101,8 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("downloadFileEnte(%s", uuid + ")"));
 		}
-		checkEsperienzeEnte(uuid, enteId, true);
-		downloadContent(uuid, response);
+		checkAttivitaEnte(uuid, enteId, true);
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_studente));
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
@@ -115,7 +115,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeIstitutoDocument(%s", uuid + ")"));
 		}
-		return removeDocument(uuid, request, user);
+		return removeDocument(uuid, request, user, null);
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/studente/{studenteId}")
@@ -128,7 +128,7 @@ public class FileController {
 			logger.info(String.format("removeStudenteDocument(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		return removeDocument(uuid, request, user);
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_ente));
 	}
 
 	@DeleteMapping("/api/remove/document/{uuid}/ente/{enteId}")
@@ -141,8 +141,8 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeEnteDocument(%s", uuid + ")"));
 		}
-		checkEsperienzeEnte(uuid, enteId, true);
-		return removeDocument(uuid, request, user);
+		checkAttivitaEnte(uuid, enteId, true);
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_studente));
 	}
 	
 	@PostMapping("/api/upload/document/risorsa/{uuid}/istituto/{istitutoId}")
@@ -157,7 +157,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForRisorsaIstituto:%s - %s", uuid, istitutoId));
 		}
-		Documento documento = uploadContent(uuid, tipo, data, request, user);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
 		return documento;
 	}
 	
@@ -172,9 +172,8 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForRisorsaStudente:%s - %s", uuid, studenteId));
 		}
-		checkTipologia(tipo, Lists.newArrayList(TipoDoc.valutazione_studente));
 		checkEsperienzeStudente(uuid, studenteId, false);
-		Documento documento = uploadContent(uuid, tipo, data, request, user);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_ente));
 		return documento;
 	}	
 
@@ -190,9 +189,8 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForRisorsaEnte:%s - %s", uuid, enteId));
 		}
-		checkTipologia(tipo, Lists.newArrayList(TipoDoc.valutazione_ente));
-		checkEsperienzeEnte(uuid, enteId, false);
-		Documento documento = uploadContent(uuid, tipo, data, request, user);
+		checkAttivitaEnte(uuid, enteId, false);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_studente));
 		return documento;
 	}
 	
@@ -254,20 +252,16 @@ public class FileController {
 		}
 	}
 	
-	private void checkEsperienzeEnte(String uuid, String enteId, boolean doc) throws Exception {
-		EsperienzaSvolta es = null;
+	private void checkAttivitaEnte(String uuid, String enteId, boolean doc) throws Exception {
+		AttivitaAlternanza aa = null;
 		if(doc) {
 			Documento document = documentManager.getEntity(uuid);
 			if(document != null) {
-				es = esperienzaSvoltaManager.findByUuid(document.getRisorsaId());
+				aa = attivitaAlternanzaManager.findByUuid(document.getRisorsaId());
 			}
 		} else {
-			es = esperienzaSvoltaManager.findByUuid(uuid);
+			aa = attivitaAlternanzaManager.findByUuid(uuid);
 		}
-		if(es == null) {
-			throw new BadRequestException("esperienzaSvolta not found");
-		}
-		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(es.getAttivitaAlternanzaId());
 		if(aa == null) {
 			throw new BadRequestException("AttivitaAlternanza not found");
 		}
@@ -282,20 +276,30 @@ public class FileController {
 		}
 	}
 	
-	private void downloadContent(String uuid, HttpServletResponse response) throws Exception {
+	private void downloadContent(String uuid, HttpServletResponse response, 
+			ArrayList<TipoDoc> list) throws Exception {
+		Documento doc = documentManager.getEntity(uuid);
+		if(doc == null) {
+			throw new BadRequestException("documento non trovato");
+		}
+		if(list != null) {
+			checkTipologia(doc.getTipo(), list);
+		}
 		try {
-			Documento doc = documentManager.getEntity(uuid);
 			File file = documentManager.loadFile(doc.getUuid());
 			response.setContentType(doc.getFormatoDocumento());
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + doc.getNomeFile() + "\"");
 			response.getOutputStream().write(FileUtils.readFileToByteArray(file));
 		} catch (FileNotFoundException e) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			throw new BadRequestException("file documento non trovato");
 		}			
 	}
 	
 	private Documento uploadContent(String uuid, TipoDoc tipo, MultipartFile data, 
-			HttpServletRequest request, ASLUser user) throws Exception {
+			HttpServletRequest request, ASLUser user, ArrayList<TipoDoc> list) throws Exception {
+		if(list != null) {
+			checkTipologia(tipo, list);
+		}
 		try {
 			Documento doc = documentManager.addDocumentToRisorsa(uuid, tipo, data, request);
 			if (doc != null) {
@@ -309,14 +313,22 @@ public class FileController {
 		}		
 	}
 	
-	private boolean removeDocument(String uuid, HttpServletRequest request, ASLUser user) throws Exception {
+	private boolean removeDocument(String uuid, HttpServletRequest request, ASLUser user, 
+			ArrayList<TipoDoc> list) throws Exception {
+		Documento doc = documentManager.getEntity(uuid);
+		if(doc == null) {
+			throw new BadRequestException("documento non trovato");
+		}
+		if(list != null) {
+			checkTipologia(doc.getTipo(), list);
+		}
 		try {
 			boolean result = documentManager.removeDocument(uuid);
 			AuditEntry audit = new AuditEntry(request.getMethod(), Documento.class, uuid, user, new Object(){});
 			auditManager.save(audit);			
 			return result;
 		} catch (Exception e) {
-			throw new ASLCustomException(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			throw new BadRequestException("file documento non trovato");
 		}
 	}
 }
