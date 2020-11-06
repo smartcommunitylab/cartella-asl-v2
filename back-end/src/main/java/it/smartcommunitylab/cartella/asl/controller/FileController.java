@@ -204,7 +204,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDocumentiIstitutoURLForRisorsaAttivita(%s", uuid + ")"));
 		}
-		return documentManager.getDocumentByAttivita(uuid, request);
+		return documentManager.getDocumentByAttivita(uuid);
 	}
 	
 	@GetMapping("/api/download/document/risorsa/{uuid}/istituto/{istitutoId}/piano")
@@ -217,7 +217,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDocumentiIstitutoURLForRisorsaPiano(%s", uuid + ")"));
 		}
-		return documentManager.getDocument(uuid, request);
+		return documentManager.getDocument(uuid);
 	}	
 	
 	@GetMapping("/api/download/document/risorsa/{uuid}/studente/{studenteId}")
@@ -230,8 +230,22 @@ public class FileController {
 			logger.info(String.format("getDocumentiStudenteURLForRisorsa(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, false);
-		return documentManager.getDocument(uuid, request);
+		return documentManager.getDocumentByStudente(uuid);
 	}	
+	
+	@GetMapping("/api/download/document/risorsa/{uuid}/ente/{enteId}")
+	public @ResponseBody List<Documento> getDocumentiEnteURLForRisorsa(
+			@PathVariable String uuid, 
+			@PathVariable String enteId, 
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getDocumentiEnteURLForRisorsa(%s", uuid + ")"));
+		}
+		checkAttivitaEnte(uuid, enteId, false);
+		return documentManager.getDocumentByEnte(uuid);
+	}
 	
 	private void checkEsperienzeStudente(String uuid, String studenteId, boolean doc)
 			throws BadRequestException, UnauthorizedException {

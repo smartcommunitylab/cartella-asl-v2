@@ -109,12 +109,12 @@ public class LocalDocumentManager {
 		return doc;
 	}
 
-	public List<Documento> getDocument(String risorsaId, HttpServletRequest request) throws Exception {
+	public List<Documento> getDocument(String risorsaId) throws Exception {
 		List<Documento> docs = documentoRepository.findDocumentoByRisorsaId(risorsaId);
 		return docs;
 	}
 	
-	public List<Documento> getDocumentByAttivita(String risorsaId, HttpServletRequest request) throws Exception {
+	public List<Documento> getDocumentByAttivita(String risorsaId) throws Exception {
 		List<String> risorsaIds = new ArrayList<String>();
 		AttivitaAlternanza aa = attivitaAlternanzaRepository.findByUuid(risorsaId);
 		if(aa != null) {
@@ -124,5 +124,27 @@ public class LocalDocumentManager {
 		}
 		List<Documento> docs = documentoRepository.findByRisorsaIdIn(risorsaIds);
 		return docs;
+	}
+
+	public List<Documento> getDocumentByStudente(String uuid) throws Exception {
+		List<Documento> result = new ArrayList<>();
+		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
+		list.forEach(doc -> {
+			if(doc.getTipo().equals(TipoDoc.valutazione_ente)) {
+				result.add(doc);
+			}
+		});
+		return result;
+ 	}
+
+	public List<Documento> getDocumentByEnte(String uuid) {
+		List<Documento> result = new ArrayList<>();
+		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
+		list.forEach(doc -> {
+			if(doc.getTipo().equals(TipoDoc.valutazione_ente) || doc.getTipo().equals(TipoDoc.piano_formativo)) {
+				result.add(doc);
+			}
+		});		
+		return result;
 	}
 }
