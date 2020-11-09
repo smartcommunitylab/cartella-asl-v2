@@ -78,12 +78,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
-			if(aa.getOffertaId() != aaDb.getOffertaId()) {
-				offertaManager.rimuoviPostiEsperienze(aaDb.getOffertaId(), esperienze.size());
-			}
-			if(aa.getOffertaId() != null) {
-				offertaManager.aggiungiPostiEsperienze(aa.getOffertaId(), esperienze.size());
-			}
 			if(!aaDb.getDataInizio().isEqual(aa.getDataInizio()) || 
 					!aaDb.getDataFine().isEqual(aa.getDataFine())) {
 				for(EsperienzaSvolta esperienza : esperienze) {
