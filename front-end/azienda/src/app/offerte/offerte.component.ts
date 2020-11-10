@@ -223,7 +223,7 @@ export class OfferteComponent implements OnInit {
         } else if (off.istitutiAssociati.length > 1) {
             label = off.istitutiAssociati.length + ' istituti';
         } else if (off.stato == 'bozza') {
-            label = 'Nessun istituto selezionata'
+            label = 'Nessun istituto selezionato'
         }
         return label;
     }
