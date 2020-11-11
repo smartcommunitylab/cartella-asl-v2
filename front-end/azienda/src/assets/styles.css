@@ -14700,10 +14700,21 @@ div.dp-input-container> input.dp-picker-input:disabled {
   text-align: left;
   font-family: Titillium Web, Regular;
   font-size: 35px;
-  font-weight: 24px;
   letter-spacing: 0;
   color: #707070;
   opacity: 1;
+}
+.searchErrorMsg{
+  text-align: left;
+  font-family: Titillium Web !important;
+  font-size: 25px;
+  letter-spacing: 0;
+  color: #707070;
+  opacity: 1;
+  font-style: italic;
+}
+.icon-lightGrey {
+  fill: #00000029;
 }
 .resetFilterBtn { 
   text-align: left;

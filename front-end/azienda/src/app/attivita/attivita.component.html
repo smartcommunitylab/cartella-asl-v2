@@ -1,4 +1,3 @@
-
 <div class="mb-3 list-container md-margin">
     <div class="row">
         <div class="col-4">
@@ -9,19 +8,24 @@
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
                     </svg>
                     <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
-                </span>                
+                </span>
             </div>
         </div>
     </div>
     <hr class="hr" />
     <div *ngIf="showContent" class="row rectangle v-center-inline">
         <div class="col-1 helpMessageIcon-mRight">
-            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
         </div>
         <div class="col-10 helpMessage-mLeft">
             <span>{{menuContent}}</span>
         </div>
-        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
     </div>
     <br />
     <br />
@@ -38,14 +42,10 @@
                 </svg>
             </it-button>
         </div>
+        <div class="col-4"></div>
         <div class="col-4">
-            <!-- <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="tipologia" (ngModelChange)="selectTipologiaFilter()">
-                <option selected="selected">Tipologie</option>
-                <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
-            </select> -->
-        </div>
-        <div class="col-4">
-            <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="stato" (ngModelChange)="selectStatoFilter()">
+            <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="stato"
+                (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Seleziona stato</option>
                 <option [ngValue]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
             </select>
@@ -69,35 +69,46 @@
                 <tr *ngFor="let aa of attivitaAAs" (click)="openDetail(aa)">
                     <!-- Titolo -->
                     <td class="pointer">
-                        <span #tooltipTitolo="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipTitolo);" class="align-middle" (click)="openDetail(aa)">{{ aa.titolo }}
+                        <span #tooltipTitolo="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipTitolo);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.titolo }}
                         </span>
                     </td>
                     <!-- Tutor aziendale -->
                     <td class="pointer">
-                        <span #tooltipAssegnato="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipAssegnato);" class="align-middle" (click)="openDetail(aa)" >{{ aa.referenteEsterno }}&nbsp;&nbsp;
+                        <span #tooltipAssegnato="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipAssegnato);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.referenteEsterno }}&nbsp;&nbsp;
                         </span>
                     </td>
                     <!-- Istituto -->
                     <td class="pointer">
-                        <span #tooltipTipologia="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipTipologia);" class="align-middle" (click)="openDetail(aa)">{{ aa.nomeIstituto }}
+                        <span #tooltipTipologia="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipTipologia);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.nomeIstituto }}
                         </span>
                     </td>
                     <!-- Studenti -->
-                    <td class="pointer">                  
-                        <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipEnte);" class="align-middle" (click)="openDetail(aa)">{{ setAssegnatoLabel(aa) }}
+                    <td class="pointer">
+                        <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipEnte);" class="align-middle"
+                            (click)="openDetail(aa)">{{ setAssegnatoLabel(aa) }}
                         </span>
                     </td>
                     <!-- Periodo -->
                     <td class="pointer">
-                        <span #tooltipPeriodo="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}" (mouseenter)="showTipRiga($event, aa, tooltipPeriodo);" class="align-middle" (click)="openDetail(aa)">{{ aa.dataInizio | date: 'dd/MM/yyyy'}} - {{ aa.dataFine | date: 'dd/MM/yyyy'}}
+                        <span #tooltipPeriodo="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipPeriodo);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.dataInizio | date: 'dd/MM/yyyy'}} -
+                            {{ aa.dataFine | date: 'dd/MM/yyyy'}}
                         </span>
                     </td>
                     <!-- Stato -->
                     <td class="pointer">
-                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipoStatoRiga}}" 
-                        (mouseenter)="showTipStatoRiga($event, aa, tooltipStato);" 
-                        (mouseleave)="hideTipStatoRiga($event, aa, tooltipStato);"
-                        class="align-middle {{aa.stato}}" (click)="openDetail(aa)">
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipoStatoRiga}}"
+                            (mouseenter)="showTipStatoRiga($event, aa, tooltipStato);"
+                            (mouseleave)="hideTipStatoRiga($event, aa, tooltipStato);" class="align-middle {{aa.stato}}"
+                            (click)="openDetail(aa)">
                             {{getStatoNome(aa.stato) }}
                             <div *ngIf="aa.fetchingToolTipRiga && (aa.toolTipoStatoRiga == null || aa.toolTipoStatoRiga=='')"
                                 class="progress-spinner progress-spinner-active size-sm">
@@ -108,7 +119,8 @@
 
                     <td class="pointer">
                         <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
-                        <span *ngIf="aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')" class="align-middle">
+                        <span *ngIf="aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')"
+                            class="align-middle">
                             <span #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
                                 (mouseenter)="showTipButton($event, aa, tooltipBotton);"
                                 (mouseleave)="hideTipButton($event, aa, tooltipStato);">
@@ -123,14 +135,15 @@
                                 </div>
                             </span>
                         </span>
-                        <span *ngIf="aa.stato=='archiviata'" placement="bottom" ngbTooltip="archiviata" class="align-middle" (click)="openDetail(aa)"></span>
-                    </td>                   
+                        <span *ngIf="aa.stato=='archiviata'" placement="bottom" ngbTooltip="archiviata"
+                            class="align-middle" (click)="openDetail(aa)"></span>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div *ngIf="!attivitaAAs?.length" class="font-14 text-center font-weight-bold">
-        <div class="row">
+    <div class="font-14 text-center font-weight-bold">
+        <div class="row" *ngIf="!attivitaAAs?.length && filterSearch">
             <div class="col-xl-12 text-center errorIconPaddingTop">
                 <svg class="icon icon-danger icon-xl">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -141,8 +154,7 @@
             </div>
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn" (click)='refreshAttivita()'>
-                    
-                    <span class="resetFilterBtn" >
+                    <span class="resetFilterBtn">
                         <div class="row">
                             <div class="col-sm-2 text-center">
                                 <svg class="icon icon-danger">
@@ -153,6 +165,18 @@
                         </div>
                     </span>
                 </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="!attivitaAAs?.length && !filterSearch">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-lightGrey icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Questa lista è vuota</span>
+            </div>
+            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Non ci sono attività associate al tuo ente.
             </div>
         </div>
     </div>
