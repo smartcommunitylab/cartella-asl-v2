@@ -32,7 +32,7 @@ export class PianoModificaTipologieComponent implements OnInit {
 
   attachedCompetenze: Competenza[]; //competenze already added to the piano
   tipologie;
-  tipologia = "Tipologie";
+  tipologia = "Tipologia";
   annoRiferimento: number = 3;
   monteOre: number;
   pianoTipologie;
@@ -205,7 +205,7 @@ export class PianoModificaTipologieComponent implements OnInit {
   allValidated() {
     return (
       ((this.monteOre && this.monteOre > 0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
       ));
   }
 

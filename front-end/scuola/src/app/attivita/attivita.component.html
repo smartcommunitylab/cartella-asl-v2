@@ -57,7 +57,7 @@
         </div>
         <div class="col-4">
             <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="tipologia" (ngModelChange)="selectTipologiaFilter()">
-                <option selected="selected">Tipologie</option>
+                <option selected="selected">Tipologia</option>
                 <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
             </select>
         </div>

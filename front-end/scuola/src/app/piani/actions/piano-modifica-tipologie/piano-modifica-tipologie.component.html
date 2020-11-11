@@ -58,12 +58,12 @@
             <div class="col-4">
                 <select class="browser-default form-control" [(ngModel)]="tipologia" id="tipologia"
                     #tipologiaInput="ngModel" required>
-                    <option selected="selected">Tipologie</option>
+                    <option selected="selected">Tipologia</option>
                     <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">
                         {{tipologia.titolo}}
                     </option>
                 </select>
-                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologie' && forceErrorDisplay">
+                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologia' && forceErrorDisplay">
                     Tipologia richiesto.
                 </div>
             </div>
@@ -98,9 +98,9 @@
         <div class="row btnAdd">
             <div class="col-4"></div>
             <div class="col-4">
-                <button *ngIf="tipologia != 'Tipologie' && monteOre" class="btn btn-primary v-center-inline activeBtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano" (click)="addNewTipologie()">
+                <button *ngIf="tipologia != 'Tipologia' && monteOre" class="btn btn-primary v-center-inline activeBtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano" (click)="addNewTipologie()">
                     Aggiungi tipologia attività&nbsp;&nbsp;&nbsp;<i class="material-icons">save</i></button>
-                <button *ngIf="tipologia == 'Tipologie' || !monteOre" class="btn btn-primary disabled v-center-inline auto inactivebtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano">
+                <button *ngIf="tipologia == 'Tipologia' || !monteOre" class="btn btn-primary disabled v-center-inline auto inactivebtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano">
                     Aggiungi tipologia attività&nbsp;&nbsp;&nbsp;<i class="material-icons">save</i></button>
             </div>
             

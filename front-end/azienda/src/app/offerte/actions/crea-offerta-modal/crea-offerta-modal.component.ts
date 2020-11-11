@@ -34,7 +34,7 @@ export class CreaOffertaModalComponent implements OnInit {
   numeroPosti;
   oraInizio;
   oraFine;
-  tipologia: any = 'Tipologie';
+  tipologia: any = 'Tipologia';
   ore;
   referenteEsterno: string;
   date;
@@ -131,7 +131,7 @@ export class CreaOffertaModalComponent implements OnInit {
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
   }

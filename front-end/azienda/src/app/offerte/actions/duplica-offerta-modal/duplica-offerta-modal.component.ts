@@ -34,7 +34,7 @@ export class DuplicaOffertaModalComponent implements OnInit {
   // numeroPosti;
   // oraInizio;
   // oraFine;
-  tipologia: any = 'Tipologie';
+  tipologia: any = 'Tipologia';
   // ore;
   // referenteEsterno: string;
   date;
@@ -132,7 +132,7 @@ export class DuplicaOffertaModalComponent implements OnInit {
         && (this.offerta.referenteEsterno && this.offerta.referenteEsterno != '' && this.offerta.referenteEsterno.trim().length > 0)
         && (this.offerta.ore && this.offerta.ore > 0)
         && (this.offerta.oraInizio && this.offerta.oraInizio>0 && this.offerta.oraFine && this.offerta.oraFine>0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
   }

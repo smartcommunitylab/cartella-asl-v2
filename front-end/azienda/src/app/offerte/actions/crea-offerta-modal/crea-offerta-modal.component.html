@@ -65,10 +65,10 @@
                 [class.has-danger]="tipologiaInput.invalid && (tipologiaInput.dirty || tipologiaInput.touched || forceErrorDisplay)">
                 <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="tipologia" id="tipologia"
                     #tipologiaInput="ngModel" required> <!--(change)="onChange($event.target.value)"-->
-                    <option selected="selected">Tipologie</option>
+                    <option selected="selected">Tipologia</option>
                     <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
                 </select>
-                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologie' && forceErrorDisplay">
+                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologia' && forceErrorDisplay">
                     Campo necessario.</div>
             </div>
             <div class="col-sm-4"

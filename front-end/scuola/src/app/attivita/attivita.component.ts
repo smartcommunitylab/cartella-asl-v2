@@ -26,7 +26,7 @@ export class AttivitaComponent implements OnInit {
     pageSize: number = 10;
     currentpage: number = 0;
     tipologie;
-    tipologia = "Tipologie";
+    tipologia = "Tipologia";
     stato;
     menuContent = "In questa pagina trovi tutte le attività. Puoi cercarle o filtrarle per tipologia o stato. Con il tasto blu sulla destra puoi andare direttamente alla gestione presenze. Per visualizzare un’attività, clicca sulla riga corrispondente.";
     showContent: boolean = false;
@@ -162,7 +162,7 @@ export class AttivitaComponent implements OnInit {
 
     selectTipologiaFilter() {
         this.cmPagination.changePage(1);
-        if (this.tipologia && this.tipologia != 'Tipologie') {
+        if (this.tipologia && this.tipologia != 'Tipologia') {
           this.filtro.tipologia = this.tipologia;
         } else {
           this.filtro.tipologia = null;
@@ -346,7 +346,7 @@ export class AttivitaComponent implements OnInit {
             titolo: '',
             stato : ''
         }
-        this.tipologia = "Tipologie"
+        this.tipologia = "Tipologia"
         this.stato = undefined;
         this.getAttivitaAltPage(1);
     }
