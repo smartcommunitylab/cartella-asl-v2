@@ -32,8 +32,8 @@ export class CreaOffertaModalComponent implements OnInit {
 
   titolo: string;
   numeroPosti;
-  oraInizio;
-  oraFine;
+  oraInizio = '07';
+  oraFine = '18';
   tipologia: any = 'Tipologia';
   ore;
   referenteEsterno: string;
@@ -42,13 +42,12 @@ export class CreaOffertaModalComponent implements OnInit {
   showSelect: boolean = true;
   forceEnteDisplay: boolean = false;
   pageSize = 20;
+  orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
   forceErrorDisplayOre: boolean = false;
   forceErrorDisplayNumeroPosti: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayRE: boolean = false;
@@ -96,20 +95,10 @@ export class CreaOffertaModalComponent implements OnInit {
       } else {
         this.forceErrorDisplayOraInizio = false;
       }
-      if (this.oraInizio > 23) {
-        this.forceDalle23ErrorDisplay = true;
-      } else {
-        this.forceDalle23ErrorDisplay = false;
-      }
       if (!this.oraFine) {
         this.forceErrorDisplayOraFine = true;
       } else {
         this.forceErrorDisplayOraFine = false;
-      }
-      if (this.oraFine > 23) {
-        this.forceAlle23ErrorDisplay = true;
-      } else {
-        this.forceAlle23ErrorDisplay = false;
       }
       if (this.ore < 1) {
         this.forceErrorDisplayOre = true;
@@ -130,7 +119,7 @@ export class CreaOffertaModalComponent implements OnInit {
         && (this.numeroPosti && this.numeroPosti > 0)
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
+        && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
