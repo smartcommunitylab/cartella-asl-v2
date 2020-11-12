@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../../../core/services/data.service';
 import { GeoService } from '../../../core/services/geo.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { Azienda } from '../../../shared/interfaces';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
@@ -21,8 +20,7 @@ export class OffertaDettaglioModificaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private geoService: GeoService,
-    private growler: GrowlerService) { }
+    private geoService: GeoService) { }
 
   offerta;
   titolo;
@@ -36,22 +34,17 @@ export class OffertaDettaglioModificaComponent implements OnInit {
   aziende: Azienda[];
   place: any;
   pageSize = 20;
-  
+  orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   forceTitoloErrorDisplay: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
   forcePostiErrorDisplay: boolean = false;
-  // forceReferenteScuolaErrorDisplay: boolean = false;
   forceReferenteEsternoErrorDisplay: boolean = false;
   forceOreErrorDisplay: boolean = false;
   forceEnteDisplay: boolean = false;
- 
   menuContent = "In questa pagina trovi tutti i dati dell’offerta. Puoi modificare ogni sezione utilizzando i tasti blu “Modifica”. Puoi creare una nuova attività con i dati di questa offerta con il tasto “crea attività da offerta”. Puoi eliminare definitivamente questa offerta con il tasto elimina: in questo caso, le attività che hai già creato non saranno influenzate dall’eliminazione dell’offerta.";
   showContent: boolean = false;
-  // tipoInterna: boolean = false;
   evn = environment;
   breadcrumbItems = [
     {
@@ -62,7 +55,6 @@ export class OffertaDettaglioModificaComponent implements OnInit {
       title: "Modifica dati offerta"
     }
   ];
-
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo',
@@ -105,20 +97,17 @@ export class OffertaDettaglioModificaComponent implements OnInit {
           this.place.location = [this.offerta.latitude, this.offerta.longitude];
           this.tipologie.filter(tipo => {
             if (tipo.id == this.offerta.tipologia) {
-              // this.tipoInterna = tipo.interna;
               this.offertaTipologia = tipo.titolo;
             }
           })
-          // if (this.offerta.enteId && !this.tipoInterna) {
-          //   this.dataService.getAzienda().subscribe((az => {
-          //     this.azienda = az;
-          //   }))
-          // }
           var dataInizio = new Date(this.offerta.dataInizio);
           this.date.dataInizio = moment(dataInizio.getTime());
           var dataFine = new Date(this.offerta.dataFine);
           this.date.dataFine = moment(dataFine);
           this.titolo = this.offerta.titolo;
+          // tackle incase saved with 1 digit in past.
+          this.offerta.oraInizio = this.dataService.formatTwoDigit(this.offerta.oraInizio);
+          this.offerta.oraFine = this.dataService.formatTwoDigit(this.offerta.oraFine);
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
       });
@@ -152,96 +141,55 @@ export class OffertaDettaglioModificaComponent implements OnInit {
   }
 
   save() {
-    
-    // if (this.offerta.referenteScuola && this.offerta.referenteScuola != '' && this.offerta.referenteScuola.trim().length > 0) {
-    //   this.offerta.referenteScuola = this.offerta.referenteScuola.trim();
-    //   this.forceReferenteScuolaErrorDisplay = false;
-    // } else {
-    //   this.forceReferenteScuolaErrorDisplay = true;
-    // }
-
     if (this.offerta.ore && this.offerta.ore > 0) {
       this.forceOreErrorDisplay = false;
     } else {
       this.forceOreErrorDisplay = true;
     }
-
     if (this.offerta.postiDisponibili > 0) {
       this.forcePostiErrorDisplay = false;
     } else {
       this.forcePostiErrorDisplay = true;
     }
-    
     if (this.titolo && this.titolo != '' && this.titolo.trim().length > 0) {
       this.offerta.titolo = this.titolo.trim();
       this.forceTitoloErrorDisplay = false;
     } else {
       this.forceTitoloErrorDisplay = true;
     }
-    
     if (!this.offerta.oraInizio) {
       this.forceErrorDisplayOraInizio = true;
     } else {
       this.forceErrorDisplayOraInizio = false;
     }
-    
-    if (this.offerta.oraInizio > 23) {
-      this.forceDalle23ErrorDisplay = true;
-    } else {
-      this.forceDalle23ErrorDisplay = false;
-    }
-    
     if (!this.offerta.oraFine) {
       this.forceErrorDisplayOraFine = true;
     } else {
       this.forceErrorDisplayOraFine = false;
     }
-
-    if (this.offerta.oraFine > 23) {
-      this.forceAlle23ErrorDisplay = true;
-    } else {
-      this.forceAlle23ErrorDisplay = false;
-    }
-    
     if (this.offerta.oraInizio > this.offerta.oraFine) {
       this.forceDalleAlleErrorDisplay = true;
     } else {
       this.forceDalleAlleErrorDisplay = false;
     }
-
-    // if (!this.tipoInterna) {
-     
-      // if (this.azienda && this.azienda.id != '') {
-      //   this.offerta.nomeEnte = this.azienda.nome;
-      //   this.offerta.enteId = this.azienda.id;
-      //   this.forceEnteDisplay = false;
-      // } else {
-      //   this.forceEnteDisplay = true;
-      // }
-
-      if (this.offerta.referenteEsterno && this.offerta.referenteEsterno != '' && this.offerta.referenteEsterno.trim().length > 0) {
-        this.offerta.referenteEsterno = this.offerta.referenteEsterno.trim();
-        this.forceReferenteEsternoErrorDisplay = false;
-      } else {
-        this.forceReferenteEsternoErrorDisplay = true;
-      }
-
-    // }
-
+    if (this.offerta.referenteEsterno && this.offerta.referenteEsterno != '' && this.offerta.referenteEsterno.trim().length > 0) {
+      this.offerta.referenteEsterno = this.offerta.referenteEsterno.trim();
+      this.forceReferenteEsternoErrorDisplay = false;
+    } else {
+      this.forceReferenteEsternoErrorDisplay = true;
+    }
     if (this.place) {
       this.offerta.luogoSvolgimento = this.place.name;
       this.offerta.latitude = this.place.location[0];
       this.offerta.longitude = this.place.location[1];
     }
-    
+
     this.offerta.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
     this.offerta.dataFine = moment(this.date.dataFine, 'YYYY-MM-DD').valueOf();
 
-    if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay 
+    if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
-      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay
-      && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
-      
+      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
       (this.offerta.descrizione) ? this.offerta.descrizione = this.offerta.descrizione.trim() : this.offerta.descrizione = null;
       (this.offerta.formatore) ? this.offerta.formatore = this.offerta.formatore.trim() : this.offerta.formatore = null;
       (this.offerta.formatoreCF) ? this.offerta.formatoreCF = this.offerta.formatoreCF.trim() : this.offerta.formatoreCF = null;
@@ -250,40 +198,15 @@ export class OffertaDettaglioModificaComponent implements OnInit {
 
       this.dataService.createOfferta(this.offerta).subscribe(() => {
         this.router.navigate(['../../'], { relativeTo: this.route });
-      },err => {
-          console.log(err);
-          if (err.indexOf("non ha abbastanza posti disponibili") != -1) {
-            // this.growler.growl(err.error.message, GrowlerMessageType.Danger, 5000);
-            this.forcePostiErrorDisplay = true;
-          }
+      }, err => {
+        console.log(err);
+        if (err.indexOf("non ha abbastanza posti disponibili") != -1) {
+          this.forcePostiErrorDisplay = true;
+        }
       });
     }
 
   }
-
-  // searchingAZ = false;
-  // searchFailedAZ = false;
-  // search = (text$: Observable<string>) =>
-  //   text$.pipe(
-  //     debounceTime(500),
-  //     distinctUntilChanged(),
-  //     tap(() => this.searchingAZ = true),
-  //     switchMap(term =>
-  //       this.dataService.searchEnte(term).pipe(
-  //         tap(() => {
-  //           this.searchFailedAZ = false
-  //         }),
-  //         catchError(() => {
-  //           this.searchFailedAZ = true;
-  //           return of([]);
-  //         }))
-  //     ),
-  //     tap(() => {
-  //       this.searchingAZ = false
-  //     })
-  //   )
-
-  // formatter = (x: { nome: string }) => x.nome;
 
   searching = false;
   searchFailed = false;
@@ -311,18 +234,16 @@ export class OffertaDettaglioModificaComponent implements OnInit {
   menuContentShow() {
     this.showContent = !this.showContent;
   }
-  
+
   trimValue(event, type) {
     if (type == 'titolo') {
       (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay = false;
     }
-    // else if (type == 'scolastico') {
-    //   (event.target.value.trim().length == 0) ? this.forceReferenteScuolaErrorDisplay = true : this.forceReferenteScuolaErrorDisplay = false;
-    // }
-     else if(type == 'esterno') {
+    else if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceReferenteEsternoErrorDisplay = true : this.forceReferenteEsternoErrorDisplay = false;
     } else if (type == 'trim') {
       event.target.value = event.target.value.trim();
     }
   }
+
 }
