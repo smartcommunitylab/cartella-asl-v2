@@ -51,12 +51,10 @@ export class CreaOffertaModalComponent implements OnInit {
   forceErrorDisplayOraFine: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayRE: boolean = false;
-
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo'
   };
-
   @Input() tipologie?: any;
   @Output() newOffertaListener = new EventEmitter<Object>();
   

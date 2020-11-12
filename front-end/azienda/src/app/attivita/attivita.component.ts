@@ -102,11 +102,6 @@ export class AttivitaComponent implements OnInit {
         this.getAttivitaAltPage(1);
     }
 
-    selectTipologiaFilter() {
-        this.cmPagination.changePage(1);
-        this.getAttivitaAltPage(1);
-    }
-
     selectStatoFilter() {
         this.cmPagination.changePage(1);
         if (this.stato) {
