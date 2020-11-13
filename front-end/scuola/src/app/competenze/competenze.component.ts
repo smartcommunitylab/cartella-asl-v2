@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { Competenza } from '../shared/classes/Competenza.class';
-import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,13 +15,12 @@ import { CreaCompetenzaModalComponent } from './actions/create-competenza-modal/
 })
 
 export class CompetenzeComponent implements OnInit {
-
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-
   competenze: Competenza[] = [];
   filterText
   title: string;
   filtro;
+  filterSearch = false;
   closeResult: string;
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -33,22 +31,19 @@ export class CompetenzeComponent implements OnInit {
   showContent: boolean = false;
   stati = [{ "name": "Disponibile", "value": 1 }, { "name": "Non disponibile", "value": 2 }];
   sources = [{ "name": "Istituto", "value": "istituto" }, { "name": "ISFOL", "value": "ISFOL" }];
-  
 
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
-    private modalService: NgbModal,
-    private growler: GrowlerService
-  ) {
+    private modalService: NgbModal) {
     this.filtro = {
       owner: [this.dataService.istitutoId, 'ISFOL'],
       stato: null,
       filterText: null
-
     }
   }
+
   ngOnInit(): void {
     this.title = 'Lista competenze';
     this.getCompetenzePage(1);
@@ -56,31 +51,32 @@ export class CompetenzeComponent implements OnInit {
   }
 
   getCompetenzePage(page: number) {
-    this.dataService.getPagedCompetenzeOrderByIstitutoId(this.filtro,  (page - 1), this.pageSize)
+    this.dataService.getPagedCompetenzeOrderByIstitutoId(this.filtro, (page - 1), this.pageSize)
       .subscribe((response: IPagedCompetenze) => {
         this.competenze = response.content;
         this.totalRecords = response.totalElements
       },
         (err: any) => console.log(err), () => console.log('getCompetenze for filtersearch: '));
-
   }
 
   filterChanged() {
     if (this.cmPagination)
       this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getCompetenzePage(1);
   }
 
   openDetail(competenza) {
     this.router.navigate(['../list/detail', competenza.id], { relativeTo: this.route });
   }
+
   openCreate() {
     const modalRef = this.modalService.open(CreaCompetenzaModalComponent, { windowClass: "myCustomModalClass" });
-        modalRef.componentInstance.newCompetenzeListener.subscribe((competenza) => {
-          this.dataService.addIstitutoCompetenza(competenza).subscribe((saved) => { 
-            this.router.navigate(['../list/detail', saved.id], { relativeTo: this.route });
-          });
-        });
+    modalRef.componentInstance.newCompetenzeListener.subscribe((competenza) => {
+      this.dataService.addIstitutoCompetenza(competenza).subscribe((saved) => {
+        this.router.navigate(['../list/detail', saved.id], { relativeTo: this.route });
+      });
+    });
   }
 
   pageChanged(page: number) {
@@ -90,7 +86,7 @@ export class CompetenzeComponent implements OnInit {
   selectStatoFilter() {
     if (this.cmPagination)
       this.cmPagination.changePage(1);
-    if (this.stato=='1') {
+    if (this.stato == '1') {
       this.filtro.stato = true;
     } else if (this.stato == '2') {
       this.filtro.stato = false;
@@ -98,6 +94,7 @@ export class CompetenzeComponent implements OnInit {
     else {
       this.filtro.stato = null;
     }
+    this.filterSearch = true;
     this.getCompetenzePage(1);
   }
 
@@ -109,6 +106,7 @@ export class CompetenzeComponent implements OnInit {
     } else {
       this.filtro.filterText = null;
     }
+    this.filterSearch = true;
     this.getCompetenzePage(1);
   }
 
@@ -128,16 +126,18 @@ export class CompetenzeComponent implements OnInit {
     } else {
       this.filtro.owner = [this.dataService.istitutoId, 'ISFOL'];
     }
+    this.filterSearch = true;
     this.getCompetenzePage(1);
   }
-  
+
   refreshCompetenza() {
     this.stato = undefined;
     this.filtro.stato = null;
-    this.filterText=null;
+    this.filterText = null;
     this.filtro.filterText = null;
-    this.owner=undefined;
+    this.owner = undefined;
     this.filtro.owner = [this.dataService.istitutoId, 'ISFOL'];
+    this.filterSearch = false;
     this.getCompetenzePage(1);
     // this.router.navigate(['/competenza/list'], { relativeTo: this.route });
   }

@@ -10,7 +10,6 @@ import { AttivitaAlternanza } from '../shared/classes/AttivitaAlternanza.class';
 import { environment } from '../../environments/environment';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
-
 @Component({
     selector: 'attivita',
     templateUrl: './attivita.component.html',
@@ -21,6 +20,7 @@ export class AttivitaComponent implements OnInit {
     title: string;
     attivitaAAs: AttivitaAlternanza[] = [];
     filtro;
+    filterSearch = false;
     closeResult: string;
     totalRecords: number = 0;
     pageSize: number = 10;
@@ -30,18 +30,16 @@ export class AttivitaComponent implements OnInit {
     stato;
     menuContent = "In questa pagina trovi tutte le attività. Puoi cercarle o filtrarle per tipologia o stato. Con il tasto blu sulla destra puoi andare direttamente alla gestione presenze. Per visualizzare un’attività, clicca sulla riga corrispondente.";
     showContent: boolean = false;
-    stati = [ {"name": "In attesa", "value": "in_attesa"}, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, {"name": "Archiviata", "value": "archiviata"}];
+    stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
     env = environment;
     timeoutTooltip = 250;
-    @ViewChild('tooltip') tooltip: NgbTooltip;
-
     filterDatePickerConfig = {
         locale: 'it',
         firstDayOfWeek: 'mo'
     };
-
+    @ViewChild('tooltip') tooltip: NgbTooltip;
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-  
+
 
     constructor(
         private dataService: DataService,
@@ -50,21 +48,16 @@ export class AttivitaComponent implements OnInit {
         private location: Location,
         private modalService: NgbModal
     ) {
-        
         // force route reload whenever params change;
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        
         this.filtro = {
             tipologia: '',
             titolo: '',
-            stato : ''
+            stato: ''
         }
-       
-
-     }
+    }
 
     ngOnInit(): void {
-
         this.title = 'Lista attività';
         console.log(this.route);
         this.dataService.getAttivitaTipologie().subscribe((res) => {
@@ -76,35 +69,32 @@ export class AttivitaComponent implements OnInit {
         },
             (err: any) => console.log(err),
             () => console.log('getAttivitaTipologie'));
-
     }
 
     openDetail(aa) {
         this.router.navigate(['../detail', aa.id], { relativeTo: this.route });
     }
-   
+
     openCreate() {
         const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.newPianoListener.subscribe((option) => {
             if (option == 1) {
                 this.router.navigate(['associa/offerta'], { relativeTo: this.route });
             } else if (option == 2) {
-                this.openCreateNewAttivita();            
+                this.openCreateNewAttivita();
             }
-
         });
     }
-    
+
     openCreateNewAttivita() {
         const modalRef = this.modalService.open(CreaAttivitaModalComponent, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.tipologie = this.tipologie;
         modalRef.componentInstance.newAttivitaListener.subscribe((attivita) => {
-             this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
+            this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
                 this.router.navigate(['../detail', response.id], { relativeTo: this.route });
-             },
-                 (err: any) => console.log(err),
-                 () => console.log('createAttivitaAlternanza'));
-
+            },
+                (err: any) => console.log(err),
+                () => console.log('createAttivitaAlternanza'));
         });
     }
 
@@ -121,7 +111,7 @@ export class AttivitaComponent implements OnInit {
                                 var classSet = [];
                                 for (let cls of aa.classi) {
                                     if (classSet.indexOf(cls) < 0)
-                                     classSet.push(cls);
+                                        classSet.push(cls);
                                 }
                                 aa.classSet = classSet;
                                 if (aa.studenti.length == 1 && aa.classSet.length == 1) {
@@ -131,25 +121,23 @@ export class AttivitaComponent implements OnInit {
                                 } else if (aa.classSet.length > 1 && aa.studenti.length > 0) {
                                     aa.groupRigaTip = aa.studenti.length + ' studenti - ' + aa.classSet.length + ' classi';
                                 }
-                            } 
-                                
+                            }
+
                         }
                     })
                 }
-                
-            }
-                ,
+            },
                 (err: any) => console.log(err),
                 () => console.log('getAttivitaAlternanzaForIstitutoAPI'));
     }
 
     getTipologia(tipologiaId) {
         if (this.tipologie) {
-          return this.tipologie.find(data => data.id == tipologiaId);
+            return this.tipologie.find(data => data.id == tipologiaId);
         } else {
-          return tipologiaId;
+            return tipologiaId;
         }
-      }
+    }
 
     menuContentShow() {
         this.showContent = !this.showContent;
@@ -157,54 +145,57 @@ export class AttivitaComponent implements OnInit {
 
     cerca() {
         this.cmPagination.changePage(1);
-        this.getAttivitaAltPage(1);        
+        this.filterSearch = true;
+        this.getAttivitaAltPage(1);
     }
 
     selectTipologiaFilter() {
         this.cmPagination.changePage(1);
         if (this.tipologia && this.tipologia != 'Tipologia') {
-          this.filtro.tipologia = this.tipologia;
+            this.filtro.tipologia = this.tipologia;
         } else {
-          this.filtro.tipologia = null;
+            this.filtro.tipologia = null;
         }
+        this.filterSearch = true;
         this.getAttivitaAltPage(1);
     }
-    
+
     selectStatoFilter() {
         this.cmPagination.changePage(1);
         if (this.stato) {
-          this.filtro.stato = this.stato;
+            this.filtro.stato = this.stato;
         } else {
-          this.filtro.stato = null;
+            this.filtro.stato = null;
         }
+        this.filterSearch = true;
         this.getAttivitaAltPage(1);
     }
-    
+
     pageChanged(page: number) {
         this.currentpage = page;
         this.getAttivitaAltPage(page);
     }
 
     showTipStatoRiga(ev, aa, tp) {
-        if(!aa.toolTipoStatoRiga) {
-            if (aa.stato == 'archiviata') {            
-                if(!aa.report) {
+        if (!aa.toolTipoStatoRiga) {
+            if (aa.stato == 'archiviata') {
+                if (!aa.report) {
                     aa.startTimeoutTipStato = true;
                     setTimeout(() => {
-                        if(aa.startTimeoutTipStato == true) {
-                            this.env.globalSpinner=false;
+                        if (aa.startTimeoutTipStato == true) {
+                            this.env.globalSpinner = false;
                             aa.fetchingToolTipRiga = true;
                             this.dataService.getAttivitaReportStudenti(aa.id).subscribe((report) => {
                                 aa.report = report;
                                 this.setTipStatoRiga(aa);
-                                aa.fetchingToolTipRiga = false; 
-                                this.env.globalSpinner=true;
-                                if(aa.startTimeoutTipStato == true) {
+                                aa.fetchingToolTipRiga = false;
+                                this.env.globalSpinner = true;
+                                if (aa.startTimeoutTipStato == true) {
                                     tp.ngbTooltip = aa.toolTipoStatoRiga;
-                                    tp.open();    
+                                    tp.open();
                                 }
-                                aa.startTimeoutTipStato = false;               
-                            }); 
+                                aa.startTimeoutTipStato = false;
+                            });
                         }
                     }, this.timeoutTooltip);
                 } else {
@@ -213,7 +204,7 @@ export class AttivitaComponent implements OnInit {
             } else if (aa.stato == 'revisione') {
                 let labelRevisione = 'Questa attività si è conclusa il gg/mm/aaaa. È necessario archiviare l’attività, altrimenti le ore non saranno considerate valide!';
                 var dataFine = new Date(aa.dataFine);
-                labelRevisione = labelRevisione.replace("gg/mm/aaaa",  dataFine.getDate() + '/' + (dataFine.getMonth()+1) + '/' + dataFine.getFullYear());
+                labelRevisione = labelRevisione.replace("gg/mm/aaaa", dataFine.getDate() + '/' + (dataFine.getMonth() + 1) + '/' + dataFine.getFullYear());
                 aa.toolTipoStatoRiga = labelRevisione;
             } else if (aa.stato == 'in_attesa') {
                 aa.toolTipoStatoRiga = 'Quest’attività non è ancora iniziata';
@@ -222,8 +213,8 @@ export class AttivitaComponent implements OnInit {
     }
 
     hideTipStatoRiga(ev, aa, tp) {
-        aa.startTimeoutTipStato = false; 
-        aa.fetchingToolTipRiga = false;   
+        aa.startTimeoutTipStato = false;
+        aa.fetchingToolTipRiga = false;
     }
 
     setTipStatoRiga(aa) {
@@ -231,7 +222,7 @@ export class AttivitaComponent implements OnInit {
         let labelArchiviata = 'Archiviata il gg/mm/aaaa, *nEs*/*n* studenti hanno completato l’attività';
         labelArchiviata = labelArchiviata.replace('*nEs*', aa.report.numeroEsperienzeCompletate);
         labelArchiviata = labelArchiviata.replace('*n*', aa.report.studenti.length);
-        labelArchiviata = labelArchiviata.replace("gg/mm/aaaa",  dateArchivazione.getDate() + '/' + (dateArchivazione.getMonth()+1) + '/' + dateArchivazione.getFullYear());
+        labelArchiviata = labelArchiviata.replace("gg/mm/aaaa", dateArchivazione.getDate() + '/' + (dateArchivazione.getMonth() + 1) + '/' + dateArchivazione.getFullYear());
         aa.toolTipoStatoRiga = labelArchiviata;
     }
 
@@ -249,8 +240,8 @@ export class AttivitaComponent implements OnInit {
             if (i == 15) {
                 break;
             }
-        } 
-        return tip;   
+        }
+        return tip;
     }
 
     setAssegnatoLabel(aa) {
@@ -258,13 +249,13 @@ export class AttivitaComponent implements OnInit {
         let classi = [];
         if (aa.classi.length > 0) {
             aa.classi.forEach(element => {
-                if(!classi.includes(element)) {
+                if (!classi.includes(element)) {
                     classi.push(element);
                 }
             });
         }
         if (aa.studenti.length == 1) {
-            label = aa.studenti[0];    
+            label = aa.studenti[0];
         } else if (aa.studenti.length > 1) {
             label = aa.studenti.length + ' studenti';
         }
@@ -279,29 +270,29 @@ export class AttivitaComponent implements OnInit {
     showTipButton(ev, aa, tp) {
         // console.log("aa::",aa,"event", ev, "tooltip", tp);
         if (!aa.toolTipButton) {
-            if(!aa.report) {
+            if (!aa.report) {
                 aa.startTimeoutTipButton = true;
                 setTimeout(() => {
-                    if(aa.startTimeoutTipButton == true) {
-                        this.env.globalSpinner=false;
+                    if (aa.startTimeoutTipButton == true) {
+                        this.env.globalSpinner = false;
                         aa.fetchingToolTipButton = true;
                         this.dataService.getAttivitaReportStudenti(aa.id).subscribe((report) => {
                             aa.report = report;
                             this.setTipButton(aa);
                             aa.fetchingToolTipButton = false;
-                            this.env.globalSpinner=true;
-                            if(aa.startTimeoutTipButton == true) {
+                            this.env.globalSpinner = true;
+                            if (aa.startTimeoutTipButton == true) {
                                 tp.ngbTooltip = aa.toolTipButton;
-                                tp.open();    
+                                tp.open();
                             }
                             aa.startTimeoutTipButton = false;
                         });
-                    }    
+                    }
                 }, this.timeoutTooltip);
             } else {
-                this.setTipButton(aa); 
+                this.setTipButton(aa);
             }
-        }         
+        }
     }
 
     setTipButton(aa) {
@@ -311,8 +302,8 @@ export class AttivitaComponent implements OnInit {
     }
 
     hideTipButton(ev, aa, tp) {
-        aa.startTimeoutTipButton = false; 
-        aa.fetchingToolTipButton = false;  
+        aa.startTimeoutTipButton = false;
+        aa.fetchingToolTipButton = false;
     }
 
     onUnovering(event) {
@@ -320,11 +311,6 @@ export class AttivitaComponent implements OnInit {
     }
 
     gestionePresenze(aa) {
-        // this.tipologie.filter(tipo => {
-        //     if (tipo.id == aa.tipologia) {
-        //         aa.individuale = tipo.individuale;
-        //     }
-        // })
         if (aa.individuale) {
             this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/individuale');
         } else {
@@ -340,14 +326,15 @@ export class AttivitaComponent implements OnInit {
         }
     }
 
-    refreshAttivita(){
+    refreshAttivita() {
         this.filtro = {
             tipologia: '',
             titolo: '',
-            stato : ''
+            stato: ''
         }
         this.tipologia = "Tipologia"
         this.stato = undefined;
+        this.filterSearch = false;
         this.getAttivitaAltPage(1);
     }
 }
