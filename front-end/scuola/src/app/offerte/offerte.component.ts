@@ -17,6 +17,7 @@ export class OfferteComponent implements OnInit {
     title: string;
     offerte = [];
     filtro;
+    filterSearch = false;
     totalRecords: number = 0;
     pageSize: number = 10;
     currentpage: number = 0;
@@ -29,12 +30,10 @@ export class OfferteComponent implements OnInit {
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
     sources = [{ "name": "Istituto", "value": "istituto" }, { "name": "Ente", "value": "ente" }];
-    
     filterDatePickerConfig = {
         locale: 'it',
         firstDayOfWeek: 'mo'
     };
-
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
     @ViewChild('tooltip') tooltip: NgbTooltip;
 
@@ -46,21 +45,17 @@ export class OfferteComponent implements OnInit {
         private location: Location,
         private modalService: NgbModal
     ) {
-
         // force route reload whenever params change;
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
         this.filtro = {
             tipologia: '',
             titolo: '',
             stato: '',
             ownerIstituto: null
         }
-
     }
 
     ngOnInit(): void {
-
         this.title = 'Lista offerte';
         console.log(this.route);
         this.dataService.getAttivitaTipologie().subscribe((res) => {
@@ -83,12 +78,11 @@ export class OfferteComponent implements OnInit {
         const modalRef = this.modalService.open(CreaOffertaModalComponent, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.tipologie = this.tipologie;
         modalRef.componentInstance.newOffertaListener.subscribe((offerta) => {
-             this.dataService.createOfferta(offerta).subscribe((response) => {
+            this.dataService.createOfferta(offerta).subscribe((response) => {
                 this.router.navigate(['../detail', response.id], { relativeTo: this.route });
-             },
-                 (err: any) => console.log(err),
-                 () => console.log('createAttivitaAlternanza'));
-
+            },
+                (err: any) => console.log(err),
+                () => console.log('createAttivitaAlternanza'));
         });
     }
 
@@ -97,8 +91,7 @@ export class OfferteComponent implements OnInit {
             .subscribe((response) => {
                 this.totalRecords = response.totalElements;
                 this.offerte = response.content;
-            }
-                ,
+            },
                 (err: any) => console.log(err),
                 () => console.log('getAttivitaAlternanzaForIstitutoAPI'));
     }
@@ -123,6 +116,7 @@ export class OfferteComponent implements OnInit {
         } else {
             this.filtro.titolo = null;
         }
+        this.filterSearch = true;
         this.getOffertePage(1);
     }
 
@@ -134,6 +128,7 @@ export class OfferteComponent implements OnInit {
         } else {
             this.filtro.tipologia = null;
         }
+        this.filterSearch = true;
         this.getOffertePage(1);
     }
 
@@ -149,6 +144,7 @@ export class OfferteComponent implements OnInit {
         } else {
             this.filtro.ownerIstituto = null;
         }
+        this.filterSearch = true;
         this.getOffertePage(1);
     }
 
@@ -159,6 +155,7 @@ export class OfferteComponent implements OnInit {
         } else {
             this.filtro.stato = null;
         }
+        this.filterSearch = true;
         this.getOffertePage(1);
     }
 
@@ -189,7 +186,7 @@ export class OfferteComponent implements OnInit {
             label = 'Istituto';
         } else {
             label = 'Ente';
-        }        
+        }
         return label;
     }
 
@@ -201,7 +198,7 @@ export class OfferteComponent implements OnInit {
         }
     }
 
-    refreshOfferte(){
+    refreshOfferte() {
         this.filtro = {
             tipologia: '',
             titolo: '',
@@ -212,6 +209,7 @@ export class OfferteComponent implements OnInit {
         this.stato = undefined;
         this.owner = undefined;
         this.filterText = undefined;
+        this.filterSearch = false;
         this.getOffertePage(1);
     }
 
