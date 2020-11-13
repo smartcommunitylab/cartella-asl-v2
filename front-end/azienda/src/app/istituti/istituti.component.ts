@@ -13,15 +13,15 @@ import { PaginationComponent } from '../shared/pagination/pagination.component';
 export class IstitutiComponent implements OnInit {
 
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-
   istituti: any[] = [];
   title: string;
   filtro;
+  filterSearch = false;
   totalRecords: number = 0;
   pageSize: number = 10;
   menuContent = "In questa pagina trovi tutti gli istituti disponibili nel sistema. Puoi vedere il dettaglio di un singolo istituto cliccando sulla riga corrispondente";
   showContent: boolean = false;
- 
+
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
@@ -43,32 +43,20 @@ export class IstitutiComponent implements OnInit {
         this.totalRecords = response.totalElements
       },
         (err: any) => console.log(err), () => console.log('getIstituti for filtersearch: '));
-
-  }
-
-  filterChanged() {
-    if (this.cmPagination)
-      this.cmPagination.changePage(1);
-    this.getIstitutiPage(1);
   }
 
   openDetail(istituto) {
     this.router.navigate(['../list/detail', istituto.id], { relativeTo: this.route });
   }
- 
+
   pageChanged(page: number) {
     this.getIstitutiPage(page);
-  }
-
-  selectStatoFilter() {
-    if (this.cmPagination)
-      this.cmPagination.changePage(1);
-    this.getIstitutiPage(1);
   }
 
   cerca() {
     if (this.cmPagination)
       this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getIstitutiPage(1);
   }
 
@@ -78,6 +66,7 @@ export class IstitutiComponent implements OnInit {
 
   refresh() {
     this.filtro.filterText = null;
+    this.filterSearch = false;
     this.getIstitutiPage(1);
   }
 
@@ -85,9 +74,9 @@ export class IstitutiComponent implements OnInit {
     var style = {
       'color': 'none',
     };
-    if (istObj.attivitaInCorso > 0) 
+    if (istObj.attivitaInCorso > 0)
       style['color'] = '#00CF86';
-    
+
     return style;
   }
 

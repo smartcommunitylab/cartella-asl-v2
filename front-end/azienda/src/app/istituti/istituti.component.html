@@ -68,8 +68,8 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="!istituti?.length" class="font-14 text-center font-weight-bold">
-        <div class="row">
+    <div class="font-14 text-center font-weight-bold">
+        <div class="row" *ngIf="!istituti?.length && filterSearch">
             <div class="col-xl-12 text-center errorIconPaddingTop">
                 <svg class="icon icon-danger icon-xl">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -80,7 +80,6 @@
             </div>
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn" (click)='refresh()'>
-
                     <span class="resetFilterBtn">
                         <div class="row">
                             <div class="col-sm-2 text-center">
@@ -94,11 +93,23 @@
                 </button>
             </div>
         </div>
+        <div class="row" *ngIf="!istituti?.length && !filterSearch">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-lightGrey icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Questa lista è vuota</span>
+            </div>
+            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Controlla la tua connessione e ricarica la
+                pagina. Contatta l'assistenza se il problema persiste.
+            </div>
+        </div>
     </div>
-</div>
-<div class="row" *ngIf="istituti.length > 0">
-    <div class="col-sm-12 text-center">
-        <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
-            #cmPagination></cm-pagination>
+    <div class="row" *ngIf="istituti.length > 0">
+        <div class="col-sm-12 text-center">
+            <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+                #cmPagination></cm-pagination>
+        </div>
     </div>
-</div>
