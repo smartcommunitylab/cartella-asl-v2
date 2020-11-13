@@ -15,6 +15,7 @@ import * as moment from 'moment';
 export class IstitutoDettaglioComponent implements OnInit {
   istituto;
   filtro;
+  filterSearch;
   attivitaAAs: AttivitaAlternanza[] = [];
   navTitle: string = "Dettaglio istituto";
   currentpage: number = 0;
@@ -26,10 +27,8 @@ export class IstitutoDettaglioComponent implements OnInit {
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   env = environment;
   timeoutTooltip = 250;
-
   @ViewChild('tooltip') tooltip: NgbTooltip;
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-
   breadcrumbItems = [
     {
       title: "Lista istituti",
@@ -51,7 +50,6 @@ export class IstitutoDettaglioComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.route.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getistitutoDettaglio(id).subscribe((res) => {
@@ -100,16 +98,13 @@ export class IstitutoDettaglioComponent implements OnInit {
 
   cerca() {
     this.cmPagination.changePage(1);
-    this.getAttivitaAltPage(1);
-  }
-
-  selectTipologiaFilter() {
-    this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getAttivitaAltPage(1);
   }
 
   selectStatoFilter() {
     this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getAttivitaAltPage(1);
   }
 
@@ -242,6 +237,7 @@ export class IstitutoDettaglioComponent implements OnInit {
   refreshAttivita() {
     this.filtro.titolo = '';
     this.filtro.stato = undefined;
+    this.filterSearch = false;
     this.getAttivitaAltPage(1);
   }
 
