@@ -36,7 +36,7 @@ export class CreaOffertaModalComponent implements OnInit {
   titolo: string;
   numeroPosti;
   referenteScuola: string;
-  tipologia: any = 'Tipologie';
+  tipologia: any = 'Tipologia';
   ore;
   referenteEsterno: string;
   date;
@@ -124,7 +124,7 @@ export class CreaOffertaModalComponent implements OnInit {
         && (this.numeroPosti && this.numeroPosti > 0)
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
     } else {
@@ -135,7 +135,7 @@ export class CreaOffertaModalComponent implements OnInit {
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.azienda && this.azienda.id != '')
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
     }

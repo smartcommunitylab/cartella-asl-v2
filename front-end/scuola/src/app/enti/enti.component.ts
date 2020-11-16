@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../core/services/data.service'
-import { PianoAlternanza } from '../shared/classes/PianoAlternanza.class'
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-modal.component';
@@ -16,8 +15,8 @@ import { environment } from '../../environments/environment';
 })
 
 export class EntiComponent implements OnInit {
-
     filtro;
+    filterSearch = false;
     closeResult: string;
     totalRecords: number = 0;
     pageSize: number = 10;
@@ -27,10 +26,8 @@ export class EntiComponent implements OnInit {
     timeoutTooltip = 250;
     env = environment;
     enti;
-
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
     @ViewChild('tooltip') tooltip: NgbTooltip;
-
 
     constructor(
         private dataService: DataService,
@@ -39,10 +36,8 @@ export class EntiComponent implements OnInit {
         private location: Location,
         private modalService: NgbModal
     ) {
-
         // force route reload whenever params change;
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-
     }
 
     ngOnInit(): void {
@@ -56,7 +51,7 @@ export class EntiComponent implements OnInit {
     openCreate() {
         const modalRef = this.modalService.open(CreaEnteModalComponent, { windowClass: "myCustomModalClass" });
         modalRef.componentInstance.newEnteListener.subscribe((res) => {
-           this.router.navigate(['../detail', res.id], { relativeTo: this.route });
+            this.router.navigate(['../detail', res.id], { relativeTo: this.route });
         });
     }
 
@@ -65,8 +60,7 @@ export class EntiComponent implements OnInit {
             .subscribe((response) => {
                 this.totalRecords = response.totalElements;
                 this.enti = response.content;
-            }
-                ,
+            },
                 (err: any) => console.log(err),
                 () => console.log('get piani attivi'));
     }
@@ -91,6 +85,7 @@ export class EntiComponent implements OnInit {
 
     cerca() {
         this.cmPagination.changePage(1);
+        this.filterSearch = true;
         this.getEntiPaged(1);
     }
 
@@ -99,8 +94,9 @@ export class EntiComponent implements OnInit {
         this.getEntiPaged(page);
     }
 
-    refreshEnti(){
+    refreshEnti() {
         this.filtro = null;
+        this.filterSearch = false;
         this.getEntiPaged(1);
     }
 }

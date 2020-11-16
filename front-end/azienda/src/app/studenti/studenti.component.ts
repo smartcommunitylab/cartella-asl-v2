@@ -15,11 +15,11 @@ export class StudentiComponent implements OnInit {
   showContent: boolean = false;
   studenti;
   filtro;
+  filterSearch = false;
   totalRecords: number = 0;
   pageSize: number = 10;
   currentpage: number = 0;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "Attivo", "value": "attivo" }, { "name": "Inattivo", "value": "inattivo" }];
-
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
 
   constructor(
@@ -41,6 +41,7 @@ export class StudentiComponent implements OnInit {
 
   cerca() {
     this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getStudenti(1);
   }
 
@@ -73,6 +74,7 @@ export class StudentiComponent implements OnInit {
     this.filtro = {
       text: null
     }
+    this.filterSearch = false;
     this.getStudenti(1);
   }
 
@@ -85,7 +87,6 @@ export class StudentiComponent implements OnInit {
         label = student.istituto.name;
       }
     }
-
     return label;
   }
 

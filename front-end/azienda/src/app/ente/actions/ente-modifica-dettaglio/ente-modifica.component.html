@@ -166,18 +166,16 @@
                                 </div>
                             </ng-template>
                             <label for="codiceAteco" *ngIf="ateco.codice" class="active">Codice ATECO</label>
-                            <input type="text" class="form-control" [(ngModel)]="atecoEntry" value="atecoEntry.codice"
+                            <input type="text" class="form-control" [(ngModel)]="ateco" value="ateco.codice"
                                 id="codiceAteco" name="codiceAteco" 
                                 [ngbTypeahead]="getAteco" [resultTemplate]="rtAteco" [inputFormatter]="formatterAteco"
-                                (ngModelChange)="selectAteco(atecoEntry)" placeholder="Codice ATECO">
+                                placeholder="Codice ATECO">
                             <small *ngIf="searchingAteco" class="progress-spinner progress-spinner-active size-sm">
                                 <span class="sr-only">Caricamento...</span>
                             </small>
                         </div>
                         <div class="col-sm-4">
-                            <label for="descAteco" *ngIf="ateco.descrizione" class="active">Descrizione Codice ATECO</label>
-                            <input disabled type="text" class="form-control" [(ngModel)]="ateco.descrizione" id="descAteco" 
-                                name="descAteco" placeholder="Descrizione Codice ATECO">
+                            {{ateco.descrizione}}
                         </div>
                     </div>
     

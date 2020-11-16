@@ -89,8 +89,8 @@
       </tbody>
     </table>
   </div>
-  <div *ngIf="!studenti?.length" class="font-14 text-center font-weight-bold">
-    <div class="row">
+  <div class="font-14 text-center font-weight-bold">
+    <div class="row" *ngIf="!studenti?.length && filterSearch">
       <div class="col-xl-12 text-center errorIconPaddingTop">
         <svg class="icon icon-danger icon-xl">
           <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -101,7 +101,6 @@
       </div>
       <div class="col-sm-12 text-center">
         <button type="button" class="btn" (click)='refreshStudenti()'>
-
           <span class="resetFilterBtn">
             <div class="row">
               <div class="col-sm-2 text-center">
@@ -115,11 +114,24 @@
         </button>
       </div>
     </div>
+    <div class="row" *ngIf="!studenti?.length && !filterSearch">
+      <div class="col-xl-12 text-center errorIconPaddingTop">
+        <svg class="icon icon-lightGrey icon-xl">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+        </svg>
+      </div>
+      <div class="col-xl-12 text-center">
+        <span class="searchError">Questa lista è vuota</span>
+      </div>
+      <div class="col-sm-12 text-center searchErrorMsg text-semibold">Non ci sono studenti con attività presso il tuo
+        ente.
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-12 text-center">
-    <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)" #cmPagination>
-    </cm-pagination>
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+        #cmPagination>
+      </cm-pagination>
+    </div>
   </div>
-</div>

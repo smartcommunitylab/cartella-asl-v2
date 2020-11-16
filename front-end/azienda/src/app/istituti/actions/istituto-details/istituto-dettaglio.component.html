@@ -51,10 +51,10 @@
             </span>
         </div>
     </div>
-    <br/>
+    <br />
     <div *ngIf="istituto">
         <div class="title">
-            Lista delle attività:<br/><br/>
+            Lista delle attività:<br /><br />
         </div>
         <div class="row">
             <div class="col-4 v-center-inline">
@@ -71,7 +71,8 @@
             </div>
             <div class="col-4"></div>
             <div class="col-4">
-                <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="filtro.stato" (ngModelChange)="selectStatoFilter()">
+                <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="filtro.stato"
+                    (ngModelChange)="selectStatoFilter()">
                     <option [ngValue]="undefined">Seleziona stato</option>
                     <option [ngValue]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
                 </select>
@@ -168,8 +169,8 @@
                 </tbody>
             </table>
         </div>
-        <div *ngIf="!attivitaAAs?.length && (filtro.titolo || filtro.stato)" class="font-14 text-center font-weight-bold">
-            <div class="row">
+        <div class="font-14 text-center font-weight-bold">
+            <div class="row" *ngIf="!attivitaAAs?.length && filterSearch">
                 <div class="col-xl-12 text-center errorIconPaddingTop">
                     <svg class="icon icon-danger icon-xl">
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -180,8 +181,7 @@
                 </div>
                 <div class="col-sm-12 text-center">
                     <button type="button" class="btn" (click)='refreshAttivita()'>
-                        
-                        <span class="resetFilterBtn" >
+                        <span class="resetFilterBtn">
                             <div class="row">
                                 <div class="col-sm-2 text-center">
                                     <svg class="icon icon-danger">
@@ -192,6 +192,19 @@
                             </div>
                         </span>
                     </button>
+                </div>
+            </div>
+            <div class="row" *ngIf="!attivitaAAs?.length && !filterSearch">
+                <div class="col-xl-12 text-center errorIconPaddingTop">
+                    <svg class="icon icon-lightGrey icon-xl">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                    </svg>
+                </div>
+                <div class="col-xl-12 text-center">
+                    <span class="searchError">Questa lista è vuota</span>
+                </div>
+                <div class="col-sm-12 text-center searchErrorMsg text-semibold">Non ci sono attività associate al
+                    studente.
                 </div>
             </div>
         </div>

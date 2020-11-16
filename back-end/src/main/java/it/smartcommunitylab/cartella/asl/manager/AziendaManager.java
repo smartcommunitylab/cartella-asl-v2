@@ -327,9 +327,6 @@ public class AziendaManager extends DataEntityManager {
 		if(aziendaDb == null) {
 			throw new BadRequestException("ente non trovato");
 		} else {
-			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
-				throw new BadRequestException("ente non modificabile");
-			}
 			List<Azienda> list = aziendaRepository.findByPartitaIva(azienda.getPartita_iva());
 			if(!azienda.getPartita_iva().equals(aziendaDb.getPartita_iva())) {
 				if(list.size() > 0) {

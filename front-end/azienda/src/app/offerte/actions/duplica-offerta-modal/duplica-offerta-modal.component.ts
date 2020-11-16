@@ -30,34 +30,24 @@ export class DuplicaOffertaModalComponent implements OnInit {
     this.calendarEnd.api.close();
   }
 
-  // titolo: string;
-  // numeroPosti;
-  // oraInizio;
-  // oraFine;
-  tipologia: any = 'Tipologie';
-  // ore;
-  // referenteEsterno: string;
+  tipologia: any = 'Tipologia';
   date;
   fieldsError: string;
   showSelect: boolean = true;
   forceEnteDisplay: boolean = false;
   pageSize = 20;
+  orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
   forceErrorDisplayOre: boolean = false;
   forceErrorDisplayNumeroPosti: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
-  forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayRE: boolean = false;
-
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo'
   };
-
   @Input() offerta?: any;
   @Input() tipologie?: any;
   @Output() onDupicateConfirm = new EventEmitter<Object>();
@@ -69,7 +59,10 @@ export class DuplicaOffertaModalComponent implements OnInit {
     this.date = {
       dataInizio: moment(this.offerta.dataInizio),
       dataFine: moment(this.offerta.dataFine)
-    }
+    };
+    // tackle incase saved with 1 digit in past.
+    this.offerta.oraInizio = this.dataService.formatTwoDigit(this.offerta.oraInizio);
+    this.offerta.oraFine = this.dataService.formatTwoDigit(this.offerta.oraFine);
   }
 
   create() { 
@@ -97,20 +90,10 @@ export class DuplicaOffertaModalComponent implements OnInit {
       } else {
         this.forceErrorDisplayOraInizio = false;
       }
-      if (this.offerta.oraInizio > 23) {
-        this.forceDalle23ErrorDisplay = true;
-      } else {
-        this.forceDalle23ErrorDisplay = false;
-      }
       if (!this.offerta.oraFine) {
         this.forceErrorDisplayOraFine = true;
       } else {
         this.forceErrorDisplayOraFine = false;
-      }
-      if (this.offerta.oraFine > 23) {
-        this.forceAlle23ErrorDisplay = true;
-      } else {
-        this.forceAlle23ErrorDisplay = false;
       }
       if (this.offerta.ore < 1) {
         this.forceErrorDisplayOre = true;
@@ -131,8 +114,8 @@ export class DuplicaOffertaModalComponent implements OnInit {
         && (this.offerta.postiDisponibili && this.offerta.postiDisponibili > 0)
         && (this.offerta.referenteEsterno && this.offerta.referenteEsterno != '' && this.offerta.referenteEsterno.trim().length > 0)
         && (this.offerta.ore && this.offerta.ore > 0)
-        && (this.offerta.oraInizio && this.offerta.oraInizio>0 && this.offerta.oraFine && this.offerta.oraFine>0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.offerta.oraInizio  && this.offerta.oraFine && this.offerta.oraFine > this.offerta.oraInizio)
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
   }
