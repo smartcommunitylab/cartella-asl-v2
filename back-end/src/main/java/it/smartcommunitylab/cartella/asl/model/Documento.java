@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Documento {
 	
 	public static enum TipoDoc {
-		piano_formativo, convenzione, valutazione_studente, valutazione_ente, doc_generico, old_doc
+		piano_formativo, convenzione, valutazione_studente, valutazione_esperienza, doc_generico, pregresso
 	};
 
 	@Id
@@ -33,7 +33,7 @@ public class Documento {
 	private String formatoDocumento;
 	private String risorsaId;
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "varchar(255) default 'old_doc'")
+	@Column(columnDefinition = "varchar(255) default 'pregresso'")
 	private TipoDoc tipo;
 	
 	public Long getId() {

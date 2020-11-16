@@ -130,7 +130,7 @@ public class LocalDocumentManager {
 		List<Documento> result = new ArrayList<>();
 		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
 		list.forEach(doc -> {
-			if(doc.getTipo().equals(TipoDoc.valutazione_ente)) {
+			if(doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
 				result.add(doc);
 			}
 		});
@@ -141,7 +141,7 @@ public class LocalDocumentManager {
 		List<Documento> result = new ArrayList<>();
 		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
 		list.forEach(doc -> {
-			if(doc.getTipo().equals(TipoDoc.valutazione_ente) || doc.getTipo().equals(TipoDoc.piano_formativo)) {
+			if(doc.getTipo().equals(TipoDoc.valutazione_esperienza) || doc.getTipo().equals(TipoDoc.piano_formativo)) {
 				result.add(doc);
 			}
 		});		
