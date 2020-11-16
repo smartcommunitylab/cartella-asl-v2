@@ -128,23 +128,48 @@ public class LocalDocumentManager {
 
 	public List<Documento> getDocumentByStudente(String uuid) throws Exception {
 		List<Documento> result = new ArrayList<>();
-		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
-		list.forEach(doc -> {
-			if(doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
-				result.add(doc);
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findByUuid(uuid);
+		if(es != null) {
+			result.addAll(documentoRepository.findDocumentoByRisorsaId(uuid));
+			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+			if(aa != null) {
+				List<Documento> list = documentoRepository.findDocumentoByRisorsaId(aa.getUuid());
+				list.forEach(doc -> {
+					if(doc.getTipo().equals(TipoDoc.piano_formativo) ||
+							doc.getTipo().equals(TipoDoc.doc_generico)) {
+						result.add(doc);
+					}
+				});			
+				List<EsperienzaSvolta> esperienze = esperienzaSvoltaRepository.findByAttivitaAlternanzaId(aa.getId());
+				for(EsperienzaSvolta e: esperienze) {
+					list = documentoRepository.findDocumentoByRisorsaId(e.getUuid());
+					list.forEach(doc -> {
+						if(doc.getTipo().equals(TipoDoc.doc_generico)) {
+							result.add(doc);
+						}
+					});					
+				}
 			}
-		});
+		}
 		return result;
  	}
 
 	public List<Documento> getDocumentByEnte(String uuid) {
 		List<Documento> result = new ArrayList<>();
-		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
-		list.forEach(doc -> {
-			if(doc.getTipo().equals(TipoDoc.valutazione_esperienza) || doc.getTipo().equals(TipoDoc.piano_formativo)) {
-				result.add(doc);
+		AttivitaAlternanza aa = attivitaAlternanzaRepository.findByUuid(uuid);
+		if(aa != null) {
+			result.addAll(documentoRepository.findDocumentoByRisorsaId(uuid));
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaRepository.findByAttivitaAlternanzaId(aa.getId());
+			for(EsperienzaSvolta e: esperienze) {
+				List<Documento> list = documentoRepository.findDocumentoByRisorsaId(e.getUuid());
+				for(Documento doc : list) {
+					if(doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
+						continue;
+					}
+					result.add(doc);
+				}
 			}
-		});		
+		}
 		return result;
 	}
 }
