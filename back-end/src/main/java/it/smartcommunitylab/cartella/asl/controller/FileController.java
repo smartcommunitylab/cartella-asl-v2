@@ -87,7 +87,8 @@ public class FileController {
 			logger.info(String.format("downloadFileStudente(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_esperienza));
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_esperienza, TipoDoc.piano_formativo,
+				TipoDoc.valutazione_studente, TipoDoc.doc_generico));
 	}
 
 	@GetMapping("/api/download/document/{uuid}/ente/{enteId}")
@@ -102,7 +103,8 @@ public class FileController {
 			logger.info(String.format("downloadFileEnte(%s", uuid + ")"));
 		}
 		checkAttivitaEnte(uuid, enteId, true);
-		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_studente));
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_studente, TipoDoc.piano_formativo,
+				TipoDoc.convenzione, TipoDoc.doc_generico));
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
@@ -128,7 +130,7 @@ public class FileController {
 			logger.info(String.format("removeStudenteDocument(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza));
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza, TipoDoc.doc_generico));
 	}
 
 	@DeleteMapping("/api/remove/document/{uuid}/ente/{enteId}")
@@ -142,7 +144,7 @@ public class FileController {
 			logger.info(String.format("removeEnteDocument(%s", uuid + ")"));
 		}
 		checkAttivitaEnte(uuid, enteId, true);
-		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_studente));
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_studente, TipoDoc.doc_generico));
 	}
 	
 	@PostMapping("/api/upload/document/risorsa/{uuid}/istituto/{istitutoId}")
@@ -173,7 +175,8 @@ public class FileController {
 			logger.info(String.format("uploadDocumentoForRisorsaStudente:%s - %s", uuid, studenteId));
 		}
 		checkEsperienzeStudente(uuid, studenteId, false);
-		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza));
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza,
+				TipoDoc.doc_generico));
 		return documento;
 	}	
 
@@ -190,7 +193,8 @@ public class FileController {
 			logger.info(String.format("uploadDocumentoForRisorsaEnte:%s - %s", uuid, enteId));
 		}
 		checkAttivitaEnte(uuid, enteId, false);
-		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_studente));
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_studente,
+				TipoDoc.doc_generico));
 		return documento;
 	}
 	
