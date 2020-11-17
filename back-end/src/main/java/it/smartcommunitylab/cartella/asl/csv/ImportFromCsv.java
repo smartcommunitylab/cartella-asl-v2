@@ -55,7 +55,7 @@ public class ImportFromCsv {
 				try {
 					String[] strings = line.split(";");
 					String cf = strings[0].toUpperCase().trim();
-					String email = strings[1].trim();
+					String email = strings[1].toLowerCase().trim();
 					Studente studente = studenteRepository.findStudenteByCf(cf);
 					if(studente == null) {
 						logger.warn("importStudente: student not found - " + cf);
@@ -161,7 +161,7 @@ public class ImportFromCsv {
 				try {
 					String[] strings = line.split(";");
 					String cf = strings[0].toUpperCase().trim();
-					String email = strings[1].trim();
+					String email = strings[1].toLowerCase().trim();
 					String name = strings[2].trim();
 					String surname = strings[3].trim();
 					ASLUser aslUser = aslUserRepository.findByEmail(email);

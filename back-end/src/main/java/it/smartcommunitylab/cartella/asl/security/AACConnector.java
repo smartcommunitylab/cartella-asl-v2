@@ -120,7 +120,7 @@ public class AACConnector {
 		ASLUser user = null;
 		
 		if (email != null) {
-			user = userRepository.findByEmail(email);
+			user = userRepository.findByEmail(email.toLowerCase());
 		}
 		if(user != null) {
 			user.getRoles().addAll(roleRepository.findByUserId(user.getId()));
@@ -133,7 +133,7 @@ public class AACConnector {
 		ASLUser user = null;
 		
 		if (cf != null) {
-			user = userRepository.findByCf(cf);
+			user = userRepository.findByCf(cf.toUpperCase());
 		}		
 		if(user != null) {
 			user.getRoles().addAll(roleRepository.findByUserId(user.getId()));
