@@ -31,25 +31,30 @@ public class ConsensoController implements AslController {
 		ASLUser user = aac.getASLUser(request);
 
 		Date date = new Date(System.currentTimeMillis());
-		Consenso result = new Consenso();
-
-		if (Utils.isNotEmpty(user.getCf())) {
-			result.setCf(user.getCf());
-		}
+		Consenso consenso = null;
 
 		if (Utils.isNotEmpty(user.getEmail())) {
-			result.setEmail(user.getEmail());
+			consenso = consensoRepository.findByEmail(user.getEmail());
 		}
-
-		result.setAuthorized(Boolean.TRUE);
-		result.setCreationDate(date);
-		consensoRepository.save(result);
+		if(consenso == null) {
+			if (Utils.isNotEmpty(user.getCf())) {
+				consenso = consensoRepository.findByCF(user.getCf());
+			}			
+		}
+		if(consenso == null) {
+			consenso = new Consenso();
+			consenso.setAuthorized(Boolean.TRUE);
+			consenso.setCreationDate(date);
+			consenso.setCf(user.getCf());
+			consenso.setEmail(user.getEmail());
+			consensoRepository.save(consenso);
+		}
 
 		if (logger.isInfoEnabled()) {
-			logger.info(String.format("addAuthorization[%s]", result.getId()));
+			logger.info(String.format("addAuthorization[%s]", consenso.getId()));
 		}
 
-		return result;
+		return consenso;
 	}
 
 }
