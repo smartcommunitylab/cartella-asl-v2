@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { Chart } from 'chart.js';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -23,7 +25,6 @@ export class DashboardSistemaComponent implements OnInit {
 
   profile;
   report = {};
-  istitutoId = "";
   annoScolastico = '2019-20';
   doughnut;
   tipologieMap = {
@@ -45,41 +46,64 @@ export class DashboardSistemaComponent implements OnInit {
 
   @ViewChild('doughnutChartCanvas') chartCanvas: ElementRef<HTMLCanvasElement>;
   
-    ngOnInit() {
-      //var ctx = this.chartCanvas.nativeElement.getContext('2d');
+  ngOnInit() {
+    //var ctx = this.chartCanvas.nativeElement.getContext('2d');
 
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
-      this.getAnnoScolstico();
-    }
-
-    getAnnoScolstico() {
-      var now = moment();
-      var lastDay = moment().month(8).date(1);
-      if(now.isBefore(lastDay)) {
-        this.annoScolastico = moment().year(now.year()-1).format('YYYY') + '-' + now.format('YY');
-      } else {
-        this.annoScolastico = now.format('YYYY') + '-' + moment().year(now.year()+1).format('YY');
+    this.dataService.getProfile().subscribe(profile => {
+      console.log(profile)
+      if (profile) {
+          this.profile = profile;          
       }
-    }
-
-  getIstituti() {
-    if(this.profile) {
-      if(this.profile.istituti) {
-        return Object.values(this.profile.istituti);
-      }
-    }
-    return [];
+    }, err => {
+      console.log('error, no institute')
+    });
+    this.getAnnoScolstico();
   }
 
+  getAnnoScolstico() {
+    var now = moment();
+    var lastDay = moment().month(8).date(1);
+    if(now.isBefore(lastDay)) {
+      this.annoScolastico = moment().year(now.year()-1).format('YYYY') + '-' + now.format('YY');
+    } else {
+      this.annoScolastico = now.format('YYYY') + '-' + moment().year(now.year()+1).format('YY');
+    }
+  }
+
+  istituto: any;
+  searchingIstituto = false;
+  searchIstitutoFailed = false;
+
+  getIstituti = (text$: Observable<string>) => 
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingIstituto = true),
+      switchMap(term => this.dataService.searchIstituti(0, 10, term).pipe(
+        map(result => {
+          let entries = [];
+          if(result.content) {            
+            result.content.forEach(element => {
+              entries.push(element);
+            });
+          }
+          return entries;
+        }),
+        tap(() => this.searchIstitutoFailed = false),
+        catchError((error) => {
+          console.log(error);
+          this.searchIstitutoFailed = true;
+          return of([]);
+        })
+        )
+      ),
+      tap(() => this.searchingIstituto = false)
+  )  
+
+  formatterIstituto = (x: {name: string}) => x.name;
+
   getReport() {
-    this.dataService.getUtilizzoSistema(this.istitutoId, this.annoScolastico)
+    this.dataService.getUtilizzoSistema(this.istituto.id, this.annoScolastico)
       .subscribe(r => {
         if(r) {
           this.report = r;

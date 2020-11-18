@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteAttivitaModalComponent } from '../modals/delete-attivita-modal/delete-attivita-modal.component';
 import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-modal/activate-attivita-modal.component';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -24,7 +26,6 @@ export class DashboardAttivitaComponent implements OnInit {
 
   profile;
   report = {};
-  istitutoId = "";
   annoScolastico = '2019-20';
   text = "";
   attivitaList = [];
@@ -66,17 +67,40 @@ export class DashboardAttivitaComponent implements OnInit {
       }
     }
 
-  getIstituti() {
-    if(this.profile) {
-      if(this.profile.istituti) {
-        return Object.values(this.profile.istituti);
-      }
-    }
-    return [];
-  }
+  istituto: any;
+  searchingIstituto = false;
+  searchIstitutoFailed = false;
+  
+  getIstituti = (text$: Observable<string>) => 
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingIstituto = true),
+      switchMap(term => this.dataService.searchIstituti(0, 10, term).pipe(
+        map(result => {
+          let entries = [];
+          if(result.content) {            
+            result.content.forEach(element => {
+              entries.push(element);
+            });
+          }
+          return entries;
+        }),
+        tap(() => this.searchIstitutoFailed = false),
+        catchError((error) => {
+          console.log(error);
+          this.searchIstitutoFailed = true;
+          return of([]);
+        })
+        )
+      ),
+      tap(() => this.searchingIstituto = false)
+  )  
+
+  formatterIstituto = (x: {name: string}) => x.name;
 
   getReport() {
-    this.dataService.getReportAttivita(this.istitutoId, this.annoScolastico)
+    this.dataService.getReportAttivita(this.istituto.id, this.annoScolastico)
       .subscribe(r => {
         if(r) {
           this.report = r;
@@ -85,7 +109,7 @@ export class DashboardAttivitaComponent implements OnInit {
   }
 
   getAttivita() {
-    this.dataService.getReportDettaglioAttivita(this.istitutoId, this.annoScolastico, this.text)
+    this.dataService.getReportDettaglioAttivita(this.istituto.id, this.annoScolastico, this.text)
       .subscribe(r => {
         if(r) {
           this.attivitaList = r;
