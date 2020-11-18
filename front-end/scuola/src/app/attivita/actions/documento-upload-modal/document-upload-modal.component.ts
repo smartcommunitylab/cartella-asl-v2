@@ -11,8 +11,14 @@ export class DocumentUploadModalComponent implements OnInit {
   optionType;
   fileSelected: boolean = false;
   selectedFileName;
-  selectedDocType;
-
+  // selectedDocType;
+  saveFileObj = { type: null, file: null };
+  optionTypes = {
+    "1": "piano_formativo",
+    "2": "convenzione",
+    "3": "doc_generico",
+    "4": "valutazione_studente"
+  }  
   @Output() newDocumentListener = new EventEmitter<Object>();
 
   constructor(public activeModal: NgbActiveModal) { }
@@ -20,9 +26,36 @@ export class DocumentUploadModalComponent implements OnInit {
   ngOnInit() {}
 
   create(option) {
-   
+    this.optionSelected = true;
+    // update only type.
+    this.saveFileObj.type = this.optionTypes[option];
+    // this.selectedDocType = this.optionTypes[option];
+    var x = document.getElementById(option);
+    if (x)
+    x.classList.add('active');
+    for (let i = 1; i <= 4; i++) {
+      if (i !== option) {
+        var x = document.getElementById(i + '');
+        if (x)
+        x.classList.remove('active');
+      }
+    }
+    // this.fileSelected = false;
+    // this.selectedFileName = null;
   }
 
+  uploadDocument(fileInput) {
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      this.fileSelected = true;
+      this.selectedFileName = fileInput.target.files[0].name;
+      // this.saveFileObj.type = this.selectedDocType;
+      this.saveFileObj.file = fileInput.target.files[0];
+    }
+  }
 
+  carica() {
+    this.newDocumentListener.emit(this.saveFileObj);
+    this.activeModal.dismiss(this.saveFileObj);;
+  }
 
 }

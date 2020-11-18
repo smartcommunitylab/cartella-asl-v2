@@ -22,11 +22,18 @@
             font-family: Titillium Web;
             font-size: larger;
             font-weight: bold;
-            color: #0066CC
+            color: #7FB2E5
         }
         .position-visible{
             top: 220px;
             position: absolute;
+        }
+        .active {
+            border: 1px solid#7FB2E5;
+            background-color: #F0F6FC;
+            .card-title{
+                color: #0066CC;
+            }
         }
         padding: 30px;   
         background-color: aliceblue;
@@ -41,5 +48,10 @@
     .card:after{
         margin-top: 0px;
     }
-
+    .file-title {
+        font-family: Titillium Web;
+        font-size: 25px;
+        font-weight: bold; 
+        color: #707070
+    }
 }
