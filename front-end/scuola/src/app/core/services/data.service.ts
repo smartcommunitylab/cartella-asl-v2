@@ -210,13 +210,14 @@ export class DataService {
       );
   }
 
-  uploadDocumentToRisorsa(file: File, uuid: string): Observable<any> {
+  uploadDocumentToRisorsa(option, uuid: string): Observable<any> {
     let url = this.host + '/upload/document/risorsa/' + uuid + '/istituto/' + this.istitutoId;
     let formData: FormData = new FormData();
-    formData.append('data', file, file.name);
+    formData.append('data', option.file, option.file.name);
+    formData.append('tipo', option.type);
     let headers = new Headers();
 
-    return this.http.post<Valutazione>(url, formData)
+    return this.http.post<any>(url, formData)
       .timeout(this.timeout)
       .pipe(
         map(res => {
@@ -471,8 +472,9 @@ export class DataService {
       .pipe(
         map(res => {
           return res;
-        }),
-        catchError(this.handleError)
+        },
+          catchError(this.handleError)
+        )
       );
   }
 

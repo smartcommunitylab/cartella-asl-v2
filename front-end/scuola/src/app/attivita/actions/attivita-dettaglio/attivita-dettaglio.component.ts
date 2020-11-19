@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
 import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
 import { AttivitaCancellaModal } from '../cancella-attivita-modal/attivita-cancella-modal.component';
@@ -10,10 +9,10 @@ import { ArchiaviazioneAttivitaModal } from '../archiaviazione-attivita-modal/ar
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
-registerLocaleData(localeIT);
-
+import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
 declare var moment: any;
 moment['locale']('it');
+registerLocaleData(localeIT);
 
 @Component({
   selector: 'cm-attivita-dettaglio',
@@ -55,6 +54,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
   showContent: boolean = false;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
+  tipiDoc = [{ "name": "Piano formativo", "value": "piano_formativo" }, { "name": "Convenzione", "value": "convenzione" }, { "name": "Valutazione studente", "value": "valutazione_studente" }, { "name": "Valutazione esperienza", "value": "valutazione_esperienza" }, { "name": "Altro", "value": "doc_generico" }, { "name": "Pregresso", "Altro": "pregresso" }];
   zeroStudent: boolean;
   breadcrumbItems = [
     {
@@ -66,9 +66,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
   ];
 
-
   ngOnInit() {
-
     this.route.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getAttivita(id).subscribe((res) => {
@@ -114,8 +112,8 @@ export class AttivitaDettaglioComponent implements OnInit {
     this.router.navigate([attivita.id], { relativeTo: this.route });
   }
 
-  getAttivitaType() { }
-  
+  getAttivitaType() {}
+
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
   }
@@ -148,39 +146,6 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
   }
 
-  uploadDocument(fileInput) {
-    if (fileInput.target.files && fileInput.target.files[0]) {
-      this.dataService.uploadDocumentToRisorsa(fileInput.target.files[0], this.attivita.uuid + '').subscribe((doc) => {
-        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
-          this.documenti = docs;
-        });
-      });
-    }
-  }
-
-  deleteDoc(doc) {
-    const modalRef = this.modalService.open(DocumentoCancellaModal);
-    modalRef.componentInstance.documento = doc;
-    modalRef.result.then((result) => {
-      if (result == 'deleted') {
-        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
-          this.documenti = docs;
-        });
-      }
-    });
-  }
-
-  downloadDoc(doc) {
-    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
-      const downloadLink = document.createElement("a");
-      downloadLink.href = url;
-      downloadLink.download = doc.nomeFile;
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    });
-  }
-
   gestionePresenze() {
     if (this.individuale) {
       this.router.navigate(['modifica/studenti/presenze/individuale'], { relativeTo: this.route });
@@ -205,8 +170,6 @@ export class AttivitaDettaglioComponent implements OnInit {
 
         this.router.navigate(['../../'], { relativeTo: this.route });
       })
-
-
     });
   }
 
@@ -269,6 +232,27 @@ export class AttivitaDettaglioComponent implements OnInit {
       label = 'Istituto';
     }
     return label;
+  }
+
+  openDocumentUpload() {
+    const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "archiviazioneModalClass" });
+    modalRef.componentInstance.attivitaIndividuale = this.individuale;
+    modalRef.componentInstance.newDocumentListener.subscribe((option) => {
+      console.log(option);
+      this.dataService.uploadDocumentToRisorsa(option, this.attivita.uuid + '').subscribe((doc) => {
+        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
+          this.documenti = docs;
+        });
+      });
+    });
+  }
+
+  setDocType(type) {
+    if (this.tipiDoc) {
+      let rtn = this.tipiDoc.find(data => data.value == type);
+      if (rtn) return rtn.name;
+      return type;
+    }
   }
 
 }

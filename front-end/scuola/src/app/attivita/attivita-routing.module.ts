@@ -8,6 +8,7 @@ import { AttivitaModificaCompetenzeComponent } from './actions/attivita-modifica
 import { AttivitaDettaglioModificaComponent } from './actions/attivita-modifica-dettaglio/attivita-modifica.component';
 import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal.component';
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
+import { DocumentUploadModalComponent } from './actions/documento-upload-modal/document-upload-modal.component';
 import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 import { AttivitaModificaStudentiComponent } from './actions/attivita-modifica-studenti/attivita-modifica-studenti.component';
 import { AttivitaCancellaModal } from './actions/cancella-attivita-modal/attivita-cancella-modal.component';
@@ -44,6 +45,7 @@ export class AttivitaRoutingModule {
     NewAttivtaModal,
     CreaAttivitaModalComponent,
     AttivitaDettaglioComponent,
+    DocumentUploadModalComponent,
     DocumentoCancellaModal,
     AttivitaModificaCompetenzeComponent,
     AttivitaModificaStudentiComponent,
