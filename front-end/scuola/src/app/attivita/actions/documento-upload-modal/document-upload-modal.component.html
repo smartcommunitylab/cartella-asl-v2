@@ -41,26 +41,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div *ngIf="attivitaIndividuale" class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(3)">
                         <div id="3" class="card-body">
-                            <h5 class="card-title">Altro</h5>
-                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
-                                questa opzione.</p>
-                            <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente<br />Studente
-                                </p>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(4)">
-                        <div id="4" class="card-body">
                             <h5 class="card-title ">Valutazione studente</h5>
                             <p class="card-text txtFont">Il documento di valutazione compilato dall’ente sullo studente
                                 coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.
@@ -74,8 +58,41 @@
                     </div>
                 </div>
             </div>
+            <div class="col-3">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(4)">
+                        <div id="4" class="card-body">
+                            <h5 class="card-title ">Valutazione esperienza</h5>
+                            <p class="card-text txtFont">Il documento di valutazione compilato dallo studente rispetto
+                                all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è
+                                possibile per la scuola caricarlo qui.
+                            </p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(5)">
+                        <div id="5" class="card-body">
+                            <h5 class="card-title">Altro</h5>
+                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
+                                questa opzione.</p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente<br />Studente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <br />
         <br />
         <div class="row" *ngIf="optionSelected">
             <label class="btn btn-primary v-center-inline btn-icon" placement="right"

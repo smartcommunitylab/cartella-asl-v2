@@ -10,6 +10,9 @@
         }     
     }
     .modal-body {
+        .card-wrapper {
+            margin-bottom: 10px;
+        }
         .card-body{
             top: 296px;
             left: 1065px;
@@ -53,5 +56,19 @@
         font-size: 25px;
         font-weight: bold; 
         color: #707070
+    }
+    .disabled {
+        .card-body {
+            background-color: #E0E0E0;
+            pointer-events: none;
+        }
+        .card {
+            background-color: #E0E0E0;
+            pointer-events: none;
+        }
+        .card-wrapper {
+            background-color: #E0E0E0;
+            pointer-events: none;
+        }        
     }
 }
