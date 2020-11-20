@@ -32,23 +32,10 @@ export class AttivitaDettaglioComponent implements OnInit {
   esperienze;
   offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
-  // cardTitle: string = "Vedi";
   individuale: boolean;
-  // agreegatedTipo = [];
-  // agreegatedTotal = {};
   corsiStudio;
   tipologie;
-  // yearsHours;
-  // yearsHoursTotal;
-  // tabDefaultSelectedId;
-  // noActivitySetted: boolean = true;
-  // order: string = 'titolo';
   documenti;
-  // painoTipologieTerza: any = [];
-  // painoTipologieQuarto: any = [];
-  // painoTipologieQuinto: any = [];
-  // totale = {};
-  // pianoTipologie = {};
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
@@ -111,8 +98,6 @@ export class AttivitaDettaglioComponent implements OnInit {
   openDetail(attivita) {
     this.router.navigate([attivita.id], { relativeTo: this.route });
   }
-
-  // getAttivitaType() {}
 
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
@@ -253,6 +238,17 @@ export class AttivitaDettaglioComponent implements OnInit {
       if (rtn) return rtn.name;
       return type;
     }
+  }
+
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
   }
 
   deleteDoc(doc) {
