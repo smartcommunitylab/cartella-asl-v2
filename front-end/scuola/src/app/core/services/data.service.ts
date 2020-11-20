@@ -25,7 +25,7 @@ const httpOptions = {
 
 @Injectable()
 export class DataService {
-      
+
   istitutoId: string = "19a46a53-8e10-4cd0-a7d0-fb2da217d1be";
   schoolYear: string = "2019-20";
   listIstituteIds = [];
@@ -116,8 +116,8 @@ export class DataService {
     let url = this.host + '/schoolYear/' + istitutoId;
     let params = new HttpParams();
     if (dataInizio)
-    params = params.append('dateFrom', dataInizio);
-  
+      params = params.append('dateFrom', dataInizio);
+
     return this.http.get<any>(url, {
       params: params,
       observe: 'response'
@@ -131,7 +131,7 @@ export class DataService {
         )
       );
   }
-  
+
   /** PIANO ALTERNANZA **/
   createPiano(piano): Observable<PianoAlternanza> {
     piano.istitutoId = this.istitutoId;
@@ -228,7 +228,6 @@ export class DataService {
   }
 
   downloadAttivitaDocumenti(id: any): Observable<any> {
-
     let url = this.host + '/download/document/risorsa/' + id + '/istituto/' + this.istitutoId + '/attivita';
 
     return this.http.get<any>(url,
@@ -261,7 +260,6 @@ export class DataService {
   }
 
   deleteDocument(id: any): Promise<any> {
-    let body = {}
     let url = this.host + '/remove/document/' + id + '/istituto/' + this.istitutoId;
 
     return this.http.delete(url)
@@ -281,7 +279,7 @@ export class DataService {
       .timeout(this.timeout)
       .map(data => {
         const blob = new Blob([data], { type: doc.formatoDocumento });
-        const url = URL.createObjectURL(blob); 
+        const url = URL.createObjectURL(blob);
         return url;
         //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
       },
@@ -311,7 +309,7 @@ export class DataService {
 
   getAttivitaTipologie(): Observable<object[]> {
     let url = this.host + '/tipologieTipologiaAttivita';
-    
+
     return this.http.get<object[]>(url)
       .timeout(this.timeout)
       .pipe(
@@ -325,7 +323,7 @@ export class DataService {
 
   getPianoTipologie(id): Observable<any> {
     let url = this.host + '/pianoAlternanza/' + id + '/tipologie';
-    
+
     return this.http.get<any>(url)
       .timeout(this.timeout)
       .pipe(
@@ -339,7 +337,7 @@ export class DataService {
 
   getRisorsaCompetenze(id): Observable<any> {
     let url = this.host + '/risorsa/' + id + '/competenze/istituto/' + this.istitutoId;
-    
+
     return this.http.get<any>(url)
       .timeout(this.timeout)
       .pipe(
@@ -439,7 +437,7 @@ export class DataService {
         map(res => {
           return res;
         }),
-          catchError(this.handleError)
+        catchError(this.handleError)
       );
   }
 
@@ -459,11 +457,10 @@ export class DataService {
 
   /** ATTIVITA ALTERNANZA **/
   createAttivitaAlternanza(attivita): Observable<AttivitaAlternanza> {
-   
     let url = this.host + "/attivita";
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
-  
+
     return this.http.post<AttivitaAlternanza>(url, attivita,
       {
         params: params
@@ -479,9 +476,7 @@ export class DataService {
   }
 
   associaOffertaToAttivita(offertaId): Observable<AttivitaAlternanza> {
-
     let url = this.host + "/attivita/offerta/" + offertaId + '/associa';
-
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
 
@@ -498,10 +493,9 @@ export class DataService {
         )
       );
   }
-  
+
 
   getAttivitaAlternanzaForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
-
     let url = this.host + "/attivita/search/";
     let headers = new HttpHeaders();
     let params = new HttpParams();
@@ -535,7 +529,7 @@ export class DataService {
   }
 
 
-  getAttivita(id): Observable<any>{
+  getAttivita(id): Observable<any> {
     let url = this.host + "/attivita/" + id;
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -578,7 +572,7 @@ export class DataService {
       );
   }
 
-  getAttivitaPresenzeIndividualeReport(id: any):Observable<any>{
+  getAttivitaPresenzeIndividualeReport(id: any): Observable<any> {
     let url = this.host + "/attivita/" + id + '/presenze/individuale/report';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -597,7 +591,6 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
-
   }
 
   getAttivitaPresenzeGruppoReport(id: any): Observable<any> {
@@ -621,7 +614,7 @@ export class DataService {
       );
   }
 
-  getAttivitaPresenzeIndividualeListaGiorni(id: any, dataInizio, dataFine):Observable<any>{
+  getAttivitaPresenzeIndividualeListaGiorni(id: any, dataInizio, dataFine): Observable<any> {
     let url = this.host + "/attivita/" + id + '/presenze/individuale';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -642,10 +635,9 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
-
   }
 
-  getAttivitaPresenzeGruppoListaGiorni(id: any, dataInizio, dataFine):Observable<any>{
+  getAttivitaPresenzeGruppoListaGiorni(id: any, dataInizio, dataFine): Observable<any> {
     let url = this.host + "/attivita/" + id + '/presenze/gruppo';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -674,7 +666,7 @@ export class DataService {
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
 
-    return this.http.post(url, presenze, {params: params})
+    return this.http.post(url, presenze, { params: params })
       .timeout(this.timeout)
       .pipe(
         map(res => {
@@ -690,7 +682,7 @@ export class DataService {
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
 
-    return this.http.post(url, presenze, {params: params})
+    return this.http.post(url, presenze, { params: params })
       .timeout(this.timeout)
       .pipe(
         map(res => {
@@ -700,7 +692,6 @@ export class DataService {
         )
       );
   }
-  
 
   deleteAttivita(id: number): Observable<any> {
     let url = this.host + "/attivita/" + id;
@@ -722,7 +713,7 @@ export class DataService {
       );
   }
 
-  getAttivitaReportStudenti(id): Observable<any>{
+  getAttivitaReportStudenti(id): Observable<any> {
     let url = this.host + "/attivita/" + id + '/report/studenti';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -769,7 +760,7 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
-  }  
+  }
 
   assignStudentiToAttivita(id: any, studenti): Observable<any> {
     let url = this.host + "/attivita/" + id + '/studenti';
@@ -795,7 +786,7 @@ export class DataService {
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
 
-    return this.http.post(url, esperienze, {params: params})
+    return this.http.post(url, esperienze, { params: params })
       .timeout(this.timeout)
       .pipe(
         map(res => {
@@ -806,51 +797,48 @@ export class DataService {
       );
   }
 
-/** OFFERTE */
-  
-getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
+  /** OFFERTE */
+  getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
+    let url = this.host + "/offerta/search/";
+    let headers = new HttpHeaders();
+    let params = new HttpParams();
 
-  let url = this.host + "/offerta/search/";
-  let headers = new HttpHeaders();
-  let params = new HttpParams();
+    if (filter.tipologia)
+      params = params.append('tipologia', filter.tipologia);
+    if (filter.titolo)
+      params = params.append('text', filter.titolo);
+    if (filter.stato)
+      params = params.append('stato', filter.stato);
+    if (filter.ownerIstituto != null) {
+      params = params.append('ownerIstituto', filter.ownerIstituto);
+    }
 
-  if (filter.tipologia)
-    params = params.append('tipologia', filter.tipologia);
-  if (filter.titolo)
-    params = params.append('text', filter.titolo);
-  if (filter.stato)
-    params = params.append('stato', filter.stato);
-  if (filter.ownerIstituto != null) {
-    params = params.append('ownerIstituto', filter.ownerIstituto);
-  }
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
 
-  params = params.append('istitutoId', this.istitutoId);
-  params = params.append('page', page);
-  params = params.append('size', pageSize);
+    return this.http.get<IPagedAA>(
+      url,
+      {
+        headers: headers,
+        params: params,
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body as IPagedAA);
 
-  return this.http.get<IPagedAA>(
-    url,
-    {
-      headers: headers,
-      params: params,
-      observe: 'response'
-    })
-    .timeout(this.timeout)
-    .pipe(
-      map(res => {
-        return (res.body as IPagedAA);
-
-      }),
-      catchError(this.handleError)
-    );
+        }),
+        catchError(this.handleError)
+      );
   }
 
   createOfferta(offerta): Observable<AttivitaAlternanza> {
-   
     let url = this.host + "/offerta";
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
-  
+
     return this.http.post<any>(url, offerta,
       {
         params: params
@@ -863,11 +851,11 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
           catchError(this.handleError)
         )
         ,
-          catchError(this.handleError)
+        catchError(this.handleError)
       );
   }
 
-  getOfferta(id): Observable<any>{
+  getOfferta(id): Observable<any> {
     let url = this.host + "/offerta/" + id;
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
@@ -885,9 +873,8 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         }),
         catchError(this.handleError)
       );
-
   }
-  
+
   deleteOfferta(id: number): Observable<any> {
     let url = this.host + "/offerta/" + id;
     let params = new HttpParams();
@@ -907,7 +894,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       );
   }
 
-
   /** STUDENTI */
   getStudenteForIstituto(filtro: any, page, pageSize) {
     let url = this.host + "/studente/ricerca/" + this.istitutoId;
@@ -920,7 +906,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       params = params.append('text', filtro.text);
     if (filtro.corsoId)
       params = params.append('corsoId', filtro.corsoId);
-       
+
     return this.http.get<any>(
       url,
       {
@@ -934,8 +920,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
 
         }),
         catchError(this.handleError)
-      );   
-
+      );
   }
 
   getStudenteDettaglio(studenteId: any): Observable<any> {
@@ -974,10 +959,10 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       })
       .timeout(this.timeout)
       .map((response) => {
-        const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
-        const url = URL.createObjectURL(blob); 
+        const blob = new Blob([response.body], { type: response.headers.get('Content-Type')! });
+        const url = URL.createObjectURL(blob);
         const disposition = response.headers.get('Content-Disposition')!;
-        const filename = disposition.substring(disposition.indexOf('=')+1).replace(/\\\"/g, '');
+        const filename = disposition.substring(disposition.indexOf('=') + 1).replace(/\\\"/g, '');
         let doc = {
           'url': url,
           'filename': filename
@@ -1005,10 +990,10 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       })
       .timeout(this.timeout)
       .map((response) => {
-        const blob = new Blob([response.body],{type: response.headers.get('Content-Type')!});
-        const url = URL.createObjectURL(blob); 
+        const blob = new Blob([response.body], { type: response.headers.get('Content-Type')! });
+        const url = URL.createObjectURL(blob);
         const disposition = response.headers.get('Content-Disposition')!;
-        const filename = disposition.substring(disposition.indexOf('=')+1).replace(/\\\"/g, '');
+        const filename = disposition.substring(disposition.indexOf('=') + 1).replace(/\\\"/g, '');
         let doc = {
           'url': url,
           'filename': filename
@@ -1040,7 +1025,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .pipe(map(res => {
         let competencies = res.body as IPagedCompetenze;
         return competencies;
-
       }), catchError(this.handleError));
 
   }
@@ -1069,7 +1053,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .pipe(map(res => {
         let competencies = res.body as IPagedCompetenze;
         return competencies;
-
       }), catchError(this.handleError));
 
   }
@@ -1173,9 +1156,9 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
   }
 
   /** AZIENDE **/
-  getListaAziende(term, page: any, pageSize:any) {
+  getListaAziende(term, page: any, pageSize: any) {
     let url = this.host + "/azienda/search";
-     let params = new HttpParams();
+    let params = new HttpParams();
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
@@ -1192,7 +1175,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .timeout(this.timeout)
       .pipe(
         map(res => {
-         return (res.body as IPagedAzienda)
+          return (res.body as IPagedAzienda)
         }),
         catchError(this.handleError)
       )
@@ -1207,11 +1190,11 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
     let params = new HttpParams();
     params = params.append('page', '0');
     params = params.append('size', '20');
-    
+
     if (term) {
-     params = params.append('text', term);
+      params = params.append('text', term);
     }
-    
+
     // return this.http
     //   .get(WIKI_URL, {params: PARAMS.set('search', term)}).pipe(
     //     map(response => response[1])
@@ -1226,17 +1209,15 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .timeout(this.timeout)
       .pipe(
         map(res => {
-         environment.globalSpinner = true; 
-         return (res.body.content)
+          environment.globalSpinner = true;
+          return (res.body.content)
         }),
-        catchError((err) => { 
-          environment.globalSpinner = true; 
+        catchError((err) => {
+          environment.globalSpinner = true;
           return this.handleError(err);
         })
-      );   
-
+      );
   }
-
 
   getAttivitaAlternanzaById(attivitaId) {
     return this.http.get(this.attivitaAlternanzaEndpoint + "/" + attivitaId)
@@ -1367,7 +1348,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         map(res => {
           const totalStudenti = +res.headers.get('X-InlineCount');
           let studenti = res.body as ReportStudente[];
-          //    this.calculateCustomersOrderTotal(customers);
           return {
             results: studenti,
             totalRecords: totalStudenti
@@ -1393,7 +1373,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         map(res => {
           const totalStudenti = +res.headers.get('X-InlineCount');
           let studenti = res.body as ReportStudente;
-          //    this.calculateCustomersOrderTotal(customers);
           return {
             results: studenti,
             totalRecords: totalStudenti
@@ -1418,8 +1397,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .pipe(
         map(res => {
           let report = res.body as ReportClasse[];
-          //    this.calculateCustomersOrderTotal(customers);
-          return {
+           return {
             results: report
           };
         }),
@@ -1443,7 +1421,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .pipe(
         map(res => {
           let report = res.body as ReportClasse;
-          //    this.calculateCustomersOrderTotal(customers);
           return {
             results: report
           };
@@ -1467,7 +1444,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       .pipe(
         map(res => {
           let report = res.body;
-          //    this.calculateCustomersOrderTotal(customers);
           return {
             results: report
           };
@@ -1526,6 +1502,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         )
       );
   }
+  
   getAttivitaGiornalieraById(id) {
     return this.http.get<Attivita>(this.attivitaGiornalieraListaEndpoint + "/" + id)
       .timeout(this.timeout)
@@ -1671,7 +1648,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
   }
 
   downloadschedaValutazioneStudente(id: any): Observable<any> {
-
     let url = this.host + '/download/schedaValutazioneStudente/' + id;
 
     return this.http.get<any>(url,
@@ -1688,7 +1664,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
   }
 
   downloadschedaValutazioneAzienda(id: any): Observable<any> {
-
     let url = this.host + '/download/schedaValutazioneAzienda/' + id;
 
     return this.http.get<any>(url,
@@ -1822,10 +1797,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
   }
 
   /** ACTIVITES/ESPERIENZA SVOLTA API BLOCK. */
-
-  //GET /esperienzaSvolta/
   getEsperienzaSvoltaAPI(dataInizio: any, dataFine: any, stato: any, tipologia: any, filterText: any, terminata: any, nomeStudente: any, page: any, pageSize: any): Observable<IPagedES> {
-
     let url = this.host + this.esperienzaSvoltaAPIUrl + "/istituto/" + this.istitutoId;
 
     let headers = new HttpHeaders();
@@ -1907,7 +1879,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         catchError(this.handleError)
       );
   }
-  //PUT
+  
   completaAttivitaAlternanza(id: any, upldatedES: any): any {
     let url = this.host + this.attiitaAlternanzaAPIUrl + '/' + id + '/completa';
 
@@ -1927,10 +1899,8 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         catchError(this.handleError));
   }
 
-
   // GET /download/schedaValutazioneAzienda/{es_id}
   downloadschedaValutazione(id: any): Observable<Valutazione> {
-
     let url = this.host + '/download/schedaValutazioneScuola/' + this.istitutoId + '/es/' + id;
 
     return this.http.get<Valutazione>(url,
@@ -1956,9 +1926,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
 
   // GET /opportunita/{aziendaId}
   getPagedOppurtunitaAPI(dataInizio: any, dataFine: any, tipologia: any, filterText: any, page: any, pageSize: any): Observable<IPagedOffers> {
-
     let url = this.host + this.opportunitaAPIUrl;
-
     let params = new HttpParams();
 
     params = params.append('istitutoId', this.istitutoId);
@@ -1973,7 +1941,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
       params = params.append('tipologia', tipologia);
     if (filterText)
       params = params.append('filterText', filterText);
-
 
     return this.http.get<IPagedOffers>(
       url,
@@ -1993,7 +1960,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
 
   // GET /opportunita/details/{id}
   getOppurtunitaDetailAPI(id: any) {
-
     let url = this.host + this.opportunitaAPIUrl + "/" + this.istitutoId + '/details/' + id;
 
     return this.http.get<IOffer>(
@@ -2011,7 +1977,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         catchError(this.handleError)
       );
   }
-
 
   // POST/opportunita/details/
   insertOppurtunitaAPI(offer: IOffer): Observable<any> {
@@ -2071,11 +2036,10 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         catchError(this.handleError))
   }
 
-
-  //DIVERSO
   // PUT /opportunita/{id}/competenze
   updateCompetenzeAzienda(id: any, listComptenze: any) {
     let url = this.host + this.opportunitaAPIUrl + '/' + this.istitutoId + '/' + id + "/competenze";
+    
     return this.http.put<IApiResponse>(
       url,
       listComptenze,
@@ -2090,9 +2054,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
             return res;
         }),
         catchError(this.handleError))
-
   }
-
 
   // PUT /opportunita/competenze/{id}
   updateRiferente(id: any, rId: any): Observable<IOffer> {
@@ -2111,7 +2073,6 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
         }
         ),
         catchError(this.handleError))
-
   }
 
   getAttivitaTipologieAzienda(): Observable<object[]> {
@@ -2195,7 +2156,7 @@ getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> 
     if (DataService.growler.growl && displayGrowl) {
       DataService.growler.growl(errMsg, GrowlerMessageType.Danger, 5000);
     }
-
+    
     return Observable.throw(errMsg);
 
   }

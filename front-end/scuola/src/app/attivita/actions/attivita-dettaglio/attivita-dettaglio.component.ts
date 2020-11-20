@@ -32,23 +32,23 @@ export class AttivitaDettaglioComponent implements OnInit {
   esperienze;
   offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
-  cardTitle: string = "Vedi";
+  // cardTitle: string = "Vedi";
   individuale: boolean;
-  agreegatedTipo = [];
-  agreegatedTotal = {};
+  // agreegatedTipo = [];
+  // agreegatedTotal = {};
   corsiStudio;
   tipologie;
-  yearsHours;
-  yearsHoursTotal;
-  tabDefaultSelectedId;
-  noActivitySetted: boolean = true;
-  order: string = 'titolo';
+  // yearsHours;
+  // yearsHoursTotal;
+  // tabDefaultSelectedId;
+  // noActivitySetted: boolean = true;
+  // order: string = 'titolo';
   documenti;
-  painoTipologieTerza: any = [];
-  painoTipologieQuarto: any = [];
-  painoTipologieQuinto: any = [];
-  totale = {};
-  pianoTipologie = {};
+  // painoTipologieTerza: any = [];
+  // painoTipologieQuarto: any = [];
+  // painoTipologieQuinto: any = [];
+  // totale = {};
+  // pianoTipologie = {};
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
@@ -112,7 +112,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     this.router.navigate([attivita.id], { relativeTo: this.route });
   }
 
-  getAttivitaType() {}
+  // getAttivitaType() {}
 
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
@@ -253,6 +253,18 @@ export class AttivitaDettaglioComponent implements OnInit {
       if (rtn) return rtn.name;
       return type;
     }
+  }
+
+  deleteDoc(doc) {
+    const modalRef = this.modalService.open(DocumentoCancellaModal);
+    modalRef.componentInstance.documento = doc;
+    modalRef.result.then((result) => {
+      if (result == 'deleted') {
+        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
+          this.documenti = docs;
+        });
+      }
+    });
   }
 
 }
