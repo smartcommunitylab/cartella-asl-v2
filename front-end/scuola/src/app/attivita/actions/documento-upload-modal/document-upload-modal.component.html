@@ -6,6 +6,7 @@
     </div>
     <div class="modal-body">
         <div class="row v-center">
+            <div class="col-1"></div>
             <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(1)">
@@ -41,7 +42,27 @@
                     </div>
                 </div>
             </div>
-            <div [class.disabled]="!attivitaIndividuale" class="col-3">
+            <div class="col-3">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(5)">
+                        <div id="5" class="card-body">
+                            <h5 class="card-title">Altro</h5>
+                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
+                                questa opzione.</p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente<br />Studente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1"></div>
+        </div>
+        <div class="row" *ngIf="attivitaIndividuale">
+            <div class="col-1"></div>
+            <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(3)">
                         <div id="3" class="card-body">
@@ -62,35 +83,44 @@
                 <div class="card-wrapper">
                     <div class="card" (click)="create(4)">
                         <div id="4" class="card-body">
-                            <h5 class="card-title">Altro</h5>
-                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
-                                questa opzione.</p>
+                            <h5 class="card-title ">Valutazione esperienza</h5>
+                            <p class="card-text txtFont">Il documento di valutazione compilato dallo studente rispetto
+                                all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è
+                                possibile per la
+                                scuola caricarlo qui.
+                            </p>
                             <span class="position-visible">
                                 <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente<br />Studente
+                                    <br />Scuola<br />Ente
                                 </p>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-3"></div>
+            <div class="col-1"></div>
         </div>
         <br />
         <div class="row" *ngIf="optionSelected">
-            <label class="btn btn-primary v-center-inline btn-icon" placement="right"
-                ngbTooltip="Allega un nuovo documento all’attività">
-                Scegli file da dispositivo&nbsp;&nbsp;&nbsp;
-                <svg class="icon icon-white icon-sm">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
-                </svg>
-                <input #fileInput type="file" hidden (click)="fileInput.value = null" value=""
-                    (change)="uploadDocument($event)">
-            </label>
+            <div class="col-1"></div>
+            <div class="m-10">
+                <label class="btn btn-primary v-center-inline btn-icon" placement="right"
+                    ngbTooltip="Allega un nuovo documento all’attività">
+                    Scegli file da dispositivo&nbsp;&nbsp;&nbsp;
+                    <svg class="icon icon-white icon-sm">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
+                    </svg>
+                    <input #fileInput type="file" hidden (click)="fileInput.value = null" value=""
+                        (change)="uploadDocument($event)">
+                </label>
+            </div>
         </div>
-        <br />
         <div *ngIf="fileSelected">
-            <span class="row file-title">File selezionato: {{ selectedFileName }} </span>
-            <br />
+            <span class="row file-title">
+                <span class="col-1"></span>
+                <span class="m-10">File selezionato: {{ selectedFileName }}</span>
+            </span>
             <br />
             <div class="text-center">
                 <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"

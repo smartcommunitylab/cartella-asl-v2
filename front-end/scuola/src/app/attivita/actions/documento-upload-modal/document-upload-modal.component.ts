@@ -16,7 +16,8 @@ export class DocumentUploadModalComponent implements OnInit {
     "1": "piano_formativo",
     "2": "convenzione",
     "3": "valutazione_studente",
-    "4": "doc_generico"    
+    "4": "valutazione_esperienza",
+    "5": "doc_generico"    
   }
   @Input() attivitaIndividuale: boolean;
   @Output() newDocumentListener = new EventEmitter<Object>();

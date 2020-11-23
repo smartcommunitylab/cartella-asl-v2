@@ -220,7 +220,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   openDocumentUpload() {
-    const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "archiviazioneModalClass" });
+    const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "documentUploadModalClass" });
     modalRef.componentInstance.attivitaIndividuale = this.individuale;
     modalRef.componentInstance.newDocumentListener.subscribe((option) => {
       console.log(option);
