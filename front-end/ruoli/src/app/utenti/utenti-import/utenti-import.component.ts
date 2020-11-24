@@ -26,6 +26,7 @@ export class UtentiImportComponent implements OnInit {
   profile: any;
   title: string = "Import utenti da csv";
   importResult: any;
+  showErrors = false;
 
   ngOnInit() {
     this.dataService.getProfile().subscribe(profile => {
@@ -74,6 +75,11 @@ export class UtentiImportComponent implements OnInit {
     if (fileInput.target.files && fileInput.target.files[0]) {
       this.dataService.uploadStudenti(fileInput.target.files[0]).subscribe((result) => {
         this.importResult = result;
+        if(this.importResult && this.importResult.errors && (this.importResult.errors.length > 0)) {
+          this.showErrors = true;
+        } else {
+          this.showErrors = false;
+        }
         console.log("uploadStudenti OK");
         this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 3000);
       });
@@ -84,6 +90,11 @@ export class UtentiImportComponent implements OnInit {
     if (fileInput.target.files && fileInput.target.files[0]) {
       this.dataService.uploadFunzioniStrumentali(fileInput.target.files[0], this.istituto.id).subscribe((result) => {
         this.importResult = result;
+        if(this.importResult && this.importResult.errors && (this.importResult.errors.length > 0)) {
+          this.showErrors = true;
+        } else {
+          this.showErrors = false;
+        }
         console.log("uploadFunzioniStrumentali OK");
         this.growler.growl('invio file andato a buon fine', GrowlerMessageType.Success, 3000);
       });
@@ -95,6 +106,12 @@ export class UtentiImportComponent implements OnInit {
       var myJSON = JSON.stringify(this.importResult);
       ngCopy(myJSON);
       this.growler.growl('dati copiati nella clipboard', GrowlerMessageType.Success, 3000);
+    }
+  }
+
+  resetErrors() {
+    if(this.importResult) {
+      this.importResult.errors = null;
     }
   }
 

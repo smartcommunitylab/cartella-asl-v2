@@ -6,3 +6,16 @@
   background-color: ivory;
   padding: 5px;
 }
+
+.card .error {
+  background-color:lightcoral;
+  padding: 5px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.right {
+  float: right;
+}

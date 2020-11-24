@@ -52,10 +52,12 @@ public class ImportFromCsv {
 		String line;
 		try {
 			while((line = in.readLine()) != null) {
+				String cf = null;
+				String email = null;
 				try {
 					String[] strings = line.split(";");
-					String cf = strings[0].toUpperCase().trim();
-					String email = strings[1].toLowerCase().trim();
+					cf = strings[0].toUpperCase().trim();
+					email = strings[1].toLowerCase().trim();
 					Studente studente = studenteRepository.findStudenteByCf(cf);
 					if(studente == null) {
 						logger.warn("importStudente: student not found - " + cf);
@@ -80,6 +82,7 @@ public class ImportFromCsv {
 					}
 				} catch (Exception e) {
 					logger.warn("importStudente:" + e.getMessage());
+					result.getErrors().add(cf + ":" + e.getMessage());
 				}
 			}
 		} catch (IOException e) {
@@ -158,10 +161,12 @@ public class ImportFromCsv {
 		String line;
 		try {
 			while((line = in.readLine()) != null) {
+				String cf = null;
+				String email = null;
 				try {
 					String[] strings = line.split(";");
-					String cf = strings[0].toUpperCase().trim();
-					String email = strings[1].toLowerCase().trim();
+					cf = strings[0].toUpperCase().trim();
+					email = strings[1].toLowerCase().trim();
 					String name = strings[2].trim();
 					String surname = strings[3].trim();
 					ASLUser aslUser = aslUserRepository.findByEmail(email);
@@ -181,6 +186,7 @@ public class ImportFromCsv {
 					}
 				} catch (Exception e) {
 					logger.warn("importFunzioneStrumentale:" + e.getMessage());
+					result.getErrors().add(email + ":" + e.getMessage());
 				}
 			}
 		} catch (IOException e) {

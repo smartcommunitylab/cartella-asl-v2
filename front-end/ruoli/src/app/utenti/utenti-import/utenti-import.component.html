@@ -26,9 +26,8 @@
 				<small *ngIf="searchingIstituto" class="progress-spinner progress-spinner-active size-sm">
 						<span class="sr-only">Caricamento...</span>
 				</small>
-				<div class="form-group col col-2" *ngIf="istituto.id">
-					<label class="btn btn-primary v-center-inline btn-icon"  placement="top"  
-					ngbTooltip="Scegli file csv">
+				<div class="form-group col col-2" *ngIf="istituto && istituto.id">
+					<label class="btn btn-primary v-center-inline btn-icon"  placement="top" ngbTooltip="Scegli file csv">
 							Carica Funzioni Strumentali&nbsp;<i class="material-icons">publish</i>
 							<input #fileInputFunzioniStrumentali type="file" hidden (click)="fileInputFunzioniStrumentali.value = null" value="" (change)="uploadFunzioniStrumentali($event)">
 					</label>
@@ -47,6 +46,21 @@
 				<div class="row">
 					<div class="col col-6">CF2;mail2@test.eu</div>
 					<div class="col col-6">CF2;test2@test.eu;Pina;Fantocci</div>
+				</div>	
+			</div>
+
+			<div class="card md-margin error" *ngIf="showErrors">
+				<div class="row">
+					<div class="col col-11"><h1><strong>Errori</strong></h1></div>
+					<div class="col col-1"><label class="pointer right" ngbTooltip="Cancella" (click)="showErrors = false">
+						<i class="material-icons">close</i></label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col col-12"></div>
+				</div>
+				<div class="row" *ngFor="let msg of importResult.errors">
+					<div class="col col-12">{{msg}}</div>
 				</div>	
 			</div>
 
