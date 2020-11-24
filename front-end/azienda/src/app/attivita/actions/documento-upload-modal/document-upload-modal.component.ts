@@ -8,32 +8,31 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DocumentUploadModalComponent implements OnInit {
   optionSelected: boolean = false;
-  optionType;
   fileSelected: boolean = false;
   selectedFileName;
   saveFileObj = { type: null, file: null };
   optionTypes = {
     "1": "doc_generico",
     "2": "valutazione_studente"
-  }  
+  }
   @Input() attivitaIndividuale: boolean;
   @Output() newDocumentListener = new EventEmitter<Object>();
 
   constructor(public activeModal: NgbActiveModal) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   create(option) {
     this.optionSelected = true;
     this.saveFileObj.type = this.optionTypes[option];
     var x = document.getElementById(option);
     if (x)
-    x.classList.add('active');
+      x.classList.add('active');
     for (let i = 1; i <= 2; i++) {
       if (i !== option) {
         var x = document.getElementById(i + '');
         if (x)
-        x.classList.remove('active');
+          x.classList.remove('active');
       }
     }
   }
@@ -56,7 +55,7 @@ export class DocumentUploadModalComponent implements OnInit {
       'left': '0px',
     };
     if (!this.attivitaIndividuale)
-      style['left'] = '100px';
+      style['left'] = '120px';
 
     return style;
   }

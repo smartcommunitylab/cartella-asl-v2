@@ -443,76 +443,40 @@ export class DataService {
   }
 
   /** DOCUMENTI **/
-  // uploadDocumentToRisorsa(file: File, uuid: string): Observable<any> {
-  //   let url = this.host + '/upload/document/risorsa/' + uuid + '/istituto/' + this.istitutoId;
-  //   let formData: FormData = new FormData();
-  //   formData.append('data', file, file.name);
-  //   let headers = new Headers();
+  uploadDocumentToRisorsa(option, uuid: string): Observable<any> {
+    let url = this.host + '/upload/document/risorsa/' + uuid + '/ente/' + this.aziendaId;
+    let formData: FormData = new FormData();
+    formData.append('data', option.file, option.file.name);
+    formData.append('tipo', option.type);
+    let headers = new Headers();
 
-  //   return this.http.post<Valutazione>(url, formData)
-  //     .timeout(this.timeout)
-  //     .pipe(
-  //       map(res => {
-  //         return res;
-  //       }),
-  //       catchError(this.handleError)
-  //     )
-  // }
+    return this.http.post<any>(url, formData)
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      )
+  }
 
-  // downloadAttivitaDocumenti(id: any): Observable<any> {
-  //   let url = this.host + '/download/document/risorsa/' + id + '/istituto/' + this.istitutoId + '/attivita';
-
-  //   return this.http.get<any>(url,
-  //     {
-  //       observe: 'response'
-  //     })
-  //     .timeout(this.timeout)
-  //     .pipe(
-  //       map(res => {
-  //         return res.body;
-  //       }),
-  //       catchError(this.handleError)
-  //     );
-  // }
-
-  // deleteDocument(id: any): Promise<any> {
-  //   let body = {}
-  //   let url = this.host + '/remove/document/' + id + '/istituto/' + this.istitutoId;
-
-  //   return this.http.delete(url)
-  //     .timeout(this.timeout)
-  //     .toPromise().then(response => {
-  //       return response;
-  //     }
-  //     ).catch(response => this.handleError);
-  // }
-
-  // downloadDocumentBlob(doc): Observable<any> {
-  //   let url = this.host + '/download/document/' + doc.uuid + '/istituto/' + this.istitutoId;
-  //   return this.http.get(url,
-  //     {
-  //       responseType: 'arraybuffer'
-  //     })
-  //     .timeout(this.timeout)
-  //     .map(data => {
-  //       const blob = new Blob([data], { type: doc.formatoDocumento });
-  //       const url = URL.createObjectURL(blob);
-  //       return url;
-  //       //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-  //     },
-  //       catchError(this.handleError)
-  //     );
-  // }
-
-  // downLoadFile(data: any, type: string) {
-  //   let blob = new Blob([data], { type: type });
-  //   let url = window.URL.createObjectURL(blob);
-  //   let pwa = window.open(url);
-
-  //   if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-  //     alert('Please disable your Pop-up blocker and try again.');
-  //   }
-  // }
+  downloadAttivitaDocumenti(id: any): Observable<any> {
+    let url = this.host + '/download/document/risorsa/' + id + '/ente/' + this.aziendaId ;
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   getRisorsaCompetenze(uuid): Observable<any> {
     let url = this.host + '/risorsa/' + uuid + '/competenze/ente/' + this.aziendaId

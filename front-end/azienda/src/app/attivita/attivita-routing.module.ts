@@ -6,6 +6,7 @@ import { AttivitaContainerComponent } from './attivita-container.component';
 import { AttivitaDettaglioComponent } from './actions/attivita-dettaglio/attivita-dettaglio.component';
 import { AttivitaDettaglioModificaComponent } from './actions/attivita-modifica-dettaglio/attivita-modifica.component';
 import { GestionePresenzeIndividualeComponent } from './actions/gestione-presenze-individuale/gestione-preseneze-individuale.component';
+import { DocumentUploadModalComponent } from './actions/documento-upload-modal/document-upload-modal.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ export class AttivitaRoutingModule {
     AttivitaDettaglioComponent,
     AttivitaDettaglioModificaComponent,
     GestionePresenzeIndividualeComponent,
+    DocumentUploadModalComponent
   ];
 }
 
