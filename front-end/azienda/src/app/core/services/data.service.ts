@@ -163,6 +163,8 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato != null)
       params = params.append('stato', filter.stato);
+    if (filter.istitutoId != null)
+    params = params.append('istitutoId', filter.istitutoId);
 
     params = params.append('enteId', this.aziendaId);
     params = params.append('page', page);
@@ -656,18 +658,15 @@ export class DataService {
   }
 
   /** STUDENTI */
-  getStudenteForIstituto(filtro: any, page, pageSize) {
-    let url = this.host + "/studente/ricerca/" + this.istitutoId;
+  getStudenteForEnte(filtro: any, page, pageSize) {
+    let url = this.host + "/studente/ricerca/" + this.aziendaId + '/ente';
     let params = new HttpParams();
-    params = params.append('annoScolastico', this.schoolYear);
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
     if (filtro.text)
       params = params.append('text', filtro.text);
-    if (filtro.corsoId)
-      params = params.append('corsoId', filtro.corsoId);
-
+   
     return this.http.get<any>(
       url,
       {
@@ -686,9 +685,9 @@ export class DataService {
   }
 
   getStudenteDettaglio(studenteId: any): Observable<any> {
-    let url = this.host + "/studente/" + studenteId + '/istituto/report/details';
+    let url = this.host + "/studente/dettaglio/" + this.aziendaId + '/ente';
     let params = new HttpParams();
-    params = params.append('enteId', this.aziendaId);
+    params = params.append('studenteId', studenteId);
 
     return this.http.get<any>(
       url,
@@ -931,7 +930,63 @@ export class DataService {
     }
     return annoScolastico;
   }
+
+  formatTwoDigit(n){
+    n = parseInt(n); //ex. if already passed '05' it will be converted to number 5
+    var ret = n > 9 ? "" + n: "0" + n;
+    return ret;
+  }
  
+  /* istituti */
+  getPagedIstitutiOrderByIstitutoId(filtro: any, page, pageSize) {
+    let url = this.host + "/istituto/search/ente";
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
+
+    if (filtro.filterText)
+      params = params.append('text', filtro.filterText);
+   
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+
+  }
+
+  getistitutoDettaglio(id: any): Observable<any> {
+    let url = this.host + "/istituto/" + id;
+    let params = new HttpParams();
+    // params = params.append('enteId', this.aziendaId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 

@@ -1,0 +1,190 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row m-left" *ngIf="studente">
+        <div class="col-6 v-center">
+            <span class="title">{{studente.name}} {{studente.surname}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+            </span> 
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <br>
+  <div class="row" *ngIf="studente">
+    
+    <div class="row square">
+        <div class="col-6">
+            <span class="row">
+                <svg class="col-2 custom icon icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user">
+                    </use>
+                </svg>
+                <span class="sub-div-data">
+                    <span class="row mb-2"><span class="text-semibold">Nome:</span>&nbsp;{{studente.name}} {{studente.surname}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Data di nascita:</span>&nbsp;{{studente.birthdate}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Codice Fiscale:</span>&nbsp;{{studente.cf}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Classe:</span>&nbsp;{{studente.classroom}}</span>
+                </span>
+            </span>            
+        </div>
+        <div class="col-4">
+            <span class="row">
+                <span class="sub-div-data">
+                    <span class="row mb-2"><span class="text-semibold">Corso:</span>&nbsp;{{studente.corsoDiStudio.nome}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Telefono:</span>&nbsp;{{studente.phone}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Mail:</span>&nbsp;{{studente.email}}</span>
+                    <span class="row mb-2"><span class="text-semibold">Iscritto presso:</span>&nbsp;{{istituto}}</span>
+                </span>
+            </span>            
+        </div>
+        <div class="col-2 sub-div">
+            <label class="disabled col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
+            placement="bottom" ngbTooltip="Esporta le attività dello studente">
+                CSV dati studente
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                </svg>
+            </label>
+        </div>
+    </div>     
+</div>
+<br />
+<div class="" *ngIf="studente">
+    <div class="title">
+        Lista delle attività:<br/><br/>
+    </div>
+    <div *ngIf="attivitaAAs && attivitaAAs.length">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Titolo</th>
+                    <th>Ore svolte</th>
+                    <th>Periodo</th>
+                    <th>Tutor aziendale</th>
+                    <th>Anno scolastico</th>
+                    <th>Stato</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let aa of attivitaAAs" (click)="openDetail(aa)">
+                    <!-- Titolo -->
+                    <td class="pointer">
+                        <span #tooltipTitolo="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipTitolo);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.titolo }}
+                        </span>
+                    </td>
+                    <!-- Studenti -->
+                    <td class="pointer">
+                        <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipEnte);" class="align-middle"
+                            (click)="openDetail(aa)">{{ setOreSvolteLabel(aa) }}
+                        </span>
+                    </td>
+                    <!-- Periodo -->
+                    <td class="pointer">
+                        <span #tooltipPeriodo="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipPeriodo);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.dataInizio | date: 'dd/MM/yyyy'}} -
+                            {{ aa.dataFine | date: 'dd/MM/yyyy'}}
+                        </span>
+                    </td>
+                    <!-- Tutor aziendale -->
+                    <td class="pointer">
+                        <span #tooltipAssegnato="ngbTooltip" placement="right" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipAssegnato);" class="align-middle"
+                            (click)="openDetail(aa)">{{ aa.referenteEsterno }}&nbsp;&nbsp;
+                        </span>
+                    </td>
+                    <!-- Anno scolastico -->
+                    <td class="pointer">
+                        <span #tooltipTipologia="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipRiga}}"
+                            (mouseenter)="showTipRiga($event, aa, tooltipTipologia);" class="align-middle"
+                            (click)="openDetail(aa)">{{ annoScolastico(aa) }}
+                        </span>
+                    </td>
+                    <!-- Stato -->
+                    <td class="pointer">
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipoStatoRiga}}"
+                            (mouseenter)="showTipStatoRiga($event, aa, tooltipStato);"
+                            (mouseleave)="hideTipStatoRiga($event, aa, tooltipStato);"
+                            class="align-middle {{aa.stato}}" (click)="openDetail(aa)">
+                            {{getStatoNome(aa.stato) }}
+                            <div *ngIf="aa.fetchingToolTipRiga && (aa.toolTipoStatoRiga == null || aa.toolTipoStatoRiga=='')"
+                                class="progress-spinner progress-spinner-active size-sm">
+                                <span class="sr-only">Caricamento...</span>
+                            </div>
+                        </span>
+                    </td>
+
+                    <td class="pointer">
+                        <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
+                        <span *ngIf="aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')"
+                            class="align-middle">
+                            <span #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
+                                (mouseenter)="showTipButton($event, aa, tooltipBotton);"
+                                (mouseleave)="hideTipButton($event, aa, tooltipStato);">
+                                <div class='btn btn-primary btn-icon btn-xs' (click)="gestionePresenze(aa)">
+                                    <svg class="icon icon-white icon-sm">
+                                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
+                                    </svg>
+                                </div>
+                                <div *ngIf="aa.fetchingToolTipButton && (aa.toolTipButton == null || aa.toolTipButton=='')"
+                                    class="progress-spinner progress-spinner-active size-sm">
+                                    <span class="sr-only">Caricamento...</span>
+                                </div>
+                            </span>
+                        </span>
+                        <span *ngIf="aa.stato=='archiviata'" placement="bottom" ngbTooltip="archiviata"
+                            class="align-middle" (click)="openDetail(aa)"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!attivitaAAs?.length" class="font-14 text-center font-weight-bold">
+        <div class="row">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-danger icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+            </div>
+            <div class="col-sm-12 text-center">
+                <button type="button" class="btn" (click)='refreshAttivita()'>
+                    
+                    <span class="resetFilterBtn" >
+                        <div class="row">
+                            <div class="col-sm-2 text-center">
+                                <svg class="icon icon-danger">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                                </svg>
+                            </div>
+                            <div class="col-sm-10 ">Resetta filtri</div>
+                        </div>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -78,12 +78,6 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
-			if(aa.getOffertaId() != aaDb.getOffertaId()) {
-				offertaManager.rimuoviPostiEsperienze(aaDb.getOffertaId(), esperienze.size());
-			}
-			if(aa.getOffertaId() != null) {
-				offertaManager.aggiungiPostiEsperienze(aa.getOffertaId(), esperienze.size());
-			}
 			if(!aaDb.getDataInizio().isEqual(aa.getDataInizio()) || 
 					!aaDb.getDataFine().isEqual(aa.getDataFine())) {
 				for(EsperienzaSvolta esperienza : esperienze) {
@@ -843,7 +837,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("studenteId", studenteId);
-		return query.getResultList();
+		List<AttivitaAlternanza> list = query.getResultList();
+		List<AttivitaAlternanza> result = new ArrayList<>();
+		for(AttivitaAlternanza aa : list) {
+			AttivitaAlternanza attivita = aa.clona();
+			attivita.setStato(getStato(aa));
+			int oreSvolte = 0;
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaAndStudente(aa.getId(), studenteId);
+			if(esperienze.size() > 0) {
+				List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienze.get(0).getId());
+				for(PresenzaGiornaliera pg : presenze) {
+					if(pg.getVerificata() || pg.getValidataEnte()) {
+						oreSvolte += pg.getOreSvolte();
+					}
+				}
+			}
+			attivita.setOreSvolte(oreSvolte);
+			result.add(attivita);
+		}
+		return result;
 	}
 	
 }

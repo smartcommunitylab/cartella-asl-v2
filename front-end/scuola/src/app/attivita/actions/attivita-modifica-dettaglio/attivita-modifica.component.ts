@@ -51,8 +51,6 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceReferenteScuolaErrorDisplay: boolean = false;
   forceReferenteEsternoErrorDisplay: boolean = false;
   forceOreErrorDisplay: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
   forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
@@ -61,6 +59,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   tipoInterna: boolean = false;
   attivitaTipologia;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
+  orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   attivitaStato: string = "";
   evn = environment;
   breadcrumbItems = [
@@ -98,7 +97,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.evn.modificationFlag=true;
+    this.evn.modificationFlag = true;
     this.date = {
       dataInizio: moment(),
       dataFine: moment(),
@@ -133,8 +132,10 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.date.prevDataInizio = moment(dataInizio.getTime());
           var dataFine = new Date(this.attivita.dataFine);
           this.date.dataFine = moment(dataFine);
-
           this.titolo = this.attivita.titolo;
+          // tackle incase saved with 1 digit in past.
+          this.attivita.oraInizio = this.formatTwoDigit(this.attivita.oraInizio);
+          this.attivita.oraFine = this.formatTwoDigit(this.attivita.oraFine);
 
           this.myForm = new FormGroup({
             titolo: new FormControl(),
@@ -149,24 +150,14 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
             referenteEsternoCF: new FormControl()
           });
 
-          // this.dataService.getListaAziende(null,0, this.pageSize).subscribe((response) => {
-          //   this.aziende = response.content;
-          //   this.aziende.filter(az => {
-          //     if (az.id == this.attivita.enteId) {
-          //       this.azienda = az;
-          //     }
-          //   });
-
-          // });
-
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
       });
     });
   }
 
-  ngOnDestroy(){
-    this.evn.modificationFlag=false;
+  ngOnDestroy() {
+    this.evn.modificationFlag = false;
   }
 
   getTipologiaString(tipologiaId) {
@@ -219,29 +210,16 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       this.forceErrorDisplayOraInizio = false;
     }
 
-    if (this.attivita.oraInizio > 23) {
-      this.forceDalle23ErrorDisplay = true;
-    } else {
-      this.forceDalle23ErrorDisplay = false;
-    }
-
     if (!this.attivita.oraFine) {
       this.forceErrorDisplayOraFine = true;
     } else {
       this.forceErrorDisplayOraFine = false;
     }
 
-    if (this.attivita.oraFine > 23) {
-      this.forceAlle23ErrorDisplay = true;
-    } else {
-      this.forceAlle23ErrorDisplay = false;
-    }
-
     if (this.attivita.oraInizio > this.attivita.oraFine) {
       this.forceDalleAlleErrorDisplay = true;
     } else {
       this.forceDalleAlleErrorDisplay = false;
-
     }
 
     if (!this.tipoInterna) {
@@ -254,7 +232,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       }
 
       if (this.attivita.referenteEsterno && this.attivita.referenteEsterno != '' && this.attivita.referenteEsterno.trim().length > 0) {
-        this.attivita.referenteEsterno =  this.attivita.referenteEsterno.trim();
+        this.attivita.referenteEsterno = this.attivita.referenteEsterno.trim();
         this.forceReferenteEsternoErrorDisplay = false;
       } else {
         this.forceReferenteEsternoErrorDisplay = true;
@@ -272,34 +250,20 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
-      && !this.forceDalle23ErrorDisplay && !this.forceAlle23ErrorDisplay && !this.forceDalleAlleErrorDisplay
-      && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
- 
+      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
+
       (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
       (this.attivita.formatore) ? this.attivita.formatore = this.attivita.formatore.trim() : this.attivita.formatore = null;
       (this.attivita.formatoreCF) ? this.attivita.formatoreCF = this.attivita.formatoreCF.trim() : this.attivita.formatoreCF = null;
       (this.attivita.referenteScuolaCF) ? this.attivita.referenteScuolaCF = this.attivita.referenteScuolaCF.trim() : this.attivita.referenteScuolaCF = null;
       (this.attivita.referenteEsternoCF) ? this.attivita.referenteEsternoCF = this.attivita.referenteEsternoCF.trim() : this.attivita.referenteEsternoCF = null;
-  
+
       this.dataService.createAttivitaAlternanza(this.attivita).subscribe((res => {
         this.router.navigate(['../../'], { relativeTo: this.route });
       }));
     }
 
   }
-
-  // search = (text$: Observable<string>) =>
-  // text$.pipe(
-  //   debounceTime(200),
-  //   distinctUntilChanged(),
-  //   map(term => {
-  //     if (parseInt("0" + term, 10) > 0) {
-  //       return this.aziende.filter(az => az.partita_iva.indexOf(term) > -1).slice(0, 10);
-  //     } else {
-  //       return this.aziende.filter(az => az.nome.toUpperCase().indexOf(term.toUpperCase()) > -1).slice(0, 10);
-  //     }
-  //   })      
-  // )
 
   searchingAZ = false;
   searchFailedAZ = false;
@@ -360,38 +324,45 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
   }
 
-  trimValue(event, type) { 
-    if(type == 'titolo'){
-      (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay   = false;
-    } else if(type == 'scolastico'){
+  trimValue(event, type) {
+    if (type == 'titolo') {
+      (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay = false;
+    } else if (type == 'scolastico') {
       (event.target.value.trim().length == 0) ? this.forceReferenteScuolaErrorDisplay = true : this.forceReferenteScuolaErrorDisplay = false;
-    }else if(type == 'esterno'){
+    } else if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceReferenteEsternoErrorDisplay = true : this.forceReferenteEsternoErrorDisplay = false;
-    }else if(type == 'trim'){
-      event.target.value = event.target.value.trim(); 
+    } else if (type == 'trim') {
+      event.target.value = event.target.value.trim();
     }
   }
 
   changeDate(event: any) {
-    if(this.date.dataInizio) {
-      if(!this.date.dataInizio.isSame(this.date.prevDataInizio)) {
+    if (this.date.dataInizio) {
+      if (!this.date.dataInizio.isSame(this.date.prevDataInizio)) {
         var nuovoAnnoScolastico = this.getAnnoScolastico(this.date.dataInizio);
-        console.log(nuovoAnnoScolastico);  
-        if(this.attivita.annoScolastico === nuovoAnnoScolastico) {
+        console.log(nuovoAnnoScolastico);
+        if (this.attivita.annoScolastico === nuovoAnnoScolastico) {
           this.date.prevDataInizio = moment(this.date.dataInizio);
         } else {
           this.growler.growl("Attenzione, non è possibile cambiare l'anno scolastico!", GrowlerMessageType.Warning, 3000);
           this.date.dataInizio = moment(this.date.prevDataInizio);
         }
       }
-    }    
+    }
   }
 
   getAnnoScolastico(data: moment.Moment) {
     var year = data.year();
-    var startAcademicYear = moment().set({'year': year, 'month': 8, 'date': 1});
+    var startAcademicYear = moment().set({ 'year': year, 'month': 8, 'date': 1 });
     var isNewAcademicYear = data.isSameOrAfter(startAcademicYear);
     var startYear = isNewAcademicYear ? year : year - 1;
     return startYear + "-" + (startYear + 1).toString().substring(2, 4);
   }
+
+  formatTwoDigit(n){
+    n = parseInt(n); //ex. if already passed '05' it will be converted to number 5
+    var ret = n > 9 ? "" + n: "0" + n;
+    return ret;
+  }
+  
 }

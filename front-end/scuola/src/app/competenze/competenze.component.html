@@ -1,4 +1,3 @@
-
 <div class="mb-3 list-container md-margin">
     <div class="row">
         <div class="col-4">
@@ -9,13 +8,14 @@
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
                     </svg>
                     <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
-                </span>                
+                </span>
             </div>
         </div>
         <div class="col-8">
             <button class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="openCreate()">
                 <span class="row btnCreateText">
-                    <span class="col-10 m-left18" placement="bottom"  ngbTooltip="Crea una nuova competenza">Crea competenza</span>
+                    <span class="col-10 m-left18" placement="bottom" ngbTooltip="Crea una nuova competenza">Crea
+                        competenza</span>
                     <span class="col-2">
                         <svg class="icon icon-white icon-sm btnIcon m-left32">
                             <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
@@ -28,12 +28,17 @@
     <hr class="hr" />
     <div *ngIf="showContent" class="row rectangle v-center-inline">
         <div class="col-1 helpMessageIcon-mRight">
-            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
         </div>
         <div class="col-10 helpMessage-mLeft">
             <span>{{menuContent}}</span>
         </div>
-        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
     </div>
     <br />
     <br />
@@ -46,20 +51,23 @@
         </div>
         <div class="col-5 v-center-inline">
             <div class="form-group center-formGroup">
-                <input type="text" id="cercaCompetenza" class="form-control search-input"
-                    [(ngModel)]="filterText" (keyup.enter)="cerca()" style="width: 300px;">
-                <label for="cercaCompetenza" >Cerca tra i nomi competenza</label>
+                <input type="text" id="cercaCompetenza" class="form-control search-input" [(ngModel)]="filterText"
+                    (keyup.enter)="cerca()" style="width: 300px;">
+                <label for="cercaCompetenza">Cerca tra i nomi competenza</label>
             </div>
             <it-button class="v-center-inline" (click)="cerca()">
-                <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+                <svg class="icon icon-primary">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+                </svg>
             </it-button>
         </div>
         <div class="col-3"></div>
         <div class="col-2 v-center-inline">
-            <select class="float-right custom-select form-control" [(ngModel)]="stato" (ngModelChange)="selectStatoFilter()">
+            <select class="float-right custom-select form-control" [(ngModel)]="stato"
+                (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Seleziona stato</option>
                 <option [value]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
-            </select>            
+            </select>
         </div>
     </div>
     <br />
@@ -74,20 +82,25 @@
             </thead>
             <tbody>
                 <tr *ngFor="let competenza of competenze" (click)="openDetail(competenza)">
-                    <td *ngIf="competenza.source == 'CONSOLE'" class="align-middle pointer"><span ngbTooltip="{{competenza.ownerName}}" placement="right">ISTITUTO</span></td>
-                    <td *ngIf="competenza.source != 'CONSOLE'" class="align-middle pointer">{{ competenza.ownerName }}</td>
-                    <!-- <td class="align-middle" ><span ngbTooltip="{{competenza.titolo}}" placement="bottom">{{ competenza.titolo }}</span></td> -->
-                    <td class="align-middle pointer" ><span ngbTooltip="{{competenza.titolo}}" placement="bottom">{{ (competenza.titolo.length>80)? (competenza.titolo | slice:0:80)+'...':(competenza.titolo) }}</span></td>
+                    <td *ngIf="competenza.source == 'CONSOLE'" class="align-middle pointer"><span
+                            ngbTooltip="{{competenza.ownerName}}" placement="right">ISTITUTO</span></td>
+                    <td *ngIf="competenza.source != 'CONSOLE'" class="align-middle pointer">{{ competenza.ownerName }}
+                    </td>
+                    <td class="align-middle pointer"><span ngbTooltip="{{competenza.titolo}}"
+                            placement="bottom">{{ (competenza.titolo.length>80)? (competenza.titolo | slice:0:80)+'...':(competenza.titolo) }}</span>
+                    </td>
                     <td class="pointer">
-                        <span *ngIf="competenza.attiva" ngbTooltip="Competenza disponibile" placement="bottom" style="color: #00CF86;" class="align-middle">Disponibile</span>
-                        <span *ngIf="!competenza.attiva" ngbTooltip="Disattivata il" placement="bottom" style="color: #FF9700" class="align-middle">Non disponibile</span>
-                    </td> 
+                        <span *ngIf="competenza.attiva" ngbTooltip="Competenza disponibile" placement="bottom"
+                            style="color: #00CF86;" class="align-middle">Disponibile</span>
+                        <span *ngIf="!competenza.attiva" ngbTooltip="Disattivata il" placement="bottom"
+                            style="color: #FF9700" class="align-middle">Non disponibile</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div *ngIf="!competenze?.length" class="font-14 text-center font-weight-bold">
-        <div class="row">
+    <div class="font-14 text-center font-weight-bold">
+        <div class="row" *ngIf="!competenze?.length && filterSearch">
             <div class="col-xl-12 text-center errorIconPaddingTop">
                 <svg class="icon icon-danger icon-xl">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -98,8 +111,7 @@
             </div>
             <div class="col-sm-12 text-center">
                 <button type="button" class="btn" (click)='refreshCompetenza()'>
-                    
-                    <span class="resetFilterBtn" >
+                    <span class="resetFilterBtn">
                         <div class="row">
                             <div class="col-sm-2 text-center">
                                 <svg class="icon icon-danger">
@@ -110,6 +122,19 @@
                         </div>
                     </span>
                 </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="!competenze?.length && !filterSearch">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-lightGrey icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Questa lista è vuota</span>
+            </div>
+            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Puoi creare nuove competenze con il pulsante
+                verde in alto a destra.
             </div>
         </div>
     </div>

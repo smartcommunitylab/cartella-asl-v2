@@ -57,6 +57,9 @@ export class EnteDettaglioModificaComponent implements OnInit {
     this.atecoEntry = {codice: '', descrizione: ''};
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
+      if(this.ente.address) {
+        this.ente.address = this.ente.address.trim();
+      }
       if(this.ente.atecoCode) {
         if(this.ente.atecoCode.length > 0) {
           this.ateco.codice = this.ente.atecoCode[0];

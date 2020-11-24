@@ -15,24 +15,31 @@
   <hr class="hr" />
   <div *ngIf="showContent" class="row rectangle v-center-inline">
     <div class="col-1 helpMessageIcon-mRight">
-        <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+      <svg class="icon icon-sm fill-darkblue">
+        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+      </svg>
     </div>
     <div class="col-10 helpMessage-mLeft">
-        <span>{{menuContent}}</span>
+      <span>{{menuContent}}</span>
     </div>
-    <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+        (click)="menuContentShow()">
+        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+      </svg></div>
   </div>
   <br />
   <br />
   <div class="row">
     <div class="col-4 v-center-inline">
       <div class="form-group center-formGroup">
-        <input type="text" id="cercaStudenti" class="form-control search-input"
-            [(ngModel)]="filtro.text" (keyup.enter)="cerca()">
-        <label for="cercaStudenti" >Cerca studente o classe</label>
+        <input type="text" id="cercaStudenti" class="form-control search-input" [(ngModel)]="filtro.text"
+          (keyup.enter)="cerca()">
+        <label for="cercaStudenti">Cerca studente o classe</label>
       </div>
       <it-button class="v-center-inline" (click)="cerca()">
-          <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>
+        <svg class="icon icon-primary">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+        </svg>
       </it-button>
     </div>
     <div class="col-4"></div>
@@ -53,32 +60,31 @@
       <tbody>
         <tr *ngFor="let studente of studenti" (click)="openDetail(studente)">
           <td class="pointer">
-            <span #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studente.toolTipRiga}}" (mouseenter)="showTipRiga($event, studente, '3');">
+            <span #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studente.toolTipRiga}}"
+              (mouseenter)="showTipRiga($event, studente, '3');">
               {{studente.classe}}
             </span>
           </td>
           <td class="pointer">
-            <span #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}" (mouseenter)="showTipRiga($event, studente, '3');">
+            <span #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
+              (mouseenter)="showTipRiga($event, studente, '3');">
               {{studente.cognomeNome}}
             </span>
           </td>
           <td class="pointer">
             <p class="ngbpBar">
-              <ngb-progressbar
-                type="{{studente.oreSvolteTerza.pgBType}}"
-                height="35px"
+              <ngb-progressbar type="{{studente.oreSvolteTerza.pgBType}}" height="35px"
                 [value]="studente.pianoId ? studente.oreSvolteTerza.hours : 100"
-                [max]="studente.pianoId ? studente.oreSvolteTerza.total : 100"
-                class="text-center align-middle" 
-                #tooltip="ngbTooltip" 
-                placement="bottom" 
-                ngbTooltip="{{studente.toolTipRiga}}"
+                [max]="studente.pianoId ? studente.oreSvolteTerza.total : 100" class="text-center align-middle"
+                #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
                 (mouseenter)="showTipRiga($event, studente, '3');">
                 <!-- {{studente.oreSvolteTerza.hours}} / {{studente.oreSvolteTerza.total}} -->
-                <span class="ngbpBar-text-complete" *ngIf="studente.pianoId && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total && studente.oreSvolteTerza.total != 0">
+                <span class="ngbpBar-text-complete"
+                  *ngIf="studente.pianoId && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total && studente.oreSvolteTerza.total != 0">
                   {{studente.oreSvolteTerza.hours}} / {{studente.oreSvolteTerza.total}} h
                 </span>
-                <span class="ngbpBar-text-notComplete" *ngIf="studente.pianoId && (studente.oreSvolteTerza.hours < studente.oreSvolteTerza.total ||  studente.oreSvolteTerza.total == 0)">
+                <span class="ngbpBar-text-notComplete"
+                  *ngIf="studente.pianoId && (studente.oreSvolteTerza.hours < studente.oreSvolteTerza.total ||  studente.oreSvolteTerza.total == 0)">
                   {{studente.oreSvolteTerza.hours}} / {{studente.oreSvolteTerza.total}} h
                 </span>
                 <span class="ngbpBar-text-notComplete" *ngIf="!studente.pianoId">
@@ -89,21 +95,18 @@
           </td>
           <td>
             <p class="ngbpBar">
-              <ngb-progressbar 
-                type="{{studente.oreSvolteQuarta.pgBType}}"
-                height="35px"
+              <ngb-progressbar type="{{studente.oreSvolteQuarta.pgBType}}" height="35px"
                 [value]="studente.pianoId ? studente.oreSvolteQuarta.hours : 100"
-                [max]="studente.pianoId ? studente.oreSvolteQuarta.total : 100"
-                class="text-center align-middle" 
-                #tooltip="ngbTooltip"
-                placement="bottom" 
-                ngbTooltip="{{studente.toolTipRiga}}"
+                [max]="studente.pianoId ? studente.oreSvolteQuarta.total : 100" class="text-center align-middle"
+                #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
                 (mouseenter)="showTipRiga($event, studente, '4');">
                 <!-- {{studente.oreSvolteQuarta.hours}} / {{studente.oreSvolteQuarta.total}} -->
-                <span class="ngbpBar-text-complete" *ngIf="studente.pianoId && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total && studente.oreSvolteQuarta.total != 0">
+                <span class="ngbpBar-text-complete"
+                  *ngIf="studente.pianoId && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total && studente.oreSvolteQuarta.total != 0">
                   {{studente.oreSvolteQuarta.hours}} / {{studente.oreSvolteQuarta.total}} h
                 </span>
-                <span class="ngbpBar-text-notComplete" *ngIf="studente.pianoId && (studente.oreSvolteQuarta.hours < studente.oreSvolteQuarta.total ||  studente.oreSvolteQuarta.total == 0)">
+                <span class="ngbpBar-text-notComplete"
+                  *ngIf="studente.pianoId && (studente.oreSvolteQuarta.hours < studente.oreSvolteQuarta.total ||  studente.oreSvolteQuarta.total == 0)">
                   {{studente.oreSvolteQuarta.hours}} / {{studente.oreSvolteQuarta.total}} h
                 </span>
                 <span class="ngbpBar-text-notComplete" *ngIf="!studente.pianoId">
@@ -114,20 +117,17 @@
           </td>
           <td>
             <p class="ngbpBar">
-              <ngb-progressbar
-               type="{{studente.oreSvolteQuinta.pgBType}}"
-               height="35px"
-               [value]="studente.pianoId ? studente.oreSvolteQuinta.hours : 100"
-               [max]="studente.pianoId ? studente.oreSvolteQuinta.total : 100"
-               class="text-center align-middle" 
-               #tooltip="ngbTooltip"
-               placement="bottom" 
-               ngbTooltip="{{studente.toolTipRiga}}"
-               (mouseenter)="showTipRiga($event, studente, '5');">
-                <span class="ngbpBar-text-complete" *ngIf="studente.pianoId && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total && studente.oreSvolteQuinta.total != 0">
+              <ngb-progressbar type="{{studente.oreSvolteQuinta.pgBType}}" height="35px"
+                [value]="studente.pianoId ? studente.oreSvolteQuinta.hours : 100"
+                [max]="studente.pianoId ? studente.oreSvolteQuinta.total : 100" class="text-center align-middle"
+                #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
+                (mouseenter)="showTipRiga($event, studente, '5');">
+                <span class="ngbpBar-text-complete"
+                  *ngIf="studente.pianoId && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total && studente.oreSvolteQuinta.total != 0">
                   {{studente.oreSvolteQuinta.hours}} / {{studente.oreSvolteQuinta.total}} h
                 </span>
-                <span class="ngbpBar-text-notComplete" *ngIf="studente.pianoId && (studente.oreSvolteQuinta.hours < studente.oreSvolteQuinta.total ||  studente.oreSvolteQuinta.total == 0)">
+                <span class="ngbpBar-text-notComplete"
+                  *ngIf="studente.pianoId && (studente.oreSvolteQuinta.hours < studente.oreSvolteQuinta.total ||  studente.oreSvolteQuinta.total == 0)">
                   {{studente.oreSvolteQuinta.hours}} / {{studente.oreSvolteQuinta.total}} h
                 </span>
                 <span class="ngbpBar-text-notComplete" *ngIf="!studente.pianoId">
@@ -140,32 +140,42 @@
       </tbody>
     </table>
   </div>
-  <div *ngIf="!studenti?.length" class="font-14 text-center font-weight-bold">
-    <!-- <span *ngIf="filtro.corsoStudio">Nessun studente corrispondende al filtro impostato</span>
-    <span *ngIf="!filtro.corsoStudio">Nessun studente, creane uno tramite l'apposito pulsante</span> -->
-    <div class="row">
+  <div class="font-14 text-center font-weight-bold">
+    <div class="row" *ngIf="!studenti?.length && filterSearch">
       <div class="col-xl-12 text-center errorIconPaddingTop">
-          <svg class="icon icon-danger icon-xl">
-              <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
-          </svg>
+        <svg class="icon icon-danger icon-xl">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+        </svg>
       </div>
       <div class="col-xl-12 text-center">
-          <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
+        <span class="searchError">Nessun risultato: modifica i tuoi criteri di ricerca</span>
       </div>
       <div class="col-sm-12 text-center">
-          <button type="button" class="btn" (click)='refreshStudenti()'>
-              
-              <span class="resetFilterBtn" >
-                  <div class="row">
-                      <div class="col-sm-2 text-center">
-                          <svg class="icon icon-danger">
-                              <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
-                          </svg>
-                      </div>
-                      <div class="col-sm-10 ">Resetta filtri</div>
-                  </div>
-              </span>
-          </button>
+        <button type="button" class="btn" (click)='refreshStudenti()'>
+          <span class="resetFilterBtn">
+            <div class="row">
+              <div class="col-sm-2 text-center">
+                <svg class="icon icon-danger">
+                  <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                </svg>
+              </div>
+              <div class="col-sm-10 ">Resetta filtri</div>
+            </div>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="!studenti?.length && !filterSearch">
+      <div class="col-xl-12 text-center errorIconPaddingTop">
+        <svg class="icon icon-lightGrey icon-xl">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+        </svg>
+      </div>
+      <div class="col-xl-12 text-center">
+        <span class="searchError">Questa lista è vuota</span>
+      </div>
+      <div class="col-sm-12 text-center searchErrorMsg text-semibold">Controlla la tua connessione e ricarica la pagina.
+        Contatta l'assistenza se il problema persiste.
       </div>
     </div>
   </div>

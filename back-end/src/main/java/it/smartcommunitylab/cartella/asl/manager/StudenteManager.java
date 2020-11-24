@@ -38,6 +38,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
@@ -647,6 +648,19 @@ public class StudenteManager extends DataEntityManager {
 			return "in_attesa";
 		}
 		return "inattivo";
+	}
+
+	public ReportStudenteDettaglioEnte getStudenteDettaglioEnte(String studenteId, String enteId) {
+		ReportStudenteDettaglioEnte report = new ReportStudenteDettaglioEnte();
+		Studente studente = findStudente(studenteId);
+		report.setStudente(studente);
+		Istituzione istituto = istituzioneManager.getIstituto(studente.getIstitutoId());
+		if(istituto != null) {
+			report.setIstituto(istituto.getName());
+		}
+		List<AttivitaAlternanza> list = attivitaAlternanzaManager.findAttivitaByStudenteAndEnte(studenteId, enteId);
+		report.setAttivitaList(list);
+		return report;
 	}
 
 }

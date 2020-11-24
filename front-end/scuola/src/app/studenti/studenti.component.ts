@@ -9,16 +9,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./studenti.component.scss']
 })
 export class StudentiComponent implements OnInit {
-
   titolo = 'Lista studenti';
   menuContent = "In questa pagina trovi tutti gli studenti. Clicca sulla riga del singolo studente per visualizzare il dettaglio dei suoi progressi.";
   showContent: boolean = false;
   studenti;
   filtro;
+  filterSearch = false;
   totalRecords: number = 0;
   pageSize: number = 10;
   currentpage: number = 0;
-
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
 
   constructor(
@@ -41,6 +40,7 @@ export class StudentiComponent implements OnInit {
 
   cerca() {
     this.cmPagination.changePage(1);
+    this.filterSearch = true;
     this.getStudenti(1);
   }
 
@@ -55,7 +55,7 @@ export class StudentiComponent implements OnInit {
         this.totalRecords = response.totalElements;
         this.studenti = response.content;
         this.studenti.forEach(studente => {
-          if(studente.pianoId) {
+          if (studente.pianoId) {
             if (studente.oreSvolteTerza.total > 0 && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total) {
               studente.oreSvolteTerza.pgBType = 'success';
             } else {
@@ -77,8 +77,7 @@ export class StudentiComponent implements OnInit {
             studente.oreSvolteQuinta.pgBType = 'error';
           }
         });
-      }
-        ,
+      },
         (err: any) => console.log(err),
         () => console.log('get lista studenti'));
   }
@@ -89,11 +88,11 @@ export class StudentiComponent implements OnInit {
 
   showTipRiga(ev, studente, year) {
     // console.log(ev.target.title);
-    if(studente.pianoId) {
+    if (studente.pianoId) {
       let lableConPiano = ' Piano triennale completo al *percentage*% (*fraction*) ore'; // (n/m ore)
-      lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreValidate /  studente.oreTotali) * 100).toFixed(0) );
+      lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreValidate / studente.oreTotali) * 100).toFixed(0));
       lableConPiano = lableConPiano.replace('*fraction*', studente.oreValidate + '/' + studente.oreTotali);
-      studente.toolTipRiga = lableConPiano;  
+      studente.toolTipRiga = lableConPiano;
     } else {
       let labelSenzaPiano = 'Attenzione: non ci sono piani associati a questo corso di studio!';
       studente.toolTipRiga = labelSenzaPiano;
@@ -140,14 +139,14 @@ export class StudentiComponent implements OnInit {
     // } else {
     //   studente.toolTipRiga = labelSenzaPiano;
     // }
-
   }
 
-  refreshStudenti(){
+  refreshStudenti() {
     this.filtro = {
       text: null,
       corsoId: null
-  }
-  this.getStudenti(1);
+    }
+    this.filterSearch = false;
+    this.getStudenti(1);
   }
 }

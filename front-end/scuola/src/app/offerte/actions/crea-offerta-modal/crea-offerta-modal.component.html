@@ -67,7 +67,7 @@
                     <option selected="selected">Tipologie</option>
                     <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
                 </select>
-                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologie' && forceErrorDisplay">
+                <div class="invalid-feedback" [class.d-block]="tipologiaInput.value==='Tipologia' && forceErrorDisplay">
                     Campo necessario.</div>
             </div>
             <div class="col-sm-4"

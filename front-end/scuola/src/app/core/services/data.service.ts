@@ -471,9 +471,8 @@ export class DataService {
       .pipe(
         map(res => {
           return res;
-        },
-          catchError(this.handleError)
-        )
+        }),
+        catchError(this.handleError)
       );
   }
 

@@ -146,8 +146,9 @@ public class IstituzioneManager extends DataEntityManager {
 			list.add(report);
 		}
 
-		String counterQuery = "SELECT COUNT(i) FROM Istituzione i";
-		Query cQuery = em.createQuery(counterQuery, Long.class);
+		String counterQuery = q.replace("SELECT i.id, COUNT(aa.id)", "SELECT COUNT(DISTINCT i)")
+				.replace("GROUP BY i.id ORDER BY COUNT(aa.id) DESC", "");
+		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();
 		Page<ReportIstitutoEnte> page = new PageImpl<ReportIstitutoEnte>(list, pageRequest, total);
 		return page;

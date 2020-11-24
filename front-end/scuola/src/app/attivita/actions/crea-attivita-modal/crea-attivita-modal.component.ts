@@ -4,8 +4,8 @@ import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { DataService } from '../../../core/services/data.service';
 import { Azienda } from '../../../shared/classes/Azienda.class';
-import { Observable, of} from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap} from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'crea-attivita-modal',
@@ -16,7 +16,7 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   @ViewChild('calendarStart') calendarStart: DatePickerComponent;
   @ViewChild('calendarEnd') calendarEnd: DatePickerComponent;
- 
+
   openStart() {
     this.calendarStart.api.open();
   }
@@ -38,10 +38,10 @@ export class CreaAttivitaModalComponent implements OnInit {
   referenteScuola: string;
   referenteEsterno: string;
   ore;
-  oraInizio;
-  oraFine;
+  oraInizio = '07';
+  oraFine = '18';
   fieldsError: string;
-  tipologia: any = 'Tipologie';
+  tipologia: any = 'Tipologia';
   date;
   showSelect: boolean = true;
   aziende: Azienda[];
@@ -51,16 +51,14 @@ export class CreaAttivitaModalComponent implements OnInit {
   pageSize = 20;
   tipoInterna: boolean = true;
   schoolYear;
-
+  orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   @Input() tipologie?: any;
   @Output() newAttivitaListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
   forceErrorDisplayRS: boolean = false;
   forceErrorDisplayRE: boolean = false;
-  forceDalle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
-  forceAlle23ErrorDisplay: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
 
   datePickerConfig = {
@@ -76,10 +74,6 @@ export class CreaAttivitaModalComponent implements OnInit {
       dataFine: moment()
     }
     this.schoolYear = this.dataService.schoolYear;
-    // this.dataService.getListaAziende(null, 0, this.pageSize).subscribe((response) => {
-    //   this.aziende = response.content;
-    // });
-    
   }
 
   onChange(tipoId) {
@@ -92,9 +86,9 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   myHandler() {
     this.dataService.getSchoolYear(this.dataService.istitutoId,
-      moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf()).subscribe((resp => { 
-      this.schoolYear = resp.schoolYear;
-    }))
+      moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf()).subscribe((resp => {
+        this.schoolYear = resp.schoolYear;
+      }))
   }
 
   create() { //create or update
@@ -103,14 +97,14 @@ export class CreaAttivitaModalComponent implements OnInit {
       attivita = {
         titolo: this.titolo.trim(),
         referenteScuola: this.referenteScuola.trim(),
-        referenteEsterno: this.tipoInterna?null:this.referenteEsterno.trim(),
+        referenteEsterno: this.tipoInterna ? null : this.referenteEsterno.trim(),
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
         ore: this.ore,
         oraInizio: this.oraInizio,
         oraFine: this.oraFine,
-        nomeEnte: this.tipoInterna?null:this.azienda.nome,
-        enteId: this.tipoInterna?null:this.azienda.id,
+        nomeEnte: this.tipoInterna ? null : this.azienda.nome,
+        enteId: this.tipoInterna ? null : this.azienda.id,
         dataInizio: moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf(),
         dataFine: moment(this.date.dataFine, 'YYYY-MM-DD').valueOf()
       }
@@ -123,20 +117,10 @@ export class CreaAttivitaModalComponent implements OnInit {
       } else {
         this.forceErrorDisplayOraInizio = false;
       }
-      if (this.oraInizio > 23) {
-        this.forceDalle23ErrorDisplay = true;
-      } else {
-        this.forceDalle23ErrorDisplay = false;
-      }
       if (!this.oraFine) {
         this.forceErrorDisplayOraFine = true;
       } else {
         this.forceErrorDisplayOraFine = false;
-      }
-      if (this.oraFine > 23) {
-        this.forceAlle23ErrorDisplay = true;
-      } else {
-        this.forceAlle23ErrorDisplay = false;
       }
       if (this.azienda) {
         this.forceEnteDisplay = false;
@@ -154,48 +138,35 @@ export class CreaAttivitaModalComponent implements OnInit {
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
-      );  
+      );
     } else {
       return (
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
         && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
-        && (this.oraInizio && this.oraInizio>0 && this.oraFine && this.oraFine>0)
+        && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.azienda.id != '')
-        && (this.tipologia && this.tipologia != 'Tipologie')
+        && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
       );
     }
   }
-  
-  trimValue(event, type) { 
-    if(type == 'titolo'){
+
+  trimValue(event, type) {
+    if (type == 'titolo') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayTitolo = true : this.forceErrorDisplayTitolo = false;
-    } else if(type == 'scolastico'){
+    } else if (type == 'scolastico') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayRS = true : this.forceErrorDisplayRS = false;
-    } else if(type == 'esterno'){
+    } else if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayRE = true : this.forceErrorDisplayRE = false;
-    }else if(type == 'trim'){
-      event.target.value = event.target.value.trim(); 
-    } 
+    } else if (type == 'trim') {
+      event.target.value = event.target.value.trim();
+    }
   }
-  // search = (text$: Observable<string>) =>
-  //   text$.pipe(
-  //     debounceTime(200),
-  //     distinctUntilChanged(),
-  //     map(term => {
-  //       if (parseInt("0" + term, 10) > 0) {
-  //         return this.aziende.filter(az => az.partita_iva.indexOf(term) > -1).slice(0, 10);
-  //       } else {
-  //         return this.aziende.filter(az => az.nome.toUpperCase().indexOf(term.toUpperCase()) > -1).slice(0, 10);
-  //       }
-  //     })      
-  //   )
-  
 
   searchingAZ = false;
   searchFailedAZ = false;
@@ -208,7 +179,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         this.dataService.searchEnte(term).pipe(
           tap(() => {
             this.searchFailedAZ = false
-          } ),
+          }),
           catchError(() => {
             this.searchFailedAZ = true;
             return of([]);
@@ -218,7 +189,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         this.searchingAZ = false
       })
     )
-  
-    formatter = (x: {nome: string}) => x.nome;
+
+  formatter = (x: { nome: string }) => x.nome;
 
 }

@@ -1,0 +1,52 @@
+.list-container{
+    margin-top: 40px;
+    padding: 16px;
+    >.row {
+        margin: 0px;
+    }
+    .btn-txt {
+        color: white;
+        font-size: 16px;
+    }
+
+    .fill-darkblue {
+        fill: #06c;
+    }
+    .title{
+        text-align: left;
+        letter-spacing: 0;
+        color: #5A6772;
+        opacity: 1;
+        font-family: Titillium Web;
+        font-size: 35px;
+        font-weight: bold;
+    }
+    .table-head {
+        white-space: nowrap;
+        font-size: larger;
+    }
+}
+.errorIconPaddingTop{
+    padding-top: 7%;
+}
+.searchError{
+    text-align: left;
+    font-family: Titillium Web, Regular;
+    font-size: 35px;
+    font-weight: 24px;
+    letter-spacing: 0;
+    color: #707070;
+    opacity: 1;
+}
+.resetFilterBtn { 
+    text-align: left;
+    font-family: Titillium Web, SemiBold;
+    font-size: 20px;
+    font-weight: 24px;
+    letter-spacing: 0;
+    color: #F83E5A;
+    opacity: 1;
+}
+.center-formGroup{
+    margin-top: 0.5rem;
+}

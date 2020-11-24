@@ -22,7 +22,7 @@ export class AttivitaComponent implements OnInit {
     pageSize: number = 10;
     currentpage: number = 0;
     tipologie;
-    // tipologia = "Tipologie";
+    filterSearch = false;
     stato;
     menuContent = "In questa pagina trovi tutte le attività svolte presso il tuo ente. Puoi cercare un istituto, uno studente o un titolo attività, oppure puoi filtrare per stato. Con il tasto blu sulla destra puoi andare direttamente alla gestione presenze. Per visualizzare un’attività, clicca sulla riga corrispondente.";
     showContent: boolean = false;
@@ -77,26 +77,11 @@ export class AttivitaComponent implements OnInit {
                     this.tipologie.filter(tipo => {
                         if (tipo.id == aa.tipologia) {
                             aa.individuale = tipo.individuale;
-                            // if (!aa.individuale) {
-                            //     var classSet = [];
-                            //     for (let cls of aa.classi) {
-                            //         if (classSet.indexOf(cls) < 0)
-                            //          classSet.push(cls);
-                            //     }
-                            //     aa.classSet = classSet;
-                            //     if (aa.studenti.length == 1 && aa.classSet.length == 1) {
-                            //         aa.groupRigaTip = aa.studenti[0] + 'i - ' + aa.classSet[0];
-                            //     } else if (aa.classSet.length == 1 && aa.studenti.length > 0) {
-                            //         aa.groupRigaTip = aa.studenti.length + ' studenti - ' + aa.classSet[0];
-                            //     } else if (aa.classSet.length > 1 && aa.studenti.length > 0) {
-                            //         aa.groupRigaTip = aa.studenti.length + ' studenti - ' + aa.classSet.length + ' classi';
-                            //     }
-                            // } 
                         }
                     })
                 }
             }, (err: any) => console.log(err),
-                () => console.log('getAttivitaAlternanzaForIstitutoAPI'));        
+                () => console.log('getAttivitaAlternanzaForIstitutoAPI'));
     }
 
     getTipologia(tipologiaId) {
@@ -112,17 +97,8 @@ export class AttivitaComponent implements OnInit {
     }
 
     cerca() {
+        this.filterSearch = true;
         this.cmPagination.changePage(1);
-        this.getAttivitaAltPage(1);
-    }
-
-    selectTipologiaFilter() {
-        this.cmPagination.changePage(1);
-        // if (this.tipologia && this.tipologia != 'Tipologie') {
-        //   this.filtro.tipologia = this.tipologia;
-        // } else {
-        //   this.filtro.tipologia = null;
-        // }
         this.getAttivitaAltPage(1);
     }
 
@@ -133,6 +109,7 @@ export class AttivitaComponent implements OnInit {
         } else {
             this.filtro.stato = null;
         }
+        this.filterSearch = true;
         this.getAttivitaAltPage(1);
     }
 
@@ -145,32 +122,7 @@ export class AttivitaComponent implements OnInit {
         if (!aa.toolTipoStatoRiga) {
             if (aa.stato == 'archiviata') {
                 this.setTipStatoRiga(aa);
-                // if(!aa.report) {
-                //     aa.startTimeoutTipStato = true;
-                //     setTimeout(() => {
-                //         if(aa.startTimeoutTipStato == true) {
-                //             this.env.globalSpinner=false;
-                //             aa.fetchingToolTipRiga = true;
-                //             this.dataService.getAttivitaReportStudenti(aa.id).subscribe((report) => {
-                //                 aa.report = report;
-                //                 this.setTipStatoRiga(aa);
-                //                 aa.fetchingToolTipRiga = false; 
-                //                 this.env.globalSpinner=true;
-                //                 if(aa.startTimeoutTipStato == true) {
-                //                     tp.ngbTooltip = aa.toolTipoStatoRiga;
-                //                     tp.open();    
-                //                 }
-                //                 aa.startTimeoutTipStato = false;               
-                //             }); 
-                //         }
-                //     }, this.timeoutTooltip);
-                // } else {
-                //     this.setTipStatoRiga(aa);
-                // }
             } else if (aa.stato == 'revisione') {
-                // let labelRevisione = 'Questa attività si è conclusa il gg/mm/aaaa. È necessario archiviare l’attività, altrimenti le ore non saranno considerate valide!';
-                // var dataFine = new Date(aa.dataFine);
-                // labelRevisione = labelRevisione.replace("gg/mm/aaaa",  dataFine.getDate() + '/' + (dataFine.getMonth()+1) + '/' + dataFine.getFullYear());
                 let labelRevisione = 'In questa attività ci sono ancora ore da validare!';
                 aa.toolTipoStatoRiga = labelRevisione;
             } else if (aa.stato == 'in_attesa') {
@@ -187,9 +139,6 @@ export class AttivitaComponent implements OnInit {
     setTipStatoRiga(aa) {
         var dateArchivazione = new Date(aa.dataArchiviazione);
         let labelArchiviata = 'Questa attività si è conclusa il gg/mm/aaaa';
-        // let labelArchiviata = 'Archiviata il gg/mm/aaaa, *nEs*/*n* studenti hanno completato l’attività';
-        // labelArchiviata = labelArchiviata.replace('*nEs*', aa.report.numeroEsperienzeCompletate);
-        // labelArchiviata = labelArchiviata.replace('*n*', aa.report.studenti.length);
         labelArchiviata = labelArchiviata.replace("gg/mm/aaaa", dateArchivazione.getDate() + '/' + (dateArchivazione.getMonth() + 1) + '/' + dateArchivazione.getFullYear());
         aa.toolTipoStatoRiga = labelArchiviata;
     }
@@ -204,7 +153,7 @@ export class AttivitaComponent implements OnInit {
     setTipRiga(aa) {
         let tip = '';
         for (let i = 0; i < aa.studenti.length; i++) {
-            tip = tip + aa.studenti[i] + '\n';// + "-" + aa.classi[i] + '\n';
+            tip = tip + aa.studenti[i] + '\n';
             if (i == 15) {
                 break;
             }
@@ -214,29 +163,16 @@ export class AttivitaComponent implements OnInit {
 
     setAssegnatoLabel(aa) {
         let label = '';
-        // let classi = [];
-        // if (aa.classi.length > 0) {
-        //     aa.classi.forEach(element => {
-        //         if(!classi.includes(element)) {
-        //             classi.push(element);
-        //         }
-        //     });
-        // }
         if (aa.studenti.length == 1) {
             label = aa.studenti[0];
         } else if (aa.studenti.length > 1) {
             label = aa.studenti.length + ' studenti';
         }
-        // if (classi.length == 1) {
-        //     label = label + ' - ' + classi[0];
-        // } else if (classi.length > 1) {
-        //     label = label + ' - ' + classi.length + ' classi';
-        // }
+
         return label;
     }
 
     showTipButton(ev, aa, tp) {
-        // console.log("aa::",aa,"event", ev, "tooltip", tp);
         if (!aa.toolTipButton) {
             if (!aa.report) {
                 aa.startTimeoutTipButton = true;
@@ -306,9 +242,9 @@ export class AttivitaComponent implements OnInit {
             titolo: '',
             stato: ''
         }
-        // this.tipologia = "Tipologie"
+        this.filterSearch = false;
         this.stato = undefined;
         this.getAttivitaAltPage(1);
     }
-    
+
 }

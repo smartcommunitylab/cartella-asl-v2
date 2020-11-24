@@ -64,4 +64,6 @@ public interface EsperienzaSvoltaRepository extends JpaRepository<EsperienzaSvol
   	@Query("update EsperienzaSvolta es set es.stato=(:stato) where es.id=(:id)")
   	public void updateStato(Long id, Stati stato);
 
+		public List<EsperienzaSvolta> findByAttivitaAlternanzaIdAndStudenteId(Long attivitaAlternanzaId, String studenteId);
+
 }

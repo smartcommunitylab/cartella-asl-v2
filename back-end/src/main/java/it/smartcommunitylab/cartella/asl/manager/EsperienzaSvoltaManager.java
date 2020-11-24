@@ -60,6 +60,10 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 		return esperienzaSvoltaRepository.findByAttivitaAlternanzaIdIn(ids);
 	}
 	
+	public List<EsperienzaSvolta> getEsperienzeByAttivitaAndStudente(Long attivitaAlternanzaId, String studenteId) {
+		return esperienzaSvoltaRepository.findByAttivitaAlternanzaIdAndStudenteId(attivitaAlternanzaId, studenteId);		
+	}
+	
 	public void changeDateRange(EsperienzaSvolta esperienza, LocalDate dataInizio, LocalDate dataFine) {
 		List<PresenzaGiornaliera> presenze = presenzaManager.findByEsperienzaSvolta(esperienza.getId());
 		presenze.forEach(presenza -> {

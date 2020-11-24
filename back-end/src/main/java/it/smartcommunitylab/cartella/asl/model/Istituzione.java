@@ -24,6 +24,8 @@ public class Istituzione {
 	private String origin;
 	private String extId;
 	private String address;
+	private String phone;
+	private String email;
 	
 	private Double hoursThreshold;
 	
@@ -119,5 +121,21 @@ public class Istituzione {
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

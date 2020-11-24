@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -68,7 +69,10 @@ public class AttivitaAlternanza {
 	private Double longitude;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	private LocalDate dataArchiviazione;	
+	private LocalDate dataArchiviazione;
+	
+	@Transient
+	private int oreSvolte;
 	
 	public AttivitaAlternanza clona() {
 		AttivitaAlternanza aa = new AttivitaAlternanza();
@@ -364,5 +368,13 @@ public class AttivitaAlternanza {
 
 	public void setReferenteEsternoTelefono(String referenteEsternoTelefono) {
 		this.referenteEsternoTelefono = referenteEsternoTelefono;
+	}
+
+	public int getOreSvolte() {
+		return oreSvolte;
+	}
+
+	public void setOreSvolte(int oreSvolte) {
+		this.oreSvolte = oreSvolte;
 	}
 }
