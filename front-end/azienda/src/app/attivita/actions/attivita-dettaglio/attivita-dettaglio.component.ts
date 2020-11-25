@@ -3,11 +3,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
-import { GrowlerService } from '../../../core/growler/growler.service';
+import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
+import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
 registerLocaleData(localeIT);
+
 declare var moment: any;
 moment['locale']('it');
 
@@ -22,6 +24,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
+    private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   attivita: AttivitaAlternanza;
@@ -39,7 +42,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   tabDefaultSelectedId;
   noActivitySetted: boolean = true;
   order: string = 'titolo';
-  documenti;
+  documenti = [];
   painoTipologieTerza: any = [];
   painoTipologieQuarto: any = [];
   painoTipologieQuinto: any = [];
@@ -140,6 +143,18 @@ export class AttivitaDettaglioComponent implements OnInit {
     } else {
       return tipologiaId;
     }
+  }
+
+  deleteDoc(doc) {
+    const modalRef = this.modalService.open(DocumentoCancellaModal);
+    modalRef.componentInstance.documento = doc;
+    modalRef.result.then((result) => {
+      if (result == 'deleted') {
+        this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
+          this.documenti = docs;
+        });
+      }
+    });
   }
 
   gestionePresenze() {

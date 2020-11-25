@@ -184,7 +184,14 @@
                         <td><a [routerLink]="">{{doc.nomeFile}}</a></td>
                         <td>{{setDocType(doc.tipo)}}</td>
                         <td>{{doc.dataUpload | date: 'dd/MM/yy' }}</td>
-                        <td></td>
+                        <td>
+                            <div class='btn btn-primary btn-icon btn-xs float-right'
+                                *ngIf="isRemovable(doc)">
+                                <svg class="icon icon-white icon-sm" (click)="deleteDoc(doc)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                                </svg>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
