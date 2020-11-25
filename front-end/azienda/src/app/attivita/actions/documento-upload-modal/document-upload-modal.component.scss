@@ -10,9 +10,6 @@
         }     
     }
     .modal-body {
-        .card-wrapper {
-            margin: 10px;
-        }
         .card-body{
             top: 296px;
             left: 1065px;
@@ -32,7 +29,7 @@
             color: #707070;
         }
         .position-visible{
-            top: 220px;
+            top: 70%;
             position: absolute;
         }
         .active {

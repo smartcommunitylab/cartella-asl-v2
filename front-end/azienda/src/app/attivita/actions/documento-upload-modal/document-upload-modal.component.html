@@ -7,7 +7,7 @@
     <div class="modal-body" [ngStyle]="styleModalBody()">
         <div *ngIf="!attivitaIndividuale" class="row v-center">
             <div class="col-3"></div>
-            <div class="col-3">
+            <div class="col-3 m-10">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(1)">
                         <div id="1" class="card-body">
@@ -26,7 +26,7 @@
         </div>
         <div *ngIf="attivitaIndividuale" class="row v-center">
             <div class="col-3"></div>
-            <div class="col-3">
+            <div class="col-3 m-10">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(1)">
                         <div id="1" class="card-body">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-3 m-10">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(2)">
                         <div id="2" class="card-body">

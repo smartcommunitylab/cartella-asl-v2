@@ -164,7 +164,7 @@ export class DataService {
     if (filter.stato != null)
       params = params.append('stato', filter.stato);
     if (filter.istitutoId != null)
-    params = params.append('istitutoId', filter.istitutoId);
+      params = params.append('istitutoId', filter.istitutoId);
 
     params = params.append('enteId', this.aziendaId);
     params = params.append('page', page);
@@ -461,7 +461,7 @@ export class DataService {
   }
 
   downloadAttivitaDocumenti(id: any): Observable<any> {
-    let url = this.host + '/download/document/risorsa/' + id + '/ente/' + this.aziendaId ;
+    let url = this.host + '/download/document/risorsa/' + id + '/ente/' + this.aziendaId;
     let params = new HttpParams();
     params = params.append('enteId', this.aziendaId);
     return this.http.get<any>(url,
@@ -476,6 +476,18 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  deleteDocument(id: any): Promise<any> {
+    let body = {}
+    let url = this.host + '/remove/document/' + id + '/ente/' + this.aziendaId;
+
+    return this.http.delete(url)
+      .timeout(this.timeout)
+      .toPromise().then(response => {
+        return response;
+      }
+      ).catch(response => this.handleError);
   }
 
   getRisorsaCompetenze(uuid): Observable<any> {
@@ -630,7 +642,7 @@ export class DataService {
 
     if (filtro.text)
       params = params.append('text', filtro.text);
-   
+
     return this.http.get<any>(
       url,
       {
@@ -741,7 +753,7 @@ export class DataService {
     }
     params = params.append('text', filterText);
 
-    
+
     return this.http.get<IPagedIstituto>(
       url,
       {
@@ -895,12 +907,12 @@ export class DataService {
     return annoScolastico;
   }
 
-  formatTwoDigit(n){
+  formatTwoDigit(n) {
     n = parseInt(n); //ex. if already passed '05' it will be converted to number 5
-    var ret = n > 9 ? "" + n: "0" + n;
+    var ret = n > 9 ? "" + n : "0" + n;
     return ret;
   }
- 
+
   /* istituti */
   getPagedIstitutiOrderByIstitutoId(filtro: any, page, pageSize) {
     let url = this.host + "/istituto/search/ente";
@@ -911,7 +923,7 @@ export class DataService {
 
     if (filtro.filterText)
       params = params.append('text', filtro.filterText);
-   
+
     return this.http.get<any>(
       url,
       {
