@@ -157,6 +157,17 @@ export class AttivitaDettaglioComponent implements OnInit {
     });
   }
 
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
   gestionePresenze() {
     if (this.individuale) {
       this.router.navigate(['modifica/studenti/presenze/individuale'], { relativeTo: this.route });

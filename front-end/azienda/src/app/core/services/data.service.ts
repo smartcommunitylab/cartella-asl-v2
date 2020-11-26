@@ -490,6 +490,33 @@ export class DataService {
       ).catch(response => this.handleError);
   }
 
+  downloadDocumentBlob(doc): Observable<any> {
+    let url = this.host + '/download/document/' + doc.uuid + '/ente/' + this.aziendaId;
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data], { type: doc.formatoDocumento });
+        const url = URL.createObjectURL(blob);
+        return url;
+        //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      },
+        catchError(this.handleError)
+      );
+  }
+
+  downLoadFile(data: any, type: string) {
+    let blob = new Blob([data], { type: type });
+    let url = window.URL.createObjectURL(blob);
+    let pwa = window.open(url);
+
+    if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+      alert('Please disable your Pop-up blocker and try again.');
+    }
+  }
+
   getRisorsaCompetenze(uuid): Observable<any> {
     let url = this.host + '/risorsa/' + uuid + '/competenze/ente/' + this.aziendaId
     // let params = new HttpParams();

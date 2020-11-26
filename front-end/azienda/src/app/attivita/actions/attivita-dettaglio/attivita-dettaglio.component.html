@@ -181,7 +181,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let doc of documenti">
-                        <td><a [routerLink]="">{{doc.nomeFile}}</a></td>
+                        <td><a [routerLink]="" (click)="downloadDoc(doc)">{{doc.nomeFile}}</a></td>
                         <td>{{setDocType(doc.tipo)}}</td>
                         <td>{{doc.dataUpload | date: 'dd/MM/yy' }}</td>
                         <td>
