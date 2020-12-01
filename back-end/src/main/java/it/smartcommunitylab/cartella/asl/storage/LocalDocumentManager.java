@@ -130,14 +130,21 @@ public class LocalDocumentManager {
 		List<Documento> result = new ArrayList<>();
 		EsperienzaSvolta es = esperienzaSvoltaRepository.findByUuid(uuid);
 		if(es != null) {
-			result.addAll(documentoRepository.findDocumentoByRisorsaId(uuid));
+			List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
+			list.forEach(doc -> {
+				if(doc.getTipo().equals(TipoDoc.doc_generico) || 
+						doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
+					result.add(doc);
+				}
+			});			
 			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
 			if(aa != null) {
-				List<Documento> list = documentoRepository.findDocumentoByRisorsaId(aa.getUuid());
+				list = documentoRepository.findDocumentoByRisorsaId(aa.getUuid());
 				list.forEach(doc -> {
 					if(doc.getTipo().equals(TipoDoc.piano_formativo) ||
 							doc.getTipo().equals(TipoDoc.doc_generico) || 
-							doc.getTipo().equals(TipoDoc.valutazione_studente)) {
+							doc.getTipo().equals(TipoDoc.valutazione_studente) ||
+							doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
 						result.add(doc);
 					}
 				});			

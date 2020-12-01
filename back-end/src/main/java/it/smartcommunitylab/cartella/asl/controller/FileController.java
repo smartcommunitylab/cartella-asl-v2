@@ -258,6 +258,15 @@ public class FileController {
 			Documento document = documentManager.getEntity(uuid);
 			if(document != null) {
 				esperienzaSvolta = esperienzaSvoltaManager.findByUuid(document.getRisorsaId());
+				if(esperienzaSvolta == null) {
+					AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(document.getRisorsaId());
+					if(aa != null) {
+						List<EsperienzaSvolta> list = esperienzaSvoltaManager.getEsperienzeByAttivitaAndStudente(aa.getId(), studenteId);
+						if(list.size() > 0) {
+							esperienzaSvolta = list.get(0);
+						}
+					}
+				}
 			}
 		} else {
 			esperienzaSvolta = esperienzaSvoltaManager.findByUuid(uuid);
