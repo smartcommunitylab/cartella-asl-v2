@@ -170,8 +170,7 @@ public class LocalDocumentManager {
 			for(EsperienzaSvolta e: esperienze) {
 				list = documentoRepository.findDocumentoByRisorsaId(e.getUuid());
 				list.forEach(doc -> {
-					if(doc.getTipo().equals(TipoDoc.valutazione_esperienza) ||
-							doc.getTipo().equals(TipoDoc.doc_generico)) {
+					if(doc.getTipo().equals(TipoDoc.doc_generico)) {
 						result.add(doc);
 					}
 				});			
