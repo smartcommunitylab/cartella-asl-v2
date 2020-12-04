@@ -54,6 +54,14 @@ security:
 oauth:
   serverUrl: https://aac.platform.smartcommunitylab.it/aac/
 
+parix:
+  endpoint: ${PARIX_ENDPOINT:}
+  user: ${PARIX_USER:}
+  password: ${PARIX_PASSWORD:}
+  keystore:
+    uri: ${PARIX_KEYSTORE_FILE:}
+    password: ${PARIX_KEYSTORE_PASSWORD:}
+
 management:
   security:
     enabled: false
