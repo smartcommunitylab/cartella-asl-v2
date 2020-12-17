@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -120,6 +121,22 @@ public class ASLUserManager extends DataEntityManager {
 		return user;
 	}
 	
+	public ASLUser getASLUserById(Long userId) {
+		Optional<ASLUser> userOp = userRepository.findById(userId);
+		if(userOp.isPresent()) {
+			return userOp.get();
+		}
+		return null;
+	}
+	
+	public ASLUserRole findASLUserRole(Long userId, ASLRole role, String domainId) {
+		Optional<ASLUserRole> userRoleOp = roleRepository.findRole(userId, role, domainId);
+		if(userRoleOp.isPresent()) {
+			return userRoleOp.get();
+		}
+		return null;
+	}
+	
 	public void updateASLUser(ASLUser user) {
 		userRepository.update(user);
 	}
@@ -128,7 +145,26 @@ public class ASLUserManager extends DataEntityManager {
 		List<ASLUserRole> roles = roleRepository.findByUserId(id);
 		roles.forEach(role -> roleRepository.deleteById(role.getId()));
 		userRepository.deleteById(id);
-	}	
+	}
+	
+	public ASLUserRole addASLUserRole(Long userId, ASLRole role, String domainId) {
+		Optional<ASLUserRole> userRoleOp = roleRepository.findRole(userId, role, domainId);
+		if(userRoleOp.isPresent()) {
+			return userRoleOp.get();
+		}
+		ASLUserRole userRole = new ASLUserRole(role, domainId, userId);
+		roleRepository.save(userRole);
+		return userRole;
+	}
+	
+	public ASLUserRole deleteASLUserRole(Long userId, ASLRole role, String domainId) {
+		Optional<ASLUserRole> userRoleOp = roleRepository.findRole(userId, role, domainId);
+		if(userRoleOp.isPresent()) {
+			roleRepository.delete(userRoleOp.get());
+			return userRoleOp.get();
+		}
+		return null;
+	}
 	
 	public ASLUser updateASLUserRoles(Long id, ASLRole role, String domainId) throws BadRequestException {
 		ASLUser user = userRepository.getOne(id);
