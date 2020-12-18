@@ -17,6 +17,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneEnteRepository;
+import it.smartcommunitylab.cartella.asl.util.Utils;
 
 public class RegistrazioneEnteManager extends DataEntityManager {
 	@Autowired
@@ -33,7 +34,26 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 	}
 	
-	public RegistrazioneEnte confermaRichiesta(String token) throws Exception {
+	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String email) throws Exception {
+		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaId(enteId);
+		if(regOp.isPresent()) {
+			throw new BadRequestException("richiesta registrazione per questo ente già presente");
+		}
+		RegistrazioneEnte reg = new RegistrazioneEnte();
+		reg.setAziendaId(enteId);
+		reg.setIstitutoId(istitutoId);
+		reg.setOwnerId(new Long(-1));
+		reg.setNominativoInvito("Sistema");
+		reg.setToken(Utils.getUUID());
+		reg.setDataInvito(LocalDate.now());
+		reg.setEmail(email);
+		reg.setStato(Stato.inviato);
+		//TODO send email
+		registrazioneEnteRepository.save(reg);
+		return reg;
+	}
+	
+	public RegistrazioneEnte confermaRichiestaRegistrazione(String token) throws Exception {
 		Optional<RegistrazioneEnte> reg = registrazioneEnteRepository.findOneByToken(token);
 		if(reg.isPresent()) {
 			if(Stato.cancellato.equals(reg.get().getStato())) {
@@ -52,24 +72,72 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				registrazioneEnteRepository.save(registrazioneEnte);
 				throw new BadRequestException("richiesta registrazione scaduta");
 			}
-			ASLUser user = new ASLUser();
-			user.setEmail(registrazioneEnte.getEmail());
-			user = userManager.getExistingASLUser(user);
+			ASLUser user = userManager.getExistingASLUser(null, registrazioneEnte.getEmail());
 			if(user == null) {
 				user = new ASLUser();
 				user.setEmail(registrazioneEnte.getEmail());
 				user = userManager.createASLUser(user);
-				registrazioneEnte.setUserId(user.getId());
-				userManager.addASLUserRole(user.getId(), ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, registrazioneEnte.getAziendaId());
-				registrazioneEnte.setOwnerId(new Long(-1));
-				registrazioneEnte.setNominativoInvito("Sistema");
-				registrazioneEnte.setStato(Stato.confermato);
-				registrazioneEnteRepository.save(registrazioneEnte);
 			}
+			registrazioneEnte.setUserId(user.getId());
+			userManager.addASLUserRole(user.getId(), ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, registrazioneEnte.getAziendaId());
+			registrazioneEnte.setStato(Stato.confermato);
+			registrazioneEnteRepository.save(registrazioneEnte);
 			return registrazioneEnte;
 		} else {
 			throw new BadRequestException("token non trovato");
 		}
+	}
+	
+	public RegistrazioneEnte aggiungiRuoloReferenteAzienda(String enteId, String nome, 
+			String cognome, String email, String cf, Long ownerId) throws Exception {
+		ASLUser owner = userManager.getASLUserById(ownerId);
+		if(owner == null) {
+			throw new BadRequestException("gestore non trovato");
+		}
+		ASLUserRole ownerRole = userManager.findASLUserRole(ownerId, 
+				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
+		if(ownerRole == null) {
+			ownerRole = userManager.findASLUserRole(ownerId, 
+					ASLRole.REFERENTE_AZIENDA, enteId);
+		}
+		if(ownerRole == null) {
+			throw new BadRequestException("gestore non autorizzato");
+		}
+		ASLUser user = userManager.getExistingASLUser(cf, email);
+		if(user != null) {
+			if(!user.getEmail().equals(email)) {
+				throw new BadRequestException("codice fiscale già presente con una diversa email");
+			}
+			user.setCf(cf);
+			user.setName(nome);
+			user.setSurname(cognome);
+			userManager.updateASLUser(user);
+		} else {
+			user = new ASLUser();
+			user.setEmail(email);
+			user.setCf(cf);
+			user.setName(nome);
+			user.setSurname(cognome);
+			userManager.createASLUser(user);
+		}
+		ASLUserRole userRole = userManager.findASLUserRole(user.getId(), 
+				ASLRole.REFERENTE_AZIENDA, enteId);
+		if(userRole == null) {
+			userRole = userManager.addASLUserRole(user.getId(), 
+					ASLRole.REFERENTE_AZIENDA, enteId);
+		}		
+		RegistrazioneEnte reg = new RegistrazioneEnte();
+		reg.setUserId(user.getId());
+		reg.setOwnerId(ownerId);
+		reg.setDataInvito(LocalDate.now());
+		reg.setDataAccettazione(LocalDate.now());
+		reg.setEmail(email);
+		reg.setNominativoInvito(owner.getName() + " " + owner.getSurname());
+		reg.setToken(Utils.getUUID());
+		reg.setStato(Stato.confermato);
+		reg.setRole(ASLRole.REFERENTE_AZIENDA);
+		registrazioneEnteRepository.save(reg);
+		return reg;
 	}
 	
 	public RegistrazioneEnte cancellaRuoloReferenteAzienda(Long registrazioneId) throws Exception {
@@ -78,7 +146,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			throw new BadRequestException("registrazione non trovata");
 		}
 		RegistrazioneEnte reg = optional.get();
-		if(!ASLRole.REFERENTE_AZIENDA.equals(reg.getStato())) {
+		if(!ASLRole.REFERENTE_AZIENDA.equals(reg.getRole())) {
 			throw new BadRequestException("ruolo non corrispondente");
 		}
 		ASLUser owner = userManager.getASLUserById(reg.getOwnerId());

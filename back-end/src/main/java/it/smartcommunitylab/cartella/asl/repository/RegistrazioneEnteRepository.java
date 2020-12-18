@@ -19,4 +19,6 @@ public interface RegistrazioneEnteRepository extends JpaRepository<Registrazione
 	
 	public Optional<RegistrazioneEnte> findOneByToken(String token);
 	
+	public Optional<RegistrazioneEnte> findOneByAziendaId(String aziendaId);
+	
 }

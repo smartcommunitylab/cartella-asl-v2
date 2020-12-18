@@ -101,15 +101,20 @@ public class ASLUserManager extends DataEntityManager {
 			user.setId(old.getId());
 		}
 		userRepository.save(user);
-		user.getRoles().forEach(role -> {
-			role.setUserId(user.getId());
-			roleRepository.save(role);
-		});
+//		user.getRoles().forEach(role -> {
+//			role.setUserId(user.getId());
+//			roleRepository.save(role);
+//		});
 		return user;
 	}
 	
 	public ASLUser getExistingASLUser(ASLUser user) {
 		ASLUser old = userRepository.findByCfOrEmail(user.getCf(), user.getEmail());
+		return old;
+	}
+	
+	public ASLUser getExistingASLUser(String cf, String email) {
+		ASLUser old = userRepository.findByCfOrEmail(cf, email);
 		return old;
 	}
 	

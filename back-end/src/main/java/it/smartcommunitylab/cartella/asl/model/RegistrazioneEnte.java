@@ -32,6 +32,8 @@ public class RegistrazioneEnte {
 	
 	private String aziendaId;
 	
+	private String istitutoId;
+	
 	private Long userId;
 	
 	private Long ownerId;
@@ -142,6 +144,14 @@ public class RegistrazioneEnte {
 
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	public String getIstitutoId() {
+		return istitutoId;
+	}
+
+	public void setIstitutoId(String istitutoId) {
+		this.istitutoId = istitutoId;
 	}
 
 }
