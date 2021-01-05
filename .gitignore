@@ -19,7 +19,11 @@ front-end/ruoli/node/*
 front-end/ruoli/www/*
 front-end/ruoli/dist/*
 front-end/ruoli/package-lock.json
-
+front-end/registrazione-ente/node_modules/*
+front-end/registrazione-ente/node/*
+front-end/registrazione-ente/www/*
+front-end/registrazione-ente/dist/*
+front-end/registrazione-ente/package-lock.json
 
 back-end/bin/
 back-end/**/target/
@@ -63,6 +67,10 @@ front-end/azienda/bin
 front-end/studente/bin
 front-end/login/bin
 front-end/ruoli/bin
+front-end/registrazione-ente/.project
+front-end/registrazione-ente/.settings
+front-end/registrazione-ente/.classpath
+front-end/registrazione-ente/bin
 
 **/front-end/*/.vscode/settings.json
 **/front-end/*/target/
