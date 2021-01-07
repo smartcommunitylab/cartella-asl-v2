@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte.Stato;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 
 @Repository
 public interface RegistrazioneEnteRepository extends JpaRepository<RegistrazioneEnte, Long> {
@@ -20,5 +21,7 @@ public interface RegistrazioneEnteRepository extends JpaRepository<Registrazione
 	public Optional<RegistrazioneEnte> findOneByToken(String token);
 	
 	public Optional<RegistrazioneEnte> findOneByAziendaId(String aziendaId);
+	
+	public Optional<RegistrazioneEnte> findOneByAziendaIdAndRole(String aziendaId, ASLRole role);
 	
 }

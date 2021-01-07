@@ -25,6 +25,8 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 	@Autowired
 	ASLUserManager userManager;
 	
+	long maxGiorni = 5;
+	
 	public RegistrazioneEnte getRegistrazioneByToken(String token) throws Exception {
 		Optional<RegistrazioneEnte> reg = registrazioneEnteRepository.findOneByToken(token);
 		if(reg.isPresent()) {
@@ -35,11 +37,20 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 	}
 	
 	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String email) throws Exception {
-		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaId(enteId);
+		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
-			throw new BadRequestException("richiesta registrazione per questo ente già presente");
+			RegistrazioneEnte reg = regOp.get();
+			if(Stato.confermato.equals(reg.getStato())) {
+				throw new BadRequestException("richiesta registrazione per questo ente già presente");
+			}
+			LocalDate today = LocalDate.now();
+			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
+				registrazioneEnteRepository.delete(reg);
+				throw new BadRequestException("richiesta registrazione per questo ente già presente");
+			}
+			registrazioneEnteRepository.delete(reg);
 		}
-		RegistrazioneEnte reg = new RegistrazioneEnte();
+		RegistrazioneEnte reg = new RegistrazioneEnte(); 
 		reg.setAziendaId(enteId);
 		reg.setIstitutoId(istitutoId);
 		reg.setOwnerId(new Long(-1));
@@ -47,29 +58,39 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setToken(Utils.getUUID());
 		reg.setDataInvito(LocalDate.now());
 		reg.setEmail(email);
+		reg.setRole(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		reg.setStato(Stato.inviato);
 		//TODO send email
 		registrazioneEnteRepository.save(reg);
 		return reg;
 	}
 	
+	public RegistrazioneEnte annullaRichiestaRegistrazione(String istitutoId, Long registrazioneId) throws Exception {
+		Optional<RegistrazioneEnte> optional = registrazioneEnteRepository.findById(registrazioneId);
+		if(!optional.isPresent()) {
+			throw new BadRequestException("registrazione non trovata");
+		}
+		RegistrazioneEnte reg = optional.get();
+		if(!reg.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istituto non autorizzato");
+		}
+		if(!Stato.inviato.equals(reg.getStato())) {
+			throw new BadRequestException("stato registrazione non compatibile");
+		}
+		registrazioneEnteRepository.delete(reg);
+		return reg;
+	}
+	
 	public RegistrazioneEnte confermaRichiestaRegistrazione(String token) throws Exception {
 		Optional<RegistrazioneEnte> reg = registrazioneEnteRepository.findOneByToken(token);
 		if(reg.isPresent()) {
-			if(Stato.cancellato.equals(reg.get().getStato())) {
-				throw new BadRequestException("richiesta registrazione cancellata");
-			}
 			if(Stato.confermato.equals(reg.get().getStato())) {
 				throw new BadRequestException("richiesta registrazione già confermata");
 			}
-			if(Stato.scaduto.equals(reg.get().getStato())) {
-				throw new BadRequestException("richiesta registrazione scaduta");
-			}
 			RegistrazioneEnte registrazioneEnte = reg.get();
 			LocalDate today = LocalDate.now();
-			if(today.isAfter(reg.get().getDataInvito().plusDays(5))) {
-				registrazioneEnte.setStato(Stato.scaduto);
-				registrazioneEnteRepository.save(registrazioneEnte);
+			if(today.isAfter(reg.get().getDataInvito().plusDays(maxGiorni))) {
+				registrazioneEnteRepository.delete(registrazioneEnte);
 				throw new BadRequestException("richiesta registrazione scaduta");
 			}
 			ASLUser user = userManager.getExistingASLUser(null, registrazioneEnte.getEmail());
@@ -80,6 +101,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			}
 			registrazioneEnte.setUserId(user.getId());
 			userManager.addASLUserRole(user.getId(), ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, registrazioneEnte.getAziendaId());
+			registrazioneEnte.setDataAccettazione(LocalDate.now());
 			registrazioneEnte.setStato(Stato.confermato);
 			registrazioneEnteRepository.save(registrazioneEnte);
 			return registrazioneEnte;
@@ -129,6 +151,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		RegistrazioneEnte reg = new RegistrazioneEnte();
 		reg.setUserId(user.getId());
 		reg.setOwnerId(ownerId);
+		reg.setAziendaId(enteId);
 		reg.setDataInvito(LocalDate.now());
 		reg.setDataAccettazione(LocalDate.now());
 		reg.setEmail(email);

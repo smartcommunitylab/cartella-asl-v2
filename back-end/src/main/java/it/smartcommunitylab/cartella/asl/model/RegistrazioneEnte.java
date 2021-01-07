@@ -23,7 +23,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 public class RegistrazioneEnte {
 	
 	public static enum Stato {
-		inviato, confermato, scaduto, cancellato
+		inviato, confermato
 	};
 
 	@Id
