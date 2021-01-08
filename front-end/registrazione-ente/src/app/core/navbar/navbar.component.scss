@@ -1,0 +1,189 @@
+.card-on-top {
+    position: fixed;
+    z-index: 1;
+}
+
+.nav-logo{
+    position: absolute;
+    max-width: 90% !important;
+    max-height: 90% !important;
+    left: 10%;
+    bottom: 5%;
+}
+.nav-image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-logo-text{
+  font-size: 12pt;
+  font-weight: bold;
+  color: white;
+  line-height: 90%;
+  padding-top: 20px;
+  padding-left: 4px;
+} 
+.nav-logo-institute{
+  font-size: 10pt;
+  font-weight: lighter;
+  color: white; 
+  padding-top: 8px;
+  padding-left: 4px;
+} 
+.profile-card{
+    background: #FAFDFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 6px 6px #00000029;
+    border: 0.5px solid #0066CC;
+    opacity: 1;
+}
+.profile-image{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #BACCD9;
+    opacity: 1;
+    // for make center
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-name{
+    text-align: left;
+    font-family: Titillium Web;
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 42px;
+    letter-spacing: 1.39px;
+    color: #707070;
+    opacity: 1;
+}
+.profile-email{
+    text-align: left;
+    font-family: Titillium Web;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #5A768A;
+    opacity: 1;
+    margin-bottom: 5%;
+}
+.list-istituto{
+  margin-top: 20px;
+}
+.rowBottomPadding{
+    padding-bottom: 10%;
+}
+.istituto-name-profile{
+    text-align: left;
+    font-family: Titillium Web;
+    font-size: 18px !important;
+    font-weight: normal;
+    line-height: 20px !important;
+    letter-spacing: 0;
+    color: #707070;
+    opacity: 1;
+}
+input:checked~span.changeColor {
+    text-align: left;
+    font-family: Titillium Web;
+    font-size: 18px !important;
+    line-height: 20px !important;
+    letter-spacing: 0;
+    color: #7FB2E5;
+    opacity: 1;
+}
+.button-logout{
+    text-align: center;
+    font-family: Titillium Web;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: 1.11px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+.button-logout-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* Custom Radio Button Start*/
+
+
+  
+  .customradio {
+    display: block;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 0px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Hide the browser's default radio button */
+  .customradio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  /* Create a custom radio button */
+  .checkmark {
+    position: absolute;
+    top: 7%;
+    left: 0;
+    height: 22px;
+    width: 22px;
+    background-color: white;
+    border-radius: 50%;
+    border:1px solid #BEBEBE;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .customradio:hover input ~ .checkmark {
+    background-color: transparent;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .customradio input:checked ~ .checkmark {
+    background-color: white;
+    border:1px solid #0073e6;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .customradio input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .customradio .checkmark:after {
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0073e6;
+  }
+  
+  /* Custom Radio Button End*/
+
+  /* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  z-index: 10;
+}

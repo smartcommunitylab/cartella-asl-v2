@@ -1,0 +1,92 @@
+<div class="it-header-navbar-wrapper sticky">
+    <div class="row">
+        <div class="col-1">
+            <a target="_blank" href="#" class="mr-5">
+                <img src="assets/images/logo_trasparente.png" class="nav-logo">
+            </a>
+        </div>
+        <div class="col-2">
+            <div class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</div>
+            <div class="nav-logo-institute">{{dataService? dataService.aziendaName : " " }}</div>
+        </div>
+        <div class="col-9">
+            <nav class="navbar navbar-expand-lg">
+                <div class="navbar-collapsable" id="nav10">
+                    <div class="overlay"></div>
+                    <div class="close-div sr-only">
+                        <button class="btn close-menu" type="button">
+                            <span class="it-close"></span>close
+                        </button>
+                    </div>
+                    <div class="menu-wrapper">
+                        <ul class="navbar-nav">
+                        </ul>
+                        <ul class="navbar-nav navbar-secondary">
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item">
+                            </li>
+                            <li class="nav-item v-center" *ngIf="env.profileFlag"> <!--*ngIf="profile" -->
+                                <span class="float-right btn btn-primary btn-icon btn-full" (click)="profileDropdownVisible = !profileDropdownVisible;">
+                                    <div>
+                                        <span>
+                                            <div>
+                                                <svg class="bg-light icon icon-lg icon-padded rounded-circle">
+                                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-user">
+                                                    </use>
+                                                </svg>
+                                                <br />
+                                                {{profile.name}} {{profile.surname}}
+                                            </div>
+                                        </span>
+                                    </div>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- dropdown menu -->
+<div *ngIf="env.profileFlag" [hidden]="!profileDropdownVisible">
+    <div class="row sticky noHeight">
+        <div class="col-10"></div>
+        <div class="col-2 card-wrapper">
+            <div class="card hiddenBG">
+                <div class="card-on-top card-body profile-card">
+                    <div class="row profile-name" *ngIf="profile"><span class="col-sm-12">{{profile.name}} {{profile.surname}}</span></div>
+                    <div class="row profile-email" *ngIf="profile"><span class="col-sm-12">{{profile.email}}</span></div>   
+                   
+                    <div class="row link-list-wrapper rowBottomPadding">
+                            
+                        <ul class="link-list">
+                            <li class="list-item list-istituto" *ngFor="let az of aziende">
+                                <label class="customradio">
+                                    <input type="radio" [value]="az" [(ngModel)]="actualAzienda"
+                                    (change)="onAziendaChange(az);profileDropdownVisible = !profileDropdownVisible">
+                                    <span class="istituto-name-parofile changeColor">{{az.nome}}</span>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8 button-logout-center">
+                            <button type="button" class="btn btn-primary btn-xs button-logout" (click)="logout()">
+                                Logout 
+                                <svg class="icon icon-white icon-sm"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-arrow-right-circle"></use></svg>
+                            </button>                                
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
