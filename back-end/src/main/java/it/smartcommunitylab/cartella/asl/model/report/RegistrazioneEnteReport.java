@@ -47,6 +47,8 @@ public class RegistrazioneEnteReport {
 	public RegistrazioneEnteReport() {}
 	
 	public RegistrazioneEnteReport(RegistrazioneEnte reg, ASLUser user) {
+		this.id = reg.getId();
+		this.aziendaId = reg.getAziendaId();
 		this.userId = user.getId();
 		this.cf = user.getCf();
 		this.email = user.getEmail();

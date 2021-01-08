@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
@@ -25,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 
+@RestController
 public class RegistrazioneEnteController implements AslController {
 	private static Log logger = LogFactory.getLog(RegistrazioneEnteController.class);
 	

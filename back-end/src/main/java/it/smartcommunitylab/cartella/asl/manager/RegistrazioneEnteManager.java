@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
@@ -19,6 +21,8 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneEnteRepository;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
+@Repository
+@Transactional
 public class RegistrazioneEnteManager extends DataEntityManager {
 	@Autowired
 	RegistrazioneEnteRepository registrazioneEnteRepository;
