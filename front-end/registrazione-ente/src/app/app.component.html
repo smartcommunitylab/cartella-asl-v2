@@ -1,0 +1,8 @@
+<main class="container" [class.sticky-header]="isSticky">
+    <!-- <cm-navbar #topNavbar></cm-navbar> -->
+    <router-outlet></router-outlet>
+    <cm-footer ></cm-footer>
+    <cm-growler position="center-center" timeout="5000"></cm-growler>
+    <cm-modal></cm-modal>
+    <cm-overlay delay="300" *ngIf='env.globalSpinner'></cm-overlay>
+</main>
