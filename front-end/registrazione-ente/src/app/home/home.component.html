@@ -1,0 +1,93 @@
+<div class="it-header-navbar-wrapper sticky">
+    <div class="row">
+        <div class="col-1">
+            <a target="_blank" href="#" class="mr-5">
+                <img src="assets/images/logo_trasparente.png" class="nav-logo">
+            </a>
+        </div>
+        <div class="col-2">
+            <div class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</div>
+            <div class="nav-logo-institute"></div>
+        </div>
+        <div class="col-9">
+          </div>
+    </div>
+</div>
+
+<div class="mb-3 list-container md-margin" *ngIf="!linkExpired">
+    <div class="text-center">
+        <span class="title color-black">Benvenuto nel sistema Esperienze Didattiche Insieme al Territorio - EDIT</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-25">
+        <p class="color-grey text-semibold">Il sistema EDIT è lo strumento informatico per la gestione delle esperienze
+            di alternanza scuola lavoro degli studenti degli istituti superiori</p>
+        <br />
+        <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema EDIT da ISTITUTO TECNICO MICHELANGELO
+            BUONARROTI.</p>
+        <br />
+        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite
+            l’indirizzo mail indicato dalla scuola.</p>
+        <br />
+        <div class="card-wrapper">
+            <div class="card-inner">
+                <div class="card-body">
+                    <div class="row font-28">
+                        <span class="text-bold col-6 text-center color-blu">
+                            <p>FONDAZIONE BRUNO KESSLER</p>
+                        </span>
+                        <span class="text-bold col-6 text-center color-blu">
+                            <p>fondazionebrunokessler@fbk.eu</p>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <p class="text-semibold color-black">Se l’ente e l’indirizzo mail corrispondono, procedi con la registrazione</p>
+    </div>
+    <br />
+    <br />
+    <div class="row color-grey">
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Google</p>
+            <br />
+            <p class="font-30 text-italic text-left">Se l’indirizzo selezionato per l’attivazione è un account Google, usa l’autenticazione Google</p>
+        </div>
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">AAC</p>
+            <br />
+            <p class="font-30 text-italic text-left">Se l’indirizzo selezionato per l’attivazione non è un account Google, registrati su AAC, il servizio di autenticazione dell’unità Smart Cities & Communities della Fondazione Bruno Kessler</p>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3 list-container md-margin" *ngIf="linkExpired">
+    <div class="text-center">
+        <span class="title color-red">Attenzione! L’invito che hai ricevuto è scaduto oppure è stato annullato</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-30">
+        <p class="color-grey text-bold">Se pensi che ci sia un errore, o se hai accordi in essere con qualche istituto della provincia di Trento <br /> puoi contattare l’istituto che ha invitato il tuo ente a partecipare EDIT</p>
+        <br />
+        <p class="color-red text-semibold">Il tuo invito è stato creato da ISTITUTO TECNICO INDUSTRIALE MICHELANGELO BUONARROTI</p>
+        <br />
+    </div>
+</div>

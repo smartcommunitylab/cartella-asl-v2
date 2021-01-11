@@ -1,0 +1,67 @@
+.card-on-top {
+    position: fixed;
+    z-index: 1;
+}
+.nav-logo{
+    position: absolute;
+    max-width: 91px !important;
+    max-height: 65px !important;
+    left: 10%;
+    bottom: -10px;
+}
+.nav-image{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-logo-text{
+  font-size: 12pt;
+  font-weight: bold;
+  color: white;
+  line-height: 90%;
+  padding-top: 20px;
+} 
+.nav-logo-institute{
+  font-size: 10pt;
+  font-weight: lighter;
+  color: white; 
+  padding-top: 8px;
+  padding-left: 4px;
+} 
+.sticky {
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  z-index: 10;
+  padding-bottom: 16px;
+}
+
+.list-container{
+    margin-top: 40px;
+    padding: 12px;
+    >.row {
+        margin: 0px;
+    }
+   .title{
+        text-align: left;
+        letter-spacing: 0;
+        opacity: 1;
+        font-size: 25px;
+        font-weight: bold;
+    }
+    .icon-image {
+        top: 229px;
+        left: 895px;
+        height: 115px;
+        opacity: 1;
+        // background: #2765AD 0% 0% no-repeat padding-box;
+    }    
+    .card-inner {
+            border: 3px solid #707070;
+            left: 10%;
+            width: 80%;
+            opacity: 1;
+            position: relative;
+    }
+   
+}
