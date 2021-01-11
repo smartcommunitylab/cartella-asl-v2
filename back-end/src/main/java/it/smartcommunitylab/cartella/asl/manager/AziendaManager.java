@@ -49,6 +49,8 @@ public class AziendaManager extends DataEntityManager {
 	AttivitaAlternanzaRepository attivitaAltRepository;
 	@Autowired
 	AziendaEsteraRepository aziendaEsteraRepository;
+	@Autowired
+	RegistrazioneEnteManager registrazioneEnteManager;
 
 	private static final String AZIENDE = "SELECT DISTINCT az FROM Azienda az ";
 
@@ -76,6 +78,9 @@ public class AziendaManager extends DataEntityManager {
 		query.setMaxResults(pageRequest.getPageSize());
 		List<Azienda> result = query.getResultList();
 
+		for(Azienda a : result) {
+			addRegistrazioneEnte(a);
+		}
 		Page<Azienda> page = new PageImpl<Azienda>(result, pageRequest, t);
 		return page;
 	}
@@ -196,10 +201,17 @@ public class AziendaManager extends DataEntityManager {
 				if(aziendaEstera != null) {
 					azienda.setEstera(true);
 				}
+				addRegistrazioneEnte(azienda);
 				return azienda;
 			}
 		}
 		return null;
+	}
+	
+	private void addRegistrazioneEnte(Azienda a) {
+		if(a != null) {
+			a.setRegistrazioneEnte(registrazioneEnteManager.getRichiestaRegistrazione(a.getId()));
+		}
 	}
 	
 	public Azienda deleteAzienda(String id) throws BadRequestException {

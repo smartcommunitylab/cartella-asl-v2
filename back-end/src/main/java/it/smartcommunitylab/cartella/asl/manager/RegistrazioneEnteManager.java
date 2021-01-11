@@ -230,4 +230,20 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		userManager.updateASLUser(owner);
 		return owner;
 	}
+	
+	public RegistrazioneEnte getRichiestaRegistrazione(String enteId) {
+		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, 
+				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
+		if(regOp.isPresent()) {
+			RegistrazioneEnte reg = regOp.get();
+			if(Stato.confermato.equals(reg.getStato())) {
+				return reg;
+			}
+			LocalDate today = LocalDate.now();
+			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
+				return reg;
+			}
+		}
+		return null;
+	}
 }
