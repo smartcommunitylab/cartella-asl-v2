@@ -31,8 +31,7 @@
         <p class="color-grey text-semibold">Il sistema EDIT è lo strumento informatico per la gestione delle esperienze
             di alternanza scuola lavoro degli studenti degli istituti superiori</p>
         <br />
-        <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema EDIT da ISTITUTO TECNICO MICHELANGELO
-            BUONARROTI.</p>
+        <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema <span class="text-capitalize">{{ nomeIstituto }}</span>.</p>
         <br />
         <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite
             l’indirizzo mail indicato dalla scuola.</p>
@@ -42,10 +41,10 @@
                 <div class="card-body">
                     <div class="row font-28">
                         <span class="text-bold col-6 text-center color-blu">
-                            <p>FONDAZIONE BRUNO KESSLER</p>
+                            <p><span class="text-capitalize">{{ nomeEnte }}</span></p>
                         </span>
                         <span class="text-bold col-6 text-center color-blu">
-                            <p>fondazionebrunokessler@fbk.eu</p>
+                            <p>{{ emailEnte }}</p>
                         </span>
                     </div>
                 </div>
@@ -79,7 +78,7 @@
     <div class="row">
         <div class="col-5"></div>
         <div class="col-2 text-center">
-            <img src="assets/images/logo_trasparente.png" class="icon-image">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
         </div>
         <div class="col-5"></div>
     </div>
@@ -87,7 +86,7 @@
     <div class="text-center font-30">
         <p class="color-grey text-bold">Se pensi che ci sia un errore, o se hai accordi in essere con qualche istituto della provincia di Trento <br /> puoi contattare l’istituto che ha invitato il tuo ente a partecipare EDIT</p>
         <br />
-        <p class="color-red text-semibold">Il tuo invito è stato creato da ISTITUTO TECNICO INDUSTRIALE MICHELANGELO BUONARROTI</p>
+        <p class="color-red text-semibold">Il tuo invito è stato creato da <span class="text-capitalize">{{ nomeIstituto }}</span>.</p>
         <br />
     </div>
 </div>
