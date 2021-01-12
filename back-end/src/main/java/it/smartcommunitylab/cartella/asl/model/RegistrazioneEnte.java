@@ -50,6 +50,10 @@ public class RegistrazioneEnte {
 	
 	private String nominativoInvito;
 	
+	private String nomeIstituto;
+	
+	private String nomeEnte;
+	
 	private String token;
 	
 	@Enumerated(EnumType.STRING)
@@ -152,6 +156,22 @@ public class RegistrazioneEnte {
 
 	public void setIstitutoId(String istitutoId) {
 		this.istitutoId = istitutoId;
+	}
+
+	public String getNomeIstituto() {
+		return nomeIstituto;
+	}
+
+	public void setNomeIstituto(String nomeIstituto) {
+		this.nomeIstituto = nomeIstituto;
+	}
+
+	public String getNomeEnte() {
+		return nomeEnte;
+	}
+
+	public void setNomeEnte(String nomeEnte) {
+		this.nomeEnte = nomeEnte;
 	}
 
 }

@@ -12,12 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
+import it.smartcommunitylab.cartella.asl.model.Azienda;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte.Stato;
 import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
+import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
+import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneEnteRepository;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -26,6 +30,10 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 public class RegistrazioneEnteManager extends DataEntityManager {
 	@Autowired
 	RegistrazioneEnteRepository registrazioneEnteRepository;
+	@Autowired
+	IstituzioneRepository istituzioneRepository;
+	@Autowired
+	AziendaRepository aziendaRepository;
 	@Autowired
 	ASLUserManager userManager;
 	
@@ -54,6 +62,8 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			}
 			registrazioneEnteRepository.delete(reg);
 		}
+		Optional<Istituzione> istituto = istituzioneRepository.findById(istitutoId);
+		Optional<Azienda> ente = aziendaRepository.findById(enteId);
 		RegistrazioneEnte reg = new RegistrazioneEnte(); 
 		reg.setAziendaId(enteId);
 		reg.setIstitutoId(istitutoId);
@@ -64,6 +74,12 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setEmail(email);
 		reg.setRole(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		reg.setStato(Stato.inviato);
+		if(istituto.isPresent()) {
+			reg.setNomeIstituto(istituto.get().getName());
+		}
+		if(ente.isPresent())  {
+			reg.setNomeEnte(ente.get().getNome());
+		}
 		//TODO send email
 		registrazioneEnteRepository.save(reg);
 		return reg;
@@ -152,6 +168,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			userRole = userManager.addASLUserRole(user.getId(), 
 					ASLRole.REFERENTE_AZIENDA, enteId);
 		}		
+		Optional<Azienda> ente = aziendaRepository.findById(enteId);
 		RegistrazioneEnte reg = new RegistrazioneEnte();
 		reg.setUserId(user.getId());
 		reg.setOwnerId(ownerId);
@@ -163,6 +180,9 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setToken(Utils.getUUID());
 		reg.setStato(Stato.confermato);
 		reg.setRole(ASLRole.REFERENTE_AZIENDA);
+		if(ente.isPresent())  {
+			reg.setNomeEnte(ente.get().getNome());
+		}
 		registrazioneEnteRepository.save(reg);
 		return reg;
 	}
