@@ -23,6 +23,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneEnteRepository;
+import it.smartcommunitylab.cartella.asl.services.MailService;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
@@ -36,6 +37,8 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 	AziendaRepository aziendaRepository;
 	@Autowired
 	ASLUserManager userManager;
+	@Autowired
+	MailService mailService;
 	
 	long maxGiorni = 5;
 	
@@ -81,6 +84,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			reg.setNomeEnte(ente.get().getNome());
 		}
 		//TODO send email
+		mailService.inviaRichiestaRegistrazione(reg);
 		registrazioneEnteRepository.save(reg);
 		return reg;
 	}
@@ -183,6 +187,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ente.isPresent())  {
 			reg.setNomeEnte(ente.get().getNome());
 		}
+		//TODO send email
 		registrazioneEnteRepository.save(reg);
 		return reg;
 	}

@@ -62,6 +62,14 @@ parix:
     uri: ${PARIX_KEYSTORE_FILE:}
     password: ${PARIX_KEYSTORE_PASSWORD:}
 
+mail:
+  host: ${MAIL_HOST:}
+  port: ${MAIL_PORT:}
+  user: ${MAIL_USER:}
+  password: ${MAIL_PASSWORD:}
+  from: ${MAIL_FROM:}
+  url: ${MAIL_URL:}
+  
 management:
   security:
     enabled: false
