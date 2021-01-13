@@ -30,18 +30,14 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
         this.env.profileFlag = false;
-        this.title = 'Template email link';
-        // // alert(this.route);
-
-        // this.route.params.subscribe(params => {
-        //     let id = params['id'];
-        // });
-
         this.route.queryParamMap.subscribe(queryParams => {
-            // http://localhost:4400/#/home?nomeIstituto=ISTITUTO%20TECNICO%20MICHELANGELO%20BUONARROTI&nomeEnte=%22Fondazione%20Bruno%20Kessler%22&emailEnte=%22khurshid@fbk.eu%22
-            this.nomeIstituto = queryParams.get("nomeIstituto");
-            this.nomeEnte = queryParams.get("nomeEnte");
-            this.emailEnte = queryParams.get("emailEnte");
+            //http://localhost:4400/#/home?token=5ea06c66-5c01-477b-a91a-e8d695523571
+            let token = queryParams.get("token");
+            this.dataService.getRegistrazioneByToken(token).subscribe(res=>{
+                this.nomeIstituto = res.nomeIstituto;
+                this.nomeEnte = res.nomeEnte;
+                this.emailEnte = res.email;
+            });            
         })
 
     }

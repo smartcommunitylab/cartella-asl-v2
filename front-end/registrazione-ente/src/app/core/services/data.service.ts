@@ -58,6 +58,23 @@ export class DataService {
     }
   }
 
+  getRegistrazioneByToken(token): Observable<any> {
+    let url = this.host.replace('/api','/registrazione-ente');
+    let params = new HttpParams();
+    params = params.append('token', token);
+    return this.http.get<any>(url, {
+      params: params,
+      observe: 'response'
+    })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getProfile(): Observable<any> {
     let headers = new HttpHeaders();
     const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
