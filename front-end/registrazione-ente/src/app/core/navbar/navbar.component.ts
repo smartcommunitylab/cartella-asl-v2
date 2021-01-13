@@ -26,10 +26,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     constructor(private router: Router, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
 
-    ngOnInit() {
-
-        
-    }
+    ngOnInit() {}
     
     initProfile() {
         this.dataService.getProfile().subscribe(profile => {
@@ -47,9 +44,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.sub.unsubscribe();
     }
 
-    loginOrOut() {
-
-    }
+    loginOrOut() {}
 
     logout() {
         this.authService.logout();

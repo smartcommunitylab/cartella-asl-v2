@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class GrowlerService {
-    
-    constructor() { }
 
-    growl: (message: string, growlType: GrowlerMessageType, timeout?:number) => number;
+  constructor() { }
+  growl: (message: string, growlType: GrowlerMessageType, timeout?: number) => number;
 
 }
 

@@ -23,10 +23,7 @@ export class HomeComponent implements OnInit {
         private authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router
-    ) {
-
-        // this.linkExpired = true;
-    }
+    ) {}
 
     ngOnInit(): void {
         this.env.profileFlag = false;
@@ -37,9 +34,11 @@ export class HomeComponent implements OnInit {
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
                 this.emailEnte = res.email;
-            });            
+            }, err => {
+                // logic for expired token.
+                this.linkExpired = true;   
+            }); 
         })
-
     }
 
     login() {

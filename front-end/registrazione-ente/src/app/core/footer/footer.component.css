@@ -1,11 +1,9 @@
 .footer {
     position: relative;
-    /* background-color: #4D4D4D; */
     background-color: transparent;
     z-index: 999;
     color: white;
     margin: 58px 16px 36px 16px;
-    /* margin-top: 58px; //Necessary because .sub-navbar-content-below moves content 58px down */
 }
 .footer .footer-images img {
     max-height: 80px;
@@ -35,7 +33,6 @@
     font-weight: bold;
     text-decoration: underline;
 }
-
 .footerModification{
     background-color: #F0F6FC !important;
     margin: -18px 0px 0px 0px!important;
