@@ -116,5 +116,12 @@ public class MailService {
 		vars.put("token", reg.getToken());
 		sendEmail(reg.getEmail(), "Registrazione Ente", "registrazioneEnte", vars);
 	}
+	
+	public void inviaRuoloReferenteAzienda(RegistrazioneEnte reg) throws Exception {
+		Map<String, String> vars = new HashMap<String, String>();
+		vars.put("baseUrl", baseUrl);
+		vars.put("token", reg.getToken());
+		sendEmail(reg.getEmail(), "Ruolo Referente Azienda", "ruoloReferenteAzienda", vars);
+	}
 
 }

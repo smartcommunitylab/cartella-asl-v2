@@ -83,7 +83,6 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ente.isPresent())  {
 			reg.setNomeEnte(ente.get().getNome());
 		}
-		//TODO send email
 		mailService.inviaRichiestaRegistrazione(reg);
 		registrazioneEnteRepository.save(reg);
 		return reg;
@@ -187,7 +186,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ente.isPresent())  {
 			reg.setNomeEnte(ente.get().getNome());
 		}
-		//TODO send email
+		mailService.inviaRuoloReferenteAzienda(reg);
 		registrazioneEnteRepository.save(reg);
 		return reg;
 	}

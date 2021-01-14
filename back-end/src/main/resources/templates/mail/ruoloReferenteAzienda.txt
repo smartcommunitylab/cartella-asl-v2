@@ -1,0 +1,4 @@
+Your RipresaTrentino account has been created, please visit the URL below to activate it:
+{{baseUrl}}/account/activate?key={{token}}
+Saluti,
+RipresaTrentino.
