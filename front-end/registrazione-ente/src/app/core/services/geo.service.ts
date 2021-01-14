@@ -117,9 +117,7 @@ export class GeoService {
     else if (error.error) {
       if (error.error.ex) {
         errMsg = error.error.ex;
-        // Use the following instead if using lite-server
-        //return Observable.throw(err.text() || 'backend server error');
-      } else if (typeof error.error === "string") {
+        } else if (typeof error.error === "string") {
         try {
           let errore = JSON.parse(error.error);
           if (errore.ex) {

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { config } from '../../config';
@@ -35,7 +35,7 @@ export class AuthenticationService {
     logout() {
         sessionStorage.clear();
         var getUrl = window.location;
-        var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
+        var baseUrl = getUrl.protocol + "//" + getUrl.host;
         var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`;        
         window.location.href = logoutUrl;
     }

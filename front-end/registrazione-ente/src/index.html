@@ -50,7 +50,6 @@
                 sessionStorage.access_token = params['access_token'];
                 sessionStorage.access_token_expires_in = new Date().getTime() + parseInt(params['expires_in'], 10) * 1000;
                 window.location.hash = '/registrazione';
-                alert(window.location.hash);
                 window.location.reload();
             }
         }

@@ -19,7 +19,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       if (!valid) {
         console.log('come here for not valid');
         this.login.redirectAuth();
-        // this.router.navigate(['/login']);
       }
       return valid;
     });
