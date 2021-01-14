@@ -4,7 +4,7 @@ import { LocalStorageModule } from '@ngx-pwa/local-storage';
 import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
 const app_routes: Routes = [
-  { path: 'home', loadChildren: 'app/home/home.module#HomeModule' },
+  { path: 'home/account/activate', loadChildren: 'app/home/home.module#HomeModule' },
   { path: 'registrazione',  loadChildren: 'app/registrazione/registrazione.module#RegistrazioneModule' },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];

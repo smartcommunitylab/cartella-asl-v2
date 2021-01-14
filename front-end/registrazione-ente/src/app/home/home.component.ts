@@ -28,8 +28,8 @@ export class HomeComponent implements OnInit {
     ngOnInit(): void {
         this.env.profileFlag = false;
         this.route.queryParamMap.subscribe(queryParams => {
-            //http://localhost:4400/#/home?token=5ea06c66-5c01-477b-a91a-e8d695523571
-            let token = queryParams.get("token");
+            //http://<host>/#/home/account/activation?key=<TOKEN>
+            let token = queryParams.get("key");
             this.dataService.getRegistrazioneByToken(token).subscribe(res=>{
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
