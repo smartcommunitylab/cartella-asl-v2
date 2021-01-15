@@ -68,16 +68,16 @@ public class MailService {
 
 	private void sendEmail(String to, String subject, String template, Map<String, String> vars) throws Exception {
 		try {
-			String textMesage = parseTemplate("templates/mail/" + template + ".txt", vars);
+//			String textMesage = parseTemplate("templates/mail/" + template + ".txt", vars);
 			String htmlMessage = parseTemplate("templates/mail/" + template + ".html", vars);
 			Multipart multipart = new MimeMultipart();
 			// PLAIN TEXT
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText(textMesage);
-			multipart.addBodyPart(messageBodyPart);
+//			messageBodyPart.setText(textMesage);
+//			multipart.addBodyPart(messageBodyPart);
 			// HTML TEXT
 			messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setContent(htmlMessage, "text/html");
+			messageBodyPart.setContent(htmlMessage, "text/html;charset=UTF-8");
 			multipart.addBodyPart(messageBodyPart);
 			
 			Session session = setMailerSession();
@@ -114,6 +114,8 @@ public class MailService {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("baseUrl", baseUrl);
 		vars.put("token", reg.getToken());
+		vars.put("nomeIstituto", reg.getNomeIstituto());
+		vars.put("nomeEnte", reg.getNomeEnte());
 		sendEmail(reg.getEmail(), "Registrazione Ente", "registrazioneEnte", vars);
 	}
 	
@@ -121,6 +123,8 @@ public class MailService {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("baseUrl", baseUrl);
 		vars.put("token", reg.getToken());
+		vars.put("nomeIstituto", reg.getNomeIstituto());
+		vars.put("nomeEnte", reg.getNomeEnte());
 		sendEmail(reg.getEmail(), "Ruolo Referente Azienda", "ruoloReferenteAzienda", vars);
 	}
 
