@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { catchError, map } from 'rxjs/operators';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { serverAPIConfig } from '../serverAPIConfig'
 import { DomSanitizer } from '@angular/platform-browser';
-import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,11 +18,6 @@ export class DataService {
   listIstituteIds = [];
   istituto: string = "Centro Formazione Professionale Agrario - S. Michele all'Adige'";
   host: string = serverAPIConfig.host;
-  corsoDiStudioAPIUrl: string = '/corsi';
-  esperienzaSvoltaAPIUrl: string = '/esperienzaSvolta';
-  attiitaAlternanzaAPIUrl: string = '/attivitaAlternanza'
-  diarioDiBordoAPIUrl: string = "/diarioDiBordo"
-  opportunitaAPIUrl: string = '/opportunita';
   static growler;
   timeout: number = 120000;
   coorindateIstituto;
@@ -59,7 +53,7 @@ export class DataService {
   }
 
   getRegistrazioneByToken(token): Observable<any> {
-    let url = this.host.replace('/api','/registrazione-ente');
+    let url = this.host.replace('/api', '/registrazione-ente');
     let params = new HttpParams();
     params = params.append('token', token);
     return this.http.get<any>(url, {
@@ -71,7 +65,7 @@ export class DataService {
         map(res => {
           return res.body;
         }),
-        catchError(this.handleError)
+        // catchError(this.handleError)
       );
   }
 

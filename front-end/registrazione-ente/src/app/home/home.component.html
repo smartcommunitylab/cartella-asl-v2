@@ -1,16 +1,15 @@
 <div class="it-header-navbar-wrapper sticky">
     <div class="row">
-        <div class="col-1">
-            <a target="_blank" href="#" class="mr-5">
-                <img src="assets/images/logo_trasparente.png" class="nav-logo">
-            </a>
+        <div class="col-4">
+            <span class="row">
+                <a target="_blank" href="#" class="mr-5">
+                    <img src="assets/images/logo_trasparente.png" class="nav-logo">
+                </a>
+                &nbsp;
+               <span class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</span>
+            </span>            
         </div>
-        <div class="col-2">
-            <div class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</div>
-            <div class="nav-logo-institute"></div>
-        </div>
-        <div class="col-9">
-          </div>
+        <div class="col-8"></div>
     </div>
 </div>
 
@@ -68,4 +67,29 @@
             <p class="font-30 text-italic text-left">Se l’indirizzo selezionato per l’attivazione non è un account Google, registrati su AAC, il servizio di autenticazione dell’unità Smart Cities & Communities della Fondazione Bruno Kessler</p>
         </div>
     </div>
+</div>
+
+<div class="mb-3 list-container md-margin" *ngIf="linkExpired">
+    <div class="text-center">
+        <span class="title color-red">Attenzione! L’invito che hai ricevuto è scaduto oppure è stato annullato</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-30">
+        <p class="color-grey text-bold">Se pensi che ci sia un errore, o se hai accordi in essere con qualche istituto
+            della provincia di Trento <br /> puoi contattare il nostro <a
+                href="mailto:cartella-help@smartcommunitylab.it" class="text-underline">servizio di assistenza</a>
+        </p>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
 </div>

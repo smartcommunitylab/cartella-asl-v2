@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../core/services/authentication.service';
-import { environment} from '../../environments/environment';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'home',
@@ -23,21 +23,21 @@ export class HomeComponent implements OnInit {
         private authService: AuthenticationService,
         private route: ActivatedRoute,
         private router: Router
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.env.profileFlag = false;
         this.route.queryParamMap.subscribe(queryParams => {
             //http://<host>/#/home/account/activation?key=<TOKEN>
             let token = queryParams.get("key");
-            this.dataService.getRegistrazioneByToken(token).subscribe(res=>{
+            this.dataService.getRegistrazioneByToken(token).subscribe(res => {
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
                 this.emailEnte = res.email;
             }, err => {
                 // logic for expired token.
-                this.linkExpired = true;   
-            }); 
+                this.linkExpired = true;
+            });
         })
     }
 
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
                 // logged in.
                 this.router.navigateByUrl('/registrazione')
             }
-           
+
         });
     }
 
