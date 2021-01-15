@@ -285,7 +285,8 @@ public class DashboardManager extends DataEntityManager {
 		sb.append(" ON es.attivitaAlternanzaId=aa.id WHERE aa.istitutoId=(:istitutoId) and aa.annoScolastico=(:annoScolastico)");
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text)"
+					+ " OR UPPER(es.cfStudente) LIKE (:text))");
 		}
 		
 		sb.append(" ORDER BY aa.dataInizio DESC, aa.titolo ASC");
