@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +29,13 @@ import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
+import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaSvoltaManager;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Documento.TipoDoc;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -52,6 +56,8 @@ public class FileController {
 	private AuditManager auditManager;		
 	@Autowired
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
+	@Autowired
+	private AttivitaAlternanzaManager attivitaAlternanzaManager;
 	
 	private static Log logger = LogFactory.getLog(FileController.class);
 
@@ -62,11 +68,12 @@ public class FileController {
 			@PathVariable String istitutoId, 
 			HttpServletRequest request, 
 			HttpServletResponse response) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("downloadFileIstituto(%s", uuid + ")"));
 		}
-		downloadContent(uuid, response);
+		downloadContent(uuid, response, null);
 	}
 
 	@GetMapping("/api/download/document/{uuid}/studente/{studenteId}")
@@ -80,19 +87,37 @@ public class FileController {
 			logger.info(String.format("downloadFileStudente(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		downloadContent(uuid, response);
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_esperienza, TipoDoc.piano_formativo,
+				TipoDoc.valutazione_studente, TipoDoc.doc_generico));
 	}
 
+	@GetMapping("/api/download/document/{uuid}/ente/{enteId}")
+	public void downloadFileEnte(
+			@PathVariable String uuid, 
+			@PathVariable String enteId, 
+			HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("downloadFileEnte(%s", uuid + ")"));
+		}
+		checkAttivitaEnte(uuid, enteId, true);
+		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_studente, TipoDoc.piano_formativo,
+				TipoDoc.convenzione, TipoDoc.doc_generico));
+	}
+	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
 	public @ResponseBody boolean removeIstitutoDocument(
 			@PathVariable String istitutoId,
 			@PathVariable String uuid, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeIstitutoDocument(%s", uuid + ")"));
 		}
-		return removeDocument(uuid, request, user);
+		return removeDocument(uuid, request, user, null);
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/studente/{studenteId}")
@@ -105,37 +130,71 @@ public class FileController {
 			logger.info(String.format("removeStudenteDocument(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, true);
-		return removeDocument(uuid, request, user);
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza, TipoDoc.doc_generico));
 	}
 
-	
+	@DeleteMapping("/api/remove/document/{uuid}/ente/{enteId}")
+	public @ResponseBody boolean removeEnteDocument(
+			@PathVariable String enteId,
+			@PathVariable String uuid, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("removeEnteDocument(%s", uuid + ")"));
+		}
+		checkAttivitaEnte(uuid, enteId, true);
+		return removeDocument(uuid, request, user, Lists.newArrayList(TipoDoc.valutazione_studente, TipoDoc.doc_generico));
+	}
 	
 	@PostMapping("/api/upload/document/risorsa/{uuid}/istituto/{istitutoId}")
 	public @ResponseBody Documento uploadDocumentoForRisorsaIstituto(
 			@PathVariable String uuid, 
-			@PathVariable String istitutoId,  
+			@PathVariable String istitutoId, 
+			@RequestParam("tipo") TipoDoc tipo,
 			@RequestParam("data") MultipartFile data, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("uploadDocumentoForRisorsaIstituto(%s", uuid + ")"));
+			logger.info(String.format("uploadDocumentoForRisorsaIstituto:%s - %s", uuid, istitutoId));
 		}
-		Documento documento = uploadContent(uuid, data, request, user);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
 		return documento;
 	}
 	
 	@PostMapping("/api/upload/document/risorsa/{uuid}/studente/{studenteId}")
 	public @ResponseBody Documento uploadDocumentoForRisorsaStudente(
 			@PathVariable String uuid, 
-			@PathVariable String studenteId,  
+			@PathVariable String studenteId,
+			@RequestParam("tipo") TipoDoc tipo,
 			@RequestParam("data") MultipartFile data, 
 			HttpServletRequest request) throws Exception {
 		ASLUser user =  usersValidator.validate(request, new ASLAuthCheck(ASLRole.STUDENTE, studenteId));
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("uploadDocumentoForRisorsaStudente(%s", uuid + ")"));
+			logger.info(String.format("uploadDocumentoForRisorsaStudente:%s - %s", uuid, studenteId));
 		}
 		checkEsperienzeStudente(uuid, studenteId, false);
-		Documento documento = uploadContent(uuid, data, request, user);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_esperienza,
+				TipoDoc.doc_generico));
+		return documento;
+	}	
+
+	@PostMapping("/api/upload/document/risorsa/{uuid}/ente/{enteId}")
+	public @ResponseBody Documento uploadDocumentoForRisorsaEnte(
+			@PathVariable String uuid, 
+			@PathVariable String enteId,
+			@RequestParam("tipo") TipoDoc tipo,
+			@RequestParam("data") MultipartFile data, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("uploadDocumentoForRisorsaEnte:%s - %s", uuid, enteId));
+		}
+		checkAttivitaEnte(uuid, enteId, false);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, Lists.newArrayList(TipoDoc.valutazione_studente,
+				TipoDoc.doc_generico));
 		return documento;
 	}
 	
@@ -144,11 +203,12 @@ public class FileController {
 			@PathVariable String uuid, 
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDocumentiIstitutoURLForRisorsaAttivita(%s", uuid + ")"));
 		}
-		return documentManager.getDocumentByAttivita(uuid, request);
+		return documentManager.getDocumentByAttivita(uuid);
 	}
 	
 	@GetMapping("/api/download/document/risorsa/{uuid}/istituto/{istitutoId}/piano")
@@ -156,11 +216,12 @@ public class FileController {
 			@PathVariable String uuid, 
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDocumentiIstitutoURLForRisorsaPiano(%s", uuid + ")"));
 		}
-		return documentManager.getDocument(uuid, request);
+		return documentManager.getDocument(uuid);
 	}	
 	
 	@GetMapping("/api/download/document/risorsa/{uuid}/studente/{studenteId}")
@@ -173,8 +234,22 @@ public class FileController {
 			logger.info(String.format("getDocumentiStudenteURLForRisorsa(%s", uuid + ")"));
 		}
 		checkEsperienzeStudente(uuid, studenteId, false);
-		return documentManager.getDocument(uuid, request);
+		return documentManager.getDocumentByStudente(uuid);
 	}	
+	
+	@GetMapping("/api/download/document/risorsa/{uuid}/ente/{enteId}")
+	public @ResponseBody List<Documento> getDocumentiEnteURLForRisorsa(
+			@PathVariable String uuid, 
+			@PathVariable String enteId, 
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getDocumentiEnteURLForRisorsa(%s", uuid + ")"));
+		}
+		checkAttivitaEnte(uuid, enteId, false);
+		return documentManager.getDocumentByEnte(uuid);
+	}
 	
 	private void checkEsperienzeStudente(String uuid, String studenteId, boolean doc)
 			throws BadRequestException, UnauthorizedException {
@@ -183,6 +258,15 @@ public class FileController {
 			Documento document = documentManager.getEntity(uuid);
 			if(document != null) {
 				esperienzaSvolta = esperienzaSvoltaManager.findByUuid(document.getRisorsaId());
+				if(esperienzaSvolta == null) {
+					AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(document.getRisorsaId());
+					if(aa != null) {
+						List<EsperienzaSvolta> list = esperienzaSvoltaManager.getEsperienzeByAttivitaAndStudente(aa.getId(), studenteId);
+						if(list.size() > 0) {
+							esperienzaSvolta = list.get(0);
+						}
+					}
+				}
 			}
 		} else {
 			esperienzaSvolta = esperienzaSvoltaManager.findByUuid(uuid);
@@ -195,22 +279,56 @@ public class FileController {
 		}
 	}
 	
-	private void downloadContent(String uuid, HttpServletResponse response) throws Exception {
+	private void checkAttivitaEnte(String uuid, String enteId, boolean doc) throws Exception {
+		AttivitaAlternanza aa = null;
+		if(doc) {
+			Documento document = documentManager.getEntity(uuid);
+			if(document != null) {
+				aa = attivitaAlternanzaManager.findByUuid(document.getRisorsaId());
+			}
+		} else {
+			aa = attivitaAlternanzaManager.findByUuid(uuid);
+		}
+		if(aa == null) {
+			throw new BadRequestException("AttivitaAlternanza not found");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new UnauthorizedException("uuid not authorized");
+		}
+	}
+	
+	private void checkTipologia(TipoDoc tipo, ArrayList<TipoDoc> list) throws Exception {
+		if(!list.contains(tipo)) {
+			throw new BadRequestException("tipologia di file non corretta");
+		}
+	}
+	
+	private void downloadContent(String uuid, HttpServletResponse response, 
+			ArrayList<TipoDoc> list) throws Exception {
+		Documento doc = documentManager.getEntity(uuid);
+		if(doc == null) {
+			throw new BadRequestException("documento non trovato");
+		}
+		if(list != null) {
+			checkTipologia(doc.getTipo(), list);
+		}
 		try {
-			Documento doc = documentManager.getEntity(uuid);
 			File file = documentManager.loadFile(doc.getUuid());
 			response.setContentType(doc.getFormatoDocumento());
 			response.setHeader("Content-Disposition", "attachment; filename=\"" + doc.getNomeFile() + "\"");
 			response.getOutputStream().write(FileUtils.readFileToByteArray(file));
 		} catch (FileNotFoundException e) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			throw new BadRequestException("file documento non trovato");
 		}			
 	}
 	
-	private Documento uploadContent(String uuid, MultipartFile data, 
-			HttpServletRequest request, ASLUser user) throws Exception {
+	private Documento uploadContent(String uuid, TipoDoc tipo, MultipartFile data, 
+			HttpServletRequest request, ASLUser user, ArrayList<TipoDoc> list) throws Exception {
+		if(list != null) {
+			checkTipologia(tipo, list);
+		}
 		try {
-			Documento doc = documentManager.addDocumentToRisorsa(uuid, data, request);
+			Documento doc = documentManager.addDocumentToRisorsa(uuid, tipo, data, request);
 			if (doc != null) {
 				AuditEntry audit = new AuditEntry(request.getMethod(), Documento.class, 
 						doc.getUuid(), user, new Object(){});
@@ -222,14 +340,22 @@ public class FileController {
 		}		
 	}
 	
-	private boolean removeDocument(String uuid, HttpServletRequest request, ASLUser user) throws Exception {
+	private boolean removeDocument(String uuid, HttpServletRequest request, ASLUser user, 
+			ArrayList<TipoDoc> list) throws Exception {
+		Documento doc = documentManager.getEntity(uuid);
+		if(doc == null) {
+			throw new BadRequestException("documento non trovato");
+		}
+		if(list != null) {
+			checkTipologia(doc.getTipo(), list);
+		}
 		try {
 			boolean result = documentManager.removeDocument(uuid);
 			AuditEntry audit = new AuditEntry(request.getMethod(), Documento.class, uuid, user, new Object(){});
 			auditManager.save(audit);			
 			return result;
 		} catch (Exception e) {
-			throw new ASLCustomException(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+			throw new BadRequestException("file documento non trovato");
 		}
 	}
 }

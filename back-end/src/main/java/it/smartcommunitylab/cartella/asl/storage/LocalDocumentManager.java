@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import it.smartcommunitylab.cartella.asl.exception.ASLCustomException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Documento;
+import it.smartcommunitylab.cartella.asl.model.Documento.TipoDoc;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.DocumentoRepository;
@@ -93,28 +94,27 @@ public class LocalDocumentManager {
 	}
 
 
-	public Documento addDocumentToRisorsa(String uuid, MultipartFile data, HttpServletRequest request) throws Exception {
+	public Documento addDocumentToRisorsa(String uuid, TipoDoc tipo, MultipartFile data, HttpServletRequest request) throws Exception {
 		Documento doc = new Documento();
 		doc.setUuid(UUID.randomUUID().toString());
 		doc.setRisorsaId(uuid);
 		doc.setFormatoDocumento(data.getContentType());
 		doc.setNomeFile(data.getOriginalFilename());
 		doc.setDataUpload(LocalDate.now());
+		doc.setTipo(tipo);
 		if (data != null) {
 			saveFile(data, doc.getUuid());
 		}
-
 		documentoRepository.save(doc);
-
 		return doc;
 	}
 
-	public List<Documento> getDocument(String risorsaId, HttpServletRequest request) throws Exception {
+	public List<Documento> getDocument(String risorsaId) throws Exception {
 		List<Documento> docs = documentoRepository.findDocumentoByRisorsaId(risorsaId);
 		return docs;
 	}
 	
-	public List<Documento> getDocumentByAttivita(String risorsaId, HttpServletRequest request) throws Exception {
+	public List<Documento> getDocumentByAttivita(String risorsaId) throws Exception {
 		List<String> risorsaIds = new ArrayList<String>();
 		AttivitaAlternanza aa = attivitaAlternanzaRepository.findByUuid(risorsaId);
 		if(aa != null) {
@@ -124,5 +124,58 @@ public class LocalDocumentManager {
 		}
 		List<Documento> docs = documentoRepository.findByRisorsaIdIn(risorsaIds);
 		return docs;
+	}
+
+	public List<Documento> getDocumentByStudente(String uuid) throws Exception {
+		List<Documento> result = new ArrayList<>();
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findByUuid(uuid);
+		if(es != null) {
+			List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
+			list.forEach(doc -> {
+				if(doc.getTipo().equals(TipoDoc.doc_generico) || 
+						doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
+					result.add(doc);
+				}
+			});			
+			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+			if(aa != null) {
+				list = documentoRepository.findDocumentoByRisorsaId(aa.getUuid());
+				list.forEach(doc -> {
+					if(doc.getTipo().equals(TipoDoc.piano_formativo) ||
+							doc.getTipo().equals(TipoDoc.doc_generico) || 
+							doc.getTipo().equals(TipoDoc.valutazione_studente) ||
+							doc.getTipo().equals(TipoDoc.valutazione_esperienza)) {
+						result.add(doc);
+					}
+				});			
+			}
+		}
+		return result;
+ 	}
+
+	public List<Documento> getDocumentByEnte(String uuid) {
+		List<Documento> result = new ArrayList<>();
+		AttivitaAlternanza aa = attivitaAlternanzaRepository.findByUuid(uuid);
+		if(aa != null) {
+			List<Documento> list = documentoRepository.findDocumentoByRisorsaId(uuid);
+			list.forEach(doc -> {
+				if(doc.getTipo().equals(TipoDoc.piano_formativo) ||
+						doc.getTipo().equals(TipoDoc.doc_generico) || 
+						doc.getTipo().equals(TipoDoc.valutazione_studente) ||
+						doc.getTipo().equals(TipoDoc.convenzione)) {
+					result.add(doc);
+				}
+			});			
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaRepository.findByAttivitaAlternanzaId(aa.getId());
+			for(EsperienzaSvolta e: esperienze) {
+				list = documentoRepository.findDocumentoByRisorsaId(e.getUuid());
+				list.forEach(doc -> {
+					if(doc.getTipo().equals(TipoDoc.doc_generico)) {
+						result.add(doc);
+					}
+				});			
+			}
+		}
+		return result;
 	}
 }

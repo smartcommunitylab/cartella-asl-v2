@@ -6,6 +6,6 @@ public class ErrorInfo {
 
     public ErrorInfo(String url, Exception ex) {
         this.url = url;
-        this.ex = ex.getLocalizedMessage();
+        this.ex = ex.getClass().getCanonicalName() + " - " + ex.getLocalizedMessage();
     }
 }

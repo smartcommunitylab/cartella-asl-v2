@@ -30,6 +30,8 @@
     "angular2-bootstrap-switch": "^0.2.3",
     "body-parser": "1.18.2",
     "bootswatch": "4.0.0",
+    "browserslist": "^4.14.7",
+    "caniuse-lite": "^1.0.30001159",
     "core-js": "^2.5.5",
     "express": "4.16.2",
     "leaflet": "^1.2.0",

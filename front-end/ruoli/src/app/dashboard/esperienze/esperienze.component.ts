@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteEsperienzaModalComponent } from '../modals/delete-esperienza-modal/delete-esperienza-modal.component';
 import { ngCopy } from 'angular-6-clipboard';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
 
 @Component({
@@ -66,17 +68,40 @@ export class DashboardEsperienzeComponent implements OnInit {
     }
   }  
 
-  getIstituti() {
-    if(this.profile) {
-      if(this.profile.istituti) {
-        return Object.values(this.profile.istituti);
-      }
-    }
-    return [];
-  }
+  istituto: any;
+  searchingIstituto = false;
+  searchIstitutoFailed = false;
+
+  getIstituti = (text$: Observable<string>) => 
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingIstituto = true),
+      switchMap(term => this.dataService.searchIstituti(0, 10, term).pipe(
+        map(result => {
+          let entries = [];
+          if(result.content) {            
+            result.content.forEach(element => {
+              entries.push(element);
+            });
+          }
+          return entries;
+        }),
+        tap(() => this.searchIstitutoFailed = false),
+        catchError((error) => {
+          console.log(error);
+          this.searchIstitutoFailed = true;
+          return of([]);
+        })
+        )
+      ),
+      tap(() => this.searchingIstituto = false)
+  )  
+
+  formatterIstituto = (x: {name: string}) => x.name;
 
   getReport() {
-    this.dataService.getReportEsperienze(this.istitutoId, this.annoScolastico, this.text)
+    this.dataService.getReportEsperienze(this.istituto.id, this.annoScolastico, this.text)
       .subscribe(r => {
         if(r) {
           this.esperienze = r;
@@ -93,7 +118,7 @@ export class DashboardEsperienzeComponent implements OnInit {
   }
 
   getEsperienzeCsv() {
-    this.dataService.getEsperienzeCsv(this.istitutoId, this.annoScolastico, this.text).subscribe((doc) => {
+    this.dataService.getEsperienzeCsv(this.istituto.id, this.annoScolastico, this.text).subscribe((doc) => {
       const downloadLink = document.createElement("a");
       downloadLink.href = doc.url;
       downloadLink.download = doc.filename;

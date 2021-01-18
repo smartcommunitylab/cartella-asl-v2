@@ -3,6 +3,8 @@ import { DataService } from '../../core/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
+import { Observable, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'cm-dashboard-registrazioni',
@@ -21,7 +23,6 @@ export class DashboardRegistrazioniComponent implements OnInit {
 
   profile;
   report = {};
-  istitutoId = '';
   cf = '';
   registrazioni = [];
   title: string = "Lista iscrizioni";
@@ -37,17 +38,40 @@ export class DashboardRegistrazioniComponent implements OnInit {
       });
     }
 
-  getIstituti() {
-    if(this.profile) {
-      if(this.profile.istituti) {
-        return Object.values(this.profile.istituti);
-      }
-    }
-    return [];
-  }
-
+    istituto: any;
+    searchingIstituto = false;
+    searchIstitutoFailed = false;
+  
+    getIstituti = (text$: Observable<string>) => 
+      text$.pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap(() => this.searchingIstituto = true),
+        switchMap(term => this.dataService.searchIstituti(0, 10, term).pipe(
+          map(result => {
+            let entries = [];
+            if(result.content) {            
+              result.content.forEach(element => {
+                entries.push(element);
+              });
+            }
+            return entries;
+          }),
+          tap(() => this.searchIstitutoFailed = false),
+          catchError((error) => {
+            console.log(error);
+            this.searchIstitutoFailed = true;
+            return of([]);
+          })
+          )
+        ),
+        tap(() => this.searchingIstituto = false)
+    )  
+  
+    formatterIstituto = (x: {name: string}) => x.name;
+  
   getReport() {
-    this.dataService.getReportRegistrazioni(this.istitutoId, this.cf)
+    this.dataService.getReportRegistrazioni(this.istituto.id, this.cf)
       .subscribe(r => {
         if(r) {
           this.registrazioni = r;

@@ -1,0 +1,111 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title">
+            <span>Seleziona la tipologia di documento da caricare</span>
+        </div>
+    </div>
+    <div class="modal-body" [ngStyle]="styleModalBody()">
+        <div *ngIf="!attivitaIndividuale" class="row v-center">
+            <div class="col-3"></div>
+            <div class="col-3 m-10">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(1)">
+                        <div id="1" class="card-body">
+                            <h5 class="card-title primary-color">Altro</h5>
+                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
+                                questa opzione.</p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente<br />Studente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="attivitaIndividuale" class="row v-center">
+            <div class="col-3"></div>
+            <div class="col-3 m-10">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(1)">
+                        <div id="1" class="card-body">
+                            <h5 class="card-title primary-color">Altro</h5>
+                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
+                                questa opzione.</p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente<br />Studente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 m-10">
+                <div class="card-wrapper">
+                    <div class="card" (click)="create(2)">
+                        <div id="2" class="card-body">
+                            <h5 class="card-title primary-color">Valutazione studente</h5>
+                            <p class="card-text txtFont">Il documento di valutazione compilato dall’ente sullo studente
+                                coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.
+                            </p>
+                            <span class="position-visible">
+                                <p class="card-text"><span class="text-bold">Visibile da:</span>
+                                    <br />Scuola<br />Ente
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3"></div>
+        </div>
+        <div class="row" *ngIf="optionSelected">
+            <div class="col-3"></div>
+            <div class="m-10">
+                <label class="btn btn-primary v-center-inline btn-icon" placement="right"
+                    ngbTooltip="Allega un nuovo documento all’attività">
+                    Scegli file da dispositivo&nbsp;&nbsp;&nbsp;
+                    <svg class="icon icon-white icon-sm">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
+                    </svg>
+                    <input #fileInput type="file" hidden (click)="fileInput.value = null" value=""
+                        (change)="uploadDocument($event)">
+                </label>
+            </div>
+        </div>
+        <div *ngIf="fileSelected">
+            <span class="row file-title">
+                <span class="col-3"></span>
+                <span class="m-10">File selezionato: {{ selectedFileName }} </span>
+            </span>
+            <br />
+            <div class="text-center" [ngStyle]="styleModalDivButton()">
+                <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"
+                    ngbTooltip="Crea una nuova attività" (click)="carica()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Carica file</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
+                    ngbTooltip="Annulla la creazione" (click)="activeModal.close('Close click')">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,32 +11,40 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="attivita.stato=='archiviata' && individuale" class="btn btn-primary v-center-inline" placement="bottom"
-                    ngbTooltip="Vedi le presenze degli studenti associati a quest’attività" (click)="gestionePresenze()">
+                <button *ngIf="attivita.stato=='archiviata' && individuale" class="btn btn-primary v-center-inline"
+                    placement="bottom" ngbTooltip="Vedi le presenze degli studenti associati a quest’attività"
+                    (click)="gestionePresenze()">
                     Vedi presenze studenti&nbsp;&nbsp;&nbsp;
                     <svg class="icon icon-white icon-sm btnModificationIcon">
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
                     </svg>
                 </button>
-                <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale" class="btn btn-primary v-center-inline"
-                    placement="bottom" ngbTooltip="Gestisci le presenze degli studenti associati a quest’attività" (click)="gestionePresenze()">
+                <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale"
+                    class="btn btn-primary v-center-inline" placement="bottom"
+                    ngbTooltip="Gestisci le presenze degli studenti associati a quest’attività"
+                    (click)="gestionePresenze()">
                     Gestisci presenze studenti&nbsp;&nbsp;&nbsp;
                     <svg class="icon icon-white icon-sm btnModificationIcon">
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
                     </svg>
-                </button>            
+                </button>
             </span>
         </div>
     </div>
     <hr class="hr" />
     <div *ngIf="showContent" class="row rectangle v-center-inline">
         <div class="col-1 helpMessageIcon-mRight">
-            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
         </div>
         <div class="col-10 helpMessage-mLeft">
             <span>{{menuContent}}</span>
         </div>
-        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
     </div>
     <div class="row m-subNav">
         <div class="col-12">
@@ -45,17 +53,22 @@
     </div>
     <div class="card-body m-16" *ngIf="attivita">
         <div>
-            <span class="title">Dati Attività</span><br/>
+            <span class="title">Dati Attività</span><br />
             <label *ngIf="attivita.offertaId" class="font-weight-bold in_attesa">
                 <span *ngIf="offertaAssociata">
-                    Offerta associata: {{ offertaAssociata.titolo }}, {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso {{ setIstiutoLabel(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} - {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
+                    Offerta associata: {{ offertaAssociata.titolo }},
+                    {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso
+                    {{ setIstiutoLabel(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} -
+                    {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
                 </span>
                 <span>
-                    <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA ASSOCIATA</a>
+                    <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA
+                        ASSOCIATA</a>
                 </span>
             </label>
-            <br *ngIf="offertaAssociata"/>
-            <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica alcuni dati dell’attività" (click)="modifica()">
+            <br *ngIf="offertaAssociata" />
+            <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Modifica alcuni dati dell’attività" (click)="modifica()">
                 Modifica dati attività&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm btnModificationIcon">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
@@ -65,40 +78,59 @@
         <br>
         <div class="p-1 row">
             <div class="col-6">
-                <span class="row mb-1"><span class="text-semibold">Stato:&nbsp;</span><span class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span> </span>
+                <span class="row mb-1"><span class="text-semibold">Stato:&nbsp;</span><span
+                        class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span> </span>
                 <span class="row mb-1"><span class="text-semibold">Titolo:&nbsp;</span>{{attivita.titolo}}</span>
-                <span class="row mb-1"><span class="text-semibold">Descrizione:&nbsp;</span>{{attivita.descrizione}}</span>
-                <span class="row mb-1"><span class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
-                <span class="row mb-1"><span class="text-semibold">Istituto:&nbsp;</span>{{attivita.nomeIstituto}}</span>
+                <span class="row mb-1"><span
+                        class="text-semibold">Descrizione:&nbsp;</span>{{attivita.descrizione}}</span>
+                <span class="row mb-1"><span
+                        class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
+                <span class="row mb-1"><span
+                        class="text-semibold">Istituto:&nbsp;</span>{{attivita.nomeIstituto}}</span>
                 <span class="row mb-1"><span class="text-semibold">Ore totali:&nbsp;</span>{{attivita.ore}}</span>
-                <span class="row mb-1"><span class="text-semibold">Tutor scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
-                <span class="row mb-1"><span class="text-semibold">Tutor aziendale:&nbsp;</span>{{attivita.referenteEsterno}}</span>
-                <span class="row mb-1"><span class="text-semibold">Telefono Tutor aziendale::&nbsp;</span>{{attivita.referenteEsternoTelefono}}</span>
+                <span class="row mb-1"><span class="text-semibold">Tutor
+                        scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
+                <span class="row mb-1"><span class="text-semibold">Tutor
+                        aziendale:&nbsp;</span>{{attivita.referenteEsterno}}</span>
+                <span class="row mb-1"><span class="text-semibold">Telefono Tutor
+                        aziendale::&nbsp;</span>{{attivita.referenteEsternoTelefono}}</span>
             </div>
             <div class="col-6">
-                <span class="row mb-1"><span class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}}&nbsp;<span class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
-                <span class="row mb-1"><span class="text-semibold">Dalle:&nbsp;</span>{{attivita.oraInizio}}&nbsp;<span class="text-semibold">Alle:&nbsp;</span>{{attivita.oraFine}}</span>
-                <span class="row mb-1"><span class="text-semibold">Anno accademico:&nbsp;</span>{{ attivita.annoScolastico }}</span>
-                <span class="row mb-1"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
+                <span class="row mb-1"><span
+                        class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}}&nbsp;<span
+                        class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
+                <span class="row mb-1"><span class="text-semibold">Dalle:&nbsp;</span>{{attivita.oraInizio}}&nbsp;<span
+                        class="text-semibold">Alle:&nbsp;</span>{{attivita.oraFine}}</span>
+                <span class="row mb-1"><span class="text-semibold">Anno
+                        accademico:&nbsp;</span>{{ attivita.annoScolastico }}</span>
+                <span class="row mb-1"><span
+                        class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
                 <span class="row mb-1"><span class="text-semibold">Formatore: </span>{{attivita.formatore}}</span>
-                <span class="row mb-1"><span class="text-semibold">CF Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
-                <span class="row mb-1"><span class="text-semibold">CF tutor scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
-                <span class="row mb-1"><span class="text-semibold">CF tutor aziendale:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
-                <span class="row mb-1"><span class="text-semibold">Telefono Tutor scolastico::&nbsp;</span>{{attivita.referenteScuolaTelefono}}</span>
-            </div>    
+                <span class="row mb-1"><span class="text-semibold">CF
+                        Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
+                <span class="row mb-1"><span class="text-semibold">CF tutor
+                        scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
+                <span class="row mb-1"><span class="text-semibold">CF tutor
+                        aziendale:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                <span class="row mb-1"><span class="text-semibold">Telefono Tutor
+                        scolastico::&nbsp;</span>{{attivita.referenteScuolaTelefono}}</span>
+            </div>
         </div>
-        <br/>
+        <br />
         <div class="title">
-            Studenti Associati<br/>
-            <button *ngIf="attivita.stato=='archiviata' && individuale"  class="btn btn-primary v-center-inline" placement="right"
-                ngbTooltip="Vedi le presenze degli studenti associati a quest’attività" (click)="gestionePresenze()">
+            Studenti Associati<br />
+            <button *ngIf="attivita.stato=='archiviata' && individuale" class="btn btn-primary v-center-inline"
+                placement="right" ngbTooltip="Vedi le presenze degli studenti associati a quest’attività"
+                (click)="gestionePresenze()">
                 Vedi presenze studenti&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm btnModificationIcon">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
                 </svg>
             </button>
-            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale"  class="btn btn-primary v-center-inline" placement="right"
-                ngbTooltip="Gestisci le presenze degli studenti associati a quest’attività" (click)="gestionePresenze()">
+            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale"
+                class="btn btn-primary v-center-inline" placement="right"
+                ngbTooltip="Gestisci le presenze degli studenti associati a quest’attività"
+                (click)="gestionePresenze()">
                 Gestisci presenze studenti&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm btnModificationIcon">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
@@ -128,33 +160,45 @@
         <br>
         <div class="title">
             Documenti allegati<br />
-            <!-- <label *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline btn-icon"  placement="right"  ngbTooltip="Associa documenti a quest’attività"></label> -->
-            <button disabled *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline btn-icon"  placement="right"  ngbTooltip="Associa documenti a quest’attività">
+            <button (click)="openDocumentUpload()" *ngIf="attivita.stato!='archiviata'"
+                class="btn btn-primary v-center-inline btn-icon" placement="right"
+                ngbTooltip="Allega un nuovo documento all’attività">
                 Carica file&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
                 </svg>
-                <input #fileInput type="file" hidden (click)="fileInput.value = null" value="" (change)="uploadDocument($event)">
-            <!-- </label> -->
             </button>
-            <div>
-                <div class="v-center" *ngIf="documenti">
-                    <ul>
-                        <li *ngFor="let doc of documenti">
-                            <a [routerLink]="" (click)="downloadDoc(doc)">   
-                                <i class="material-icons">insert_drive_file</i>
-                                {{doc.nomeFile}}
-                            </a>
-                            &nbsp;&nbsp;
-                            <i *ngIf="attivita.stato!='archiviata'" class="material-icons pointer" (click)="deleteDoc(doc)">delete</i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>       
+        </div>
+        <div class="table list-group" *ngIf="documenti.length > 0">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th width="30%">Nome file</th>
+                        <th width="30%">Tipologia</th>
+                        <th width="30%">Data caricamento</th>
+                        <th width="10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let doc of documenti">
+                        <td><a [routerLink]="" (click)="downloadDoc(doc)">{{doc.nomeFile}}</a></td>
+                        <td>{{setDocType(doc.tipo)}}</td>
+                        <td>{{doc.dataUpload | date: 'dd/MM/yy' }}</td>
+                        <td>
+                            <div class='btn btn-primary btn-icon btn-xs float-right'
+                                *ngIf="isRemovable(doc)">
+                                <svg class="icon icon-white icon-sm" (click)="deleteDoc(doc)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                                </svg>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <br>
         <div class="title" *ngIf="atttivitaCompetenze[0]">
-            Competenze associate<br/>
+            Competenze associate<br />
         </div>
         <div *ngIf="atttivitaCompetenze[0]">
             <div class="table list-group">

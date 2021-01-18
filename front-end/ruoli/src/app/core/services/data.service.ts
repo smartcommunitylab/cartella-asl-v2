@@ -207,6 +207,26 @@ export class DataService {
       );
   }
 
+  searchIstituti(page, pageSize, text) {
+    let params = new HttpParams();
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
+    params = params.append('text', text);
+
+    return this.http.get<any>(
+      this.host + "/istituto/search",
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(users => {
+          return (users);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getStudenti(page, pageSize, filters) {
     let params = new HttpParams();
     params = params.append('page', page);

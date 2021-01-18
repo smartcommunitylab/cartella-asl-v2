@@ -9,6 +9,7 @@ public class ImportRuoliResult {
 	private List<ASLUser> users = new ArrayList<>();
 	private List<String> alreadyPresent = new ArrayList<>();
 	private List<String> notFound = new ArrayList<>();
+	private List<String> errors = new ArrayList<>();
 		
 	public List<ASLUser> getUsers() {
 		return users;
@@ -27,5 +28,11 @@ public class ImportRuoliResult {
 	}
 	public void setAlreadyPresent(List<String> alreadyPresent) {
 		this.alreadyPresent = alreadyPresent;
+	}
+	public List<String> getErrors() {
+		return errors;
+	}
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
 	}
 }

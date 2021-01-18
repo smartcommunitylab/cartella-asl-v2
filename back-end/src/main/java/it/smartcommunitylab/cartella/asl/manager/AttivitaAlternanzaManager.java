@@ -858,4 +858,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return result;
 	}
 	
+	public AttivitaAlternanza findByUuid(String uuid) {
+		return attivitaAlternanzaRepository.findByUuid(uuid);
+	}
+	
 }

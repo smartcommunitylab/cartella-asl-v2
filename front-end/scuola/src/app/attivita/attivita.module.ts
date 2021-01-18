@@ -7,6 +7,7 @@ import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { from } from 'rxjs/observable/from';
 import { DesignAngularKitModule } from 'design-angular-kit' 
 import { AttivitaCancellaModal } from './actions/cancella-attivita-modal/attivita-cancella-modal.component'
+import { DocumentUploadModalComponent } from './actions/documento-upload-modal/document-upload-modal.component';
 import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-modal/archiaviazione-attivita.component';
 import { DpDatePickerModule } from 'ng2-date-picker';
@@ -36,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   entryComponents: [
     NewAttivtaModal,
     CreaAttivitaModalComponent,
+    DocumentUploadModalComponent,
     DocumentoCancellaModal,
     AttivitaCancellaModal,
     ArchiaviazioneAttivitaModal

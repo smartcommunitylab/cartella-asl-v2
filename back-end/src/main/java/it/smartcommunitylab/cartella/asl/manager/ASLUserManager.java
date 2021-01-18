@@ -3,6 +3,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
@@ -164,30 +164,42 @@ public class ASLUserManager extends DataEntityManager {
 	}	
 	
 	public Page<ASLUser> findASLUsers(ASLRole role, String text, ASLRole userRole, String userDomainId, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder(ASLUSERS);
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT u FROM ASLUser u LEFT JOIN ASLUserRole r ON r.userId=u.id");
+		if (role != null) {
+			sb.append(" AND r.role=(:role)");
+		}
+		if (Utils.isNotEmpty(userDomainId)) {
+			sb.append(" AND r.domainId=(:domainId)");
+		}
 		if (Utils.isNotEmpty(text)) {
 			sb.append(
 					" AND ((UPPER(u.name) LIKE (:text)) OR (UPPER(u.surname) LIKE (:text)) OR (UPPER(u.email) LIKE (:text)) "
 					+ "OR (UPPER(u.cf) LIKE (:text)))");
 		}
-
 		sb.append(" ORDER BY u.email");
 
 		String q = sb.toString();
 		q = q.replaceFirst(" AND ", " WHERE ");
 
 		TypedQuery<ASLUser> query = em.createQuery(q, ASLUser.class);
-
 		if (Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
+		if (role != null) {
+			query.setParameter("role", role);
+		}
+		if (Utils.isNotEmpty(userDomainId)) {
+			query.setParameter("domainId", userDomainId);
+		}
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
 
 		List<ASLUser> result = query.getResultList();
 		result.forEach(user -> {
 			completeASLUser(user);
 		});
 
-		if (role != null) {
+		/*if (role != null) {
 			if (ASLRole.ADMIN.equals(userRole)) {
 				result.removeIf(x -> !x.getRoles().stream().filter(y -> role.equals(y.getRole())).findFirst().isPresent());
 				if (userDomainId != null) {
@@ -197,17 +209,11 @@ public class ASLUserManager extends DataEntityManager {
 				ASLUserRole resultRole = new ASLUserRole(role, userDomainId, null);
 				result.removeIf(x -> !x.getRoles().contains(resultRole));
 			}
-		}
+		}*/
 
-		long total = result.size();
-		int from = pageRequest.getPageNumber() * pageRequest.getPageSize();
-		int to = Math.min(result.size(), (pageRequest.getPageNumber() + 1) * pageRequest.getPageSize());
-		if (to > from) {
-			result = result.subList(from, to);
-		} else {
-			result = Lists.newArrayList();
-		}
-
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT u","COUNT(DISTINCT u)"), query);
+		long total = (Long) cQuery.getSingleResult();
+		
 		Page<ASLUser> page = new PageImpl<ASLUser>(result, pageRequest, total);
 		return page;
 	}

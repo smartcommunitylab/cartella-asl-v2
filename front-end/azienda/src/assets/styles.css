@@ -14165,6 +14165,10 @@ hr {
   padding: 10px;
 }
 
+.documentUploadModalClass .modal-dialog {
+  max-width: 1340px;
+}
+
 .tooltip .tooltip-inner {
   background-color: white;
   color: black;

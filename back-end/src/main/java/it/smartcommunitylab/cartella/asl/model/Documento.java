@@ -2,7 +2,10 @@ package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +19,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 	indexes = { @Index(name = "risorsaId_idx", columnList = "risorsaId", unique = false) })
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Documento {
+	
+	public static enum TipoDoc {
+		piano_formativo, convenzione, valutazione_studente, valutazione_esperienza, doc_generico, pregresso
+	};
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +32,9 @@ public class Documento {
 	private LocalDate dataUpload;
 	private String formatoDocumento;
 	private String risorsaId;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "varchar(255) default 'pregresso'")
+	private TipoDoc tipo;
 	
 	public Long getId() {
 		return id;
@@ -72,6 +82,14 @@ public class Documento {
 
 	public void setRisorsaId(String risorsaId) {
 		this.risorsaId = risorsaId;
+	}
+
+	public TipoDoc getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoDoc tipo) {
+		this.tipo = tipo;
 	}
 
 }
