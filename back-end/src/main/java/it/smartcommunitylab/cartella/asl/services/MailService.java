@@ -116,16 +116,18 @@ public class MailService {
 		vars.put("token", reg.getToken());
 		vars.put("nomeIstituto", reg.getNomeIstituto());
 		vars.put("nomeEnte", reg.getNomeEnte());
-		sendEmail(reg.getEmail(), "Registrazione Ente", "registrazioneEnte", vars);
+		sendEmail(reg.getEmail(), "Attivazione accesso sistema EDIT - Gestione esperienze Alternanza Scuola Lavoro istituti superiori", 
+				"registrazioneEnte", vars);
 	}
 	
 	public void inviaRuoloReferenteAzienda(RegistrazioneEnte reg) throws Exception {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("baseUrl", baseUrl);
 		vars.put("token", reg.getToken());
-		vars.put("nomeIstituto", reg.getNomeIstituto());
+		vars.put("nominativoInvito", reg.getNominativoInvito());
 		vars.put("nomeEnte", reg.getNomeEnte());
-		sendEmail(reg.getEmail(), "Ruolo Referente Azienda", "ruoloReferenteAzienda", vars);
+		sendEmail(reg.getEmail(), "Attivazione account EDIT per conto di " + reg.getNomeEnte(), 
+				"ruoloReferenteAzienda", vars);
 	}
 
 }
