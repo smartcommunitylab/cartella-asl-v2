@@ -8,19 +8,26 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
+import it.smartcommunitylab.cartella.asl.manager.AziendaManager;
 import it.smartcommunitylab.cartella.asl.manager.DashboardManager;
+import it.smartcommunitylab.cartella.asl.manager.RegistrazioneEnteManager;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
+import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardDettaglioAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
@@ -39,6 +46,10 @@ public class DashboardController {
 	private ASLRolesValidator usersValidator;
 	@Autowired
 	private AuditManager auditManager;
+	@Autowired
+	private RegistrazioneEnteManager registrazioneEnteManager;
+	@Autowired
+	private AziendaManager aziendaManager;
 
 	@GetMapping("/api/dashboard/sistema")
 	public ReportDashboardUsoSistema getReportUtilizzoSistema (
@@ -150,5 +161,45 @@ public class DashboardController {
 		}	
 		return aa;
 	}
+	
+	@GetMapping("/api/dashboard/registrazione-ente")
+	public @ResponseBody List<RegistrazioneEnteReport> getRuoliByEnte(
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		List<RegistrazioneEnteReport> list = registrazioneEnteManager.getRuoliByEnte(enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getRuoliByEnte:%s - %s", enteId, list.size()));
+		}		
+		return list;
+	}
+
+	@DeleteMapping("/api/dashboard/registrazione-ente")
+	public @ResponseBody RegistrazioneEnte cancellaRuoloByEnte(
+			@RequestParam Long registrazioneId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
+		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.cancellaRuolo(registrazioneId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneEnte.class, registrazioneEnte.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("cancellaRuoloByEnte:%s", registrazioneId));
+		}		
+		return registrazioneEnte;		
+	}
+	
+	@GetMapping("/api/dashboard/enti")
+	public Page<Azienda> searchEnti(
+			@RequestParam String text,
+			Pageable pageRequest,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		Page<Azienda> page = aziendaManager.findAziende(text, pageRequest);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("searchEnti:%s", text));
+		}		
+		return page;
+	}
+	
 
 }

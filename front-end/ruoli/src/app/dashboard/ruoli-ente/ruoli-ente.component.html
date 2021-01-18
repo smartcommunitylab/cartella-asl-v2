@@ -1,0 +1,65 @@
+<div class="card md-margin">
+    <h3 class="card-header">{{title}}</h3>
+    <div class="card-body">
+        <div class="row">
+            <div class="col col-6">
+                <div class="form-group">
+                    <ng-template #rtEnte let-r="result" let-t="term">
+                        <div class="row">
+                            <ngb-highlight [result]="r.nome + ' - ' + r.partita_iva" [term]="t"></ngb-highlight>
+                        </div>
+                    </ng-template>
+                    <label for="ente">Ente</label>
+                    <input type="text" class="form-control" [(ngModel)]="ente"
+                        id="ente" name="ente" [ngbTypeahead]="getEnti" 
+                        [resultTemplate]="rtEnte" [inputFormatter]="formatterEnte"
+                        placeholder="Cerca nome o partita iva">
+                    <small *ngIf="searchingEnte" class="progress-spinner progress-spinner-active size-sm">
+                        <span class="sr-only">Caricamento...</span>
+                    </small>
+                </div>
+            </div>
+            <div class="pull-right">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-secondary v-center mr-3" (click)="getReport()">
+                        <i class="material-icons">refresh</i> Aggiorna
+                    </button>    
+                </div>
+            </div>
+        </div>
+        <div *ngIf="ente">
+            <h1>{{ente.nome}} - {{ente.partita_iva}}</h1>
+        </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Utente</th>
+                    <th>CF</th>
+                    <th>Email</th>
+                    <th>Data invio</th>
+                    <th>Ruolo</th>
+                    <th>Stato</th>
+                    <th>Invitato da</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reg of registrazioni">
+                    <td>{{reg.name}} {{reg.surname}}</td>
+                    <td>{{reg.cf}}</td>
+                    <td>{{reg.email}}</td>
+                    <td>{{reg.dataInvito}}</td>
+                    <td>{{reg.role}}</td>
+                    <td>
+                        <span ngbTooltip="{{reg.dataAccettazione}}">{{reg.stato}}</span>
+                    </td>
+                    <td>{{reg.nominativoInvito}}</td>
+                    <td>
+                        <i class="material-icons pointer error" ngbTooltip="cancella ruolo"
+                        (click)="deleteEnteRole(reg)">delete_forever</i> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

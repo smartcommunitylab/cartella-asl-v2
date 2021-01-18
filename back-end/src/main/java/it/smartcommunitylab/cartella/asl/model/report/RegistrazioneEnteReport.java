@@ -36,6 +36,10 @@ public class RegistrazioneEnteReport {
 	
 	private String nominativoInvito;
 	
+	private String nomeIstituto;
+	
+	private String nomeEnte;
+	
 	private String token;
 	
 	@Enumerated(EnumType.STRING)
@@ -57,6 +61,8 @@ public class RegistrazioneEnteReport {
 		this.dataInvito = reg.getDataInvito();
 		this.dataAccettazione = reg.getDataAccettazione();
 		this.nominativoInvito = reg.getNominativoInvito();
+		this.nomeIstituto = reg.getNomeIstituto();
+		this.nomeEnte = reg.getNomeEnte();
 		this.token = reg.getToken();
 		this.stato = reg.getStato();
 		this.role = reg.getRole();
@@ -164,6 +170,22 @@ public class RegistrazioneEnteReport {
 
 	public void setRole(ASLRole role) {
 		this.role = role;
+	}
+
+	public String getNomeIstituto() {
+		return nomeIstituto;
+	}
+
+	public void setNomeIstituto(String nomeIstituto) {
+		this.nomeIstituto = nomeIstituto;
+	}
+
+	public String getNomeEnte() {
+		return nomeEnte;
+	}
+
+	public void setNomeEnte(String nomeEnte) {
+		this.nomeEnte = nomeEnte;
 	}
 
 }

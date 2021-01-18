@@ -218,6 +218,17 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		return reg;
 	}
 	
+	public RegistrazioneEnte cancellaRuolo(Long registrazioneId) throws Exception {
+		Optional<RegistrazioneEnte> optional = registrazioneEnteRepository.findById(registrazioneId);
+		if(!optional.isPresent()) {
+			throw new BadRequestException("registrazione non trovata");
+		}
+		RegistrazioneEnte reg = optional.get();
+		userManager.deleteASLUserRole(reg.getUserId(), reg.getRole(), reg.getAziendaId());
+		registrazioneEnteRepository.delete(reg);
+		return reg;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<RegistrazioneEnteReport> getRuoliByEnte(String enteId) throws Exception {
 		StringBuilder sb = new StringBuilder("SELECT reg, u FROM RegistrazioneEnte reg, ASLUser u");

@@ -227,6 +227,25 @@ export class DataService {
       );
   }
 
+  searchEnti(page, pageSize, text) {
+    let params = new HttpParams();
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
+    params = params.append('text', text);
+    return this.http.get<any>(
+      this.host + "/dashboard/enti",
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(enti => {
+          return (enti);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getStudenti(page, pageSize, filters) {
     let params = new HttpParams();
     params = params.append('page', page);
@@ -417,6 +436,40 @@ export class DataService {
     }
     return this.http.get<any>(
       this.host + '/dashboard/esperienze',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getReportRegistrazioneEnte(enteId:string):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('enteId', enteId);
+    return this.http.get<any>(
+      this.host + '/dashboard/registrazione-ente',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  deleteRegistrazioneEnte(registrazioneId:string):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('registrazioneId', registrazioneId);
+    return this.http.delete<any>(
+      this.host + '/dashboard/registrazione-ente',
       {
         params: params
       })
