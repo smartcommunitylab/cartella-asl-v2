@@ -18,7 +18,6 @@ export function init_app(appLoadService: AppLoadService) {
   return () => appLoadService.initializeApp();
 }
 
-
 @NgModule({
   providers: [
     AppLoadService,

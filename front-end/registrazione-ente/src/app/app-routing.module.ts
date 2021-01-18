@@ -5,7 +5,7 @@ import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@a
 
 const app_routes: Routes = [
   { path: 'home/account/activate', loadChildren: 'app/home/home.module#HomeModule' },
-  { path: 'registrazione',  loadChildren: 'app/registrazione/registrazione.module#RegistrazioneModule' },
+  { path: 'registrazione', loadChildren: 'app/registrazione/registrazione.module#RegistrazioneModule' },
   { path: '**', pathMatch: 'full', redirectTo: 'home' }
 ];
 
@@ -14,6 +14,6 @@ const app_routes: Routes = [
     RouterModule.forRoot(app_routes),
     LocalStorageModule
   ],
-  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}]
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }]
 })
 export class AppRoutingModule { }

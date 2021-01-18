@@ -15,6 +15,6 @@ export class AppComponent implements OnInit {
   env = environment;
   constructor(private router: Router, private dataService: DataService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
 }
