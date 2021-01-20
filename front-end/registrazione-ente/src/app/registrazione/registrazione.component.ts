@@ -4,7 +4,9 @@ import { DataService } from '../core/services/data.service';
 import { environment } from '../../environments/environment';
 import Stepper from 'bs-stepper'
 import { AuthenticationService } from '../core/services/authentication.service';
+import { ModificaAccountModalComponent } from './actions/modifica-account-modal/modifica-account-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModificaEnteModalComponent } from './actions/modifica-ente-modal/modifica-ente-modal.component';
 
 @Component({
   selector: 'cm-registrazione-container',
@@ -74,31 +76,18 @@ export class Registrazioneomponent implements OnInit {
   }
 
   ngOnInit() {
-    
     this.dataService.getProfile().subscribe(profile => {
       if (profile && profile.aziende) {
         this.profile = profile;
-        var ids = [];
-        for (var k in profile.aziende) {
-          ids.push(k);
-        }
-        this.dataService.getListaAziendeByIds(ids).subscribe((aziende: Array<any>) => {
-          if (aziende) {
-            this.aziende = aziende;
-            this.dataService.setAziendaId(this.aziende[0].id);
-            this.dataService.setAziendaName(this.aziende[0].nome);
-            this.actualAzienda = this.aziende[0];
-           }
-        }
-          , err => {
-            console.log('error, no azienda')
-          });
-        this.dataService.setAziendaId(ids[0]);
+        // var aziendaId = Object.keys(profile.aziende)[0];
+        var aziendaId = sessionStorage.getItem('aziendaId');
+        this.dataService.setAziendaId(aziendaId);
+        this.dataService.setAziendaName(profile.aziende[aziendaId].nome);
+        this.actualAzienda = profile.aziende[aziendaId];
         this.stepper = new Stepper(document.querySelector('#stepper1'), {
           linear: true,
           animation: true
         })
-
       }
     }, err => {
     });
@@ -107,8 +96,5 @@ export class Registrazioneomponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-
-
-
 
 }
