@@ -102,8 +102,8 @@ export class DataService {
   }
 
   getAziendaInfoRiferente(aziendaId: any) {
-    let url = this.host + "/azienda/" + aziendaId;
-
+    let url = this.host + "/azienda/" + aziendaId + '/ente';
+    
     return this.http.get<Azienda>(url,
       {
         observe: 'response'
