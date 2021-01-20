@@ -84,7 +84,7 @@ export class DataService {
         map(res => {
           return res.body;
         }),
-        catchError(this.handleError)
+        // catchError(this.handleError)
       );
   }
 

@@ -79,37 +79,6 @@
             </div>
         </div>
     </div>
-
-    <!-- <div id="stepper" class="steppers">
-        <ul class="steppers-header">
-            <li class="no-line">
-                <span class="steppers-number">
-                    <span class="sr-only">Step </span>1
-                </span>Label Step 1
-            </li>  
-            <li class="active no-line">
-                <span class="steppers-number">
-                    <span class="sr-only">Step </span>2
-                </span>Label Step 2
-            </li>
-            <li>
-                <span class="steppers-number">
-                    <span class="sr-only">Step </span>3
-                </span>Label Step 3
-            </li>
-         </ul>
-
-         <div class="steppers-content" aria-live="polite">
-            <p>Contenuto di esempio dello step corrente</p>
-           </div>
-
-        <nav class="steppers-nav">
-            <button type="button" class="btn btn-outline-primary btn-sm steppers-btn-prev"><svg class="icon icon-primary"><use xlink:href="/bootstrap-italia/dist/svg/sprite.svg#it-chevron-left"></use></svg>Indietro</button>
-            <button type="button" class="btn btn-outline-primary btn-sm steppers-btn-next">Avanti<svg class="icon icon-primary"><use xlink:href="/bootstrap-italia/dist/svg/sprite.svg#it-chevron-right"></use></svg></button>
-            <button type="button" class="btn btn-primary btn-sm steppers-btn-confirm d-none d-lg-block">Conferma</button>
-          </nav>
-    </div> -->
-
     <div id="stepper1" class="bs-stepper">
         <div class="bs-stepper-header">
             <div class="step" (click)="move(1)" data-target="#test-l-1">
@@ -195,7 +164,8 @@
                     <br />
                     <br />
                     <div class="text-center font-20">
-                       
+                        <it-checkbox id="Ho letto e accetto tutto" name="letto" [(ngModel)]="letto"
+                            label="Ho letto e accetto tutto"></it-checkbox>
                     </div>
                     <br />
                     <br />
@@ -211,16 +181,43 @@
                     </div>
                 </div>
                 <div id="test-l-2" class="content">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
                         <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
                     </div>
-                    <button (click)="next()" class="btn btn-primary">Next</button>
-         
-                </div>
+                    <button (click)="next()" class="btn btn-primary">Next</button> -->
+                    <br />
+                    <br />
+                    <div class="callNote text-semibold text-center font-30">Alcuni dati su questo ente sono già presenti
+                        nel nostro database: puoi correggerli e integrarli subito, oppure farlo più tardi.</div>
+                    <br />
+                    <br />
+                    <div class="card-body-step2 m-16" *ngIf="profile">
+                        <div class="title">
+                            <button class="btn btn-primary v-center-inline" placement="bottom"
+                                ngbTooltip="Modifica i dati di questa attività" (click)="modificaDatiAccount()">
+                                Modifica dati account&nbsp;&nbsp;&nbsp;
+                                <svg class="icon icon-white icon-sm btnModificationIcon">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <br>
+                        <div class="p-1 middle-div row">
+                            <div class="col-6">
+                                <span class="row"><span class="text-semibold">Nome:&nbsp;</span>{{profile.name}}</span>
+                                <span class="row"><span
+                                        class="text-semibold">Cognome:&nbsp;</span>{{profile.surname}}</span>
+                                <span class="row"><span class="text-semibold">Mail:&nbsp;</span>{{profile.email}}</span>
+                                <span class="row"><span class="text-semibold">Codice
+                                        Fiscale:&nbsp;</span>{{profile.cf}}</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
                 <div id="test-l-3" class="content text-center">
-                   
-                </div>
+                    
+                 </div>
             </form>
         </div>
     </div>

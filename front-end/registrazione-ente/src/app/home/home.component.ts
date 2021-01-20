@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
                 this.emailEnte = res.email;
                 sessionStorage.aziendaId = res.aziendaId;
                 this.dataService.confermaRichiestaRegistrazione(token).subscribe(res => {}, err => {
-                    // this.linkExpired = true;
+                    this.linkExpired = true;
                 });
 
             }, err => {
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        alert('login');
+        // alert('login');
         this.authService.checkLoginStatus().then(valid => {
             if (!valid) {
                 console.log('come here for not valid');
