@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
-import { DatePickerComponent } from 'ng2-date-picker';
 import { DataService } from '../../../core/services/data.service';
 
 @Component({
@@ -25,7 +23,7 @@ export class ModificaAccountModalComponent implements OnInit {
 
   ngOnInit() { }
 
-  create() { //create or update
+  save() {
     if (this.allValidated()) {
       this.newOffertaListener.emit(this.profile);
       this.activeModal.dismiss('create')

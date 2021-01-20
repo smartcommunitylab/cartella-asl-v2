@@ -84,6 +84,7 @@ export class DataService {
         map(res => {
           return res.body;
         }),
+        catchError(this.handleError)
       );
   }
 
@@ -185,6 +186,40 @@ export class DataService {
         ),
         catchError(this.handleError))
   }
+
+  aggiornaDatiOwnerAzienda(data): Observable<any> {
+    let headers = new HttpHeaders();
+    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    let url = this.host + "/registrazione-ente/owner";
+
+    let params = new HttpParams();
+    params = params.append('enteId', data.enteId);
+    params = params.append('nome', data.name);
+    params = params.append('cognome', data.surname);
+    params = params.append('cf', data.cf);
+    params = params.append('ownerId', data.ownerId);
+  
+    return this.http.post<any>(
+      url,
+      null,
+      {
+        headers: headers.set('Authorization', authHeader),
+        params: params,
+        observe: 'response',
+      }
+    )
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body as any);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+  
 
   getAteco(code: string): Observable<any> {
     let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
