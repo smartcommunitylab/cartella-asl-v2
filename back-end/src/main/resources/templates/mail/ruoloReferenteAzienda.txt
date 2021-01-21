@@ -1,7 +1,7 @@
 Buongiorno, 
 Questa è una mail automatica inviata dal sistema EDIT per la gestione delle esperienze di alternanza scuola lavoro degli istituti secondari superiori della Provincia Autonoma di Trento. 
 
-Le comunichiamo che il Suo indirizzo email è stato indicato da {{nominativoInvito}} come delegato per la gestione dell’ente {{nomeEnte}} nel portale EDIT. 
+Le comunichiamo che il Suo indirizzo email è stato indicato da {{nominativoInvito}} di {{nomeEnte}} come delegato per la gestione dell’ente {{nomeEnte}} nel portale EDIT. 
 
 Se vuole accettare l’invito, clicchi sul link in calce alla mail, che La condurrà verso la procedura di registrazione in EDIT. 
 
