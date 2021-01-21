@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../../../core/services/data.service';
 import { GeoService } from '../../../core/services/geo.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -16,8 +16,6 @@ export class ModificaEnteModalComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private router: Router,
-    private route: ActivatedRoute,
     private dataService: DataService,
     private geoService: GeoService) { }
 
@@ -223,7 +221,6 @@ export class ModificaEnteModalComponent implements OnInit {
       this.ente.address = placeObj.name;
       this.ente.latitude = placeObj.location[0];
       this.ente.longitude = placeObj.location[1];
-
     }
   }
 

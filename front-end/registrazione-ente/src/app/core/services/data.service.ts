@@ -13,14 +13,9 @@ const httpOptions = {
 @Injectable()
 export class DataService {
 
-  istitutoId: string = "19a46a53-8e10-4cd0-a7d0-fb2da217d1be";
-  schoolYear: string = "2019-20";
-  listIstituteIds = [];
-  istituto: string = "Centro Formazione Professionale Agrario - S. Michele all'Adige'";
   host: string = serverAPIConfig.host;
   static growler;
   timeout: number = 120000;
-  coorindateIstituto;
   aziendaId: string = '';
   listAziendaIds = [];
   aziendaName: string = "";
@@ -33,7 +28,6 @@ export class DataService {
     DataService.growler = growler;
   }
 
-  /** AZIENDA.  **/
   setAziendaId(id) {
     if (id) {
       this.aziendaId = id;
@@ -43,12 +37,6 @@ export class DataService {
   setAziendaName(name) {
     if (name) {
       this.aziendaName = name;
-    }
-  }
-
-  setListId(list) {
-    if (list) {
-      this.listIstituteIds = list;
     }
   }
 
@@ -73,12 +61,12 @@ export class DataService {
     let url = this.host.replace('/api', '/registrazione-ente');
     let params = new HttpParams();
     params = params.append('token', token);
-    return this.http.post<any>(url, 
+    return this.http.post<any>(url,
       null,
       {
-      params: params,
-      observe: 'response'
-    })
+        params: params,
+        observe: 'response'
+      })
       .timeout(this.timeout)
       .pipe(
         map(res => {
@@ -123,7 +111,7 @@ export class DataService {
   getAziendaInfoRiferente(aziendaId: any) {
     let headers = new HttpHeaders();
     const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
-    let url = this.host + "/azienda/" + aziendaId;
+    let url = this.host + "/azienda/" + aziendaId + '/ente';
 
     return this.http.get<any>(url,
       {
@@ -140,7 +128,6 @@ export class DataService {
       );
   }
 
-  // GET /azienda/{id}
   getAzienda() {
     let headers = new HttpHeaders();
     const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
@@ -198,7 +185,7 @@ export class DataService {
     params = params.append('cognome', data.surname);
     params = params.append('cf', data.cf);
     params = params.append('ownerId', data.ownerId);
-  
+
     return this.http.post<any>(
       url,
       null,
@@ -219,7 +206,7 @@ export class DataService {
         ),
         catchError(this.handleError))
   }
-  
+
 
   getAteco(code: string): Observable<any> {
     let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
