@@ -114,6 +114,8 @@
                     </td>
                     <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
                     <td>
+                        <i class="material-icons pointer ok" ngbTooltip="dettaglio attività"
+                        (click)="detailAttivita(aa)">info</i> 
                         <i class="material-icons pointer ok" ngbTooltip="attiva attività"
                         *ngIf="aa.stato=='archiviata'" (click)="activateAttivita(aa)">unarchive</i> 
                         <i class="material-icons pointer error" ngbTooltip="cancella attività"

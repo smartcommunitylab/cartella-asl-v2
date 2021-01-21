@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteAttivitaModalComponent } from '../modals/delete-attivita-modal/delete-attivita-modal.component';
 import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-modal/activate-attivita-modal.component';
+import { DetailAttivitaModalComponent } from '../modals/detail-attivita-modal/detail-attivita-modal.component';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -140,6 +141,17 @@ export class DashboardAttivitaComponent implements OnInit {
           this.getAttivita();
         }
       });
+    });
+  }
+
+  detailAttivita(aa: any) {
+    this.dataService.reportAttivita(aa.id).subscribe(r => {
+      if(r) {
+        const modalRef = this.modalService.open(DetailAttivitaModalComponent);
+        modalRef.componentInstance.report = r;
+        modalRef.componentInstance.onActivate.subscribe(res => {
+        });
+      }
     });
   }
 

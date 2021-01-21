@@ -1,0 +1,27 @@
+<div class="modal-header">
+  <h4 class="modal-title">Dettaglio Attività</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-6">
+      Titolo: {{report.attivitaAlternanza.titolo}}
+    </div>
+    <div class="col-6">
+      Tipologia: {{getTipologia()}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      Anno scolastico: {{report.attivitaAlternanza.annoScolastico}}
+    </div>
+    <div class="col-6">
+      Stato: {{report.attivitaAlternanza.stato}}
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">OK</button>
+</div>

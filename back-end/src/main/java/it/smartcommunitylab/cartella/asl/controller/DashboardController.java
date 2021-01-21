@@ -13,11 +13,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
+import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.AziendaManager;
 import it.smartcommunitylab.cartella.asl.manager.DashboardManager;
@@ -28,6 +31,7 @@ import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
+import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardDettaglioAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
@@ -50,9 +54,11 @@ public class DashboardController {
 	private RegistrazioneEnteManager registrazioneEnteManager;
 	@Autowired
 	private AziendaManager aziendaManager;
+	@Autowired
+	private AttivitaAlternanzaManager attivitaAlternanzaManager;
 
 	@GetMapping("/api/dashboard/sistema")
-	public ReportDashboardUsoSistema getReportUtilizzoSistema (
+	public @ResponseBody ReportDashboardUsoSistema getReportUtilizzoSistema (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			HttpServletRequest request) throws Exception {
@@ -65,7 +71,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/attivita/report")
-	public ReportDashboardAttivita getReportAttivita (
+	public @ResponseBody ReportDashboardAttivita getReportAttivita (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			@RequestParam(required=false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
@@ -80,7 +86,7 @@ public class DashboardController {
 	}
 
 	@GetMapping("/api/dashboard/attivita")
-	public List<ReportDashboardDettaglioAttivita> getAttivita (
+	public @ResponseBody List<ReportDashboardDettaglioAttivita> getAttivita (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			@RequestParam(required=false) String text,
@@ -94,7 +100,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/esperienze")
-	public List<ReportDashboardEsperienza> getReportEsperienze (
+	public @ResponseBody List<ReportDashboardEsperienza> getReportEsperienze (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			@RequestParam(required=false) String text,
@@ -108,7 +114,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/registrazioni")
-	public List<ReportDashboardRegistrazione> getReportRegistrazioni (
+	public @ResponseBody List<ReportDashboardRegistrazione> getReportRegistrazioni (
 			@RequestParam String istitutoId,
 			@RequestParam String cf,
 			HttpServletRequest request) throws Exception {
@@ -121,7 +127,7 @@ public class DashboardController {
 	}
 	
 	@DeleteMapping("/api/dashboard/attivita")
-	public AttivitaAlternanza deleteAttivita(
+	public @ResponseBody AttivitaAlternanza deleteAttivita(
 			@RequestParam Long attivitaId,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
@@ -135,7 +141,7 @@ public class DashboardController {
 	}
 	
 	@DeleteMapping("/api/dashboard/esperienza")
-	public EsperienzaSvolta deleteEsperienza(
+	public @ResponseBody EsperienzaSvolta deleteEsperienza(
 			@RequestParam Long esperienzaId,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
@@ -149,7 +155,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/attivita/attiva")
-	public AttivitaAlternanza activateAttivita(
+	public @ResponseBody AttivitaAlternanza activateAttivita(
 			@RequestParam Long attivitaId,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.checkRole(request, ASLRole.ADMIN);
@@ -189,7 +195,7 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/enti")
-	public Page<Azienda> searchEnti(
+	public @ResponseBody Page<Azienda> searchEnti(
 			@RequestParam String text,
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
@@ -199,6 +205,22 @@ public class DashboardController {
 			logger.info(String.format("searchEnti:%s", text));
 		}		
 		return page;
+	}
+	
+	@GetMapping("/api/dashboard/attivita/detail")
+	public @ResponseBody ReportAttivitaAlternanzaDettaglio getAttivitaAlternanza(
+			@RequestParam Long attivitaId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(attivitaId);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getAttivitaAlternanza:%s", attivitaId));
+		}
+		return report;
 	}
 	
 
