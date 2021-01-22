@@ -8,6 +8,8 @@ import { DesignAngularKitModule } from 'design-angular-kit'
 import { DpDatePickerModule } from 'ng2-date-picker';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { ModificaAccountModalComponent } from './actions/modifica-account-modal/modifica-account-modal.component';
+import { ModificaEnteModalComponent } from './actions/modifica-ente-modal/modifica-ente-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -22,7 +24,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   providers: [
     NgbActiveModal,
   ],
-  entryComponents: [],
+  entryComponents: [
+    ModificaAccountModalComponent,
+    ModificaEnteModalComponent
+  ],
 declarations: [RegistrazioneRoutingModule.components]
 })
 export class RegistrazioneModule { }

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Registrazioneomponent } from './registrazione.component';
+import { ModificaAccountModalComponent } from './actions/modifica-account-modal/modifica-account-modal.component';
+import { ModificaEnteModalComponent } from './actions/modifica-ente-modal/modifica-ente-modal.component';
 
 const routes: Routes = [
   { path: '', component: Registrazioneomponent },
@@ -13,7 +15,9 @@ const routes: Routes = [
 })
 export class RegistrazioneRoutingModule { 
   static components = [
-    Registrazioneomponent
+    Registrazioneomponent,
+    ModificaAccountModalComponent,
+    ModificaEnteModalComponent   
   ];
 }
 

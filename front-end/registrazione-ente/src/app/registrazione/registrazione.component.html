@@ -105,11 +105,6 @@
         <div class="bs-stepper-content">
             <form (ngSubmit)="onSubmit()">
                 <div id="test-l-1" class="content">
-                    <!-- <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" />
-                    </div>
-                    <button (click)="next()" class="btn btn-primary">Next</button> -->
                     <br />
                     <br />
                     <div class="callNote text-semibold text-center font-30">Prima di tutto, ti chiediamo di leggere ed
@@ -181,11 +176,6 @@
                     </div>
                 </div>
                 <div id="test-l-2" class="content">
-                    <!-- <div class="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
-                    </div>
-                    <button (click)="next()" class="btn btn-primary">Next</button> -->
                     <br />
                     <br />
                     <div class="callNote text-semibold text-center font-30">Alcuni dati su questo ente sono già presenti
@@ -206,17 +196,65 @@
                         <div class="p-1 middle-div row">
                             <div class="col-6">
                                 <span class="row"><span class="text-semibold">Nome:&nbsp;</span>{{profile.name}}</span>
-                                <span class="row"><span
-                                        class="text-semibold">Cognome:&nbsp;</span>{{profile.surname}}</span>
+                                <span class="row"><span class="text-semibold">Cognome:&nbsp;</span>{{profile.surname}}</span>
                                 <span class="row"><span class="text-semibold">Mail:&nbsp;</span>{{profile.email}}</span>
-                                <span class="row"><span class="text-semibold">Codice
-                                        Fiscale:&nbsp;</span>{{profile.cf}}</span>
+                                <span class="row"><span class="text-semibold">Codice fiscale:&nbsp;</span>{{profile.cf}}</span>
                             </div>
                         </div>
                     </div>
-                 </div>
+                    <div class="card-body-step2 m-16" *ngIf="actualAzienda">
+                        <div class="title">
+                            Dati ente <br />
+                            <button class="btn btn-primary v-center-inline" placement="bottom"
+                                ngbTooltip="Modifica i dati di questa attività" (click)="modificaDatiEnte()">
+                                Modifica dati ente&nbsp;&nbsp;&nbsp;
+                                <svg class="icon icon-white icon-sm btnModificationIcon">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
+                                </svg>
+                            </button>
+                        </div>
+                        <br>
+                        <div class="p-1 middle-div row">
+                            <div class="col-6">
+                                <span class="row"><span class="text-semibold">Nome ente:&nbsp;</span>{{actualAzienda.nome}}</span>
+                                <span class="row"><span class="text-semibold">Partita iva:&nbsp;</span>{{actualAzienda.partita_iva}}</span>
+                                <span class="row"><span class="text-semibold">Indirizzo:&nbsp;</span>{{actualAzienda.viaPiazza}}</span>
+                                <span class="row"><span class="text-semibold">CAP:&nbsp;</span>{{actualAzienda.cap}}</span>
+                                <span class="row"><span class="text-semibold">Comune:&nbsp;</span>{{actualAzienda.comune}}</span>
+                                <span class="row"><span class="text-semibold">Provincia:&nbsp;</span>{{actualAzienda.provincia}}</span>
+                            </div>
+                            <div class="col-6">
+                                <span class="row"><span class="text-semibold">Email:&nbsp;</span>{{ actualAzienda.email }}</span>
+                                <span class="row"><span class="text-semibold">PEC:&nbsp;</span>{{actualAzienda.pec}}</span>
+                                <span class="row"><span class="text-semibold">Telefono:&nbsp;</span>{{actualAzienda.phone}}</span>
+                                <span class="row"><span class="text-semibold">Legale rappresentante:&nbsp;</span>{{actualAzienda.legaleRappresentante}}</span>
+                                <span class="row"><span class="text-semibold">Responsabile della sicurezza:&nbsp;</span>{{actualAzienda.responsabileSicurezza}}</span>
+                                <span class="row"><span class="text-semibold">Medico competente:&nbsp;</span>{{actualAzienda.medicoCompetente}}</span>
+                            </div>
+                        </div>
+                        <div class="p-1 middle-div row">
+                            <div class="col-12">
+                                <span class="row"><span class="text-semibold">Codice ATECO:&nbsp;</span></span>
+                                <span class="row" *ngFor="let ateco of attachedAteco">
+                                    <td class="col-sm-6">{{ateco.codice}} - {{ateco.descrizione}}</td>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="test-l-3" class="content text-center">
-                    
+                    <br />
+                    <br />
+                    <div class="callNote text-semibold text-center font-30">Benvenuto in EDIT!</div>
+                    <br />
+                    <br />
+                    <div class="title">Gestione delle attività <br /></div>
+                    <br />
+                    <br />
+                    <div class="title">Creazione e gestione offerte <br /></div>
+                    <br />
+                    <br />
+                    <div class="title">Lista studenti & istituti <br /></div>
                  </div>
             </form>
         </div>

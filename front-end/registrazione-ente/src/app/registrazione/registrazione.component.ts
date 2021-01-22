@@ -84,6 +84,7 @@ export class Registrazioneomponent implements OnInit {
         this.dataService.setAziendaId(aziendaId);
         this.dataService.setAziendaName(profile.aziende[aziendaId].nome);
         this.actualAzienda = profile.aziende[aziendaId];
+        this.updateAtecoCodiceList();
         this.stepper = new Stepper(document.querySelector('#stepper1'), {
           linear: true,
           animation: true
@@ -96,5 +97,54 @@ export class Registrazioneomponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+
+  updateAtecoCodiceList() {
+    this.attachedAteco = [];
+    if (this.actualAzienda.atecoCode && this.actualAzienda.atecoDesc) {
+      for (var i = 0; i < this.actualAzienda.atecoCode.length; i++) {
+        let atecoEntry = {codice: this.actualAzienda.atecoCode[i], descrizione: this.actualAzienda.atecoDesc[i]};
+        this.attachedAteco.push(atecoEntry);
+      }
+    }
+  }
+
+  modificaDatiEnte() {
+    const modalRef = this.modalService.open(ModificaEnteModalComponent, { windowClass: "creaAttivitaModalClass" });
+    modalRef.componentInstance.ente = this.actualAzienda;
+    modalRef.componentInstance.updatedEnteListener.subscribe((enteUpdated) => {
+      this.dataService.addAzienda(enteUpdated).subscribe((res) => {
+        this.dataService.getProfile().subscribe(profile => {
+          if (profile && profile.aziende) {
+            this.profile = profile;
+            var aziendaId = this.dataService.aziendaId;
+            this.dataService.setAziendaName(profile.aziende[aziendaId].nome);
+            this.actualAzienda = profile.aziende[aziendaId];
+            this.updateAtecoCodiceList();
+            this.stepper.to(2);
+          }
+        }, err => {
+        });
+      },
+        (err: any) => console.log(err),
+        () => console.log('updateAzienda'));
+    });
+  }
+
+  modificaDatiAccount() {
+    const modalRef = this.modalService.open(ModificaAccountModalComponent, { windowClass: "creaAttivitaModalClass" });
+    modalRef.componentInstance.profile = this.profile;
+    modalRef.componentInstance.newOffertaListener.subscribe((profileUpdated) => {
+      profileUpdated.enteId = this .actualAzienda.id;
+      profileUpdated.ownerId = this.profile.id;
+      this.dataService.aggiornaDatiOwnerAzienda(profileUpdated).subscribe((res) => {
+        this.profile = res;
+      },
+        (err: any) => console.log(err),
+        () => console.log('aggiornaDatiOwnerAzienda'));
+
+    });
+
+  }
+
 
 }
