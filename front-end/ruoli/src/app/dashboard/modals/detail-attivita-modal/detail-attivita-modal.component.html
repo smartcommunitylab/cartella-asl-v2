@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Dettaglio Attività</h4>
+  <h4 class="modal-title">Dettaglio Attività {{report.attivitaAlternanza.id}}</h4>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
   </button>
@@ -7,20 +7,68 @@
 <div class="modal-body">
   <div class="row">
     <div class="col-6">
-      Titolo: {{report.attivitaAlternanza.titolo}}
+      <strong>Titolo:</strong> {{report.attivitaAlternanza.titolo}}
     </div>
     <div class="col-6">
-      Tipologia: {{getTipologia()}}
+      <strong>Tipologia:</strong> {{getTipologia()}}
     </div>
   </div>
   <div class="row">
     <div class="col-6">
-      Anno scolastico: {{report.attivitaAlternanza.annoScolastico}}
+      <strong>Anno scolastico:</strong> {{report.attivitaAlternanza.annoScolastico}}
     </div>
     <div class="col-6">
-      Stato: {{report.attivitaAlternanza.stato}}
+      <strong>Stato:</strong> {{report.attivitaAlternanza.stato}}
     </div>
   </div>
+  <div class="row">
+    <div class="col-6">
+      <strong>Data Inizio:</strong> {{report.attivitaAlternanza.dataInizio}}
+    </div>
+    <div class="col-6">
+      <strong>Data fine:</strong> {{report.attivitaAlternanza.dataFine}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <strong>Dalle:</strong> {{report.attivitaAlternanza.oraInizio}}
+    </div>
+    <div class="col-6">
+      <strong>Alle:</strong> {{report.attivitaAlternanza.oraFine}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <strong>Referente scuola:</strong> {{report.attivitaAlternanza.referenteScuola}}
+    </div>
+    <div class="col-6">
+      <strong>Referente esterno:</strong> {{report.attivitaAlternanza.referenteEsterno}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <strong>Formatore:</strong> {{report.attivitaAlternanza.formatore}}
+    </div>
+    <div class="col-6">
+      <strong>Ente:</strong> {{report.attivitaAlternanza.nomeEnte}}
+    </div>
+  </div>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+          <th>Nome</th>
+          <th>CF</th>
+          <th>Classe</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let esp of report.esperienze">
+        <td>{{esp.nominativoStudente}}</td>
+        <td>{{esp.cfStudente}}</td>
+        <td>{{esp.classeStudente}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-flat" (click)="activeModal.close('Close click')">OK</button>

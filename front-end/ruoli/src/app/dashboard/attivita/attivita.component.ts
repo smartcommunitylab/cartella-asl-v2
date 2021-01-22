@@ -147,7 +147,7 @@ export class DashboardAttivitaComponent implements OnInit {
   detailAttivita(aa: any) {
     this.dataService.reportAttivita(aa.id).subscribe(r => {
       if(r) {
-        const modalRef = this.modalService.open(DetailAttivitaModalComponent);
+        const modalRef = this.modalService.open(DetailAttivitaModalComponent, {size:'lg'});
         modalRef.componentInstance.report = r;
         modalRef.componentInstance.onActivate.subscribe(res => {
         });
