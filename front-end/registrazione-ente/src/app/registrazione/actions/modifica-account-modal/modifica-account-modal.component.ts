@@ -14,8 +14,7 @@ export class ModificaAccountModalComponent implements OnInit {
   forceErrorDisplayCognome: boolean = false;
   forceErrorDisplayCF: boolean = false;
   forceErrorDisplayMail: boolean = false;
-  // forceErrorDisplayTelefono: boolean = false;
-
+  
   @Input() profile?: any;
   @Output() newOffertaListener = new EventEmitter<Object>();
   
@@ -38,7 +37,6 @@ export class ModificaAccountModalComponent implements OnInit {
         && (this.profile.surname && this.profile.surname != '' && this.profile.surname.trim().length > 0)
         && (this.profile.cf && this.profile.cf != '' && this.profile.cf.trim().length > 0)
         && (this.profile.email && this.profile.email != '' && this.profile.email.trim().length > 0)
-        // && (this.profile.phone && this.profile.phone != '' && this.profile.phone.trim().length > 0)
       );
   }
 
@@ -51,8 +49,6 @@ export class ModificaAccountModalComponent implements OnInit {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayCF = true : this.forceErrorDisplayCF = false;
     } else if (type == 'mail') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayMail = true : this.forceErrorDisplayMail = false;
-    // } else if (type == 'telefono') {
-    //   (event.target.value.trim().length == 0) ? this.forceErrorDisplayTelefono = true : this.forceErrorDisplayTelefono = false;
     } else if(type == 'trim'){
       event.target.value = event.target.value.trim(); 
     } 
