@@ -26,9 +26,12 @@ public class EsperienzaSvoltaAllineamento {
 
 	private boolean daAllineare = true;
 
-	@Column(columnDefinition="VARCHAR(1024)")
+	@Column(columnDefinition="VARCHAR(2048)")
 	private String errore;
 
+	@Column(columnDefinition="VARCHAR(2048)")
+	private String invio;
+	
 	private int numeroTentativi;
 
 	public Long getId() {
@@ -85,6 +88,14 @@ public class EsperienzaSvoltaAllineamento {
 
 	public void setNumeroTentativi(int numeroTentativi) {
 		this.numeroTentativi = numeroTentativi;
+	}
+
+	public String getInvio() {
+		return invio;
+	}
+
+	public void setInvio(String invio) {
+		this.invio = invio;
 	}
 
 }

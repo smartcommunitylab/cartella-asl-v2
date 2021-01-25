@@ -20,12 +20,14 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.AziendaEstera;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.ext.AlignEsperienza;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.AziendaEsteraRepository;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
+import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
@@ -48,6 +50,8 @@ public class InfoTNAlignExpService {
 	private IstituzioneRepository istitutoRepository;
 	@Autowired
 	private AttivitaAlternanzaRepository attivitaAlternanzaRepository;
+	@Autowired
+	EsperienzaSvoltaRepository esperienzaSvoltaRepository;	
 	@Autowired
 	private StudenteRepository studenteRepository;
 	@Autowired
@@ -95,11 +99,16 @@ public class InfoTNAlignExpService {
 					new AbstractMap.SimpleEntry<>("1", "65"), new AbstractMap.SimpleEntry<>("3", "70"))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-	public String alignEsperienza(EsperienzaSvolta es) throws Exception {
+	public String alignEsperienza(EsperienzaSvoltaAllineamento esa) throws Exception {
 		logger.info("call align experience service infoTN");
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		String url = infoTNAPIUrl;
+		
+		EsperienzaSvolta es = esperienzaSvoltaRepository.getOne(esa.getEspSvoltaId());
+		if (es == null) {
+			throw new BadRequestException(errorLabelManager.get("esperienza.notfound"));
+		}
 		
 		AttivitaAlternanza aa = attivitaAlternanzaRepository.getOne(es.getAttivitaAlternanzaId());
 		if (aa == null) {
@@ -168,6 +177,8 @@ public class InfoTNAlignExpService {
 		// logger.info("token" + token);
 		// logger.info("url" + url);
 		logger.info("body" + json);
+		int index = json.length() > 2000 ? 2000 : json.length();
+		esa.setInvio(json.substring(0, index));
 
 		return httpsUtils.sendPOSTSAA(url, "application/json", "application/json", token, json);
 

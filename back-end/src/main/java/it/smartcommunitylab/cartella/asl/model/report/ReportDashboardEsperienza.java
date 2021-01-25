@@ -32,6 +32,7 @@ public class ReportDashboardEsperienza {
 	private boolean allineato;
 	private int numeroTentativi;
 	private String errore;
+	private String invio;
 	
 	public Long getEsperienzaId() {
 		return esperienzaId;
@@ -122,5 +123,11 @@ public class ReportDashboardEsperienza {
 	}
 	public void setNumeroTentativi(int numeroTentativi) {
 		this.numeroTentativi = numeroTentativi;
+	}
+	public String getInvio() {
+		return invio;
+	}
+	public void setInvio(String invio) {
+		this.invio = invio;
 	}
 }

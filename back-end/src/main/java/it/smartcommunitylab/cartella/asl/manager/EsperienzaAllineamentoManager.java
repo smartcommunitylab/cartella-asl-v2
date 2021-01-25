@@ -36,23 +36,25 @@ public class EsperienzaAllineamentoManager {
 			// align with infoTN.
 			String response;
 			try {
-				response = infoTNAlignExpService.alignEsperienza(esperienzaSvoltaRepository.getOne(esperienzaSvoltaAllineamento.getEspSvoltaId()));
+				response = infoTNAlignExpService.alignEsperienza(esperienzaSvoltaAllineamento);
 				if (response != null && response.equalsIgnoreCase("ok")) {
 					esperienzaSvoltaAllineamento.setAllineato(true);
 					esperienzaSvoltaAllineamento.setDaAllineare(false); //shall i nullify errore, tentativi string here
 				} else {
 					esperienzaSvoltaAllineamento.setAllineato(false);
 					esperienzaSvoltaAllineamento.setDaAllineare(true);
-					esperienzaSvoltaAllineamento
-							.setNumeroTentativi(esperienzaSvoltaAllineamento.getNumeroTentativi() + 1);
-					esperienzaSvoltaAllineamento.setErrore(response);
+					esperienzaSvoltaAllineamento.setNumeroTentativi(esperienzaSvoltaAllineamento.getNumeroTentativi() + 1);
+					int index = response.length() > 2000 ? 2000 : response.length();
+					esperienzaSvoltaAllineamento.setErrore(response.substring(0, index));
 				}
 			} catch (Exception e) {
 				esperienzaSvoltaAllineamento.setAllineato(false);
 				esperienzaSvoltaAllineamento.setDaAllineare(true);
 				esperienzaSvoltaAllineamento.setNumeroTentativi(esperienzaSvoltaAllineamento.getNumeroTentativi() + 1);
-				if (e.getMessage() != null && !e.getMessage().isEmpty())
-				esperienzaSvoltaAllineamento.setErrore(e.getMessage().substring(0, Math.min(e.getMessage().length(), 1000))); // save only first 1000 chars
+				if (e.getMessage() != null && !e.getMessage().isEmpty()) {
+					int index = e.getMessage().length() > 2000 ? 2000 : e.getMessage().length();
+					esperienzaSvoltaAllineamento.setErrore(e.getMessage().substring(0, index)); // save only first 2000 chars
+				}
 				logger.error(e);
 			}
 			esperienzaAllineamentoRepository.save(esperienzaSvoltaAllineamento);

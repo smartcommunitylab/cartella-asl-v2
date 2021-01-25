@@ -50,6 +50,7 @@
         <table class="table table-hover">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Studente</th>
                     <th>Classe</th>
                     <th>Esperienza</th>
@@ -62,6 +63,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let esp of esperienze">
+                    <td>{{esp.esperienzaId}}</td>
                     <td>
                         <span ngbTooltip="{{esp.cfStudente}}">{{esp.nominativoStudente}}</span>
                     </td>
@@ -77,10 +79,11 @@
                         <i *ngIf="esp.stato=='valida' && (esp.numeroTentativi == 0)" class="material-icons"
                         ngbTooltip="esperienza da allineare">arrow_circle_up</i> 
                         <i *ngIf="esp.stato=='valida' && !esp.allineato && (esp.numeroTentativi > 0)" class="material-icons error"
-                        ngbTooltip="errore nell'allineamento">highlight_off</i>
+                        ngbTooltip="copia errore di allineamento nella clipboard" (click)="copyText(esp.errore)">highlight_off</i>
                         &nbsp;
-                        <i *ngIf="esp.stato=='valida' && esp.errore" class="material-icons pointer" 
-                        ngbTooltip="copia errore nella clipboard" (click)="copyText(esp.errore)">content_copy</i>
+                        <i *ngIf="esp.invio" class="material-icons pointer data" 
+                        ngbTooltip="copia dati di invio nella clipboard" (click)="copyText(esp.invio)">content_copy</i>
+                        &nbsp;
                         <i class="material-icons pointer error" ngbTooltip="cancella esperienza"
                         (click)="deleteEsperienza(esp)">delete_forever</i> 
                     </td>

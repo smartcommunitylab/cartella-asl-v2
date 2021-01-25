@@ -12,6 +12,9 @@
 .material-icons.ok { 
   color: #7aaf40; 
 }
+.material-icons.data { 
+  color: #446bb3; 
+}
 .pointer {
   cursor: pointer;
 }
