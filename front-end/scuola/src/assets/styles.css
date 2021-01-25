@@ -14154,6 +14154,17 @@ hr {
   background-color: #FFB54C;
 }
 
+.abilitaEnteModalClass .modal-dialog {
+  right: 2%;
+  left: 2%;
+  max-width: 1192px;
+  max-height: 624px;
+}
+
+.abilitaEnteModalClass .modal-header {
+  background-color: #FFB54C;
+}
+
 .archiviazioneModalClass .modal-dialog {
   max-width: 1800px;
 }
@@ -14733,4 +14744,7 @@ div.dp-input-container> input.dp-picker-input{
   font-style: italic;
 }
 
+.font-25 {
+  font-size: 25px!important;
+}
 /**/
