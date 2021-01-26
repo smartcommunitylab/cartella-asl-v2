@@ -116,7 +116,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				registrazioneEnteRepository.delete(registrazioneEnte);
 				throw new BadRequestException("richiesta registrazione scaduta");
 			}
-			ASLUser user = userManager.getExistingASLUser(null, registrazioneEnte.getEmail());
+			ASLUser user = userManager.getExistingASLUser(registrazioneEnte.getEmail());
 			if(user == null) {
 				user = new ASLUser();
 				user.setEmail(registrazioneEnte.getEmail());
@@ -148,11 +148,8 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ownerRole == null) {
 			throw new BadRequestException("gestore non autorizzato");
 		}
-		ASLUser user = userManager.getExistingASLUser(cf, email);
+		ASLUser user = userManager.getExistingASLUser(email);
 		if(user != null) {
-			if(!user.getEmail().equals(email)) {
-				throw new BadRequestException("codice fiscale già presente con una diversa email");
-			}
 			user.setCf(cf);
 			user.setName(nome);
 			user.setSurname(cognome);

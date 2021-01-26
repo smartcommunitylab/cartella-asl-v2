@@ -113,8 +113,8 @@ public class ASLUserManager extends DataEntityManager {
 		return old;
 	}
 	
-	public ASLUser getExistingASLUser(String cf, String email) {
-		ASLUser old = userRepository.findByCfOrEmail(cf, email);
+	public ASLUser getExistingASLUser(String email) {
+		ASLUser old = userRepository.findByEmail(email);
 		return old;
 	}
 	
