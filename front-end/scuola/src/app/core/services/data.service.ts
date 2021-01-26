@@ -1796,6 +1796,52 @@ export class DataService {
       );
   }
 
+  creaRichiestaRegistrazione(az): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('enteId', az.id);
+    params = params.append('email', az.email);
+    return this.http.post<any>(
+      url,
+      null,
+      { 
+        params: params,
+        observe: 'response',
+       })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body as any);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+
+  annullaRichiestaRegistrazione(az): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('registrazioneId', az.registrazioneEnte.id);
+    
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
   /** ACTIVITES/ESPERIENZA SVOLTA API BLOCK. */
   getEsperienzaSvoltaAPI(dataInizio: any, dataFine: any, stato: any, tipologia: any, filterText: any, terminata: any, nomeStudente: any, page: any, pageSize: any): Observable<IPagedES> {
     let url = this.host + this.esperienzaSvoltaAPIUrl + "/istituto/" + this.istitutoId;

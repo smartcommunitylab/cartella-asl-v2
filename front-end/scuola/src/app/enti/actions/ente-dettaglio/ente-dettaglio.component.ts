@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import * as Leaflet from 'leaflet';
 import { EnteCancellaModal } from '../cancella-ente-modal/ente-cancella-modal.component';
+import { AnnullaInvitoModal } from '../annulla-invito-modal/annulla-invito-modal.component';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -124,6 +124,54 @@ export class EnteDettaglioComponent implements OnInit {
 
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
-  } 
+  }
+  
+  setStatus(ente) {
+    if (ente.origin == 'CONSOLE') {
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            return 'In attivazione';
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            return 'Con account';
+        } else {
+            return 'Disponibile';
+        }            
+    } else {
+        return 'Con account';
+    }
+}
+
+  styleOption(ente) {
+    var style = {
+      'color': '#00CF86', //green
+      'font-weight': 'bold'
+    };
+    if (ente.origin == 'CONSOLE') {
+      if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+        style['color'] = '#7FB2E5';
+      } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+        style['color'] = '#00CF86';
+      } else {
+        style['color'] = '#FFB54C';
+      }
+    }
+    return style;
+  }
+
+  abilitaEnte() {
+        //api call.
+        this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+          this.router.navigate(['../../'], { relativeTo: this.route });
+        })
+  }
+
+  annullaInvitoEnte() {
+    const modalRef = this.modalService.open(AnnullaInvitoModal, { windowClass: "abilitaEnteModalClass" });
+    modalRef.componentInstance.ente = this.ente;
+    modalRef.componentInstance.onAnnulla.subscribe((res) => {
+      this.dataService.annullaRichiestaRegistrazione(this.ente).subscribe((res) => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      })
+    });
+  }
 
 }

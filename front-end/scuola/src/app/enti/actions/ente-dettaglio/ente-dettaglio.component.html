@@ -11,7 +11,28 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete" placement="bottom"  ngbTooltip="Elimina questo ente" (click)="delete()">
+                <button *ngIf="ente.origin=='CONSOLE' && !ente.registrazioneEnte" class="btn btn-success btn-icon btnCreate m-right" placement="bottom"  ngbTooltip="Attiva l’accesso ad EDIT" (click)="abilitaEnte()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Abilita accesso</span>
+                        <span class="col-2">
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-external-link"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                <button *ngIf="ente.origin=='CONSOLE' && ente.registrazioneEnte && ente.registrazioneEnte.stato=='inviato'" class="btn btn-warning btn-icon btnClose m-right" placement="bottom"  ngbTooltip="Annulla l’accesso ad EDIT" (click)="annullaInvitoEnte()">
+                    <span class="row btnText">
+                        <span class="col-10 v-center">Annulla invito</span>
+                        <span class="col-2">
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;
+                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete" placement="bottom"  ngbTooltip="Cancella ente" (click)="delete()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Elimina ente</span>
                         <span class="col-2">
@@ -42,10 +63,14 @@
     <div class="card-body m-16" *ngIf="ente">
         <div class="title">
             Dati ente <br/>
-            <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questa attività" (click)="modifica()">
+            <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questo ente" (click)="modifica()">
                 Modifica dati ente&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>
         <br>
+        <div class="row">
+            <span class="col-12"><span class="text-semibold">Account:&nbsp;</span><span [ngStyle]="styleOption(ente)">{{
+                    setStatus(ente) }}</span> </span>
+        </div>
         <div class="p-1 middle-div row">
             <div class="col-6">
                 <span class="row"><span class="text-semibold">Nome:&nbsp;</span>{{ente.nome}}</span>

@@ -7,6 +7,7 @@ import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-moda
 import { EnteDettaglioComponent } from './actions/ente-dettaglio/ente-dettaglio.component';
 import { EnteDettaglioModificaComponent } from './actions/ente-modifica-dettaglio/ente-modifica.component';
 import { EnteCancellaModal } from './actions/cancella-ente-modal/ente-cancella-modal.component';
+import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ export class EntiRoutingModule {
     CreaEnteModalComponent,
     EnteDettaglioComponent,
     EnteDettaglioModificaComponent,
-    EnteCancellaModal
+    EnteCancellaModal,
+    AnnullaInvitoModal
   ];
 }
 

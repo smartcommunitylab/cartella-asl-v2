@@ -8,6 +8,7 @@ import { DesignAngularKitModule } from 'design-angular-kit'
 import { EnteCancellaModal } from './actions/cancella-ente-modal/ente-cancella-modal.component';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-modal.component';
+import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -23,7 +24,8 @@ import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-moda
   ],
   entryComponents: [
     CreaEnteModalComponent,
-    EnteCancellaModal
+    EnteCancellaModal,
+    AnnullaInvitoModal
   ],
 declarations: [EntiRoutingModule.components]
 })
