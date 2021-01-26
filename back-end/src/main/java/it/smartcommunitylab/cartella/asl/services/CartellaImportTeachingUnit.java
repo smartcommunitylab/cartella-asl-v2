@@ -25,7 +25,7 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Service
 public class CartellaImportTeachingUnit {
-	private static final transient Log logger = LogFactory.getLog(CartellaImportInstitutes.class);
+	private static final transient Log logger = LogFactory.getLog(CartellaImportTeachingUnit.class);
 
 	@Value("${cartella.api}")
 	private String cartellaAPIUrl;
@@ -68,7 +68,7 @@ public class CartellaImportTeachingUnit {
 
 	private void updateTeachingUnit(int page, int size, MetaInfo metaInfo) throws Exception {
 
-		logger.info("start import Istituti from CARTELLA");
+		logger.info("start import Unità scolastiche from CARTELLA");
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		String url;
