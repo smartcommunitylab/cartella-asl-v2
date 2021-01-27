@@ -75,7 +75,9 @@
                     <td class="align-middle pointer">{{ente.address}}</td>
                     <td class="align-middle pointer">{{ente.phone }}</td>
                     <td class="align-middle pointer">{{ente.email}}</td>
-                    <td class="align-middle pointer" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}</td>
+                    <td class="align-middle pointer" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
+                        (mouseenter)="showTipStatoRiga(ente);" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}
+                    </td>
                 </tr>
             </tbody>
         </table>

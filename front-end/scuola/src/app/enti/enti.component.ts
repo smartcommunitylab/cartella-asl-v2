@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-modal.component';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -27,7 +26,6 @@ export class EntiComponent implements OnInit {
     env = environment;
     enti;
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-    @ViewChild('tooltip') tooltip: NgbTooltip;
 
     constructor(
         private dataService: DataService,
@@ -129,4 +127,21 @@ export class EntiComponent implements OnInit {
         }
         return style;
     }
+
+    showTipStatoRiga(ente) {
+        if (!ente.toolTipoStatoRiga) {
+            if (ente.origin == 'CONSOLE') {
+                if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+                    ente.toolTipoStatoRiga = 'Email di attivazione inviata, in attesa di risposta.';
+                } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+                    ente.toolTipoStatoRiga = 'Accesso ente attivato.';
+                } else {
+                    ente.toolTipoStatoRiga = 'Accesso ente non attivato.';
+                }
+            } else {
+                ente.toolTipoStatoRiga = 'Accesso ente attivato.';
+            }
+        }
+    }
+
 }
