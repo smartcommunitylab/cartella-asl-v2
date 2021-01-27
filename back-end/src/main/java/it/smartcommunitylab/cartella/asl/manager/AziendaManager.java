@@ -158,9 +158,6 @@ public class AziendaManager extends DataEntityManager {
 			allineaAziendaEstera(null, a.getPartita_iva(), a.isEstera());
 			return aziendaRepository.save(a); 
 		} else {
-			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
-				throw new BadRequestException("entity not updatable");
-			}
 			if(!a.getPartita_iva().equals(aziendaDb.getPartita_iva())) {
 				if(list.size() > 0) {
 					throw new BadRequestException("partita iva already exists");
