@@ -91,23 +91,21 @@ export class EnteDettaglioComponent implements OnInit {
     this.router.navigate(['modifica/dati/'], { relativeTo: this.route });
   }
 
-   delete() {
-     const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
-     modalRef.componentInstance.ente = this.ente;
-     modalRef.componentInstance.onDelete.subscribe((res) => {
-       if (res == 'deleted') {
-         this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
-           this.router.navigate(['../../'], { relativeTo: this.route });
-         })
-       }
-     });
+  delete() {
+    const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.ente = this.ente;
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      if (res == 'deleted') {
+        this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
+          this.router.navigate(['../../'], { relativeTo: this.route });
+        })
+      }
+    });
   }
-
 
   menuContentShow() {
     this.showContent = !this.showContent;
   }
-
 
   drawMap(): void {
     this.map = Leaflet.map('map');
@@ -125,20 +123,20 @@ export class EnteDettaglioComponent implements OnInit {
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
   }
-  
+
   setStatus(ente) {
     if (ente.origin == 'CONSOLE') {
-        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
-            return 'In attivazione';
-        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
-            return 'Con account';
-        } else {
-            return 'Disponibile';
-        }            
-    } else {
+      if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+        return 'In attivazione';
+      } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
         return 'Con account';
+      } else {
+        return 'Disponibile';
+      }
+    } else {
+      return 'Con account';
     }
-}
+  }
 
   styleOption(ente) {
     var style = {
@@ -158,10 +156,10 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   abilitaEnte() {
-        //api call.
-        this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
-          this.router.navigate(['../../'], { relativeTo: this.route });
-        })
+    //api call.
+    this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+      this.router.navigate(['../../'], { relativeTo: this.route });
+    })
   }
 
   annullaInvitoEnte() {
