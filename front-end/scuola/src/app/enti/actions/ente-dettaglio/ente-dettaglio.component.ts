@@ -131,7 +131,7 @@ export class EnteDettaglioComponent implements OnInit {
       } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
         return 'Con account';
       } else {
-        return 'Disponibile';
+        return 'Disponibile all’attivazione';
       }
     } else {
       return 'Con account';
