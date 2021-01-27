@@ -28,14 +28,6 @@ export class DashboardRuoliEnteComponent implements OnInit {
   title: string = "Ruoli Ente";
 
     ngOnInit() {
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
     }
 
     ente: any;

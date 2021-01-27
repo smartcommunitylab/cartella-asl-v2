@@ -47,14 +47,6 @@ export class DashboardAttivitaComponent implements OnInit {
   title: string = "Statistiche delle attività";
 
     ngOnInit() {
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
       this.getAnnoScolstico();
     }
 

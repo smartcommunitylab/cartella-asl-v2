@@ -47,14 +47,6 @@ export class DashboardEsperienzeComponent implements OnInit {
   title: string = "Lista esperienze";
 
     ngOnInit() {
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
       this.getAnnoScolstico();
     }
 
