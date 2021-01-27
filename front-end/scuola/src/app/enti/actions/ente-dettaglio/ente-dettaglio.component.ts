@@ -5,8 +5,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import * as Leaflet from 'leaflet';
 import { EnteCancellaModal } from '../cancella-ente-modal/ente-cancella-modal.component';
-import { AbilitaEntePrimaModal } from '../abilita-ente-prima-modal/abilita-ente-prima-modal.component';
-import { AbilitaEnteSecondaModal } from '../abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from '../annulla-invito-modal/annulla-invito-modal.component';
 
 @Component({
@@ -45,7 +43,7 @@ export class EnteDettaglioComponent implements OnInit {
   pianoTipologie = {};
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
-  menuContent = "In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati.";
+  menuContent = "In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente ha un profilo attivo, quindi per modificare il suo profilo devi rivolgerti al responsabile dell’ente.";
   showContent: boolean = false;
 
   breadcrumbItems = [
@@ -108,6 +106,14 @@ export class EnteDettaglioComponent implements OnInit {
 
 
   menuContentShow() {
+    if (this.ente.origin == 'CONSOLE') {
+      if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+        this.menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente è già stato invitato ad attivare un profilo. Attendi una risposta o, se pensi che ci sia stato un errore, annulla l’invito.'
+      } else if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      } else {
+        this.menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Attiva accesso” puoi invitare un ente a crearsi un account in EDIT per gestire presenze, offerte e documentazione';
+      }
+    }
     this.showContent = !this.showContent;
   }
 
@@ -161,18 +167,11 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   abilitaEnte() {
-    const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
-    modalRef.componentInstance.ente = this.ente;
-    modalRef.componentInstance.onAbilita.subscribe((res) => {
-      const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
-      modalRef.componentInstance.ente = this.ente;
-      modalRef.componentInstance.onAbilita.subscribe((res) => {
-        //api call.
+   
         this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
           this.router.navigate(['../../'], { relativeTo: this.route });
         })
-      });
-    })
+
   }
 
   annullaInvitoEnte() {
