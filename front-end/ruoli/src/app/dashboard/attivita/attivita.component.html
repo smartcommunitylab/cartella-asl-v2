@@ -37,11 +37,6 @@
             <div class="col">
                 <div class="pull-right">
                     <div class="btn-group">
-                        <button class="btn btn-secondary v-center mr-4" (click)="getReport()">
-                            <i class="material-icons">refresh</i> Report
-                        </button>    
-                    </div>
-                    <div class="btn-group">
                         <button class="btn btn-secondary v-center mr-4" (click)="getAttivita()">
                             <i class="material-icons">refresh</i> Cerca
                         </button>        
@@ -49,6 +44,39 @@
                 </div>    
             </div>
         </div>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titolo</th>
+                    <th>Tipologia</th>
+                    <th>Periodo</th>
+                    <th>Stato</th>
+                    <th>Studenti</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let aa of attivitaList">
+                    <td>{{aa.id}}</td>
+                    <td><div [ngbTooltip]="aa.descrizione">{{aa.titolo}}</div></td>
+                    <td>{{getTipologia(aa.tipologia)}}</td>
+                    <td>{{aa.dataInizio}} <br/> {{aa.dataFine}}</td>
+                    <td>
+                        <div [ngbTooltip]="aa.dataArchiviazione">{{aa.stato}}</div>
+                    </td>
+                    <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
+                    <td>
+                        <i class="material-icons pointer ok" ngbTooltip="dettaglio attività"
+                        (click)="detailAttivita(aa)">info</i> 
+                        <i class="material-icons pointer ok" ngbTooltip="attiva attività"
+                        *ngIf="aa.stato=='archiviata'" (click)="activateAttivita(aa)">unarchive</i> 
+                        <i class="material-icons pointer error" ngbTooltip="cancella attività"
+                        (click)="deleteAttivita(aa)">delete_forever</i> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <div class="grey">
             <div class="row form-group">
                 <div class="col-4">
@@ -93,38 +121,16 @@
                 </div>
             </div>    
         </div>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Titolo</th>
-                    <th>Tipologia</th>
-                    <th>Periodo</th>
-                    <th>Stato</th>
-                    <th>Studenti</th>
-                    <th>Azioni</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let aa of attivitaList">
-                    <td>{{aa.id}}</td>
-                    <td><div [ngbTooltip]="aa.descrizione">{{aa.titolo}}</div></td>
-                    <td>{{getTipologia(aa.tipologia)}}</td>
-                    <td>{{aa.dataInizio}} <br/> {{aa.dataFine}}</td>
-                    <td>
-                        <div [ngbTooltip]="aa.dataArchiviazione">{{aa.stato}}</div>
-                    </td>
-                    <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
-                    <td>
-                        <i class="material-icons pointer ok" ngbTooltip="dettaglio attività"
-                        (click)="detailAttivita(aa)">info</i> 
-                        <i class="material-icons pointer ok" ngbTooltip="attiva attività"
-                        *ngIf="aa.stato=='archiviata'" (click)="activateAttivita(aa)">unarchive</i> 
-                        <i class="material-icons pointer error" ngbTooltip="cancella attività"
-                        (click)="deleteAttivita(aa)">delete_forever</i> 
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="row">
+            <div class="col">
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary v-center mr-4" (click)="getReport()">
+                            <i class="material-icons">refresh</i> Report
+                        </button>    
+                    </div>
+                </div>    
+            </div>
+        </div>
     </div>
 </div>
