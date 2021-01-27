@@ -63,7 +63,7 @@
     <div class="card-body m-16" *ngIf="ente">
         <div class="title">
             Dati ente <br/>
-            <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questo ente" (click)="modifica()">
+            <button *ngIf="isModificable(ente)" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questo ente" (click)="modifica()">
                 Modifica dati ente&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>
         <br>

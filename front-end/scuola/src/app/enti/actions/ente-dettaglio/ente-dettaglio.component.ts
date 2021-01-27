@@ -2,8 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import * as Leaflet from 'leaflet';
 import { EnteCancellaModal } from '../cancella-ente-modal/ente-cancella-modal.component';
+import { AbilitaEntePrimaModal } from '../abilita-ente-prima-modal/abilita-ente-prima-modal.component';
+import { AbilitaEnteSecondaModal } from '../abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from '../annulla-invito-modal/annulla-invito-modal.component';
 
 @Component({
@@ -91,21 +94,23 @@ export class EnteDettaglioComponent implements OnInit {
     this.router.navigate(['modifica/dati/'], { relativeTo: this.route });
   }
 
-  delete() {
-    const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
-    modalRef.componentInstance.ente = this.ente;
-    modalRef.componentInstance.onDelete.subscribe((res) => {
-      if (res == 'deleted') {
-        this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
-          this.router.navigate(['../../'], { relativeTo: this.route });
-        })
-      }
-    });
+   delete() {
+     const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
+     modalRef.componentInstance.ente = this.ente;
+     modalRef.componentInstance.onDelete.subscribe((res) => {
+       if (res == 'deleted') {
+         this.dataService.deleteAzienda(this.ente.id).subscribe((res) => {
+           this.router.navigate(['../../'], { relativeTo: this.route });
+         })
+       }
+     });
   }
+
 
   menuContentShow() {
     this.showContent = !this.showContent;
   }
+
 
   drawMap(): void {
     this.map = Leaflet.map('map');
@@ -123,20 +128,20 @@ export class EnteDettaglioComponent implements OnInit {
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
   }
-
+  
   setStatus(ente) {
     if (ente.origin == 'CONSOLE') {
-      if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
-        return 'In attivazione';
-      } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
-        return 'Con account';
-      } else {
-        return 'Disponibile all’attivazione';
-      }
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            return 'In attivazione';
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            return 'Con account';
+        } else {
+            return 'Disponibile all’attivazione';
+        }            
     } else {
-      return 'Con account';
+        return 'Con account';
     }
-  }
+}
 
   styleOption(ente) {
     var style = {
@@ -156,9 +161,17 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   abilitaEnte() {
-    //api call.
-    this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
-      this.router.navigate(['../../'], { relativeTo: this.route });
+    const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
+    modalRef.componentInstance.ente = this.ente;
+    modalRef.componentInstance.onAbilita.subscribe((res) => {
+      const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
+      modalRef.componentInstance.ente = this.ente;
+      modalRef.componentInstance.onAbilita.subscribe((res) => {
+        //api call.
+        this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+          this.router.navigate(['../../'], { relativeTo: this.route });
+        })
+      });
     })
   }
 
@@ -170,6 +183,16 @@ export class EnteDettaglioComponent implements OnInit {
         this.router.navigate(['../../'], { relativeTo: this.route });
       })
     });
+  }
+  
+  isModificable(ente) {
+    var isModificable = false;
+    if (ente.origin == 'CONSOLE') {
+      if (!ente.registrazioneEnte) {
+        isModificable = true;
+      }
+    }
+    return isModificable;
   }
 
 }
