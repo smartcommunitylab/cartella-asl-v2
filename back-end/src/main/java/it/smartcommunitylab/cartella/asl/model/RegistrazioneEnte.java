@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,7 +19,9 @@ import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 
 @Entity
-@Table(name = "registrazione_ente")
+@Table(name = "registrazione_ente", indexes = { 
+		@Index(name = "aziendaId_idx", columnList = "aziendaId", unique = false),
+		@Index(name = "token_idx", columnList = "token", unique = false)})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RegistrazioneEnte {
 	
