@@ -124,17 +124,14 @@ export class EntiComponent implements OnInit {
 
     showTipStatoRiga(ente) {
         if (!ente.toolTipoStatoRiga) {
-            if (ente.origin == 'CONSOLE') {
-                if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
-                    ente.toolTipoStatoRiga = 'Email di attivazione inviata, in attesa di risposta.';
-                } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
-                    ente.toolTipoStatoRiga = 'Accesso ente attivato.';
-                } else {
-                    ente.toolTipoStatoRiga = 'Accesso ente non attivato.';
-                }
-            } else {
+            if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+                ente.toolTipoStatoRiga = 'Email di attivazione inviata, in attesa di risposta.';
+            } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
                 ente.toolTipoStatoRiga = 'Accesso ente attivato.';
+            } else {
+                ente.toolTipoStatoRiga = 'Accesso ente non attivato.';
             }
+
         }
     }
 
