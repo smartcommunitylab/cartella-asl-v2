@@ -99,32 +99,26 @@ export class EntiComponent implements OnInit {
     }
 
     setStatus(ente) {
-        if (ente.origin == 'CONSOLE') {
-            if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
-                return 'In attivazione';
-            } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
-                return 'Con account';
-            } else {
-                return 'Disponibile';
-            }            
-        } else {
-            return 'Con account';
+        let stato = 'Disponibile';
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            stato = 'In attivazione';
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            stato = 'Con account';
         }
+        return stato;
     }
 
     styleOption(ente) {
         var style = {
-            'color': '#00CF86', //green
+            'color': '#FFB54C', //orange
         };
-        if (ente.origin == 'CONSOLE') {
-            if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
-                style['color'] = '#7FB2E5';
-            } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
-                style['color'] = '#00CF86';
-            } else {
-                style['color'] = '#FFB54C';
-            }
+
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            style['color'] = '#7FB2E5'; // grey
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            style['color'] = '#00CF86'; // green
         }
+
         return style;
     }
 
