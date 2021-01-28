@@ -14,6 +14,9 @@ export class AbilitaEntePrimaModal {
 
   constructor(public activeModal: NgbActiveModal) { }
  
-
+  abilita() {
+    this.activeModal.close();
+    this.onAbilita.emit('ABILITA');
+  }
 }
 

@@ -10841,6 +10841,10 @@ a.bg-900:focus, a.bg-900:hover, button.bg-900:focus, button.bg-900:hover {
   text-align: center!important
 }
 
+.text-vcenter {
+  vertical-align: middle!important
+}
+
 @media (min-width:576px) {
   .text-sm-left {
     text-align: left!important
