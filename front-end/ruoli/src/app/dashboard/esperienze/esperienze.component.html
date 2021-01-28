@@ -50,8 +50,10 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Id</th>
+                    <th>Esp</th>
+                    <th>Att</th>
                     <th>Studente</th>
+                    <th>CF</th>
                     <th>Classe</th>
                     <th>Esperienza</th>
                     <th>Tipologia</th>
@@ -63,10 +65,10 @@
             </thead>
             <tbody>
                 <tr *ngFor="let esp of esperienze">
-                    <td>{{esp.esperienzaId}}</td>
-                    <td>
-                        <span ngbTooltip="{{esp.cfStudente}}">{{esp.nominativoStudente}}</span>
-                    </td>
+                    <td><span ngbTooltip="id esperienza">{{esp.esperienzaId}}</span></td>
+                    <td><span ngbTooltip="id attività">{{esp.attivitaAlternanzaId}}</span></td>
+                    <td>{{esp.nominativoStudente}}</td>
+                    <td>{{esp.cfStudente}}</td>
                     <td>{{esp.classeStudente}}</td>
                     <td>{{esp.titolo}}</td>
                     <td>{{getTipologia(esp.tipologia)}}</td>

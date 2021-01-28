@@ -213,6 +213,7 @@ public class DashboardManager extends DataEntityManager {
 			EsperienzaSvoltaAllineamento esa = (EsperienzaSvoltaAllineamento)obj[2];
 			int oreValidate = getOreValidate(es.getId());
 			ReportDashboardEsperienza report = new ReportDashboardEsperienza();
+			report.setAttivitaAlternanzaId(es.getAttivitaAlternanzaId());
 			report.setEsperienzaId(es.getId());
 			report.setStudenteId(es.getStudenteId());
 			report.setNominativoStudente(es.getNominativoStudente());
