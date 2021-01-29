@@ -88,13 +88,15 @@
             <div class="col-sm-3">
                 Al:
                 <dp-date-picker #calendarEnd [(ngModel)]="date.dataFine" [config]="datePickerConfig" theme="dp-material"
-                    id="dataFine" (onChange)="myHandler()"></dp-date-picker>
+                    id="dataFine" (onChange)="myHandler()" minDate="date.minFine" maxDate="date.maxFine"></dp-date-picker>
                 <svg (click)="openEnd()" class="icon icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-calendar"></use>
                 </svg>
                 <div class="invalid-feedback" [class.d-block]="!date.dataFine">Campo necessario.</div>
-                <div class="invalid-feedback" [class.d-block]="!date.dataFine || date.dataFine < date.dataInizio">La
+                <div class="invalid-feedback" [class.d-block]="date.dataFine < date.dataInizio">La
                     data fine deve essere posteriore alla data inizio</div>
+                <div class="invalid-feedback" [class.d-block]="date.dataFine > date.maxFine">La
+                    data fine non deve eccedere il {{date.maxFine.format('DD-MM-YYYY')}}</div>
             </div>
             <div class="col-sm-3"
                 [class.has-danger]="oraInizioInput.invalid && (oraInizioInput.dirty || oraInizioInput.touched || forceErrorDisplay)">
@@ -109,7 +111,7 @@
                     Campo necessario.</div>
                 <div class="invalid-feedback" [class.d-block]="oraFineInput.value < oraInizioInput.value">La ora fine
                     deve essere posteriore alla ora inizio</div>
-            </div>
+                </div>
             <div class="col-sm-3"
                 [class.has-danger]="oraFineInput.invalid && (oraFineInput.dirty || oraFineInput.touched || forceErrorDisplay)">
                 <span class="row v-center">
@@ -166,9 +168,15 @@
         </div>
 
         <div class="row v-center form-group">
-            <div class="col-sm-4" placement="bottom"
-                ngbTooltip="L'anno scolastico di riferimento viene assegnato in automatico a partire dalla data di inizio dell'attività">
-                Anno accademico: {{schoolYear}}
+            <div class="col-sm-4"
+                [class.has-danger]="schoolYearInput.invalid && (schoolYearInput.dirty || schoolYearInput.touched || forceErrorDisplay)">
+                <label for="schoolYear" class="active">Anno accademico</label>
+                <select class="custom-select form-control" [(ngModel)]="schoolYear" id="schoolYear"
+                    #schoolYearInput="ngModel" (change)="onChange($event.target.value)" required>
+                    <option [value]="year" *ngFor="let year of schoolYears">{{year}}</option>
+                </select>
+                <div class="invalid-feedback" [class.d-block]="!schoolYear && forceErrorDisplay">
+                    Campo necessario.</div>
             </div>
         </div>
 
