@@ -2,12 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import * as Leaflet from 'leaflet';
 import { EnteCancellaModal } from '../cancella-ente-modal/ente-cancella-modal.component';
 import { AbilitaEntePrimaModal } from '../abilita-ente-prima-modal/abilita-ente-prima-modal.component';
 import { AbilitaEnteSecondaModal } from '../abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from '../annulla-invito-modal/annulla-invito-modal.component';
+import { GrowlerMessageType, GrowlerService } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -20,7 +20,8 @@ export class EnteDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private growler: GrowlerService) { }
 
   ente;
   map;
@@ -159,18 +160,23 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   abilitaEnte() {
-    const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
-    modalRef.componentInstance.ente = this.ente;
-    modalRef.componentInstance.onAbilita.subscribe((res) => {
-      const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
+    if (!this.ente.email) {
+      this.growler.growl('<b>Errore: nessun indirizzo email associato all\'ente.</b><br/>Inserire l\'indirizzo e riprovare. Si consiglia di contattare direttamente l\'ente per ottenere un indirizzo aggiornato e attivo.', GrowlerMessageType.Danger);
+    } else {
+      const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
       modalRef.componentInstance.ente = this.ente;
       modalRef.componentInstance.onAbilita.subscribe((res) => {
-        //api call.
-        this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
-          this.router.navigate(['../../'], { relativeTo: this.route });
-        })
-      });
-    })
+        const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
+        modalRef.componentInstance.ente = this.ente;
+        modalRef.componentInstance.onAbilita.subscribe((res) => {
+          //api call.
+          this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+            this.router.navigate(['../../'], { relativeTo: this.route });
+          })
+        });
+      })
+    }
+
   }
 
   annullaInvitoEnte() {

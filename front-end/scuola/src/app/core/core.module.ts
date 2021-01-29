@@ -19,6 +19,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './footer/footer.component';
 import { ReloginModal } from './overlay/modal/login/relogin-modal.component';
+import { ValidationService } from './services/validation.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule, HttpClientModule, GrowlerModule, ModalModule,FormsModule, OverlayModule],
@@ -34,6 +35,7 @@ import { ReloginModal } from './overlay/modal/login/relogin-modal.component';
     GeoService, 
     DialogService,
     EventBusService,
+    ValidationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

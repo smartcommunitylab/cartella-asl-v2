@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as Leaflet from 'leaflet';
+import { ValidationService } from '../../../core/services/validation.service';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -19,6 +20,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
+    private validationService: ValidationService,
     private geoService: GeoService) { }
 
   ente;
@@ -33,6 +35,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
   forceErrorDisplay: boolean = false;
   forceTitoloErrorDisplay: boolean = false;
   forceAddressDisplay: boolean = false;;
+  forceErrorDisplayMail: boolean = false;
   showContent: boolean = false;
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
@@ -108,6 +111,11 @@ export class EnteDettaglioModificaComponent implements OnInit {
       } else {
         this.forceTitoloErrorDisplay = true;
       }
+      if (!this.validationService.isValidEmail(this.ente.email)) {
+        this.forceErrorDisplayMail = true;
+      } else {
+        this.forceErrorDisplayMail = false;
+      }
     }
   }
 
@@ -133,7 +141,9 @@ export class EnteDettaglioModificaComponent implements OnInit {
       && (this.ente.nome && this.ente.nome != '' && this.ente.nome.trim().length > 0)
       && (this.ente.partita_iva && this.ente.partita_iva != '')
       && this.checkPlace()
-      && (this.ente.idTipoAzienda && this.ente.idTipoAzienda != '' && this.ente.idTipoAzienda != 'Tipo'));
+      && (this.ente.idTipoAzienda && this.ente.idTipoAzienda != '' && this.ente.idTipoAzienda != 'Tipo')
+      && (this.ente.email && this.ente.email != '' && this.ente.email.trim().length > 0 && this.validationService.isValidEmail(this.ente.email))
+      );
   }
 
   checkPlace() {

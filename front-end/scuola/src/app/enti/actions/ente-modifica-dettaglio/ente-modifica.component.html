@@ -56,6 +56,10 @@
                             <label for="email" *ngIf="ente.email" class="active">Email</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.email" id="email" name="email"
                                 #EmailInput="ngModel" placeholder="Email">
+                            <div class="invalid-feedback"
+                                [class.d-block]="forceErrorDisplayMail || (EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay))">
+                                Campo necessario.
+                            </div>
                         </div>
                     </div>
                     <div class="row v-center form-group">

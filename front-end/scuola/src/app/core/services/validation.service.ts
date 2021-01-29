@@ -41,4 +41,15 @@ export class ValidationService {
             return { 'invalidPassword': true };
         }
     }
+
+    isValidEmail(email) {
+        // RFC 2822 compliant regex
+        if (email.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
