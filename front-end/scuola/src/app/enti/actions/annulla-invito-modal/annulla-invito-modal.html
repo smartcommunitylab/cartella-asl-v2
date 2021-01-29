@@ -12,7 +12,7 @@
     <div class="text-bold text-center color-1">Confermare l’annullamento dell’invito?</div>
 </div>
 <br>
-<div class="text-center">
+<!-- <div class="text-center">
     <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
         <span class="row">
             <span class="btn-txt v-center">Esci&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -25,6 +25,26 @@
             <span class="btn-txt v-center">Annulla invito&nbsp;&nbsp;&nbsp;&nbsp;</span>
             <span>
                 <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+</div> -->
+<div class="text-center">
+    <button class="btn btn-primary btn-icon btn-xs btnDuplica" (click)="activeModal.close('Close click')">
+        <span class="row btnModificationText">
+            <span class="col-4 leftItem"></span>
+            <span class="col-4 leftItem">Esci</span>
+            <span class="col-4 leftItem"></span>
+        </span>
+    </button>
+    &nbsp;&nbsp;
+    <button type="button" class="btn btn-primary btn-icon btn-xs btnClose" (click)="annullaInvito()">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla invito</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
                 </svg>
             </span>
