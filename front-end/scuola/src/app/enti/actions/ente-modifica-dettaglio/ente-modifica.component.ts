@@ -3,7 +3,7 @@ import { DataService } from '../../../core/services/data.service';
 import { GeoService } from '../../../core/services/geo.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as Leaflet from 'leaflet';
@@ -59,8 +59,6 @@ export class EnteDettaglioModificaComponent implements OnInit {
         setTimeout(() => { //ensure that map div is rendered
           this.drawMap();
         }, 0);
-        // });
-
       },
         (err: any) => console.log(err),
         () => console.log('getAzienda'));
