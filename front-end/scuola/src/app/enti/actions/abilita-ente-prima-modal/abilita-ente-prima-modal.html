@@ -44,26 +44,27 @@
 </div>
 <br>
 <div class="text-center">
-    <button class="btn btn-flat btn-success" (click)="abilita()">
-        <span class="row">
-            <span class="btn-txt v-center">Procedi&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span>
+    <button class="btn btn-success btn-icon btn-xs btnSave m-top22" (click)="abilita(myForm)">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Procedi</span>
+            <span class="col-4 rightItem">
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
                 </svg>
             </span>
         </span>
-    </button>&nbsp;
-    <button class="btn btn-danger btn-icon" (click)="activeModal.close('Close click')">
-        <span class="row">
-            <span class="btn-txt v-center">Annulla&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <span>
-                <svg class="icon icon-white icon-sm">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+    </button>
+    &nbsp;&nbsp;
+    <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22"
+        (click)="activeModal.close('Close click')">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
                 </svg>
             </span>
         </span>
     </button>
-
 </div>
 <br>
