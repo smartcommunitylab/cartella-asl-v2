@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { catchError, map } from 'rxjs/operators';
-import { IApiResponse } from '../../shared/classes/IApiResponse.class';
 import { IPagedIstituto } from '../../shared/classes/IPagedIstituto.class';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { CorsoDiStudio } from '../../shared/classes/CorsoDiStudio.class';
 import { serverAPIConfig } from '../serverAPIConfig'
 import { Azienda, IPagedAA } from '../../shared/interfaces';
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment';
 import * as moment from 'moment';
 
 const httpOptions = {
@@ -35,6 +32,7 @@ export class DataService {
   timeout: number = 120000;
   coorindateIstituto;
   aziendaId: string = '';
+  ownerId;
   listAziendaIds = [];
   aziendaName: string = "";
   coorindateAzienda;
@@ -56,6 +54,12 @@ export class DataService {
   setAziendaName(name) {
     if (name) {
       this.aziendaName = name;
+    }
+  }
+
+  setOwnerId(id) {
+    if (id) {
+      this.ownerId = id;
     }
   }
 
@@ -112,6 +116,27 @@ export class DataService {
       .pipe(
         map(res => {
           let attivita = res.body as Azienda;
+          return attivita;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getRuoliByEnte() {
+    let url = this.host + "/registrazione-ente/ruoli";
+
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+
+    return this.http.get<any>(url,
+      {
+        params: params,
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          let attivita = res.body;
           return attivita;
         }),
         catchError(this.handleError)
@@ -891,6 +916,7 @@ export class DataService {
       );
   }
 
+  
   addConsent(): Observable<any> {
     let url = this.host + '/consent/add';
 

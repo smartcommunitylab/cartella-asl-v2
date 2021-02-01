@@ -42,6 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             this.aziende = aziende;
                             this.dataService.setAziendaId(this.aziende[0].id);
                             this.dataService.setAziendaName(this.aziende[0].nome);
+                            this.dataService.setOwnerId(this.profile.id)
                             if (this.aziende[0].coordinate && this.aziende[0].coordinate.latitude && this.aziende[0].coordinate.longitude) {
                                 this.dataService.setAziendaPosition(this.aziende[0].coordinate);
                             } else {
