@@ -68,6 +68,24 @@ public class RegistrazioneEnteController implements AslController {
 		return user;
 	}
 	
+	@PostMapping("/api/registrazione-ente/ref-azienda/user")
+	public @ResponseBody ASLUser aggiornaDatiReferenteAzienda(
+			@RequestParam String enteId, 
+			@RequestParam String nome, 
+			@RequestParam String cognome, 
+			@RequestParam String cf, 
+			@RequestParam Long userId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ASLUser user = registrazioneEnteManager.aggiornaDatiReferenteAzienda(enteId, nome, cognome, cf, userId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("aggiornaDatiReferenteAzienda:%s - %s", enteId, userId));
+		}		
+		return user;
+	}
+	
 	@GetMapping("/registrazione-ente")
 	public @ResponseBody RegistrazioneEnte getRegistrazioneByToken(
 			@RequestParam String token,

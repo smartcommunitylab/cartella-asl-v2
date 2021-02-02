@@ -263,6 +263,24 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		return owner;
 	}
 	
+	public ASLUser aggiornaDatiReferenteAzienda(String enteId, String nome, 
+			String cognome, String cf, Long userId) throws Exception {
+		ASLUser user = userManager.getASLUserById(userId);
+		if(user == null) {
+			throw new BadRequestException("gestore non trovato");
+		}		
+		ASLUserRole userRole = userManager.findASLUserRole(userId, 
+				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
+		if(userRole == null) {
+			throw new BadRequestException("utente non autorizzato");
+		}
+		user.setName(nome);
+		user.setSurname(cognome);
+		user.setCf(cf);
+		userManager.updateASLUser(user);
+		return user;
+	}
+	
 	public RegistrazioneEnte getRichiestaRegistrazione(String enteId) {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, 
 				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
