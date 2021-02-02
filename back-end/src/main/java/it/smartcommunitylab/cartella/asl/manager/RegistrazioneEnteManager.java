@@ -270,7 +270,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			throw new BadRequestException("gestore non trovato");
 		}		
 		ASLUserRole userRole = userManager.findASLUserRole(userId, 
-				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
+				ASLRole.REFERENTE_AZIENDA, enteId);
 		if(userRole == null) {
 			throw new BadRequestException("utente non autorizzato");
 		}
