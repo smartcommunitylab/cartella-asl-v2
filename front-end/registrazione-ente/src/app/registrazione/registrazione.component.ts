@@ -134,13 +134,13 @@ export class Registrazioneomponent implements OnInit {
     const modalRef = this.modalService.open(ModificaAccountModalComponent, { windowClass: "creaAttivitaModalClass" });
     modalRef.componentInstance.profile = this.profile;
     modalRef.componentInstance.newOffertaListener.subscribe((profileUpdated) => {
-      profileUpdated.enteId = this .actualAzienda.id;
+      profileUpdated.enteId = this.actualAzienda.id;
       profileUpdated.ownerId = this.profile.id;
-      this.dataService.aggiornaDatiOwnerAzienda(profileUpdated).subscribe((res) => {
+      this.dataService.aggiornaDatiUser(profileUpdated).subscribe((res) => {
         this.profile = res;
       },
         (err: any) => console.log(err),
-        () => console.log('aggiornaDatiOwnerAzienda'));
+        () => console.log('aggiornaDatiUser'));
 
     });
 

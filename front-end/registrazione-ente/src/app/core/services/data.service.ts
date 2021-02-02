@@ -174,17 +174,17 @@ export class DataService {
         catchError(this.handleError))
   }
 
-  aggiornaDatiOwnerAzienda(data): Observable<any> {
+  aggiornaDatiUser(data): Observable<any> {
     let headers = new HttpHeaders();
     const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
-    let url = this.host + "/registrazione-ente/owner";
+    let url = this.host + "/registrazione-ente/user";
 
     let params = new HttpParams();
     params = params.append('enteId', data.enteId);
     params = params.append('nome', data.name);
     params = params.append('cognome', data.surname);
     params = params.append('cf', data.cf);
-    params = params.append('ownerId', data.ownerId);
+    params = params.append('userId', data.ownerId);
 
     return this.http.post<any>(
       url,

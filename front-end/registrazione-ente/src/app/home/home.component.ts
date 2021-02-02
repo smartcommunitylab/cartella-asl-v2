@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
                 this.emailEnte = res.email;
                 sessionStorage.aziendaId = res.aziendaId;
                 this.dataService.confermaRichiestaRegistrazione(token).subscribe(res => {}, err => {
-                    // this.linkExpired = true;
+                    this.linkExpired = true;
                     // this.login();
                 });
 
