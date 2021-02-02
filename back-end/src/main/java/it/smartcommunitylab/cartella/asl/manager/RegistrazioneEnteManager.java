@@ -245,35 +245,12 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		return list;
 	}
 	
-	public ASLUser aggiornaDatiOwnerAzienda(String enteId, String nome, 
-			String cognome, String cf, Long ownerId) throws Exception {
-		ASLUser owner = userManager.getASLUserById(ownerId);
-		if(owner == null) {
-			throw new BadRequestException("gestore non trovato");
-		}		
-		ASLUserRole userRole = userManager.findASLUserRole(ownerId, 
-				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
-		if(userRole == null) {
-			throw new BadRequestException("utente non autorizzato");
-		}
-		owner.setName(nome);
-		owner.setSurname(cognome);
-		owner.setCf(cf);
-		userManager.updateASLUser(owner);
-		return owner;
-	}
-	
-	public ASLUser aggiornaDatiReferenteAzienda(String enteId, String nome, 
+	public ASLUser aggiornaDatiUtenteAzienda(String enteId, String nome, 
 			String cognome, String cf, Long userId) throws Exception {
 		ASLUser user = userManager.getASLUserById(userId);
 		if(user == null) {
 			throw new BadRequestException("gestore non trovato");
 		}		
-		ASLUserRole userRole = userManager.findASLUserRole(userId, 
-				ASLRole.REFERENTE_AZIENDA, enteId);
-		if(userRole == null) {
-			throw new BadRequestException("utente non autorizzato");
-		}
 		user.setName(nome);
 		user.setSurname(cognome);
 		user.setCf(cf);

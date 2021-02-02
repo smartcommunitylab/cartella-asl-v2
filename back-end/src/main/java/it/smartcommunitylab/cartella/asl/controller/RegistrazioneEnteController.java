@@ -50,38 +50,21 @@ public class RegistrazioneEnteController implements AslController {
 		return list;
 	}
 	
-	@PostMapping("/api/registrazione-ente/owner")
-	public @ResponseBody ASLUser aggiornaDatiOwnerAzienda(
-			@RequestParam String enteId, 
-			@RequestParam String nome, 
-			@RequestParam String cognome, 
-			@RequestParam String cf, 
-			@RequestParam Long ownerId,
-			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId)));
-		ASLUser user = registrazioneEnteManager.aggiornaDatiOwnerAzienda(enteId, nome, cognome, cf, ownerId);
-		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, ownerId, user, new Object(){});
-		auditManager.save(audit);			
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("aggiornaDatiOwnerAzienda:%s - %s", enteId, ownerId));
-		}		
-		return user;
-	}
-	
-	@PostMapping("/api/registrazione-ente/ref-azienda/user")
-	public @ResponseBody ASLUser aggiornaDatiReferenteAzienda(
+	@PostMapping("/api/registrazione-ente/user")
+	public @ResponseBody ASLUser aggiornaDatiUserAzienda(
 			@RequestParam String enteId, 
 			@RequestParam String nome, 
 			@RequestParam String cognome, 
 			@RequestParam String cf, 
 			@RequestParam Long userId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		ASLUser user = registrazioneEnteManager.aggiornaDatiReferenteAzienda(enteId, nome, cognome, cf, userId);
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId),
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, cf, userId);
 		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("aggiornaDatiReferenteAzienda:%s - %s", enteId, userId));
+			logger.info(String.format("aggiornaDatiUserAzienda:%s - %s", enteId, userId));
 		}		
 		return user;
 	}
