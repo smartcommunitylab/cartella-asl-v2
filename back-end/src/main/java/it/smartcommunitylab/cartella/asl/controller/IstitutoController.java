@@ -111,6 +111,22 @@ public class IstitutoController implements AslController {
 		return result;
 	}
 	
+	@PutMapping("/api/istituto")
+	public @ResponseBody Istituzione updateIstituto(
+			Istituzione istituto,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istituto.getId()), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istituto.getId())));
+		
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("updateIstituto:%s", istituto.getId()));
+		}		
+		Istituzione result = istituzioneManager.updateIstituto(istituto);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Istituzione.class, istituto.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		return result;
+	}
+	
 	@GetMapping(value = "/api/istituto/search/ente")
 	public @ResponseBody Page<ReportIstitutoEnte> searchIstitutiByEnte(
 			@RequestParam String enteId,

@@ -153,4 +153,19 @@ public class IstituzioneManager extends DataEntityManager {
 		Page<ReportIstitutoEnte> page = new PageImpl<ReportIstitutoEnte>(list, pageRequest, total);
 		return page;
 	}
+
+	public Istituzione updateIstituto(Istituzione istituto) {
+		Istituzione dbIst = istituzioneRepository.findById(istituto.getId()).orElse(null);
+		if(dbIst != null) {
+			dbIst.setName(istituto.getName());
+			dbIst.setCf(istituto.getCf());
+			dbIst.setAddress(istituto.getAddress());
+			dbIst.setPhone(istituto.getPhone());
+			dbIst.setEmail(istituto.getEmail());
+			dbIst.setLatitude(istituto.getLatitude());
+			dbIst.setLongitude(istituto.getLongitude());
+			istituzioneRepository.save(dbIst);
+		}
+		return null;
+	}
 }
