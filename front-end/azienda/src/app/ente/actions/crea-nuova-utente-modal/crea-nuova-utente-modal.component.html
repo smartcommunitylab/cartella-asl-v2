@@ -74,28 +74,5 @@
                     [class.d-block]="forceErrorDisplayMail || (mailInput.invalid && (mailInput.dirty || mailInput.touched || forceErrorDisplay))">
                     Campo necessario.</div>
             </div>
-            <!-- <div class="col-sm-4"
-                [class.has-danger]="telefonoInput.invalid && (telefonoInput.dirty || telefonoInput.touched || forceErrorDisplay)">
-                <label for="telefono" *ngIf="telefono" class="active">Telefono</label>
-                <input type="text" pattern="[0-9]*" minlength="12" maxlength="15" class="form-control"
-                    [(ngModel)]="profile.phone" id="telefono" #telefonoInput="ngModel" placeholder="Telefono" required>
-                <div class="invalid-feedback"
-                    [class.d-block]="forceErrorDisplayTelefono || (telefonoInput.invalid && (telefonoInput.dirty || telefonoInput.touched || forceErrorDisplay))">
-                    Campo necessario.</div>
-            </div> -->
         </div>
-        <!-- <div class="row v-center form-group">
-            <div class="col-sm-5"
-                [class.has-danger]="idTipoUtenteInput.invalid && (idTipoUtenteInput.dirty || idTipoUtenteInput.touched || forceErrorDisplay)">
-                <label for="idTipoUtente" *ngIf="profile.idTipoUtente" class="active">Tipologia</label>
-                <select class="form-control custom_select" [(ngModel)]="profile.idTipoUtente" id="idTipoUtente"
-                    name="idTipoUtente" #idTipoUtenteInput="ngModel" required>
-                    <option selected="selected">Tipo</option>
-                    <option *ngFor="let tipo of tipoUtente" [ngValue]="tipo.id">{{tipo.value}}</option>
-                </select>
-                <div class="invalid-feedback" [class.d-block]="idTipoUtenteInput.value==='Tipo' && forceErrorDisplay">
-                    Campo necessario.</div>
-            </div>
-        </div> -->
-
-    </div>
+      </div>

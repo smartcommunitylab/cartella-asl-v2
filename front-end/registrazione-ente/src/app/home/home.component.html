@@ -43,7 +43,7 @@
                             {{ nomeEnte }}
                         </span>
                         <span class="text-bold col-6 color-blu">
-                            {{ emailEnte }}
+                            {{ email }}
                         </span>
                     </div>
                 </div>
@@ -86,20 +86,21 @@
         <p class="color-grey text-semibold">Il sistema EDIT è lo strumento informatico per la gestione delle esperienze
             di alternanza scuola lavoro degli studenti degli istituti superiori</p>
         <br />
-        <!-- <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema <span class="text-capitalize">{{ nomeIstituto }}</span>.</p> -->
+        <p class="color-blu text-semibold color-blu">Sei stato invitato ad accedere al sistema EDIT da <span class="text-capitalize">{{ nomeEnte }}</span>.</p>
         <br />
-        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite
-            l’indirizzo mail indicato dalla scuola.</p>
+        <p class="color-black text-semibold">Dopo l’autenticazione, potrai accedere al profilo EDIT di <span class="text-capitalize">{{ nomeEnte }}</span> come Delegato</p>
+        <br />
+        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite la persona di riferimento e la mail indicata</p>
         <br />
         <div class="card-wrapper">
             <div class="card-inner">
                 <div class="card-body">
                     <div class="row font-28 text-vcenter">
                         <span class="text-bold col-6 color-blu text-capitalize">
-                            {{ nomeEnte }}
+                            {{ nominativoInvito }}
                         </span>
                         <span class="text-bold col-6 color-blu">
-                            {{ emailEnte }}
+                            {{ email }}
                         </span>
                     </div>
                 </div>
@@ -107,7 +108,7 @@
         </div>
         <br />
         <br />
-        <p class="text-semibold color-black">Se l’ente e l’indirizzo mail corrispondono, procedi con la registrazione</p>
+        <p class="text-semibold color-black">Se il nome del Delegato e l’indirizzo mail sono corretti, scegli il metodo con cui svolgere l’autenticazione.</p>
     </div>
     <br />
     <br />

@@ -16,8 +16,9 @@ export class HomeComponent implements OnInit {
     env = environment;
     nomeIstituto;
     nomeEnte;
-    emailEnte;
+    email;
     role;
+    nominativoInvito;
 
     constructor(
         private dataService: DataService,
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
             this.dataService.getRegistrazioneByToken(token).subscribe(res => {
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
-                this.emailEnte = res.email;
+                this.email = res.email;
+                this.nominativoInvito = res.nominativoInvito;
                 this.role = res.role;
                 sessionStorage.aziendaId = res.aziendaId;
                 if (this.role == 'LEGALE_RAPPRESENTANTE_AZIENDA' && res.stato == 'inviato') { // CASE 1. MANDATA DA SCUOLA A PADRONE DI AZIENDA
