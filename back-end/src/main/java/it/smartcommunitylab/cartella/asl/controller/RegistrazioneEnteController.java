@@ -61,7 +61,7 @@ public class RegistrazioneEnteController implements AslController {
 			HttpServletRequest request) throws Exception {
 		ASLUser caller = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId),
 				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId)));
-		if(!caller.equals(userId)) {
+		if(!caller.getId().equals(userId)) {
 			throw new BadRequestException("id utente non corrispondente");
 		}
 		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, cf, userId);
