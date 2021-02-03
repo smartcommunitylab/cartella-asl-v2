@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
     nomeIstituto;
     nomeEnte;
     emailEnte;
+    role;
 
     constructor(
         private dataService: DataService,
@@ -34,12 +35,13 @@ export class HomeComponent implements OnInit {
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
                 this.emailEnte = res.email;
+                this.role = res.role;
                 sessionStorage.aziendaId = res.aziendaId;
-                this.dataService.confermaRichiestaRegistrazione(token).subscribe(res => {}, err => {
-                    this.linkExpired = true;
-                    // this.login();
-                });
-
+                if (this.role == 'LEGALE_RAPPRESENTANTE_AZIENDA' && res.stato == 'inviato') { // CASE 1. MANDATA DA SCUOLA A PADRONE DI AZIENDA
+                    this.dataService.confermaRichiestaRegistrazione(token).subscribe(res => { }, err => {
+                        this.linkExpired = true;
+                    });
+                }
             }, err => {
                 // logic for expired token.
                 this.linkExpired = true;
