@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.RegistrazioneEnteManager;
@@ -58,10 +59,13 @@ public class RegistrazioneEnteController implements AslController {
 			@RequestParam String cf, 
 			@RequestParam Long userId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId),
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ASLUser caller = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId),
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId)));
+		if(!caller.equals(userId)) {
+			throw new BadRequestException("id utente non corrispondente");
+		}
 		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, cf, userId);
-		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, user, new Object(){});
+		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, caller, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("aggiornaDatiUserAzienda:%s - %s", enteId, userId));
