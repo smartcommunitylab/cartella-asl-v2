@@ -42,22 +42,15 @@ export class EnteDettaglioComponent implements OnInit {
   tipoInterna: boolean = false;
   codiceAteco: string = '';
   descAteco: string = '';
-  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati.";
+  ruoli;
+  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza.";
   showContent: boolean = false;
+  attachedAteco = [];
 
   ngOnInit() {
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
-      if(this.ente.atecoCode) {
-        if(this.ente.atecoCode.length > 0) {
-          this.codiceAteco = this.ente.atecoCode[0];
-        }
-      }
-      if(this.ente.atecoDesc) {
-        if(this.ente.atecoDesc.length > 0) {
-          this.descAteco = this.ente.atecoDesc[0];
-        }
-      }
+      this.updateAtecoCodiceList();
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -89,6 +82,25 @@ export class EnteDettaglioComponent implements OnInit {
 
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
-  } 
+  }
+  
+  aggiungiAccount() {
+  }
+
+  modificaAbilitati() {
+    this.router.navigate(['modifica/abilitati/'], { relativeTo: this.route });
+  }
+
+  updateAtecoCodiceList() {
+    this.attachedAteco = [];
+    if (this.ente.atecoCode && this.ente.atecoDesc) {
+      for (var i = 0; i < this.ente.atecoCode.length; i++) {
+        let atecoEntry = {codice: this.ente.atecoCode[i], descrizione: this.ente.atecoDesc[i]};
+        this.attachedAteco.push(atecoEntry);
+      }
+    }
+  }
+
+  
 
 }
