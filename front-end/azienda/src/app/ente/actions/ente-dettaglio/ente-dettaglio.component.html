@@ -73,6 +73,54 @@
                 </svg>
             </button>
         </div>
+        <br>
+        <div class="list-group" *ngIf="ruoli && ruoli.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Indirizzo email</th>
+                        <th>Nome</th>
+                        <th>Ruolo</th>
+                        <th>Creato il</th>
+                        <th>Creato da</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ruolo of ruoli">
+                        <!-- Indirizzo email -->
+                        <td class="pointer">
+                            <span class="align-middle color-blu text-underline">{{ ruolo.email }}</span>
+                        </td>
+                        <!-- Nome -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ ruolo.name }} {{ ruolo.surname }}</span>
+                        </td>
+                        <!-- Ruolo -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ ruolo.role }}</span>
+                        </td>
+                        <!-- Creato il -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ ruolo.dataAccettazione | date: 'dd/MM/yyyy'}}</span>
+                        </td>
+                        <!-- Creato da -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ ruolo.nominativoInvito }}</span>
+                        </td>
+                        <!-- delete -->
+                        <td class="pointer">
+                            <div class='btn btn-primary btn-icon btn-xs float-right'>
+                                <svg class="icon icon-white icon-sm">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                                </svg>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
         <div class="p-1 middle-div row" *ngIf="hasCoordinate()">
             <div class="col">
               <div id="map" style="height:300px;width:100%;"></div>

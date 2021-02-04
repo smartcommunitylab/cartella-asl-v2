@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
+import { CreaNuovaUtenteModalComponent } from '../crea-nuova-utente-modal/crea-nuova-utente-modal.component';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -51,6 +52,9 @@ export class EnteDettaglioComponent implements OnInit {
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
       this.updateAtecoCodiceList();
+      this.dataService.getRuoliByEnte().subscribe((roles) => {
+        this.initializeRole(roles);
+      });
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -85,6 +89,14 @@ export class EnteDettaglioComponent implements OnInit {
   }
   
   aggiungiAccount() {
+    const modalRef = this.modalService.open(CreaNuovaUtenteModalComponent, { windowClass: "creaAttivitaModalClass" });
+    modalRef.componentInstance.newUtenteListener.subscribe((role) => {
+      this.dataService.aggiungiRuoloReferenteAzienda(role).subscribe(res => {
+        this.dataService.getRuoliByEnte().subscribe((roles) => {
+          this.initializeRole(roles);
+        });
+      });
+    });
   }
 
   modificaAbilitati() {
@@ -101,6 +113,14 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
-  
+
+  initializeRole(roles) {
+    this.ruoli = roles.filter(role => {
+      if (role.userId == this.dataService.ownerId) {
+        return false;
+      }
+      return true;
+    });
+  }
 
 }
