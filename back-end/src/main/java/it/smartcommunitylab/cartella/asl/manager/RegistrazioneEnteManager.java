@@ -177,6 +177,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setDataAccettazione(LocalDate.now());
 		reg.setEmail(email);
 		reg.setNominativoInvito(owner.getName() + " " + owner.getSurname());
+		reg.setNominativoReferente(nome + " " + cognome);
 		reg.setToken(Utils.getUUID());
 		reg.setStato(Stato.confermato);
 		reg.setRole(ASLRole.REFERENTE_AZIENDA);

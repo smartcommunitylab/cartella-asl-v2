@@ -53,6 +53,8 @@ public class RegistrazioneEnte {
 	
 	private String nominativoInvito;
 	
+	private String nominativoReferente;
+	
 	private String nomeIstituto;
 	
 	private String nomeEnte;
@@ -175,6 +177,14 @@ public class RegistrazioneEnte {
 
 	public void setNomeEnte(String nomeEnte) {
 		this.nomeEnte = nomeEnte;
+	}
+
+	public String getNominativoReferente() {
+		return nominativoReferente;
+	}
+
+	public void setNominativoReferente(String nominativoReferente) {
+		this.nominativoReferente = nominativoReferente;
 	}
 
 }
