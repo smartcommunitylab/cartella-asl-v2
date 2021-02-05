@@ -917,6 +917,57 @@ export class DataService {
   }
 
   
+  aggiungiRuoloReferenteAzienda(role): Observable<any> {
+    let url = this.host + "/registrazione-ente/ref-azienda";
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('nome', role.name);
+    params = params.append('cognome', role.surname);
+    params = params.append('email', role.email);
+    params = params.append('cf', role.cf);
+    params = params.append('ownerId', this.ownerId);
+    return this.http.post<any>(
+      url,
+      null,
+      { 
+        params: params,
+        observe: 'response',
+      }
+    )
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+
+  cancellaRuoloReferenteAzienda(id): Observable<any> {
+    let url = this.host + '/registrazione-ente/ref-azienda';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('registrazioneId', id);
+    
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+
+
   addConsent(): Observable<any> {
     let url = this.host + '/consent/add';
 
