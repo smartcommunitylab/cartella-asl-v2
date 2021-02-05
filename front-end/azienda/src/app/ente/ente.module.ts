@@ -9,6 +9,8 @@ import { DpDatePickerModule } from 'ng2-date-picker';
 import { IstitutiSelectorModule } from '../shared/istituti-selector/istituti-selector.module';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreaNuovaUtenteModalComponent } from './actions/crea-nuova-utente-modal/crea-nuova-utente-modal.component';
+import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -26,7 +28,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   providers: [
     NgbActiveModal,
   ],
-  entryComponents: [],
+  entryComponents: [
+    CreaNuovaUtenteModalComponent,
+    RuoloCancellaModal
+  ],
 declarations: [EnteRoutingModule.components]
 })
 export class EnteModule { }

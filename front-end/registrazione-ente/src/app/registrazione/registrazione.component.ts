@@ -79,7 +79,7 @@ export class Registrazioneomponent implements OnInit {
     this.dataService.getProfile().subscribe(profile => {
       if (profile && profile.aziende) {
         this.profile = profile;
-        // var aziendaId = Object.keys(profile.aziende)[0];
+        // multiple roles scenario, select aziendaId as in the token(registrazione_ente);
         var aziendaId = sessionStorage.getItem('aziendaId');
         this.dataService.setAziendaId(aziendaId);
         this.dataService.setAziendaName(profile.aziende[aziendaId].nome);

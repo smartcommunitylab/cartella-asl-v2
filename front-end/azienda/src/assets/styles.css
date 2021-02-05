@@ -14741,4 +14741,24 @@ div.dp-input-container> input.dp-picker-input:disabled {
 .text-italic {
     font-style: italic;
 }
+.text-underline {
+  text-decoration: underline!important;
+}
+
+.color-black {
+  color: #393939;
+} 
+
+.color-grey {
+  color: #707070;
+}
+
+.color-blu {
+  color: #0066CC
+}
+
+.color-red {
+  color: #FF667D
+}
+
 /**/

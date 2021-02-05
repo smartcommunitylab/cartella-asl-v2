@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { CreaNuovaUtenteModalComponent } from '../crea-nuova-utente-modal/crea-nuova-utente-modal.component';
+import { RuoloCancellaModal } from '../ruolo-cancella-modal/ruolo-cancella-modal.component';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -113,6 +114,18 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
+  deleteRuolo(ruolo) {
+    const modalRef = this.modalService.open(RuoloCancellaModal);
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      this.dataService.cancellaRuoloReferenteAzienda(ruolo.id).subscribe(res => {
+        this.dataService.getRuoliByEnte().subscribe((roles) => {
+          this.initializeRole(roles);
+        },
+          (err: any) => console.log(err),
+          () => console.log('getRuoliByEnte'));
+      });
+    });
+  }
 
   initializeRole(roles) {
     this.ruoli = roles.filter(role => {
