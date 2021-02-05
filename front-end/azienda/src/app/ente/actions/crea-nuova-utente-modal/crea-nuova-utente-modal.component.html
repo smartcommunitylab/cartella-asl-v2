@@ -33,7 +33,7 @@
         <div class="row v-center form-group">
             <div class="col-sm-4"
                 [class.has-danger]="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched || forceErrorDisplay)">
-                <label for="nome" *ngIf="nome" class="active">Nome</label>
+                <label for="nome" *ngIf="profile.name" class="active">Nome</label>
                 <input type="text" class="form-control" [(ngModel)]="profile.name" id="nome" #nomeInput="ngModel"
                     placeholder="Nome" (keyup)="trimValue($event, 'nome')" (focusout)="trimValue($event, 'trim')"
                     required>
@@ -44,7 +44,7 @@
             </div>
             <div class="col-sm-4"
                 [class.has-danger]="cognomeInput.invalid && (cognomeInput.dirty || cognomeInput.touched || forceErrorDisplay)">
-                <label for="cognome" *ngIf="cognome" class="active">Cognome</label>
+                <label for="cognome" *ngIf="profile.surname" class="active">Cognome</label>
                 <input type="text" class="form-control" [(ngModel)]="profile.surname" id="cognome"
                     #cognomeInput="ngModel" placeholder="Cognome" (keyup)="trimValue($event, 'cognome')"
                     (focusout)="trimValue($event, 'trim')" required>
@@ -54,7 +54,7 @@
             </div>
             <div class="col-sm-4"
                 [class.has-danger]="cfInput.invalid && (cfInput.dirty || cfInput.touched || forceErrorDisplay)">
-                <label for="cf" *ngIf="cf" class="active">Codice fiscale</label>
+                <label for="cf" *ngIf="profile.cf" class="active">Codice fiscale</label>
                 <input type="text" class="form-control" [(ngModel)]="profile.cf" id="cf" #cfInput="ngModel"
                     placeholder="Codice fiscale" (keyup)="trimValue($event, 'cf')"
                     (focusout)="trimValue($event, 'trim')" required>
@@ -66,7 +66,7 @@
         <div class="row v-center form-group">
             <div class="col-sm-4"
                 [class.has-danger]="mailInput.invalid && (mailInput.dirty || mailInput.touched || forceErrorDisplay)">
-                <label for="mail" *ngIf="mail" class="active">Mail</label>
+                <label for="mail" *ngIf="profile.email" class="active">Mail</label>
                 <input type="text" class="form-control" [(ngModel)]="profile.email" id="mail" #mailInput="ngModel"
                     placeholder="Mail" (keyup)="trimValue($event, 'mail')" (focusout)="trimValue($event, 'trim')"
                     required>
