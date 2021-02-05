@@ -65,7 +65,14 @@
                     <td>
                         <div [ngbTooltip]="aa.dataArchiviazione">{{aa.stato}}</div>
                     </td>
-                    <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
+                    <td>
+                        <ng-template #list>
+                            <div class="d-flex flex-column">
+                              <span *ngFor="let content of getStudentiTip(aa)">{{content}}</span>
+                            </div>
+                        </ng-template>
+                        <div [ngbTooltip]="list">{{getNumStudentiTip(aa)}}</div>
+                    </td>
                     <td>
                         <i class="material-icons pointer ok" ngbTooltip="dettaglio attività"
                         (click)="detailAttivita(aa)">info</i> 

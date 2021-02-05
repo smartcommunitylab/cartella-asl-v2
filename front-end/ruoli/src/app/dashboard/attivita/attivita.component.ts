@@ -163,9 +163,10 @@ export class DashboardAttivitaComponent implements OnInit {
   }
 
   getStudentiTip(aa: any) {
-    let tip = '';
+    let tip = [];
     for (let i = 0; i < aa.studenti.length; i++) {
-        tip = tip + aa.studenti[i] + " - " + aa.classi[i] + '\n';
+        let row = aa.studenti[i] + " - " + aa.classi[i];
+        tip.push(row);
         if (i == 15) {
             break;
         }
