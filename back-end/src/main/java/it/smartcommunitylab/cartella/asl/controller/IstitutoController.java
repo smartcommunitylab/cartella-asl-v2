@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -113,7 +114,7 @@ public class IstitutoController implements AslController {
 	
 	@PutMapping("/api/istituto")
 	public @ResponseBody Istituzione updateIstituto(
-			Istituzione istituto,
+			@RequestBody Istituzione istituto,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istituto.getId()), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istituto.getId())));
