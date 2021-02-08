@@ -162,6 +162,7 @@ public class IstituzioneManager extends DataEntityManager {
 			dbIst.setAddress(istituto.getAddress());
 			dbIst.setPhone(istituto.getPhone());
 			dbIst.setEmail(istituto.getEmail());
+			dbIst.setPec(istituto.getPec());
 			dbIst.setLatitude(istituto.getLatitude());
 			dbIst.setLongitude(istituto.getLongitude());
 			istituzioneRepository.save(dbIst);
