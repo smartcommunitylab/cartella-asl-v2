@@ -1695,6 +1695,19 @@ export class DataService {
       );
   }
 
+  updateIstituto(ist:any) {
+    let url = this.host + '/istituto/';
+    return this.http.put<any>(url, ist)
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
   getListaIstitutiByIds(ids: any): any {
     let singleObservables = ids.map((singleIds: string, urlIndex: number) => {
       return this.getIstitutoById(singleIds)
@@ -1926,25 +1939,6 @@ export class DataService {
       );
   }
   
-  completaAttivitaAlternanza(id: any, upldatedES: any): any {
-    let url = this.host + this.attiitaAlternanzaAPIUrl + '/' + id + '/completa';
-
-    return this.http.put<IApiResponse>(
-      url,
-      upldatedES,
-      { observe: 'response', }
-    )
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          if (res.ok)
-            return true;
-          else
-            return res;
-        }),
-        catchError(this.handleError));
-  }
-
   // GET /download/schedaValutazioneAzienda/{es_id}
   downloadschedaValutazione(id: any): Observable<Valutazione> {
     let url = this.host + '/download/schedaValutazioneScuola/' + this.istitutoId + '/es/' + id;
@@ -2063,25 +2057,6 @@ export class DataService {
       );
   }
 
-  // PUT/opportunita/details/{id}
-  updateOppurtunita(offer: IOffer) {
-    let url = this.host + this.opportunitaAPIUrl + "/" + this.istitutoId + '/details/' + offer.id;
-    return this.http.put(
-      url,
-      offer,
-      {
-        observe: 'response',
-        responseType: 'text'
-      }
-    )
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          return res;
-        }),
-        catchError(this.handleError))
-  }
-
   // PUT /opportunita/{id}/competenze
   updateCompetenzeAzienda(id: any, listComptenze: any) {
     let url = this.host + this.opportunitaAPIUrl + '/' + this.istitutoId + '/' + id + "/competenze";
@@ -2102,48 +2077,11 @@ export class DataService {
         catchError(this.handleError))
   }
 
-  // PUT /opportunita/competenze/{id}
-  updateRiferente(id: any, rId: any): Observable<IOffer> {
-    let url = this.host + this.opportunitaAPIUrl + '/' + id + "/referenteAzienda/" + rId;
-    return this.http.put<IOffer>(
-      url,
-      { observe: 'response', }
-    )
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          if (res) {
-            return (res as IOffer);
-          } else
-            return res;
-        }
-        ),
-        catchError(this.handleError))
-  }
-
   getAttivitaTipologieAzienda(): Observable<object[]> {
     return this.http.get<object[]>(this.host + "/tipologieTipologiaAttivita")
       .pipe(
         map(tipologie => {
           return tipologie;
-        },
-          catchError(this.handleError)
-        )
-      );
-  }
-
-  //DIVERSO
-  saveAttivitaGiornaliereStudentiPresenzeAzienda(presenzeObject) {
-    return this.http.put(this.attivitaGiornalieraListaEndpoint + '/calendario', presenzeObject,
-      {
-        observe: 'response',
-        responseType: 'text'
-      }
-    )
-      .timeout(this.timeout)
-      .pipe(
-        map(studenti => {
-          return studenti
         },
           catchError(this.handleError)
         )

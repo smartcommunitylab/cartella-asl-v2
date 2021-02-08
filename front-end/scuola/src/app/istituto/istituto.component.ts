@@ -48,4 +48,8 @@ export class IstitutoComponent implements OnInit {
         this.showContent = !this.showContent;
     }
 
+    modifica() {
+        this.router.navigate(['../modifica', this.dataService.istitutoId], { relativeTo: this.route });
+      }
+
 }

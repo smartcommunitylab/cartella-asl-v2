@@ -28,6 +28,13 @@
     <br />
     <br />
     <div class="card-body m-16" *ngIf="istituto">
+        <div class="title">
+            Dati istituto <br />
+            <button class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Modifica i dati di questo istituto" (click)="modifica()">
+                Modifica dati istituto&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+        </div>
+        <br>
         <div class="p-1 middle-div row">
             <div class="col-6">
                 <span class="row"><span class="text-semibold">Nome:&nbsp;</span>{{istituto.name}}</span>
