@@ -10,6 +10,7 @@ const app_routes: Routes = [
   { path: 'studenti', loadChildren: 'app/studenti/studenti.module#StudentiModule' },
   { path: 'enti', loadChildren: 'app/enti/enti.module#EntiModule' },
   { path: 'competenze', loadChildren: 'app/competenze/competenze.module#CompetenzeModule' },
+  { path: 'istituto', loadChildren: 'app/istituto/istituto.module#IstitutoModule' },
   { path: 'terms/:authorized', loadChildren: 'app/terms/terms.module#TermsModule' },
   { path: '**', pathMatch: 'full', redirectTo: '/attivita/list' }
 ];
