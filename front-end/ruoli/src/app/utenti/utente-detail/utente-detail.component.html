@@ -45,7 +45,7 @@
                         <div class="form-group" [class.has-danger]="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
                             <label for="email">Email</label>
                             <input type="email" class="form-control" id="email" placeholder="Inserisci email" [(ngModel)]="user.email" #emailInput="ngModel"
-                                required>
+                                disabled required>
                             <div class="invalid-feedback" [class.d-block]="emailInput.invalid && (emailInput.dirty || emailInput.touched || forceInvalidFeedback)">
                                 Email richiesta
                             </div>
