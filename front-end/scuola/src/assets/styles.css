@@ -14744,7 +14744,15 @@ div.dp-input-container> input.dp-picker-input{
   font-style: italic;
 }
 
+.font-18 {
+  font-size: 18px!important;
+}
+
 .font-25 {
   font-size: 25px!important;
+}
+
+.font-35 {
+  font-size: 35px!important;
 }
 /**/
