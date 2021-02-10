@@ -863,5 +863,46 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public AttivitaAlternanza findByUuid(String uuid) {
 		return attivitaAlternanzaRepository.findByUuid(uuid);
 	}
+
+	public AttivitaAlternanza duplicaAttivitaAlternanza(Long attivitaId, String istitutoId) throws Exception {
+		AttivitaAlternanza aaDb = getAttivitaAlternanza(attivitaId);
+		if(aaDb == null) {
+			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
+		}
+		if(!aaDb.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istituto non corrispondente");
+		}
+		AttivitaAlternanza aa = new AttivitaAlternanza();
+		aa.setAnnoScolastico(aaDb.getAnnoScolastico());
+		aa.setDataArchiviazione(aaDb.getDataArchiviazione());
+		aa.setDataFine(aaDb.getDataFine());
+		aa.setDataInizio(aaDb.getDataInizio());
+		aa.setDescrizione(aaDb.getDescrizione());
+		aa.setEnteId(aaDb.getEnteId());
+		aa.setFormatore(aaDb.getFormatore());
+		aa.setFormatoreCF(aaDb.getFormatoreCF());
+		aa.setIstitutoId(istitutoId);
+		aa.setLatitude(aaDb.getLatitude());
+		aa.setLongitude(aaDb.getLongitude());
+		aa.setLuogoSvolgimento(aaDb.getLuogoSvolgimento());
+		aa.setNomeEnte(aaDb.getNomeEnte());
+		aa.setOffertaId(aaDb.getOffertaId());
+		aa.setOraFine(aaDb.getOraFine());
+		aa.setOraInizio(aaDb.getOraInizio());
+		aa.setOre(aaDb.getOre());
+		aa.setReferenteEsterno(aaDb.getReferenteEsterno());
+		aa.setReferenteEsternoCF(aaDb.getReferenteEsternoCF());
+		aa.setReferenteEsternoTelefono(aaDb.getReferenteEsternoTelefono());
+		aa.setReferenteScuola(aaDb.getReferenteScuola());
+		aa.setReferenteScuolaCF(aaDb.getReferenteScuolaCF());
+		aa.setReferenteScuolaTelefono(aaDb.getReferenteScuolaTelefono());
+		aa.setStato(Stati.attiva);
+		aa.setTipologia(aaDb.getTipologia());
+		aa.setTitolo(aaDb.getTitolo());
+		aa.setTitoloOfferta(aaDb.getTitoloOfferta());
+		aa.setUuid(Utils.getUUID());
+		attivitaAlternanzaRepository.save(aa);
+		return aa;
+	}
 	
 }
