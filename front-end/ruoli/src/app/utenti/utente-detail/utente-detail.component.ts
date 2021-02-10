@@ -59,7 +59,7 @@ export class UtenteDetailComponent implements OnInit {
             () => console.log('get user by id'));
       } else {
         this.user = {};
-        //this.breadcrumbItems[0].location = "../";
+        //this.breadcrumbItems[0].location = "./";
         this.navTitle = "Nuovo utente";
       }
     });
@@ -162,7 +162,12 @@ export class UtenteDetailComponent implements OnInit {
   }
   navigateBack(event = null) {
     this.route.queryParamMap.subscribe(params => {
-      this.router.navigate(['../../'], { relativeTo: this.route, queryParams: { role: params.get("roleback") } });
+      if(this.isNewUser) {
+        this.router.navigate(['../'], { relativeTo: this.route, queryParams: { role: params.get("roleback") } });
+      } else {
+        this.router.navigate(['../../'], { relativeTo: this.route, queryParams: { role: params.get("roleback") } });
+      }
+      
     });
   }
 
