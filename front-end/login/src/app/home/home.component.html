@@ -10,9 +10,9 @@
     </div>
     <div class="col-9"></div>
   </div>
-
+  <br/>
+  <br/>
   <div class="page-body" [ngClass]="{'border-selected': loginSelected, 'border-error': errMsg != '' }">
-
     <div class="row">
       <div class="col-5"></div>
       <div class="col-2 text-center">
@@ -27,15 +27,12 @@
     </div>
     <div class="row m-top-body">
       <div class="col-12">
-        <p class="text-center heading-1">Benvenuto nel portale Esperienze Didattiche Insieme al Territorio della
-          Provincia di Trento</p>
+        <p class="text-center heading-1">Scopri EDIT - il portale che ti accompagna nel mondo dell’alternanza scuola lavoro</p>
       </div>
     </div>
     <div class="row">
       <div class="col-12">
-        <p *ngIf="!loginSelected" class="text-center heading-2">Seleziona il tuo profilo prima di effettuare l’accesso
-        </p>
-        <p *ngIf="loginSelected" class="text-center heading-2">Premi ok e vai alla schermata di login</p>
+        <p class="text-center heading-2">Il servizio nasce per connettere Studentesse, Studenti, Scuole ed Enti del territorio trentino</p>
       </div>
     </div>
     <div class="row m-top20">
@@ -70,7 +67,7 @@
           <div class="col-8">
             <label class="customradio">
               <input [disabled]="options[1].disabled" type="radio" [value]="options[1]" [(ngModel)]="actualOption"
-                (change)="onChange(options[1])" #studente>
+                (change)="onChange(options[1])">
               <span class="option-1">{{options[1].name}}</span>
               <span class="checkmark"></span>
             </label>
@@ -89,7 +86,7 @@
           </div>
         </div>
       </div>
-      <div class="col-4">
+       <div class="col-4">
         <div class="row">
           <div class="col-4"></div>
           <div class="col-8">
@@ -115,16 +112,31 @@
         </div>
       </div>
     </div>
+    <br/>
+    <br/>
     <div class="row text-center m-top20">
       <div class="col-5"></div>
       <div class="col-2">
-        <button type="button" class="btn btn-lg"
+        <button [disabled]="!loginSelected" class="btn btn-lg v-center btnModificationText"
           [ngClass]="{'btn-primary': loginSelected, 'btn-secondary':!loginSelected }"
-          (click)="login()">&nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;</button>
+          (click)="login()">
+          <span class="row btnCreateTxt">
+            <span class="col-4"></span>
+            <span class="col-4">OK</span>
+            <span class="col-4"></span>
+          </span>
+        </button>
       </div>
       <div class="col-5"></div>
     </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <div>
+      <p class="font-10 text-center">Questo servizio è stato progettato tramite un percorso di co-design da: Istituto Tecnico Tecnologico “Gugliemo Marconi” (Rovereto), Istituto Tecnico Economico e Tecnologico “Felice e Gregorio</p>
+      <p class="font-10 text-center">Fontana” (Rovereto), Collegio Arcivescovile Celestino Endrici (Trento) e Istituto di Istruzione “Martino Martini” (Mezzolombardo)</p>
+    </div>
   </div>
 </div>
-
 <cm-footer class="page-footer"></cm-footer>
