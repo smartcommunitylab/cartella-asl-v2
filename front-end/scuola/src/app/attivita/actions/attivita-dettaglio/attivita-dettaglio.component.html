@@ -35,6 +35,17 @@
                         </span>
                     </span>
                 </button>
+                <button *ngIf="individuale && attivita.stato!='archiviata'" class="btn btn-primary btn-sm btn-icon btnDuplica mLeft12"
+                    placement="bottom" ngbTooltip="Crea una copia di questo attività" (click)="duplicaAA()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Duplica</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-copy"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
             </span>
         </div>
     </div>
