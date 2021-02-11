@@ -797,6 +797,22 @@ export class DataService {
       );
   }
 
+  duplicaAA(aa): Observable<any> {
+    let url = this.host + '/attivita/duplica';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('attivitaId', aa.id);
+    return this.http.post(url, null, { params: params })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
   /** OFFERTE */
   getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
     let url = this.host + "/offerta/search/";
