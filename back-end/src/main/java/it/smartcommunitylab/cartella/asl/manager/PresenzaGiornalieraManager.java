@@ -38,6 +38,9 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 		List<PresenzaGiornaliera> list = presenzaRepository.findByEsperienzaSvoltaIdAndGiornata(pg.getEsperienzaSvoltaId(), 
 				pg.getGiornata());
 		if(list.size() == 0) {
+			if(pg.getOreSvolte() < 0) {
+				return null;
+			}
 			pg.setVerificata(true);
 			pg.setValidataEnte(false);
 			if(pg.getSmartWorking() == null) {
@@ -45,6 +48,12 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 			}
 			presenzaRepository.save(pg);
 		} else {
+			if(pg.getOreSvolte() < 0) {
+				for(PresenzaGiornaliera pgDb : list) {
+					presenzaRepository.delete(pgDb);
+				}
+				return null;
+			}			
 			PresenzaGiornaliera pgDb = list.get(0);
 			pgDb.setVerificata(true);
 			pgDb.setValidataEnte(pgDb.getValidataEnte());
@@ -61,6 +70,9 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 		List<PresenzaGiornaliera> list = presenzaRepository.findByEsperienzaSvoltaIdAndGiornata(pg.getEsperienzaSvoltaId(), 
 				pg.getGiornata());
 		if(list.size() == 0) {
+			if(pg.getOreSvolte() < 0) {
+				return null;
+			}			
 			pg.setVerificata(false);
 			pg.setValidataEnte(true);
 			if(pg.getSmartWorking() == null) {
@@ -68,6 +80,12 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 			}
 			presenzaRepository.save(pg);
 		} else {
+			if(pg.getOreSvolte() < 0) {
+				for(PresenzaGiornaliera pgDb : list) {
+					presenzaRepository.delete(pgDb);
+				}
+				return null;
+			}						
 			PresenzaGiornaliera pgDb = list.get(0);
 			if(!pgDb.getVerificata()) {
 				pgDb.setVerificata(false);
@@ -86,6 +104,9 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 		List<PresenzaGiornaliera> list = presenzaRepository.findByEsperienzaSvoltaIdAndGiornata(pg.getEsperienzaSvoltaId(), 
 				pg.getGiornata());
 		if(list.size() == 0) {
+			if(pg.getOreSvolte() < 0) {
+				return null;
+			}
 			pg.setVerificata(false);
 			pg.setValidataEnte(false);
 			if(pg.getSmartWorking() == null) {
@@ -93,6 +114,12 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 			}
 			presenzaRepository.save(pg);
 		} else {
+			if(pg.getOreSvolte() < 0) {
+				for(PresenzaGiornaliera pgDb : list) {
+					presenzaRepository.delete(pgDb);
+				}
+				return null;
+			}
 			PresenzaGiornaliera pgDb = list.get(0);
 			if(!pgDb.getVerificata() && !pgDb.getValidataEnte()) {
 				pgDb.setVerificata(false);

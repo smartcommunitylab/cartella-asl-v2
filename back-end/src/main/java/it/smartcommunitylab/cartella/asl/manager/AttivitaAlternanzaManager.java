@@ -483,7 +483,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public List<PresenzaGiornaliera> validaPresenzeAttivita(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
 		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
-			result.add(presenzaGiornalieraManager.validaPresenza(pg));
+			PresenzaGiornaliera presenzaGiornaliera = presenzaGiornalieraManager.validaPresenza(pg);
+			if(presenzaGiornaliera != null) {
+				result.add(presenzaGiornaliera);	
+			}
 		}
 		return  result;
 	}
@@ -491,7 +494,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public List<PresenzaGiornaliera> validaPresenzeAttivitaByEnte(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
 		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
-			result.add(presenzaGiornalieraManager.validaPresenzaByEnte(pg));
+			PresenzaGiornaliera presenzaGiornaliera = presenzaGiornalieraManager.validaPresenzaByEnte(pg);
+			if(presenzaGiornaliera != null) {
+				result.add(presenzaGiornaliera);	
+			}
 		}
 		return  result;
 	}
