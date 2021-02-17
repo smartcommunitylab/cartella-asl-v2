@@ -12,7 +12,6 @@ import { GeoService } from './services/geo.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FilterService } from './services/filter.service';
 import { SorterService } from './services/sorter.service';
-import { DialogService } from './services/dialog.service';
 import { EnsureModuleLoadedOnceGuard } from './ensureModuleLoadedOnceGuard';
 import { EventBusService } from './services/event-bus.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -33,7 +32,6 @@ import { ValidationService } from './services/validation.service';
     FilterService,
     DataService,
     GeoService, 
-    DialogService,
     EventBusService,
     ValidationService,
     {
