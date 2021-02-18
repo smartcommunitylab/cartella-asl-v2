@@ -37,6 +37,6 @@ export class DetailAttivitaModalComponent implements OnInit {
   }
 
   getTipologia() {
-    return this.tipologieMap[this.report.attivitaAlternanza.id]['label'];
+    return this.tipologieMap[this.report.attivitaAlternanza.tipologia]['label'];
   }
 }
