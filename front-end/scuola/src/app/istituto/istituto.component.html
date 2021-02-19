@@ -1,13 +1,15 @@
 <div class="mb-3 list-container md-margin">
     <div class="row" *ngIf="istituto">
-        <div class="row v-center">
-            <span class="title font-35 m-left2">{{istituto.name}}</span>&nbsp;&nbsp;
-            <span (click)="menuContentShow()">
-                <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
-                </svg>
-                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
-            </span>
+        <div class="col-12">
+            <div class="row v-center">
+                <span class="title font-30 m-left2">{{istituto.name}}</span>&nbsp;&nbsp;
+                <span (click)="menuContentShow()">
+                    <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                    </svg>
+                    <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+                </span>
+            </div>
         </div>
     </div>
     <hr class="hr" />

@@ -263,4 +263,10 @@ export class AttivitaDettaglioComponent implements OnInit {
     });
   }
 
+  duplicaAA() {
+    this.dataService.duplicaAA(this.attivita).subscribe((res) => {
+      this.router.navigate(['../../detail/' + res.id + '/modifica/attivita'], { relativeTo: this.route });
+    });
+  }
+
 }

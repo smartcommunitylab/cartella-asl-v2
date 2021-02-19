@@ -10,7 +10,6 @@ import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } f
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment';
-import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-modifica-dettaglio',
@@ -23,8 +22,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private geoService: GeoService,
-    private growler: GrowlerService) { }
+    private geoService: GeoService) { }
 
   attivita: AttivitaAlternanza;
   esperienze;
@@ -91,6 +89,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
 
   @ViewChild('calendarStart') calendarStart: DatePickerComponent;

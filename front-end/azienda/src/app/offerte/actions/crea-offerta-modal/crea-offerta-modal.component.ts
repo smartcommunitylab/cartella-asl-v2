@@ -53,7 +53,9 @@ export class CreaOffertaModalComponent implements OnInit {
   forceErrorDisplayRE: boolean = false;
   datePickerConfig = {
     locale: 'it',
-    firstDayOfWeek: 'mo'
+    firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
   @Input() tipologie?: any;
   @Output() newOffertaListener = new EventEmitter<Object>();

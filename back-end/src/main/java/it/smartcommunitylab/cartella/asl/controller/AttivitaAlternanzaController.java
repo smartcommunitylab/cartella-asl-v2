@@ -390,6 +390,22 @@ public class AttivitaAlternanzaController implements AslController {
 		return aa;
 	}
 	
+	@PostMapping("/api/attivita/duplica")
+	public @ResponseBody AttivitaAlternanza duplicaAttivitaAlternanza(
+			@RequestParam String istitutoId,
+			@RequestParam Long attivitaId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		AttivitaAlternanza result = attivitaAlternanzaManager.duplicaAttivitaAlternanza(attivitaId, istitutoId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, result.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("duplicaAttivitaAlternanza:%s - %s - %s", attivitaId, result.getId(), istitutoId));
+		}		
+		return result;
+	}
+	
 	@GetMapping("/api/attivita/ente/search")
 	public @ResponseBody Page<ReportAttivitaAlternanzaRicercaEnte> searchAttivitaAlternanzaByEnte(
 			@RequestParam String enteId,

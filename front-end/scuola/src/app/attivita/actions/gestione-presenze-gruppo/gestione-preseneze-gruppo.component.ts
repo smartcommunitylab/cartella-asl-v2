@@ -201,16 +201,18 @@ export class GestionePresenzeGruppoComponent implements OnInit {
     var endDate = moment(this.attivita.dataFine);
     var now = startDate.clone();
     while (now.diff(endDate, 'days') <= 0) {
-      // while (now.isSameOrBefore(endDate)) {
-      this.studenti[key].presenze.push({
-        "attivitaSvolta": "",
-        "esperienzaSvoltaId": this.studenti[key].esperienzaSvoltaId,
-        "giornata": moment(now).format('YYYY-MM-DD'),
-        "istitutoId": this.studenti[key].istitutoId,
-        "oreSvolte": null,
-        "verificata": false
-      });     
-      now.add(1, 'days');
+      var index = this.studenti[key].presenze.findIndex(x => x.giornata === now.format('YYYY-MM-DD'));
+        if (index < 0) {
+          this.studenti[key].presenze.push({
+            "attivitaSvolta": "",
+            "esperienzaSvoltaId": this.studenti[key].esperienzaSvoltaId,
+            "giornata": moment(now).format('YYYY-MM-DD'),
+            "istitutoId": this.studenti[key].istitutoId,
+            "oreSvolte": null,
+            "verificata": false
+          });         
+        }
+        now.add(1, 'days');
     }
   }
 
