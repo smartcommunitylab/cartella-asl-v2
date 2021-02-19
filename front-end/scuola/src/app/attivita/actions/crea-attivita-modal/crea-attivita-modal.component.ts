@@ -72,7 +72,9 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   datePickerConfig = {
     locale: 'it',
-    firstDayOfWeek: 'mo'
+    firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
 
   constructor(public activeModal: NgbActiveModal, private dataService: DataService) { }
