@@ -199,7 +199,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
-        && (this.azienda.id != '')
+        && (this.azienda && this.azienda.id != '')
         && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine < this.date.maxFine))
       );
