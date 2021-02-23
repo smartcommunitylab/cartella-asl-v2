@@ -153,11 +153,11 @@ public class ExportDataManager {
 	}
 	
 	public ExportCsv getDashboardEsperienze(String istitutoId, String annoScolastico, 
-			String text) throws Exception {
-		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text);
+			String text, boolean getErrors) throws Exception {
+		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, getErrors);
 		String filename = "esperienze.csv";
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\"\n");
+		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"invio\";\"errore\"\n");
 		for(ReportDashboardEsperienza esp : list) {
 			sb.append(esp.getEsperienzaId() + ";");
 			sb.append("\"" + esp.getStudenteId() + "\";");
@@ -172,6 +172,11 @@ public class ExportDataManager {
 			sb.append(esp.getOreTotali() + ";");
 			sb.append(esp.getOreValidate() + ";");
 			sb.append("\"" + esp.isAllineato() + "\";");
+			if(Utils.isNotEmpty(esp.getInvio())) {
+				sb.append("\"" + cleanString(esp.getInvio()) + "\";");
+			} else {
+				sb.append("\"\";");
+			}
 			if(Utils.isNotEmpty(esp.getErrore())) {
 				sb.append("\"" + cleanString(esp.getErrore()) + "\"\n");
 			} else {

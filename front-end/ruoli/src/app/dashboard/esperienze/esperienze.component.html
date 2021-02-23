@@ -19,7 +19,7 @@
                     </small>
                 </div>
             </div>
-            <div class="col col-3">
+            <div class="col col-2">
                 <div class="form-group">
                     <label for="annoScolastico">Anno scolastico</label>
                     <input type="text" class="form-control" id="annoScolastico" placeholder="2019-20" 
@@ -31,6 +31,12 @@
                     <label for="text">Cerca</label>
                     <input type="text" class="form-control" id="text" placeholder="studente o classe" 
                         [(ngModel)]="text" (keyup.enter)="getReport()">
+                </div>
+            </div>
+            <div class="col col-1">
+                <div class="form-group">
+                    <label for="errors" ngbTooltip="cerca tutti gli errori di allineamento">Errori</label>
+                    <input type="checkbox" class="form-control" id="errors" [(ngModel)]="findErrors">
                 </div>
             </div>
         </div>
@@ -78,7 +84,7 @@
                     <td>
                         <i *ngIf="esp.stato=='valida' && esp.allineato" class="material-icons ok"
                         ngbTooltip="esperienza allineata">check_circle_outline</i> 
-                        <i *ngIf="esp.stato=='valida' && (esp.numeroTentativi == 0)" class="material-icons"
+                        <i *ngIf="esp.stato=='valida' && !esp.allineato && (esp.numeroTentativi == 0)" class="material-icons"
                         ngbTooltip="esperienza da allineare">arrow_circle_up</i> 
                         <i *ngIf="esp.stato=='valida' && !esp.allineato && (esp.numeroTentativi > 0)" class="material-icons error"
                         ngbTooltip="copia errore di allineamento nella clipboard" (click)="copyText(esp.errore)">highlight_off</i>

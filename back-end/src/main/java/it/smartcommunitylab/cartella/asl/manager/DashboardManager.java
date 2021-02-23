@@ -188,7 +188,8 @@ public class DashboardManager extends DataEntityManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, String text) {
+	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, 
+			String text, boolean getErrors) {
 		String q = "SELECT es, aa, esa FROM EsperienzaSvolta es LEFT JOIN AttivitaAlternanza aa"
 				+ " ON es.attivitaAlternanzaId=aa.id"
 				+ " LEFT JOIN EsperienzaSvoltaAllineamento esa"
@@ -196,6 +197,9 @@ public class DashboardManager extends DataEntityManager {
 				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
 		if(Utils.isNotEmpty(text)) {
 			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))";
+		}
+		if(getErrors) {
+			q += " AND esa.allineato = false AND esa.numeroTentativi > 0";
 		}
 		q += " ORDER BY aa.dataInizio DESC";
 		Query query = em.createQuery(q);

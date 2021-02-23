@@ -104,9 +104,10 @@ public class DashboardController {
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			@RequestParam(required=false) String text,
+			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
-		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text);
+		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, getErrors);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportEsperienze:%s - %s", istitutoId, annoScolastico));
 		}

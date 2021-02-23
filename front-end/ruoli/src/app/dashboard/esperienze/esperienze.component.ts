@@ -30,6 +30,7 @@ export class DashboardEsperienzeComponent implements OnInit {
   annoScolastico = '';
   text = '';
   esperienze = [];
+  findErrors: boolean = false;
   tipologieMap = {
     1: {color: 'rgba(255, 0, 0, 0.9)', label: 'Testimonianza'},
     2: {color: 'rgba(255, 128, 0, 0.9)', label: 'Formazione'},
@@ -93,7 +94,7 @@ export class DashboardEsperienzeComponent implements OnInit {
   formatterIstituto = (x: {name: string}) => x.name;
 
   getReport() {
-    this.dataService.getReportEsperienze(this.istituto.id, this.annoScolastico, this.text)
+    this.dataService.getReportEsperienze(this.istituto.id, this.annoScolastico, this.text, this.findErrors)
       .subscribe(r => {
         if(r) {
           this.esperienze = r;
@@ -110,7 +111,7 @@ export class DashboardEsperienzeComponent implements OnInit {
   }
 
   getEsperienzeCsv() {
-    this.dataService.getEsperienzeCsv(this.istituto.id, this.annoScolastico, this.text).subscribe((doc) => {
+    this.dataService.getEsperienzeCsv(this.istituto.id, this.annoScolastico, this.text, this.findErrors).subscribe((doc) => {
       const downloadLink = document.createElement("a");
       downloadLink.href = doc.url;
       downloadLink.download = doc.filename;
