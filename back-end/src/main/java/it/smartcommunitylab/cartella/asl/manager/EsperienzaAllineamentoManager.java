@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,10 @@ public class EsperienzaAllineamentoManager {
 	EsperienzaSvoltaRepository esperienzaSvoltaRepository;
 	
 	public void addEsperienzaSvoltaAllineamento(Long esperienzaSvoltaId) {
+		deleteEsperienzaSvoltaAllineamento(esperienzaSvoltaId);
 		EsperienzaSvoltaAllineamento esa = new EsperienzaSvoltaAllineamento();
 		esa.setEspSvoltaId(esperienzaSvoltaId);
-		esperienzaAllineamentoRepository.save(esa);
+		esperienzaAllineamentoRepository.save(esa);			
 	}
 	
 	public void allineaEsperienzaSvolta(EsperienzaSvoltaAllineamento esperienzaSvoltaAllineamento) {
@@ -72,8 +75,8 @@ public class EsperienzaAllineamentoManager {
 	}
 
 	public void deleteEsperienzaSvoltaAllineamento(Long esperienzaSvoltaId) {
-		EsperienzaSvoltaAllineamento esa = esperienzaAllineamentoRepository.findByEspSvoltaId(esperienzaSvoltaId);
-		if(esa != null) {
+		List<EsperienzaSvoltaAllineamento> list = esperienzaAllineamentoRepository.findByEspSvoltaId(esperienzaSvoltaId);
+		for(EsperienzaSvoltaAllineamento esa : list) {
 			esperienzaAllineamentoRepository.delete(esa);
 		}
 	}

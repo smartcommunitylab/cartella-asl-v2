@@ -10,7 +10,7 @@ import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 @Repository
 public interface EsperienzaAllineamentoRepository extends JpaRepository<EsperienzaSvoltaAllineamento, Long> {
 
-	public EsperienzaSvoltaAllineamento findByEspSvoltaId(Long espSvoltaId);
+	public List<EsperienzaSvoltaAllineamento> findByEspSvoltaId(Long espSvoltaId);
 	public List<EsperienzaSvoltaAllineamento> findByDaAllineare(Boolean daAllineare);
 
 }
