@@ -196,7 +196,7 @@ public class DashboardManager extends DataEntityManager {
 				+ " ON es.id=esa.espSvoltaId"
 				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
 		if(Utils.isNotEmpty(text)) {
-			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))";
+			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text))";
 		}
 		if(getErrors) {
 			q += " AND esa.allineato = false AND esa.numeroTentativi > 0";
