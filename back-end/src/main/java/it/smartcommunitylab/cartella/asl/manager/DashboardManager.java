@@ -235,6 +235,7 @@ public class DashboardManager extends DataEntityManager {
 				report.setNumeroTentativi(esa.getNumeroTentativi());
 				report.setErrore(esa.getErrore());
 				report.setInvio(esa.getInvio());
+				report.setUltimoAllineamento(esa.getUltimoAllineamento());
 			}
 			list.add(report);
 		}

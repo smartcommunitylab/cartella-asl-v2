@@ -80,7 +80,7 @@
                     <td>{{getTipologia(esp.tipologia)}}</td>
                     <td>{{esp.dataInizio}} <br/> {{esp.dataFine}}</td>
                     <td><span ngbTooltip="validate / totali">{{esp.oreValidate}} / {{esp.oreTotali}}</span></td>
-                    <td>{{esp.stato}}</td>
+                    <td><span ngbTooltip="{{getDataAllineamento(esp)}}">{{esp.stato}}</span></td>
                     <td>
                         <i *ngIf="esp.stato=='valida' && esp.allineato" class="material-icons ok"
                         ngbTooltip="esperienza allineata">check_circle_outline</i> 

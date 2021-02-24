@@ -106,6 +106,14 @@ export class DashboardEsperienzeComponent implements OnInit {
     return this.tipologieMap[id]['label'];
   }
 
+  getDataAllineamento(esp) {
+    var label = 'ultimo allineamento: ';
+    if(esp.ultimoAllineamento) {
+      label = label +  moment(esp.ultimoAllineamento).format("DD-MM-YYYY hh:mm");
+    }
+    return label;
+  }
+
   copyText(text) {
     ngCopy(text);
   }

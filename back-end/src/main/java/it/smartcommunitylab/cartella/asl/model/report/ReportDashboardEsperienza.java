@@ -34,6 +34,7 @@ public class ReportDashboardEsperienza {
 	private int numeroTentativi;
 	private String errore;
 	private String invio;
+	private Long ultimoAllineamento;
 	
 	public Long getEsperienzaId() {
 		return esperienzaId;
@@ -136,5 +137,11 @@ public class ReportDashboardEsperienza {
 	}
 	public void setAttivitaAlternanzaId(Long attivitaAlternanzaId) {
 		this.attivitaAlternanzaId = attivitaAlternanzaId;
+	}
+	public Long getUltimoAllineamento() {
+		return ultimoAllineamento;
+	}
+	public void setUltimoAllineamento(Long ultimoAllineamento) {
+		this.ultimoAllineamento = ultimoAllineamento;
 	}
 }
