@@ -65,7 +65,7 @@ public class InfoTNAlignExpService {
 	@Autowired
 	private ErrorLabelManager errorLabelManager;
 
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	private ObjectMapper mapper = new ObjectMapper();
 
 	Map<String, String> infoTNAslCodDesr = Stream.of(new AbstractMap.SimpleEntry<>("10", "Tirocinio curriculare"),
