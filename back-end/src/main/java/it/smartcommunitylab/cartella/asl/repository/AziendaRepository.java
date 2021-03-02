@@ -14,7 +14,13 @@ import it.smartcommunitylab.cartella.asl.model.Azienda;
 public interface AziendaRepository extends JpaRepository<Azienda, String> {
 
 	@Modifying
-	@Query("update Azienda az0 set nome=:#{#az.nome}, description=:#{#az.description}, idTipoAzienda=:#{#az.idTipoAzienda}, address=:#{#az.address}, partita_iva=:#{#az.partita_iva}, email=:#{#az.email}, pec=:#{#az.pec}, phone=:#{#az.phone}, latitude=:#{#az.latitude}, longitude=:#{#az.longitude} where id = :#{#az.id}")
+	@Query("update Azienda az0 set nome=:#{#az.nome}, description=:#{#az.description}, idTipoAzienda=:#{#az.idTipoAzienda}, "
+			+ "address=:#{#az.address}, partita_iva=:#{#az.partita_iva}, email=:#{#az.email}, pec=:#{#az.pec}, phone=:#{#az.phone}, "
+			+ "geocode=:#{#az.geocode}, businessName=:#{#az.businessName}, latitude=:#{#az.latitude}, longitude=:#{#az.longitude}, "
+			+ "atecoCode=:#{#az.atecoCode}, atecoDesc=:#{#az.atecoDesc}, legaleRappresentante=:#{#az.legaleRappresentante}, "
+			+ "medicoCompetente=:#{#az.medicoCompetente}, responsabileSicurezza=:#{#az.responsabileSicurezza}, "
+			+ "viaPiazza=:#{#az.viaPiazza}, cap=:#{#az.cap}, comune=:#{#az.comune}, provincia=:#{#az.provincia} "
+			+ "where id = :#{#az.id}")
 	public void update(@Param("az") Azienda az);
 
 	@Query("SELECT a FROM Azienda a WHERE a.extId =:#{#extId}")
