@@ -37,6 +37,7 @@ export class EnteDettaglioModificaComponent implements OnInit {
   tipoInterna: boolean = false;
   ateco: {codice: string, descrizione: string};
   atecoEntry: any;
+  attachedAteco = [];
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
 
@@ -60,18 +61,12 @@ export class EnteDettaglioModificaComponent implements OnInit {
       if(this.ente.address) {
         this.ente.address = this.ente.address.trim();
       }
-      if(this.ente.atecoCode) {
-        if(this.ente.atecoCode.length > 0) {
-          this.ateco.codice = this.ente.atecoCode[0];
-          this.atecoEntry.codice = this.ente.atecoCode[0];
+      if (this.ente.atecoCode) {
+        for (var i = 0; i < this.ente.atecoCode.length; i++) {
+          let atecoEntry = {codice: this.ente.atecoCode[i], descrizione: this.ente.atecoDesc[i]};
+          this.attachedAteco.push(atecoEntry);
         }
-      }
-      if(this.ente.atecoDesc) {
-        if(this.ente.atecoDesc.length > 0) {
-          this.ateco.descrizione = this.ente.atecoDesc[0];
-          this.atecoEntry.descrizione = this.ente.atecoDesc[0];
-        }
-      }
+      }  
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -104,15 +99,18 @@ export class EnteDettaglioModificaComponent implements OnInit {
       (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
       (this.ente.phone) ? this.ente.phone = this.ente.phone.trim() : this.ente.phone = null;
 
-      if(!this.ente.atecoCode) {
-        this.ente.atecoCode = [];
-      }
-      if(!this.ente.atecoDesc) {
-        this.ente.atecoDesc = [];
-      }
-      this.ente.atecoCode[0] = this.ateco.codice;
-      this.ente.atecoDesc[0] = this.ateco.descrizione;
+      this.ente.atecoCode = [];
+      this.ente.atecoDesc = [];
 
+      if (this.attachedAteco && this.attachedAteco.length > 0) {
+        this.attachedAteco.forEach(ateco => {
+          this.ente.atecoCode.push(ateco.codice);
+          this.ente.atecoDesc.push(ateco.descrizione)
+        })
+      } 
+
+      delete this.ente['registrazioneEnte'];
+      
       this.dataService.addAzienda(this.ente).subscribe((res) => {
         this.router.navigate(['../../'], { relativeTo: this.route });
       },
@@ -223,13 +221,6 @@ export class EnteDettaglioModificaComponent implements OnInit {
 
   formatterAteco = (x: {codice: string, descrizione: string}) => x.codice;
 
-  selectAteco(entry: any) {
-    if(entry && entry.codice && entry.descrizione) {
-      this.ateco.codice = entry.codice;
-      this.ateco.descrizione = entry.descrizione;
-    }    
-  }
-
   menuContentShow() {
     this.showContent = !this.showContent;
   }
@@ -296,6 +287,22 @@ export class EnteDettaglioModificaComponent implements OnInit {
   trimValue(event, type) {
     if (type == 'titolo') {
       (event.target.value.trim().length == 0) ? this.forceTitoloErrorDisplay = true : this.forceTitoloErrorDisplay = false;
+    }
+  }
+
+  selectAteco(entry: any) {
+    if (entry && entry.codice && entry.descrizione) {
+      let index = this.attachedAteco.findIndex(x => x.codice === entry.codice);
+      if (index < 0) {
+        this.attachedAteco.push(entry);
+      }
+    }
+  }
+
+  deleteAteco(entry: any) {
+    let index = this.attachedAteco.findIndex(x => x.codice === entry.codice);
+    if (index > -1) {
+      this.attachedAteco.splice(index, 1);
     }
   }
 

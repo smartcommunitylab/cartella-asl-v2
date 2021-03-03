@@ -58,6 +58,8 @@ export class OffertaDettaglioModificaComponent implements OnInit {
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
 
   @ViewChild('calendarStart') calendarStart: DatePickerComponent;

@@ -5,22 +5,24 @@
         </div>
         <div class="col-6">
             <div class="row v-center float-right">
-                <button type="button" class="btn btn-danger btn-icon btn-xs" placement="bottom"
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
                     ngbTooltip="Annulla le modifiche" (click)="cancel()">
-                    <span class="row modalButtonTextStyle">
-                        <span class="v-center">Annulla&nbsp;</span>&nbsp;
-                        <span>
-                            <i class="material-icons">close</i>
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
                         </span>
                     </span>
                 </button>
                 &nbsp;&nbsp;
-                <button *ngIf="ente.origin=='CONSOLE'" class="btn btn-success btn-icon btn-xs" placement="bottom" ngbTooltip="Modifica l'attività"
+                <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom" ngbTooltip="Modifica l'attività"
                     (click)="save(myForm)">
-                    <span class="row modalButtonTextStyle">
-                        <span class="v-center">Salva&nbsp;</span>&nbsp;
-                        <span>
-                            <i class="material-icons">save</i>
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
                         </span>
                     </span>
                 </button>
@@ -56,6 +58,10 @@
                             <label for="email" *ngIf="ente.email" class="active">Email</label>
                             <input type="text" class="form-control" [(ngModel)]="ente.email" id="email" name="email"
                                 #EmailInput="ngModel" placeholder="Email">
+                            <div class="invalid-feedback"
+                                [class.d-block]="forceErrorDisplayMail || (EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay))">
+                                Campo necessario.
+                            </div>
                         </div>
                     </div>
                     <div class="row v-center form-group">

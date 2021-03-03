@@ -16,7 +16,7 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   @ViewChild('calendarStart') calendarStart: DatePickerComponent;
   @ViewChild('calendarEnd') calendarEnd: DatePickerComponent;
-
+  
   openStart() {
     this.calendarStart.api.open();
   }
@@ -42,7 +42,15 @@ export class CreaAttivitaModalComponent implements OnInit {
   oraFine = '18';
   fieldsError: string;
   tipologia: any = 'Tipologia';
-  date;
+  date: {
+    dataInizio: moment.Moment,
+    dataFine: moment.Moment,
+    maxFine: moment.Moment
+  } = {
+    dataInizio: null,
+    dataFine: null,
+    maxFine: null
+  };
   showSelect: boolean = true;
   aziende: Azienda[];
   azienda: any;
@@ -50,7 +58,8 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceEnteDisplay: boolean = false;
   pageSize = 20;
   tipoInterna: boolean = true;
-  schoolYear;
+  schoolYear: string;
+  schoolYears: string[] = [];
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   @Input() tipologie?: any;
   @Output() newAttivitaListener = new EventEmitter<Object>();
@@ -63,17 +72,18 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   datePickerConfig = {
     locale: 'it',
-    firstDayOfWeek: 'mo'
+    firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
 
   constructor(public activeModal: NgbActiveModal, private dataService: DataService) { }
 
   ngOnInit() {
-    this.date = {
-      dataInizio: moment(),
-      dataFine: moment()
-    }
-    this.schoolYear = this.dataService.schoolYear;
+    this.date.dataInizio = moment();
+    this.date.dataFine = moment();
+    this.checkDate();
+    this.schoolYear = this.getAnnoScolastico(this.date.dataInizio);
   }
 
   onChange(tipoId) {
@@ -84,11 +94,51 @@ export class CreaAttivitaModalComponent implements OnInit {
     })
   }
 
+  checkDate() {
+    var anno = this.getAnnoScolasticoNum(this.date.dataInizio);
+    this.date.maxFine = moment([anno + 1, 8, 30]);
+  }
+
   myHandler() {
-    this.dataService.getSchoolYear(this.dataService.istitutoId,
-      moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf()).subscribe((resp => {
-        this.schoolYear = resp.schoolYear;
-      }))
+    this.checkDate();
+    this.schoolYears = [];
+
+    var inizioSettembre = moment([this.date.dataInizio.year(), 8, 1]);
+    var fineSettembre = moment([this.date.dataInizio.year(), 9, 1]);
+    var annoScolasticoPrec = moment().year(this.date.dataInizio.year() - 1).format('YYYY') + '-' + this.date.dataInizio.format('YY');
+    var annoScolasticoSucc = this.date.dataInizio.format('YYYY') + '-' + moment().year(this.date.dataInizio.year() + 1).format('YY');
+    if(this.date.dataInizio.isBefore(inizioSettembre)) {
+      this.schoolYears.push(annoScolasticoPrec);
+    }
+    if(this.date.dataFine.isAfter(fineSettembre)) {
+      this.schoolYears.push(annoScolasticoSucc);
+    }
+    if(this.date.dataInizio.isSameOrAfter(inizioSettembre) && this.date.dataFine.isBefore(fineSettembre)) {
+      this.schoolYears.push(annoScolasticoPrec);
+      this.schoolYears.push(annoScolasticoSucc);
+    }
+    if(!this.schoolYears.includes(this.schoolYear)) {
+      this.schoolYear = this.schoolYears[0].slice();
+    }
+  }
+
+  getAnnoScolasticoNum(now) {
+    var lastDay = moment(now).month(8).date(1);
+    if (now.isBefore(lastDay)) {
+      return (now.get('year') - 1);
+    }
+    return now.get('year');
+  }
+
+  getAnnoScolastico(now) {
+    var annoScolastico;
+    var lastDay = moment().month(8).date(1);
+    if (now.isBefore(lastDay)) {
+      annoScolastico = moment().year(now.year() - 1).format('YYYY') + '-' + now.format('YY');
+    } else {
+      annoScolastico = now.format('YYYY') + '-' + moment().year(now.year() + 1).format('YY');
+    }
+    return annoScolastico;
   }
 
   create() { //create or update
@@ -140,7 +190,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.tipologia && this.tipologia != 'Tipologia')
-        && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
+        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine < this.date.maxFine))
       );
     } else {
       return (
@@ -149,9 +199,9 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
-        && (this.azienda.id != '')
+        && (this.azienda && this.azienda.id != '')
         && (this.tipologia && this.tipologia != 'Tipologia')
-        && (this.date.dataInizio && this.date.dataFine && this.date.dataInizio <= this.date.dataFine)
+        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine < this.date.maxFine))
       );
     }
   }

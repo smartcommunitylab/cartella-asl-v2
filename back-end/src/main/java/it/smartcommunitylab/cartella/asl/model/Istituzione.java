@@ -26,6 +26,7 @@ public class Istituzione {
 	private String address;
 	private String phone;
 	private String email;
+	private String pec;
 	
 	private Double hoursThreshold;
 	
@@ -137,5 +138,13 @@ public class Istituzione {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getPec() {
+		return pec;
+	}
+
+	public void setPec(String pec) {
+		this.pec = pec;
 	}
 }

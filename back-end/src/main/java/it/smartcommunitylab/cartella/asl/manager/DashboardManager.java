@@ -188,14 +188,18 @@ public class DashboardManager extends DataEntityManager {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, String text) {
+	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, 
+			String text, boolean getErrors) {
 		String q = "SELECT es, aa, esa FROM EsperienzaSvolta es LEFT JOIN AttivitaAlternanza aa"
 				+ " ON es.attivitaAlternanzaId=aa.id"
 				+ " LEFT JOIN EsperienzaSvoltaAllineamento esa"
 				+ " ON es.id=esa.espSvoltaId"
 				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
 		if(Utils.isNotEmpty(text)) {
-			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))";
+			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text))";
+		}
+		if(getErrors) {
+			q += " AND esa.allineato = false AND esa.numeroTentativi > 0";
 		}
 		q += " ORDER BY aa.dataInizio DESC";
 		Query query = em.createQuery(q);
@@ -213,6 +217,7 @@ public class DashboardManager extends DataEntityManager {
 			EsperienzaSvoltaAllineamento esa = (EsperienzaSvoltaAllineamento)obj[2];
 			int oreValidate = getOreValidate(es.getId());
 			ReportDashboardEsperienza report = new ReportDashboardEsperienza();
+			report.setAttivitaAlternanzaId(es.getAttivitaAlternanzaId());
 			report.setEsperienzaId(es.getId());
 			report.setStudenteId(es.getStudenteId());
 			report.setNominativoStudente(es.getNominativoStudente());
@@ -229,6 +234,8 @@ public class DashboardManager extends DataEntityManager {
 				report.setAllineato(esa.isAllineato());
 				report.setNumeroTentativi(esa.getNumeroTentativi());
 				report.setErrore(esa.getErrore());
+				report.setInvio(esa.getInvio());
+				report.setUltimoAllineamento(esa.getUltimoAllineamento());
 			}
 			list.add(report);
 		}
@@ -285,7 +292,8 @@ public class DashboardManager extends DataEntityManager {
 		sb.append(" ON es.attivitaAlternanzaId=aa.id WHERE aa.istitutoId=(:istitutoId) and aa.annoScolastico=(:annoScolastico)");
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text)"
+					+ " OR UPPER(es.cfStudente) LIKE (:text))");
 		}
 		
 		sb.append(" ORDER BY aa.dataInizio DESC, aa.titolo ASC");

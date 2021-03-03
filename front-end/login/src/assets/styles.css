@@ -14388,3 +14388,6 @@ div.dp-input-container> input.dp-picker-input{
 .center-formGroup{
   margin-top: 0.5rem;
 }
+.font-10 {
+  font-size: 12px!important;
+}

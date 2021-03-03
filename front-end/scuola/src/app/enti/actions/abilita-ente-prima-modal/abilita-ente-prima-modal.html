@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white font-25">ATTENZIONE</h4>
+    </div>
+</div>
+<div class="modal-body">
+    <p class="text-center text-bold color-1">Sarà inviato un invito alla mail <a href="" onclick="return false;"
+            class="footer-textUnderline">{{ ente.email }}</a> per accedere al sistema come ente "{{ ente.nome }}"</p>
+    <br />
+    <div class="card-wrapper">
+        <div class="card-inner">
+            <div class="card-body">
+                <p><span class="text-bold">La mail inviata dal sistema a <a href="" onclick="return false;"
+                            class="footer-textUnderline">{{ ente.email }}</a> conterrà un link per l’attivazione del
+                        profilo</span></p>
+                <p>Clicando sul link l’ente potrà prendere il controllo del proprio profilo sul sistema EDIT. Da quel
+                    momento in poi, la scuola non sarà più in grado di modificare le informazioni relative all’ente, né di creare
+                    offerte a suo nome.</p>
+                <br />
+                <p><span class="text-bold">Controlla che la mail di riferimento sia corretta e che vi siano accordi in
+                        essere con l’ente invitato!</span></p>
+                <p>L’invito ad accedere permetterà all’ente di:</p>
+                <br />
+                <ul>
+                    <li>
+                        <p>Validare autonomamente le presenze dei ragazzi che vi svolgono tirocinio</p>
+                    </li>
+                    <li>
+                        <p>Creare offerte di attività per le scuole</p>
+                    </li>
+                    <li>
+                        <p>Visualizzare lo stato delle attività presso la sua sede</p>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="font-weight-bold text-center">Procedere con l’attivazione del profilo dell’ente "{{ ente.nome }}"?</div>
+</div>
+<br>
+<div class="text-center">
+    <button class="btn btn-success btn-icon btn-xs btnSave m-top22" (click)="abilita()">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Procedi</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+    &nbsp;&nbsp;
+    <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22"
+        (click)="activeModal.close('Close click')">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+</div>
+<br>

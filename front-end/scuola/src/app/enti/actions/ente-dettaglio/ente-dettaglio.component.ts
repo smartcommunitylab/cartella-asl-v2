@@ -2,9 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import * as Leaflet from 'leaflet';
 import { EnteCancellaModal } from '../cancella-ente-modal/ente-cancella-modal.component';
+import { AbilitaEntePrimaModal } from '../abilita-ente-prima-modal/abilita-ente-prima-modal.component';
+import { AbilitaEnteSecondaModal } from '../abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
+import { AnnullaInvitoModal } from '../annulla-invito-modal/annulla-invito-modal.component';
+import { GrowlerMessageType, GrowlerService } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -17,7 +20,8 @@ export class EnteDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private growler: GrowlerService) { }
 
   ente;
   map;
@@ -42,7 +46,8 @@ export class EnteDettaglioComponent implements OnInit {
   pianoTipologie = {};
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
-  menuContent = "In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati.";
+  menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Attiva accesso” puoi invitare un ente a crearsi un account in EDIT per gestire presenze, offerte e documentazione';
+  
   showContent: boolean = false;
 
   breadcrumbItems = [
@@ -103,11 +108,14 @@ export class EnteDettaglioComponent implements OnInit {
      });
   }
 
-
   menuContentShow() {
+    if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      this.menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente è già stato invitato ad attivare un profilo. Attendi una risposta o, se pensi che ci sia stato un errore, annulla l’invito.'
+    } else if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      this.menuContent = "In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente ha un profilo attivo, quindi per modificare il suo profilo devi rivolgerti al responsabile dell’ente.";
+    }
     this.showContent = !this.showContent;
   }
-
 
   drawMap(): void {
     this.map = Leaflet.map('map');
@@ -124,6 +132,71 @@ export class EnteDettaglioComponent implements OnInit {
 
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
-  } 
+  }
+  
+  setStatus(ente) {
+    let stato = 'Disponibile all’attivazione';
+    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+      stato = 'In attivazione';
+    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+      stato = 'Con account';
+    }
+    return stato;
+  }
+
+  styleOption(ente) {
+    var style = {
+      'color': '#FFB54C', //orange
+      'font-weight': 'bold'
+    };
+
+    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+      style['color'] = '#7FB2E5'; // grey
+    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+      style['color'] = '#00CF86'; // green
+    }
+
+    return style;
+  }
+
+  abilitaEnte() {
+    if (!this.ente.email) {
+      this.growler.growl('<b>Errore: nessun indirizzo email associato all\'ente.</b><br/>Inserire l\'indirizzo e riprovare. Si consiglia di contattare direttamente l\'ente per ottenere un indirizzo aggiornato e attivo.', GrowlerMessageType.Danger);
+    } else {
+      const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
+      modalRef.componentInstance.ente = this.ente;
+      modalRef.componentInstance.onAbilita.subscribe((res) => {
+        const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
+        modalRef.componentInstance.ente = this.ente;
+        modalRef.componentInstance.onAbilita.subscribe((res) => {
+          //api call.
+          this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+            this.router.navigate(['../../'], { relativeTo: this.route });
+          })
+        });
+      })
+    }
+
+  }
+
+  annullaInvitoEnte() {
+    const modalRef = this.modalService.open(AnnullaInvitoModal, { windowClass: "abilitaEnteModalClass" });
+    modalRef.componentInstance.ente = this.ente;
+    modalRef.componentInstance.onAnnulla.subscribe((res) => {
+      this.dataService.annullaRichiestaRegistrazione(this.ente).subscribe((res) => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      })
+    });
+  }
+  
+  isModificable(ente) {
+    var isModificable = true;
+    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+      isModificable = false;
+    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+      isModificable = false;
+    }
+    return isModificable;
+  }
 
 }

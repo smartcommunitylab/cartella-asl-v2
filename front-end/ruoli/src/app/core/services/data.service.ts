@@ -227,6 +227,25 @@ export class DataService {
       );
   }
 
+  searchEnti(page, pageSize, text) {
+    let params = new HttpParams();
+    params = params.append('page', page);
+    params = params.append('size', pageSize);
+    params = params.append('text', text);
+    return this.http.get<any>(
+      this.host + "/dashboard/enti",
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(enti => {
+          return (enti);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   getStudenti(page, pageSize, filters) {
     let params = new HttpParams();
     params = params.append('page', page);
@@ -390,6 +409,23 @@ export class DataService {
       );    
   }
 
+  reportAttivita(attivitaId): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('attivitaId', attivitaId);
+    return this.http.get<any>(
+      this.host + '/dashboard/attivita/detail',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
   getReportRegistrazioni(istitutoId, cf):  Observable<any> {
     let params = new HttpParams();
     params = params.append('istitutoId', istitutoId);
@@ -408,12 +444,15 @@ export class DataService {
       );    
   }
 
-  getReportEsperienze(istitutoId, annoScolastico, text):  Observable<any> {
+  getReportEsperienze(istitutoId, annoScolastico, text, getErrors):  Observable<any> {
     let params = new HttpParams();
     params = params.append('istitutoId', istitutoId);
     params = params.append('annoScolastico', annoScolastico);
     if(text) {
       params = params.append('text', text);
+    }
+    if(getErrors) {
+      params = params.append('getErrors', getErrors);
     }
     return this.http.get<any>(
       this.host + '/dashboard/esperienze',
@@ -429,13 +468,50 @@ export class DataService {
       );    
   }
 
-  getEsperienzeCsv(istitutoId, annoScolastico, text): Observable<any> {
+  getReportRegistrazioneEnte(enteId:string):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('enteId', enteId);
+    return this.http.get<any>(
+      this.host + '/dashboard/registrazione-ente',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  deleteRegistrazioneEnte(registrazioneId:string):  Observable<any> {
+    let params = new HttpParams();
+    params = params.append('registrazioneId', registrazioneId);
+    return this.http.delete<any>(
+      this.host + '/dashboard/registrazione-ente',
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );    
+  }
+
+  getEsperienzeCsv(istitutoId, annoScolastico, text, getErrors): Observable<any> {
     let url = this.host + '/export/csv/studente';
     let params = new HttpParams();
     params = params.append('istitutoId', istitutoId);
     params = params.append('annoScolastico', annoScolastico);
     if(text) {
       params = params.append('text', text);
+    }
+    if(getErrors) {
+      params = params.append('getErrors', getErrors);
     }
     return this.http.get(
       this.host + '/export/csv/dashboard/esperienze',

@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
+import { CreaNuovaUtenteModalComponent } from '../crea-nuova-utente-modal/crea-nuova-utente-modal.component';
+import { RuoloCancellaModal } from '../ruolo-cancella-modal/ruolo-cancella-modal.component';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -42,22 +44,18 @@ export class EnteDettaglioComponent implements OnInit {
   tipoInterna: boolean = false;
   codiceAteco: string = '';
   descAteco: string = '';
-  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati.";
+  ruoli;
+  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza.";
   showContent: boolean = false;
+  attachedAteco = [];
 
   ngOnInit() {
     this.dataService.getAzienda().subscribe((res) => {
       this.ente = res;
-      if(this.ente.atecoCode) {
-        if(this.ente.atecoCode.length > 0) {
-          this.codiceAteco = this.ente.atecoCode[0];
-        }
-      }
-      if(this.ente.atecoDesc) {
-        if(this.ente.atecoDesc.length > 0) {
-          this.descAteco = this.ente.atecoDesc[0];
-        }
-      }
+      this.updateAtecoCodiceList();
+      this.dataService.getRuoliByEnte().subscribe((roles) => {
+        this.initializeRole(roles);
+      });
       setTimeout(() => { //ensure that map div is rendered
         this.drawMap();
       }, 0);
@@ -89,6 +87,53 @@ export class EnteDettaglioComponent implements OnInit {
 
   hasCoordinate(): boolean {
     return (this.ente.latitude && this.ente.longitude);
-  } 
+  }
+  
+  aggiungiAccount() {
+    const modalRef = this.modalService.open(CreaNuovaUtenteModalComponent, { windowClass: "creaAttivitaModalClass" });
+    modalRef.componentInstance.newUtenteListener.subscribe((role) => {
+      this.dataService.aggiungiRuoloReferenteAzienda(role).subscribe(res => {
+        this.dataService.getRuoliByEnte().subscribe((roles) => {
+          this.initializeRole(roles);
+        });
+      });
+    });
+  }
+
+  modificaAbilitati() {
+    this.router.navigate(['modifica/abilitati/'], { relativeTo: this.route });
+  }
+
+  updateAtecoCodiceList() {
+    this.attachedAteco = [];
+    if (this.ente.atecoCode && this.ente.atecoDesc) {
+      for (var i = 0; i < this.ente.atecoCode.length; i++) {
+        let atecoEntry = {codice: this.ente.atecoCode[i], descrizione: this.ente.atecoDesc[i]};
+        this.attachedAteco.push(atecoEntry);
+      }
+    }
+  }
+
+  deleteRuolo(ruolo) {
+    const modalRef = this.modalService.open(RuoloCancellaModal);
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      this.dataService.cancellaRuoloReferenteAzienda(ruolo.id).subscribe(res => {
+        this.dataService.getRuoliByEnte().subscribe((roles) => {
+          this.initializeRole(roles);
+        },
+          (err: any) => console.log(err),
+          () => console.log('getRuoliByEnte'));
+      });
+    });
+  }
+
+  initializeRole(roles) {
+    this.ruoli = roles.filter(role => {
+      if (role.userId == this.dataService.ownerId) {
+        return false;
+      }
+      return true;
+    });
+  }
 
 }

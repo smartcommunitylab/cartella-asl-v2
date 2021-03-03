@@ -99,12 +99,7 @@ public class CartellaImportInstitutes {
 					Istituzione institute = convertToInstitute(istExt);
 					istituzioneRepository.save(institute);
 					totalSaved = totalSaved + 1;
-				} else {
-				    if (Utils.isNotEmpty(istExt.getCf())) {
-				    	stored.setCf(istExt.getCf());
-				    	istituzioneRepository.save(stored);
-				    }
-				}
+				} 
 			}
 
 			int numberOfElements = Integer.valueOf(pagedResponseMap.get("numberOfElements").toString());

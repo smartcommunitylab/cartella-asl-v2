@@ -10,7 +10,6 @@ import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } f
 import * as moment from 'moment';
 import { DatePickerComponent } from 'ng2-date-picker';
 import { environment } from '../../../../environments/environment';
-import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-modifica-dettaglio',
@@ -23,8 +22,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private geoService: GeoService,
-    private growler: GrowlerService) { }
+    private geoService: GeoService) { }
 
   attivita: AttivitaAlternanza;
   esperienze;
@@ -43,10 +41,24 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   tipologie;
   azienda: any;
   place: any;
-  date;
+  date: {
+    dataInizio: moment.Moment,
+    dataFine: moment.Moment,
+    maxFine: moment.Moment,
+    minInizio: moment.Moment,
+    prevDataInizio: moment.Moment
+  } = {
+    dataInizio: null,
+    dataFine: null,
+    maxFine: null,
+    minInizio: null,
+    prevDataInizio: null
+  };
   forceEnteDisplay: boolean = false;
   start: moment.Moment;
   end: moment.Moment;
+  schoolYear: string;
+  schoolYears: string[] = [];
   forceTitoloErrorDisplay: boolean = false;
   forceReferenteScuolaErrorDisplay: boolean = false;
   forceReferenteEsternoErrorDisplay: boolean = false;
@@ -54,9 +66,11 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceDalleAlleErrorDisplay: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
+  forceAnnoScolasticoErrorDisplay: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
+  zeroStudent: boolean = true;
   attivitaTipologia;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
@@ -75,6 +89,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   datePickerConfig = {
     locale: 'it',
     firstDayOfWeek: 'mo',
+    min: moment().subtract(60, 'months'),
+    max: moment().add(36,'months')
   };
 
   @ViewChild('calendarStart') calendarStart: DatePickerComponent;
@@ -98,11 +114,10 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
   ngOnInit() {
     this.evn.modificationFlag = true;
-    this.date = {
-      dataInizio: moment(),
-      dataFine: moment(),
-      prevDataInizio: moment()
-    }
+    this.date.dataInizio = moment();
+    this.date.dataFine = moment();
+    this.date.prevDataInizio = moment();
+    this.date.minInizio = moment([2018, 8, 1]);
 
     this.route.params.subscribe(params => {
       let id = params['id'];
@@ -115,6 +130,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.place.name = this.attivita.luogoSvolgimento;
           this.place.location = [this.attivita.latitude, this.attivita.longitude];
           this.esperienze = res.esperienze;
+          this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
           this.tipologie.filter(tipo => {
             if (tipo.id == this.attivita.tipologia) {
               this.tipoInterna = tipo.interna;
@@ -132,6 +148,9 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.date.prevDataInizio = moment(dataInizio.getTime());
           var dataFine = new Date(this.attivita.dataFine);
           this.date.dataFine = moment(dataFine);
+          this.schoolYear = this.attivita.annoScolastico.slice();
+          this.checkDate();
+      
           this.titolo = this.attivita.titolo;
           // tackle incase saved with 1 digit in past.
           this.attivita.oraInizio = this.formatTwoDigit(this.attivita.oraInizio);
@@ -176,6 +195,34 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     } else {
       return tipologiaId;
     }
+  }
+
+  checkDate() {
+    if(this.zeroStudent) {
+      var anno = this.getAnnoScolasticoNum(this.date.dataInizio);
+      this.date.maxFine = moment([anno + 1, 8, 30]);
+      this.date.minInizio = moment([2018, 8, 1]);
+    } else {
+      var annoFisso = parseInt(this.attivita.annoScolastico.substring(0, 4), 10);
+      this.date.maxFine = moment([annoFisso + 1, 8, 30]);
+      this.date.minInizio = moment([annoFisso, 8, 1]);
+    }
+  }
+
+  getAnnoScolasticoNum(now) {
+    var lastDay = moment(now).month(8).date(1);
+    if (now.isBefore(lastDay)) {
+      return (now.get('year') - 1);
+    }
+    return now.get('year');
+  }
+
+  getAnnoScolastico(data: moment.Moment) {
+    var year = data.year();
+    var startAcademicYear = moment().set({ 'year': year, 'month': 8, 'date': 1 });
+    var isNewAcademicYear = data.isSameOrAfter(startAcademicYear);
+    var startYear = isNewAcademicYear ? year : year - 1;
+    return startYear + "-" + (startYear + 1).toString().substring(2, 4);
   }
 
   cancel() {
@@ -239,6 +286,13 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       }
     }
 
+    if ((this.date.dataInizio < this.date.minInizio) || (this.date.dataFine > this.date.maxFine)
+      || (this.date.dataInizio > this.date.dataFine)) {
+      this.forceAnnoScolasticoErrorDisplay = true;
+    } else {
+      this.forceAnnoScolasticoErrorDisplay = false;
+    }
+
     if (this.place) {
       this.attivita.luogoSvolgimento = this.place.name;
       this.attivita.latitude = this.place.location[0];
@@ -247,9 +301,10 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
     this.attivita.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
     this.attivita.dataFine = moment(this.date.dataFine, 'YYYY-MM-DD').valueOf();
+    this.attivita.annoScolastico = this.schoolYear;
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
-      && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
+      && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay && !this.forceAnnoScolasticoErrorDisplay
       && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
 
       (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
@@ -337,26 +392,30 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   changeDate(event: any) {
-    if (this.date.dataInizio) {
-      if (!this.date.dataInizio.isSame(this.date.prevDataInizio)) {
-        var nuovoAnnoScolastico = this.getAnnoScolastico(this.date.dataInizio);
-        console.log(nuovoAnnoScolastico);
-        if (this.attivita.annoScolastico === nuovoAnnoScolastico) {
-          this.date.prevDataInizio = moment(this.date.dataInizio);
-        } else {
-          this.growler.growl("Attenzione, non è possibile cambiare l'anno scolastico!", GrowlerMessageType.Warning, 3000);
-          this.date.dataInizio = moment(this.date.prevDataInizio);
-        }
+    this.checkDate();
+    this.schoolYears = [];
+    if(this.zeroStudent) {
+      var inizioSettembre = moment([this.date.dataInizio.year(), 8, 1]);
+      var fineSettembre = moment([this.date.dataInizio.year(), 9, 1]);
+      var annoScolasticoPrec = moment().year(this.date.dataInizio.year() - 1).format('YYYY') + '-' + this.date.dataInizio.format('YY');
+      var annoScolasticoSucc = this.date.dataInizio.format('YYYY') + '-' + moment().year(this.date.dataInizio.year() + 1).format('YY');
+      if(this.date.dataInizio.isBefore(inizioSettembre)) {
+        this.schoolYears.push(annoScolasticoPrec);
       }
+      if(this.date.dataFine.isAfter(fineSettembre)) {
+        this.schoolYears.push(annoScolasticoSucc);
+      }
+      if(this.date.dataInizio.isSameOrAfter(inizioSettembre) && this.date.dataFine.isBefore(fineSettembre)) {
+        this.schoolYears.push(annoScolasticoPrec);
+        this.schoolYears.push(annoScolasticoSucc);
+      }
+      if(!this.schoolYears.includes(this.schoolYear)) {
+        this.schoolYear = this.schoolYears[0].slice();
+      }  
+    } else {
+      this.schoolYear = this.attivita.annoScolastico.slice();
+      this.schoolYears.push(this.schoolYear.slice());
     }
-  }
-
-  getAnnoScolastico(data: moment.Moment) {
-    var year = data.year();
-    var startAcademicYear = moment().set({ 'year': year, 'month': 8, 'date': 1 });
-    var isNewAcademicYear = data.isSameOrAfter(startAcademicYear);
-    var startYear = isNewAcademicYear ? year : year - 1;
-    return startYear + "-" + (startYear + 1).toString().substring(2, 4);
   }
 
   formatTwoDigit(n){

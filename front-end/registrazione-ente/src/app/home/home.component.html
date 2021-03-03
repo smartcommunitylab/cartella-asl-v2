@@ -1,0 +1,153 @@
+<div class="it-header-navbar-wrapper sticky">
+    <div class="row">
+        <div class="col-4">
+            <span class="row">
+                <a target="_blank" href="#" class="mr-5">
+                    <img src="assets/images/logo_trasparente.png" class="nav-logo">
+                </a>
+                &nbsp;
+               <span class="nav-logo-text">Esperienze Didattiche<br>Insieme al Territorio</span>
+            </span>            
+        </div>
+        <div class="col-8"></div>
+    </div>
+</div>
+<!-- LEGALE_RAPPRESENTANTE_AZIENDA HOMEPAGE-->
+<div class="mb-3 list-container md-margin" *ngIf="!linkExpired && role=='LEGALE_RAPPRESENTANTE_AZIENDA'">
+    <div class="text-center">
+        <span class="title color-black font-35">Benvenuto nel sistema Esperienze Didattiche Insieme al Territorio - EDIT</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-25">
+        <p class="color-grey text-semibold">Il sistema EDIT è lo strumento informatico per la gestione delle esperienze
+            di alternanza scuola lavoro degli studenti degli istituti superiori</p>
+        <br />
+        <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema <span class="text-capitalize">{{ nomeIstituto }}</span>.</p>
+        <br />
+        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite
+            l’indirizzo mail indicato dalla scuola.</p>
+        <br />
+        <div class="card-wrapper">
+            <div class="card-inner">
+                <div class="card-body">
+                    <div class="row font-28 text-vcenter">
+                        <span class="text-bold col-6 color-blu text-capitalize">
+                            {{ nomeEnte }}
+                        </span>
+                        <span class="text-bold col-6 color-blu">
+                            {{ email }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <p class="text-semibold color-black">Se l’ente e l’indirizzo mail corrispondono, procedi con la registrazione</p>
+    </div>
+    <br />
+    <br />
+    <div class="row color-grey">
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Google</p>
+            <br />
+            <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione è un account Google, usa l’autenticazione Google</p>
+        </div>
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">AAC</p>
+            <br />
+            <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione non è un account Google, registrati su AAC, il servizio di autenticazione dell’unità Smart Cities & Communities della Fondazione Bruno Kessler</p>
+        </div>
+    </div>
+</div>
+<!-- RIFERENTE_AZIENDA HOMEPAGE-->
+<div class="mb-3 list-container md-margin" *ngIf="!linkExpired && role!='LEGALE_RAPPRESENTANTE_AZIENDA'">
+    <div class="text-center">
+        <span class="title color-black font-35">Benvenuto nel sistema Esperienze Didattiche Insieme al Territorio - EDIT</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-25">
+        <p class="color-grey text-semibold">Il sistema EDIT è lo strumento informatico per la gestione delle esperienze
+            di alternanza scuola lavoro degli studenti degli istituti superiori</p>
+        <br />
+        <p class="color-blu text-semibold color-blu">Sei stato invitato ad accedere al sistema EDIT da <span class="text-capitalize">{{ nomeEnte }}</span>.</p>
+        <br />
+        <p class="color-black text-semibold">Dopo l’autenticazione, potrai accedere al profilo EDIT di <span class="text-capitalize">{{ nomeEnte }}</span> come Delegato</p>
+        <br />
+        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite la persona di riferimento e la mail indicata</p>
+        <br />
+        <div class="card-wrapper">
+            <div class="card-inner">
+                <div class="card-body">
+                    <div class="row font-28 text-vcenter">
+                        <span class="text-bold col-6 color-blu text-capitalize">
+                            {{ nominativoReferente }}
+                        </span>
+                        <span class="text-bold col-6 color-blu">
+                            {{ email }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <p class="text-semibold color-black">Se il nome del Delegato e l’indirizzo mail sono corretti, scegli il metodo con cui svolgere l’autenticazione.</p>
+    </div>
+    <br />
+    <br />
+    <div class="row color-grey">
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Google</p>
+            <br />
+            <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione è un account Google, usa l’autenticazione Google</p>
+        </div>
+        <div class="col-6 text-center">
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">AAC</p>
+            <br />
+            <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione non è un account Google, registrati su AAC, il servizio di autenticazione dell’unità Smart Cities & Communities della Fondazione Bruno Kessler</p>
+        </div>
+    </div>
+</div>
+<!-- TOKEN EXPIRED HOMEPAGE -->
+<div class="mb-3 list-container md-margin" *ngIf="linkExpired">
+    <div class="text-center font-30">
+        <span class="title color-red">Attenzione! L’invito che hai ricevuto è scaduto oppure è stato annullato</span>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 text-center">
+            <img src="assets/images/logo_trasparente_page.png" class="icon-image">
+        </div>
+        <div class="col-5"></div>
+    </div>
+    <br />
+    <div class="text-center font-30">
+        <p class="color-grey text-bold">Se pensi che ci sia un errore, o se hai accordi in essere con qualche istituto
+            della provincia di Trento <br /> puoi contattare il nostro <a
+                href="mailto:cartella-help@smartcommunitylab.it" class="text-underline">servizio di assistenza</a>
+        </p>
+        <br />
+        <br />
+    </div>
+    <br />
+    <br />
+    <br />
+</div>

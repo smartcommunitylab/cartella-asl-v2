@@ -12,6 +12,7 @@ import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta.Stati;
 
 public class ReportDashboardEsperienza {
+	private Long attivitaAlternanzaId;
 	private Long esperienzaId;
 	private String studenteId;
 	private String nominativoStudente;
@@ -32,6 +33,8 @@ public class ReportDashboardEsperienza {
 	private boolean allineato;
 	private int numeroTentativi;
 	private String errore;
+	private String invio;
+	private Long ultimoAllineamento;
 	
 	public Long getEsperienzaId() {
 		return esperienzaId;
@@ -122,5 +125,23 @@ public class ReportDashboardEsperienza {
 	}
 	public void setNumeroTentativi(int numeroTentativi) {
 		this.numeroTentativi = numeroTentativi;
+	}
+	public String getInvio() {
+		return invio;
+	}
+	public void setInvio(String invio) {
+		this.invio = invio;
+	}
+	public Long getAttivitaAlternanzaId() {
+		return attivitaAlternanzaId;
+	}
+	public void setAttivitaAlternanzaId(Long attivitaAlternanzaId) {
+		this.attivitaAlternanzaId = attivitaAlternanzaId;
+	}
+	public Long getUltimoAllineamento() {
+		return ultimoAllineamento;
+	}
+	public void setUltimoAllineamento(Long ultimoAllineamento) {
+		this.ultimoAllineamento = ultimoAllineamento;
 	}
 }

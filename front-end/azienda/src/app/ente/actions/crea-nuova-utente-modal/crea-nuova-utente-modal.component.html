@@ -1,0 +1,78 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title">
+            <span class="modalHeaderText">Crea nuovo utente</span>
+        </div>
+        <div class="row v-center float-right">
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
+                ngbTooltip="Annulla creazione offerta" (click)="activeModal.close('Close click')">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Annulla</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom" ngbTooltip="Crea offerta"
+                (click)="create()">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Salva</span>
+                    <span class="col-4 rightItem">
+                        <i class="material-icons btnModificationIcon">save</i>
+                    </span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+        <span class="row v-center modal-title modalBodyHeaderText">Dati personali</span>
+        <div class="row v-center form-group">
+            <div class="col-sm-4"
+                [class.has-danger]="nomeInput.invalid && (nomeInput.dirty || nomeInput.touched || forceErrorDisplay)">
+                <label for="nome" *ngIf="profile.name" class="active">Nome</label>
+                <input type="text" class="form-control" [(ngModel)]="profile.name" id="nome" #nomeInput="ngModel"
+                    placeholder="Nome" (keyup)="trimValue($event, 'nome')" (focusout)="trimValue($event, 'trim')"
+                    required>
+                <div class="invalid-feedback"
+                    [class.d-block]="forceErrorDisplayNome || nomeInput.invalid && (nomeInput.dirty || nomeInput.touched || forceErrorDisplay)">
+                    Campo necessario.
+                </div>
+            </div>
+            <div class="col-sm-4"
+                [class.has-danger]="cognomeInput.invalid && (cognomeInput.dirty || cognomeInput.touched || forceErrorDisplay)">
+                <label for="cognome" *ngIf="profile.surname" class="active">Cognome</label>
+                <input type="text" class="form-control" [(ngModel)]="profile.surname" id="cognome"
+                    #cognomeInput="ngModel" placeholder="Cognome" (keyup)="trimValue($event, 'cognome')"
+                    (focusout)="trimValue($event, 'trim')" required>
+                <div class="invalid-feedback"
+                    [class.d-block]="forceErrorDisplayCognome || (cognomeInput.invalid && (cognomeInput.dirty || cognomeInput.touched || forceErrorDisplay))">
+                    Campo necessario.</div>
+            </div>
+            <div class="col-sm-4"
+                [class.has-danger]="cfInput.invalid && (cfInput.dirty || cfInput.touched || forceErrorDisplay)">
+                <label for="cf" *ngIf="profile.cf" class="active">Codice fiscale</label>
+                <input type="text" class="form-control" [(ngModel)]="profile.cf" id="cf" #cfInput="ngModel"
+                    placeholder="Codice fiscale" (keyup)="trimValue($event, 'cf')"
+                    (focusout)="trimValue($event, 'trim')" required>
+                <div class="invalid-feedback"
+                    [class.d-block]="forceErrorDisplayCF || (cfInput.invalid && (cfInput.dirty || cfInput.touched || forceErrorDisplay))">
+                    Campo necessario.</div>
+            </div>
+        </div>
+        <div class="row v-center form-group">
+            <div class="col-sm-4"
+                [class.has-danger]="mailInput.invalid && (mailInput.dirty || mailInput.touched || forceErrorDisplay)">
+                <label for="mail" *ngIf="profile.email" class="active">Mail</label>
+                <input type="text" class="form-control" [(ngModel)]="profile.email" id="mail" #mailInput="ngModel"
+                    placeholder="Mail" (keyup)="trimValue($event, 'mail')" (focusout)="trimValue($event, 'trim')"
+                    required>
+                <div class="invalid-feedback"
+                    [class.d-block]="forceErrorDisplayMail || (mailInput.invalid && (mailInput.dirty || mailInput.touched || forceErrorDisplay))">
+                    Campo necessario.</div>
+            </div>
+        </div>
+      </div>

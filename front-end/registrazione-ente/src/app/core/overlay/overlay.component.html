@@ -1,0 +1,12 @@
+<div class="overlay" [class.active]="enabled">
+    <!-- <div class="overlay-background"></div> -->
+    <div class="overlay-content">
+        <div class="row" style="width: 90%;">
+            <div class="col-4">
+                <img src="assets/images/spinnerGlobal.gif" class="spinnerGlobal">
+            </div>
+            <div class="col-8"><span class="spinnerText">Caricamento in corso…</span></div>
+        </div>
+        <ng-content></ng-content>
+    </div>
+</div>

@@ -57,6 +57,9 @@ public class Azienda {
 	
 	@Transient
 	private boolean estera = false;
+	
+	@Transient
+	private RegistrazioneEnte registrazioneEnte;
 
 	public String getId() {
 		return id;
@@ -266,6 +269,14 @@ public class Azienda {
 
 	public void setProvincia(String provincia) {
 		this.provincia = provincia;
+	}
+
+	public RegistrazioneEnte getRegistrazioneEnte() {
+		return registrazioneEnte;
+	}
+
+	public void setRegistrazioneEnte(RegistrazioneEnte registrazioneEnte) {
+		this.registrazioneEnte = registrazioneEnte;
 	}
 
 }

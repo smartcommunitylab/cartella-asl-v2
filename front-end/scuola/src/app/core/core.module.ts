@@ -12,13 +12,13 @@ import { GeoService } from './services/geo.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FilterService } from './services/filter.service';
 import { SorterService } from './services/sorter.service';
-import { DialogService } from './services/dialog.service';
 import { EnsureModuleLoadedOnceGuard } from './ensureModuleLoadedOnceGuard';
 import { EventBusService } from './services/event-bus.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent } from './footer/footer.component';
 import { ReloginModal } from './overlay/modal/login/relogin-modal.component';
+import { ValidationService } from './services/validation.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule, HttpClientModule, GrowlerModule, ModalModule,FormsModule, OverlayModule],
@@ -32,8 +32,8 @@ import { ReloginModal } from './overlay/modal/login/relogin-modal.component';
     FilterService,
     DataService,
     GeoService, 
-    DialogService,
     EventBusService,
+    ValidationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

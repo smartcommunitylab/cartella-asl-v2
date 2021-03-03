@@ -51,14 +51,14 @@
             <div class="card-body p0 modify-bgcolor">
                 <div class="row v-center bg-white">
                     <div class="col-4">
-                        <label class="primary-color font-weight-bold">Istituti associate: {{attachedIstituti.length}}</label>
+                        <label class="primary-color font-weight-bold">Istituti associati: {{attachedIstituti.length}}</label>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-6 input-group">
                         <div class="form-group center-formGroup">
                             <input type="text" id="cercaistitutoAssociateTxt" class="form-control search-input"
                                 [(ngModel)]="searchistitutoAssociateTxt" (keyup.enter)="searchistitutoAssociate()">
-                            <label for="cercaistitutoAssociateTxt" >Cerca istituti associate</label>
+                            <label for="cercaistitutoAssociateTxt" >Cerca istituti associati</label>
                         </div>
                         <button class="btn btn-icon v-center-inline" (click)="searchistitutoAssociate()">
                             <svg class="icon icon-primary"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use></svg>

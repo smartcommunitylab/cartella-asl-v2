@@ -73,11 +73,13 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(aaDb.getStato().equals(Stati.archiviata)) {
 				throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 			}
-			if(!aaDb.getAnnoScolastico().equalsIgnoreCase(Utils.annoScolastico(aa.getDataInizio()))) {
-				throw new BadRequestException(errorLabelManager.get("attivita.error.schoolYear"));
-			}
 			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aaDb, 
 					Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+			if(esperienze.size() > 0) {
+				if(!aaDb.getAnnoScolastico().equalsIgnoreCase(aa.getAnnoScolastico())) {
+					throw new BadRequestException(errorLabelManager.get("attivita.error.schoolYear"));
+				}				
+			}
 			if(!aaDb.getDataInizio().isEqual(aa.getDataInizio()) || 
 					!aaDb.getDataFine().isEqual(aa.getDataFine())) {
 				for(EsperienzaSvolta esperienza : esperienze) {
@@ -481,7 +483,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public List<PresenzaGiornaliera> validaPresenzeAttivita(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
 		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
-			result.add(presenzaGiornalieraManager.validaPresenza(pg));
+			PresenzaGiornaliera presenzaGiornaliera = presenzaGiornalieraManager.validaPresenza(pg);
+			if(presenzaGiornaliera != null) {
+				result.add(presenzaGiornaliera);	
+			}
 		}
 		return  result;
 	}
@@ -489,7 +494,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	public List<PresenzaGiornaliera> validaPresenzeAttivitaByEnte(AttivitaAlternanza aa, List<PresenzaGiornaliera> presenze) throws Exception {
 		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
-			result.add(presenzaGiornalieraManager.validaPresenzaByEnte(pg));
+			PresenzaGiornaliera presenzaGiornaliera = presenzaGiornalieraManager.validaPresenzaByEnte(pg);
+			if(presenzaGiornaliera != null) {
+				result.add(presenzaGiornaliera);	
+			}
 		}
 		return  result;
 	}
@@ -860,6 +868,47 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	
 	public AttivitaAlternanza findByUuid(String uuid) {
 		return attivitaAlternanzaRepository.findByUuid(uuid);
+	}
+
+	public AttivitaAlternanza duplicaAttivitaAlternanza(Long attivitaId, String istitutoId) throws Exception {
+		AttivitaAlternanza aaDb = getAttivitaAlternanza(attivitaId);
+		if(aaDb == null) {
+			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
+		}
+		if(!aaDb.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istituto non corrispondente");
+		}
+		AttivitaAlternanza aa = new AttivitaAlternanza();
+		aa.setAnnoScolastico(aaDb.getAnnoScolastico());
+		aa.setDataArchiviazione(aaDb.getDataArchiviazione());
+		aa.setDataFine(aaDb.getDataFine());
+		aa.setDataInizio(aaDb.getDataInizio());
+		aa.setDescrizione(aaDb.getDescrizione());
+		aa.setEnteId(aaDb.getEnteId());
+		aa.setFormatore(aaDb.getFormatore());
+		aa.setFormatoreCF(aaDb.getFormatoreCF());
+		aa.setIstitutoId(istitutoId);
+		aa.setLatitude(aaDb.getLatitude());
+		aa.setLongitude(aaDb.getLongitude());
+		aa.setLuogoSvolgimento(aaDb.getLuogoSvolgimento());
+		aa.setNomeEnte(aaDb.getNomeEnte());
+		aa.setOffertaId(aaDb.getOffertaId());
+		aa.setOraFine(aaDb.getOraFine());
+		aa.setOraInizio(aaDb.getOraInizio());
+		aa.setOre(aaDb.getOre());
+		aa.setReferenteEsterno(aaDb.getReferenteEsterno());
+		aa.setReferenteEsternoCF(aaDb.getReferenteEsternoCF());
+		aa.setReferenteEsternoTelefono(aaDb.getReferenteEsternoTelefono());
+		aa.setReferenteScuola(aaDb.getReferenteScuola());
+		aa.setReferenteScuolaCF(aaDb.getReferenteScuolaCF());
+		aa.setReferenteScuolaTelefono(aaDb.getReferenteScuolaTelefono());
+		aa.setStato(Stati.attiva);
+		aa.setTipologia(aaDb.getTipologia());
+		aa.setTitolo(aaDb.getTitolo());
+		aa.setTitoloOfferta(aaDb.getTitoloOfferta());
+		aa.setUuid(Utils.getUUID());
+		attivitaAlternanzaRepository.save(aa);
+		return aa;
 	}
 	
 }

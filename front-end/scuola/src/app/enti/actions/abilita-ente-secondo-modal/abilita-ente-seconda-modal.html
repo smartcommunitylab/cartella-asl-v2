@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white font-25">ATTENZIONE</h4>
+    </div>
+</div>
+<div class="modal-body">
+    <p class="text-center text-bold">È FONDAMENTALE ACCERTARSI CHE L’INDIRIZZO EMAIL INDICATO SIA CORRETTO. L’INVIO AD
+        INDIRIZZI ERRATI POTREBBE DARE ACCESSO A DATI SENSIBILI A PERSONALE NON AUTORIZZATO</p>
+    <br />
+    <div class="card-wrapper">
+        <div class="card-inner">
+            <div class="card-body">
+                <div class="row">
+                    <span class="col-6 color-1 text-center">
+                        <p>Indirizzo mail:</p>
+                    </span>
+                    <span class="col-6 color-1 text-center">
+                        <p>Ente invitato:</p>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="text-bold col-6 text-center">
+                        <p>{{ ente.email }}</p>
+                    </span>
+                    <span class="text-bold col-6 text-center">
+                        <p>{{ ente.nome }}</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="font-weight-bold text-center">Confermi l’invio della mail di attivazione all’ente {{ ente.nome }}?</div>
+</div>
+<br>
+<div class="text-center">
+    <button class="btn btn-success btn-icon btn-xs btnSave m-top22" (click)="invia()">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Invia invito</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-check"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+    &nbsp;&nbsp;
+    <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22"
+        (click)="activeModal.close('Close click')">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+</div>
+<br>

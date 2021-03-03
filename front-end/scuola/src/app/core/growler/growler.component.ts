@@ -11,9 +11,8 @@ import { GrowlerService, GrowlerMessageType } from './growler.service';
           <div class="row alert-message">
             <div class="col-2 bg-image">
             </div>
-            <div class="col-10"><span class="growl-message">{{ growl.message }}</span></div>
+            <div class="col-10"><span class="growl-message" [innerHtml]="growl.message"></span></div>
           </div>
-          <!-- <span class="growl-message">{{ growl.message }}</span> -->
       </div>
     </div>
   `,

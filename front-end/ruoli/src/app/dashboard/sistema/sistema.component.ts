@@ -48,15 +48,6 @@ export class DashboardSistemaComponent implements OnInit {
   
   ngOnInit() {
     //var ctx = this.chartCanvas.nativeElement.getContext('2d');
-
-    this.dataService.getProfile().subscribe(profile => {
-      console.log(profile)
-      if (profile) {
-          this.profile = profile;          
-      }
-    }, err => {
-      console.log('error, no institute')
-    });
     this.getAnnoScolstico();
   }
 

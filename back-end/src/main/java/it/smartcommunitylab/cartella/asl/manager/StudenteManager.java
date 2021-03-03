@@ -438,7 +438,10 @@ public class StudenteManager extends DataEntityManager {
 		List<PresenzaGiornaliera> result = new ArrayList<>();
 		for(PresenzaGiornaliera pg : presenze) {
 			pg.setEsperienzaSvoltaId(esperienzaSvoltaId);
-			result.add(presenzaGiornalieraManager.aggiornaPresenza(pg));
+			PresenzaGiornaliera presenzaGiornaliera = presenzaGiornalieraManager.aggiornaPresenza(pg);
+			if(presenzaGiornaliera != null) {
+				result.add(presenzaGiornaliera);
+			}
 		}
 		return result;
 	}

@@ -28,19 +28,14 @@
             <div class="col col-3">
                 <div class="form-group">
                     <label for="text">Cerca</label>
-                    <input type="text" class="form-control" id="text" placeholder="studente o classe" 
-                        [(ngModel)]="text" (keyup.enter)="getReport()">
+                    <input type="text" class="form-control" id="text" placeholder="titolo o studente o classe o cf" 
+                        [(ngModel)]="text">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col">
                 <div class="pull-right">
-                    <div class="btn-group">
-                        <button class="btn btn-secondary v-center mr-4" (click)="getReport()">
-                            <i class="material-icons">refresh</i> Report
-                        </button>    
-                    </div>
                     <div class="btn-group">
                         <button class="btn btn-secondary v-center mr-4" (click)="getAttivita()">
                             <i class="material-icons">refresh</i> Cerca
@@ -49,51 +44,10 @@
                 </div>    
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-4">
-                <label>Numero attività:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroAttivita}}</strong></label>    
-            </div>
-            <div class="col-4">
-                <label>Numero attività archiviate:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroAttivitaArchiviate}}</strong></label>    
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-4">
-                <label>Numero attività senza studenti associate:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroAttivitaSenzaStudenti}}</strong></label>    
-            </div>
-            <div class="col-4">
-                <label>Numero esperienze:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroEsperienze}}</strong></label>    
-            </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-4">
-                <label>Numero esperienze annullate:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroEsperienzeAnnullate}}</strong></label>    
-            </div>
-            <div class="col-4">
-                <label>Numero esperienze allineate con TrentinoDigitale:</label>    
-            </div>
-            <div class="col-1">
-                <label><strong>{{report.numeroEsperienzeAllineate}}</strong></label>    
-            </div>
-        </div>
         <table class="table table-hover">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Titolo</th>
                     <th>Tipologia</th>
                     <th>Periodo</th>
@@ -104,14 +58,24 @@
             </thead>
             <tbody>
                 <tr *ngFor="let aa of attivitaList">
+                    <td>{{aa.id}}</td>
                     <td><div [ngbTooltip]="aa.descrizione">{{aa.titolo}}</div></td>
                     <td>{{getTipologia(aa.tipologia)}}</td>
                     <td>{{aa.dataInizio}} <br/> {{aa.dataFine}}</td>
                     <td>
                         <div [ngbTooltip]="aa.dataArchiviazione">{{aa.stato}}</div>
                     </td>
-                    <td><div [ngbTooltip]="getStudentiTip(aa)">{{getNumStudentiTip(aa)}}</div></td>
                     <td>
+                        <ng-template #list>
+                            <div class="d-flex flex-column">
+                              <span *ngFor="let content of getStudentiTip(aa)">{{content}}</span>
+                            </div>
+                        </ng-template>
+                        <div [ngbTooltip]="list">{{getNumStudentiTip(aa)}}</div>
+                    </td>
+                    <td>
+                        <i class="material-icons pointer ok" ngbTooltip="dettaglio attività"
+                        (click)="detailAttivita(aa)">info</i> 
                         <i class="material-icons pointer ok" ngbTooltip="attiva attività"
                         *ngIf="aa.stato=='archiviata'" (click)="activateAttivita(aa)">unarchive</i> 
                         <i class="material-icons pointer error" ngbTooltip="cancella attività"
@@ -120,5 +84,60 @@
                 </tr>
             </tbody>
         </table>
+        <div class="grey">
+            <div class="row form-group">
+                <div class="col-4">
+                    <label>Numero attività:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroAttivita}}</strong></label>    
+                </div>
+                <div class="col-4">
+                    <label>Numero attività archiviate:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroAttivitaArchiviate}}</strong></label>    
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-4">
+                    <label>Numero attività senza studenti associate:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroAttivitaSenzaStudenti}}</strong></label>    
+                </div>
+                <div class="col-4">
+                    <label>Numero esperienze:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroEsperienze}}</strong></label>    
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-4">
+                    <label>Numero esperienze annullate:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroEsperienzeAnnullate}}</strong></label>    
+                </div>
+                <div class="col-4">
+                    <label>Numero esperienze allineate con TrentinoDigitale:</label>    
+                </div>
+                <div class="col-1">
+                    <label><strong>{{report.numeroEsperienzeAllineate}}</strong></label>    
+                </div>
+            </div>    
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button class="btn btn-secondary v-center mr-4" (click)="getReport()">
+                            <i class="material-icons">refresh</i> Report
+                        </button>    
+                    </div>
+                </div>    
+            </div>
+        </div>
     </div>
 </div>

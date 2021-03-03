@@ -17,6 +17,7 @@ public interface ASLUserRepository extends JpaRepository<ASLUser, Long> {
 	public ASLUser findByCf(String cf);
 	public ASLUser findByEmail(String email);
 	public ASLUser findByCfOrEmail(String cf, String email);
+	public ASLUser findByCfAndEmail(String cf, String email);
 	
 	public ASLUser findByUsername(String username);
 	

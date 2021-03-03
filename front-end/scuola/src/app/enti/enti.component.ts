@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-modal.component';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -27,7 +26,6 @@ export class EntiComponent implements OnInit {
     env = environment;
     enti;
     @ViewChild('cmPagination') private cmPagination: PaginationComponent;
-    @ViewChild('tooltip') tooltip: NgbTooltip;
 
     constructor(
         private dataService: DataService,
@@ -99,4 +97,42 @@ export class EntiComponent implements OnInit {
         this.filterSearch = false;
         this.getEntiPaged(1);
     }
+
+    setStatus(ente) {
+        let stato = 'Disponibile';
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            stato = 'In attivazione';
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            stato = 'Con account';
+        }
+        return stato;
+    }
+
+    styleOption(ente) {
+        var style = {
+            'color': '#FFB54C', //orange
+        };
+
+        if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+            style['color'] = '#7FB2E5'; // grey
+        } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+            style['color'] = '#00CF86'; // green
+        }
+
+        return style;
+    }
+
+    showTipStatoRiga(ente) {
+        if (!ente.toolTipoStatoRiga) {
+            if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+                ente.toolTipoStatoRiga = 'Email di attivazione inviata, in attesa di risposta.';
+            } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+                ente.toolTipoStatoRiga = 'Accesso ente attivato.';
+            } else {
+                ente.toolTipoStatoRiga = 'Accesso ente non attivato.';
+            }
+
+        }
+    }
+
 }

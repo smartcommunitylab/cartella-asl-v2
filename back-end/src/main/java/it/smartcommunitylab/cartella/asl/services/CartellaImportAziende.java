@@ -87,37 +87,40 @@ public class CartellaImportAziende {
 			List<Azienda> tobeSaved = new ArrayList<Azienda>();
 			for (it.smartcommunitylab.cartella.asl.model.ext.Azienda aziendaExt : temp) {
 				// find existing.
-				Azienda stored = aziendaRepository.findById(aziendaExt.getId()).orElse(null);
-				if (stored == null) {
-					Azienda result = new Azienda();
-					result.setId(aziendaExt.getId());
-					result.setAddress(getMaxString(aziendaExt.getAddress()));
-					result.setDescription(getMaxString(aziendaExt.getDescription()));
-					result.setEmail(aziendaExt.getEmail());
-					result.setExtId(aziendaExt.getExtId());
-					result.setNome(getMaxString(aziendaExt.getName()));
-					result.setOrigin(aziendaExt.getOrigin());
-					result.setPartita_iva(aziendaExt.getCf());
-					result.setPec(aziendaExt.getPec());
-					result.setPhone(aziendaExt.getPhone());
-					result.setBusinessName(getMaxString(aziendaExt.getBusinessName()));
-					if (aziendaExt.getGeocode() != null) {
-						result.setLatitude(aziendaExt.getGeocode()[1]);
-						result.setLongitude(aziendaExt.getGeocode()[0]);
-					}
-					if(aziendaExt.getAtecoCode().size() > 0) {
-						String[] codes = new String[aziendaExt.getAtecoCode().size()]; 
-						result.setAtecoCode(aziendaExt.getAtecoCode().toArray(codes));
-					}
-					if(aziendaExt.getAtecoDesc().size() > 0) {
-						String[] descs = new String[aziendaExt.getAtecoDesc().size()]; 
-						result.setAtecoDesc(aziendaExt.getAtecoDesc().toArray(descs));
-					}
-					result.setIdTipoAzienda(aziendaExt.getIdTipoAzienda());
-					totalSaved = totalSaved + 1;
-					tobeSaved.add(result);
+				List<Azienda> list = aziendaRepository.findByPartitaIva(aziendaExt.getCf());
+				if(list.size() == 0) {
+					Azienda stored = aziendaRepository.findById(aziendaExt.getId()).orElse(null);
+					if (stored == null) {
+						Azienda result = new Azienda();
+						result.setId(aziendaExt.getId());
+						result.setAddress(getMaxString(aziendaExt.getAddress()));
+						result.setDescription(getMaxString(aziendaExt.getDescription()));
+						result.setEmail(aziendaExt.getEmail());
+						result.setExtId(aziendaExt.getExtId());
+						result.setNome(getMaxString(aziendaExt.getName()));
+						result.setOrigin(aziendaExt.getOrigin());
+						result.setPartita_iva(aziendaExt.getCf());
+						result.setPec(aziendaExt.getPec());
+						result.setPhone(aziendaExt.getPhone());
+						result.setBusinessName(getMaxString(aziendaExt.getBusinessName()));
+						if (aziendaExt.getGeocode() != null) {
+							result.setLatitude(aziendaExt.getGeocode()[1]);
+							result.setLongitude(aziendaExt.getGeocode()[0]);
+						}
+						if(aziendaExt.getAtecoCode().size() > 0) {
+							String[] codes = new String[aziendaExt.getAtecoCode().size()]; 
+							result.setAtecoCode(aziendaExt.getAtecoCode().toArray(codes));
+						}
+						if(aziendaExt.getAtecoDesc().size() > 0) {
+							String[] descs = new String[aziendaExt.getAtecoDesc().size()]; 
+							result.setAtecoDesc(aziendaExt.getAtecoDesc().toArray(descs));
+						}
+						result.setIdTipoAzienda(aziendaExt.getIdTipoAzienda());
+						totalSaved = totalSaved + 1;
+						tobeSaved.add(result);
+					} 			
 				} else {
-				   	stored.setIdTipoAzienda(aziendaExt.getIdTipoAzienda());				   	
+					logger.info(String.format("partita iva già esistente:%s - %s", aziendaExt.getCf(), aziendaExt.getId()));
 				}
 			}
 

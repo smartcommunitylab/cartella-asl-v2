@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
 import { catchError, map } from 'rxjs/operators';
-import { IApiResponse } from '../../shared/classes/IApiResponse.class';
 import { IPagedIstituto } from '../../shared/classes/IPagedIstituto.class';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { CorsoDiStudio } from '../../shared/classes/CorsoDiStudio.class';
 import { serverAPIConfig } from '../serverAPIConfig'
 import { Azienda, IPagedAA } from '../../shared/interfaces';
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment';
 import * as moment from 'moment';
 
 const httpOptions = {
@@ -35,6 +32,7 @@ export class DataService {
   timeout: number = 120000;
   coorindateIstituto;
   aziendaId: string = '';
+  ownerId;
   listAziendaIds = [];
   aziendaName: string = "";
   coorindateAzienda;
@@ -56,6 +54,12 @@ export class DataService {
   setAziendaName(name) {
     if (name) {
       this.aziendaName = name;
+    }
+  }
+
+  setOwnerId(id) {
+    if (id) {
+      this.ownerId = id;
     }
   }
 
@@ -102,8 +106,8 @@ export class DataService {
   }
 
   getAziendaInfoRiferente(aziendaId: any) {
-    let url = this.host + "/azienda/" + aziendaId;
-
+    let url = this.host + "/azienda/" + aziendaId + '/ente';
+    
     return this.http.get<Azienda>(url,
       {
         observe: 'response'
@@ -112,6 +116,27 @@ export class DataService {
       .pipe(
         map(res => {
           let attivita = res.body as Azienda;
+          return attivita;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getRuoliByEnte() {
+    let url = this.host + "/registrazione-ente/ruoli";
+
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+
+    return this.http.get<any>(url,
+      {
+        params: params,
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          let attivita = res.body;
           return attivita;
         }),
         catchError(this.handleError)
@@ -890,6 +915,58 @@ export class DataService {
         catchError(this.handleError)
       );
   }
+
+  
+  aggiungiRuoloReferenteAzienda(role): Observable<any> {
+    let url = this.host + "/registrazione-ente/ref-azienda";
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('nome', role.name);
+    params = params.append('cognome', role.surname);
+    params = params.append('email', role.email);
+    params = params.append('cf', role.cf);
+    params = params.append('ownerId', this.ownerId);
+    return this.http.post<any>(
+      url,
+      null,
+      { 
+        params: params,
+        observe: 'response',
+      }
+    )
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+
+  cancellaRuoloReferenteAzienda(id): Observable<any> {
+    let url = this.host + '/registrazione-ente/ref-azienda';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('registrazioneId', id);
+    
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+
 
   addConsent(): Observable<any> {
     let url = this.host + '/consent/add';

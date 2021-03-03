@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteAttivitaModalComponent } from '../modals/delete-attivita-modal/delete-attivita-modal.component';
 import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-modal/activate-attivita-modal.component';
+import { DetailAttivitaModalComponent } from '../modals/detail-attivita-modal/detail-attivita-modal.component';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -46,14 +47,6 @@ export class DashboardAttivitaComponent implements OnInit {
   title: string = "Statistiche delle attività";
 
     ngOnInit() {
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
       this.getAnnoScolstico();
     }
 
@@ -143,6 +136,17 @@ export class DashboardAttivitaComponent implements OnInit {
     });
   }
 
+  detailAttivita(aa: any) {
+    this.dataService.reportAttivita(aa.id).subscribe(r => {
+      if(r) {
+        const modalRef = this.modalService.open(DetailAttivitaModalComponent, {size:'lg'});
+        modalRef.componentInstance.report = r;
+        modalRef.componentInstance.onActivate.subscribe(res => {
+        });
+      }
+    });
+  }
+
   getTipologia(id) {
     return this.tipologieMap[id]['label'];
   }
@@ -159,9 +163,10 @@ export class DashboardAttivitaComponent implements OnInit {
   }
 
   getStudentiTip(aa: any) {
-    let tip = '';
+    let tip = [];
     for (let i = 0; i < aa.studenti.length; i++) {
-        tip = tip + aa.studenti[i] + " - " + aa.classi[i] + '\n';
+        let row = aa.studenti[i] + " - " + aa.classi[i];
+        tip.push(row);
         if (i == 15) {
             break;
         }

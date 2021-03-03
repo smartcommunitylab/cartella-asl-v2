@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -108,6 +109,22 @@ public class IstitutoController implements AslController {
 		if (logger.isInfoEnabled()) {
 			logger.info(String.format("searchIstituti: %s", text));
 		}		
+		return result;
+	}
+	
+	@PutMapping("/api/istituto")
+	public @ResponseBody Istituzione updateIstituto(
+			@RequestBody Istituzione istituto,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istituto.getId()), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istituto.getId())));
+		
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("updateIstituto:%s", istituto.getId()));
+		}		
+		Istituzione result = istituzioneManager.updateIstituto(istituto);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Istituzione.class, istituto.getId(), user, new Object(){});
+		auditManager.save(audit);			
 		return result;
 	}
 	

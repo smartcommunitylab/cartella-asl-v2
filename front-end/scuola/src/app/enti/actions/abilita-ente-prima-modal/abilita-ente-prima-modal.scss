@@ -1,0 +1,20 @@
+.modal-body {
+    padding: 30px; 
+    .color-1 {
+        color: #707070
+     }
+    .card-wrapper {
+        margin: 10px;
+    }
+    .card-inner {
+        border: 3px solid #FF9700;
+        left: 10%;
+        width: 80%;
+        opacity: 1;
+        position: relative;
+    }
+    .card-body {
+        background: #F0F6FC 0% 0% no-repeat padding-box;
+        font-size: 25px;
+    }
+}

@@ -49,6 +49,8 @@ public class AziendaManager extends DataEntityManager {
 	AttivitaAlternanzaRepository attivitaAltRepository;
 	@Autowired
 	AziendaEsteraRepository aziendaEsteraRepository;
+	@Autowired
+	RegistrazioneEnteManager registrazioneEnteManager;
 
 	private static final String AZIENDE = "SELECT DISTINCT az FROM Azienda az ";
 
@@ -76,6 +78,9 @@ public class AziendaManager extends DataEntityManager {
 		query.setMaxResults(pageRequest.getPageSize());
 		List<Azienda> result = query.getResultList();
 
+		for(Azienda a : result) {
+			addRegistrazioneEnte(a);
+		}
 		Page<Azienda> page = new PageImpl<Azienda>(result, pageRequest, t);
 		return page;
 	}
@@ -153,9 +158,6 @@ public class AziendaManager extends DataEntityManager {
 			allineaAziendaEstera(null, a.getPartita_iva(), a.isEstera());
 			return aziendaRepository.save(a); 
 		} else {
-			if(!Constants.ORIGIN_CONSOLE.equals(aziendaDb.getOrigin())) {
-				throw new BadRequestException("entity not updatable");
-			}
 			if(!a.getPartita_iva().equals(aziendaDb.getPartita_iva())) {
 				if(list.size() > 0) {
 					throw new BadRequestException("partita iva already exists");
@@ -196,10 +198,17 @@ public class AziendaManager extends DataEntityManager {
 				if(aziendaEstera != null) {
 					azienda.setEstera(true);
 				}
+				addRegistrazioneEnte(azienda);
 				return azienda;
 			}
 		}
 		return null;
+	}
+	
+	private void addRegistrazioneEnte(Azienda a) {
+		if(a != null) {
+			a.setRegistrazioneEnte(registrazioneEnteManager.getRichiestaRegistrazione(a.getId()));
+		}
 	}
 	
 	public Azienda deleteAzienda(String id) throws BadRequestException {

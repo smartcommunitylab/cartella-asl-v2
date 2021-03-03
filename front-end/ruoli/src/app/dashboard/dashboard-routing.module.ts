@@ -5,6 +5,7 @@ import { DashboardSistemaComponent } from './sistema/sistema.component';
 import { DashboardAttivitaComponent } from './attivita/attivita.component';
 import { DashboardEsperienzeComponent } from './esperienze/esperienze.component';
 import { DashboardRegistrazioniComponent } from './registrazioni/registrazioni.component';
+import { DashboardRuoliEnteComponent } from './ruoli-ente/ruoli-ente.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent,
@@ -12,6 +13,7 @@ const routes: Routes = [
       { path: 'esperienze', component: DashboardEsperienzeComponent },
       { path: 'registrazioni', component: DashboardRegistrazioniComponent },
       { path: 'attivita', component: DashboardAttivitaComponent },
+      { path: 'enti', component: DashboardRuoliEnteComponent },
       { path: 'sistema', component: DashboardSistemaComponent }
     ]
   }

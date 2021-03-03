@@ -28,14 +28,6 @@ export class DashboardRegistrazioniComponent implements OnInit {
   title: string = "Lista iscrizioni";
 
     ngOnInit() {
-      this.dataService.getProfile().subscribe(profile => {
-        console.log(profile)
-        if (profile) {
-            this.profile = profile;          
-        }
-      }, err => {
-        console.log('error, no institute')
-      });
     }
 
     istituto: any;

@@ -18,7 +18,7 @@ public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlte
 	@Query("update AttivitaAlternanza aa0 set titolo=:#{#aa.titolo}, descrizione=:#{#aa.descrizione}, "
 			+ "dataInizio=:#{#aa.dataInizio}, dataFine=:#{#aa.dataFine}, oraInizio=:#{#aa.oraInizio}, "
 			+ "oraFine=:#{#aa.oraFine}, ore=:#{#aa.ore}, offertaId=:#{#aa.offertaId}, titoloOfferta=:#{#aa.titoloOfferta}, "
-			+ "enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, "
+			+ "annoScolastico=:#{#aa.annoScolastico}, enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, "
 			+ "referenteScuola=:#{#aa.referenteScuola}, referenteScuolaCF=:#{#aa.referenteScuolaCF}, "
 			+ "referenteScuolaTelefono=:#{#aa.referenteScuolaTelefono}, "
 			+ "referenteEsterno=:#{#aa.referenteEsterno}, referenteEsternoCF=:#{#aa.referenteEsternoCF}, "
