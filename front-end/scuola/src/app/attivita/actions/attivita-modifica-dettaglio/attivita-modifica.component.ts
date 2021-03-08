@@ -114,9 +114,9 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
   ngOnInit() {
     this.evn.modificationFlag = true;
-    this.date.dataInizio = moment();
-    this.date.dataFine = moment();
-    this.date.prevDataInizio = moment();
+    this.date.dataInizio = moment().startOf('day');
+    this.date.dataFine = moment().startOf('day');;
+    this.date.prevDataInizio = moment().startOf('day');;
     this.date.minInizio = moment([2018, 8, 1]);
 
     this.route.params.subscribe(params => {
@@ -144,10 +144,10 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
             }))
           }
           var dataInizio = new Date(this.attivita.dataInizio);
-          this.date.dataInizio = moment(dataInizio.getTime());
-          this.date.prevDataInizio = moment(dataInizio.getTime());
+          this.date.dataInizio = moment(dataInizio).startOf('day');;
+          this.date.prevDataInizio = moment(dataInizio).startOf('day');;
           var dataFine = new Date(this.attivita.dataFine);
-          this.date.dataFine = moment(dataFine);
+          this.date.dataFine = moment(dataFine).startOf('day');;
           this.schoolYear = this.attivita.annoScolastico.slice();
           this.checkDate();
       

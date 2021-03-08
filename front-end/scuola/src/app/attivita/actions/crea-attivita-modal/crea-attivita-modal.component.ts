@@ -190,7 +190,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.tipologia && this.tipologia != 'Tipologia')
-        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine < this.date.maxFine))
+        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine <= this.date.maxFine))
       );
     } else {
       return (
@@ -201,7 +201,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.azienda && this.azienda.id != '')
         && (this.tipologia && this.tipologia != 'Tipologia')
-        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine < this.date.maxFine))
+        && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine <= this.date.maxFine))
       );
     }
   }
