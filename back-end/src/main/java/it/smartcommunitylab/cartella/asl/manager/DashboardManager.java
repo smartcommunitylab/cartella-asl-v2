@@ -208,7 +208,7 @@ public class DashboardManager extends DataEntityManager {
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
-		query.setMaxResults(50);
+		query.setMaxResults(1000);
 		List<Object[]> result = query.getResultList();
 		List<ReportDashboardEsperienza> list = new ArrayList<>();
 		for (Object[] obj : result) {
@@ -267,6 +267,7 @@ public class DashboardManager extends DataEntityManager {
 		Query query = em.createQuery(q);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("cf", cf.trim().toUpperCase());
+		query.setMaxResults(1000);
 		List<Object[]> result = query.getResultList();
 		for (Object[] obj : result) {
 			Registration r = (Registration) obj[0];
@@ -306,6 +307,7 @@ public class DashboardManager extends DataEntityManager {
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
+		query.setMaxResults(1000);
 		
 		List<AttivitaAlternanza> aaList = query.getResultList();
 		
