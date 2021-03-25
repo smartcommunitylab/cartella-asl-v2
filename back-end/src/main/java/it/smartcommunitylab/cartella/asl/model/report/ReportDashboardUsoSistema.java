@@ -7,6 +7,7 @@ public class ReportDashboardUsoSistema {
 	private long numeroStudentiIscritti;
 	private long numeroStudentiConEsperienze;
 	private long numeroAttivita;
+	private long numeroEsperienze;
 	Map<Integer, Long> tipologiaMap = new HashMap<>();
 	
 	public long getNumeroStudentiIscritti() {
@@ -32,6 +33,12 @@ public class ReportDashboardUsoSistema {
 	}
 	public void setTipologiaMap(Map<Integer, Long> tipologiaMap) {
 		this.tipologiaMap = tipologiaMap;
+	}
+	public long getNumeroEsperienze() {
+		return numeroEsperienze;
+	}
+	public void setNumeroEsperienze(long numeroEsperienze) {
+		this.numeroEsperienze = numeroEsperienze;
 	}
 	
 }

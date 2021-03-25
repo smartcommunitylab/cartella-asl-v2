@@ -63,6 +63,14 @@ public class DashboardManager extends DataEntityManager {
 		query.setParameter("annoScolastico", annoScolastico);		
 		Long numeroStudentiConEsperienze = query.getSingleResult();
 
+		q = "SELECT COUNT(DISTINCT es.id) FROM AttivitaAlternanza aa, EsperienzaSvolta es"
+				+ " WHERE es.attivitaAlternanzaId=aa.id"
+				+ " AND aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
+		query = em.createQuery(q, Long.class);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("annoScolastico", annoScolastico);		
+		Long numeroEsperienze = query.getSingleResult();
+
 		q = "SELECT COUNT(*), aa.tipologia FROM AttivitaAlternanza aa"
 				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)"
 				+ " GROUP BY aa.tipologia";
@@ -83,6 +91,7 @@ public class DashboardManager extends DataEntityManager {
 		report.setNumeroStudentiIscritti(numeroStudentiIscritti);
 		report.setNumeroStudentiConEsperienze(numeroStudentiConEsperienze);
 		report.setNumeroAttivita(numeroAttivita);
+		report.setNumeroEsperienze(numeroEsperienze);
 		report.setTipologiaMap(tipologiaMap);
 		return report;
 	}
