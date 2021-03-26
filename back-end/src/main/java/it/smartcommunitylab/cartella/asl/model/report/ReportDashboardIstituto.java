@@ -1,14 +1,14 @@
 package it.smartcommunitylab.cartella.asl.model.report;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ReportDashboardIstituto {
 	private long numeroAttivitaInAttesa;
 	private long numeroAttivitaInCorso;
 	private long numeroAttivitaInRevisione;
-	Map<Integer, Long> tipologiaMap = new HashMap<>();
-	Map<String, Double> classiMap = new HashMap<>();
+	Map<Integer, Long> tipologiaMap = new TreeMap<>();
+	Map<String, Double> classiMap = new TreeMap<>();
 	
 	public Map<Integer, Long> getTipologiaMap() {
 		return tipologiaMap;
