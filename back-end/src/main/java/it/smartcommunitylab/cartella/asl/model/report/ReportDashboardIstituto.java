@@ -4,17 +4,18 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ReportDashboardIstituto {
+	private long numeroOreTotali;
 	private long numeroAttivitaInAttesa;
 	private long numeroAttivitaInCorso;
 	private long numeroAttivitaInRevisione;
-	Map<Integer, Long> tipologiaMap = new TreeMap<>();
-	Map<String, Double> classiMap = new TreeMap<>();
+	Map<Integer, Long> oreTipologiaMap = new TreeMap<>();
+	Map<String, MediaOre> oreClassiMap = new TreeMap<>();
 	
-	public Map<Integer, Long> getTipologiaMap() {
-		return tipologiaMap;
+	public long getNumeroOreTotali() {
+		return numeroOreTotali;
 	}
-	public void setTipologiaMap(Map<Integer, Long> tipologiaMap) {
-		this.tipologiaMap = tipologiaMap;
+	public void setNumeroOreTotali(long numeroOreTotali) {
+		this.numeroOreTotali = numeroOreTotali;
 	}
 	public long getNumeroAttivitaInAttesa() {
 		return numeroAttivitaInAttesa;
@@ -34,11 +35,17 @@ public class ReportDashboardIstituto {
 	public void setNumeroAttivitaInRevisione(long numeroAttivitaInRevisione) {
 		this.numeroAttivitaInRevisione = numeroAttivitaInRevisione;
 	}
-	public Map<String, Double> getClassiMap() {
-		return classiMap;
+	public Map<Integer, Long> getOreTipologiaMap() {
+		return oreTipologiaMap;
 	}
-	public void setClassiMap(Map<String, Double> classiMap) {
-		this.classiMap = classiMap;
+	public void setOreTipologiaMap(Map<Integer, Long> oreTipologiaMap) {
+		this.oreTipologiaMap = oreTipologiaMap;
+	}
+	public Map<String, MediaOre> getOreClassiMap() {
+		return oreClassiMap;
+	}
+	public void setOreClassiMap(Map<String, MediaOre> oreClassiMap) {
+		this.oreClassiMap = oreClassiMap;
 	}
 	
 }
