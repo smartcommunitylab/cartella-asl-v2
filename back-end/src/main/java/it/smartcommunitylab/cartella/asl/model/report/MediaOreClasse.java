@@ -1,6 +1,6 @@
 package it.smartcommunitylab.cartella.asl.model.report;
 
-public class MediaOre {
+public class MediaOreClasse {
 	long oreSvolte = 0;
 	int numStudenti = 0;
 	double media = 0.0;

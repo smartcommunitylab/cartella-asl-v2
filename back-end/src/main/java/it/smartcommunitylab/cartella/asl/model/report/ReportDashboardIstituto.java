@@ -9,7 +9,8 @@ public class ReportDashboardIstituto {
 	private long numeroAttivitaInCorso;
 	private long numeroAttivitaInRevisione;
 	Map<Integer, Long> oreTipologiaMap = new TreeMap<>();
-	Map<String, MediaOre> oreClassiMap = new TreeMap<>();
+	Map<String, MediaOreClasse> oreClassiMap = new TreeMap<>();
+	Map<String, OreStudente> oreStudentiMap = new TreeMap<>();
 	
 	public long getNumeroOreTotali() {
 		return numeroOreTotali;
@@ -41,11 +42,17 @@ public class ReportDashboardIstituto {
 	public void setOreTipologiaMap(Map<Integer, Long> oreTipologiaMap) {
 		this.oreTipologiaMap = oreTipologiaMap;
 	}
-	public Map<String, MediaOre> getOreClassiMap() {
+	public Map<String, MediaOreClasse> getOreClassiMap() {
 		return oreClassiMap;
 	}
-	public void setOreClassiMap(Map<String, MediaOre> oreClassiMap) {
+	public void setOreClassiMap(Map<String, MediaOreClasse> oreClassiMap) {
 		this.oreClassiMap = oreClassiMap;
+	}
+	public Map<String, OreStudente> getOreStudentiMap() {
+		return oreStudentiMap;
+	}
+	public void setOreStudentiMap(Map<String, OreStudente> oreStudentiMap) {
+		this.oreStudentiMap = oreStudentiMap;
 	}
 	
 }

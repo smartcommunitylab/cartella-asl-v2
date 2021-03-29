@@ -41,5 +41,19 @@ public class DashboardIstitutoController {
 		return report;
 	}
 		
+	@GetMapping("/api/dashboard-ist/classe")
+	public @ResponseBody ReportDashboardIstituto getReportUtilizzoClasse (
+			@RequestParam String istitutoId,
+			@RequestParam String annoScolastico,
+			@RequestParam String classe,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ReportDashboardIstituto report = dashboardManager.getReportUtilizzoClasse(istitutoId, annoScolastico, classe);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportUtilizzoClasse:%s - %s - %s", istitutoId, annoScolastico, classe));
+		}
+		return report;
+	}
 
 }
