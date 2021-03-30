@@ -86,7 +86,9 @@ public class DashboardIstitutoManager extends DataEntityManager {
 			//String studenteId = (String) obj[1];
 			long oreSvolteTotali = (long) obj[2];
 			if(!classiMediaMap.containsKey(classe)) {
-				classiMediaMap.put(classe, new MediaOreClasse());
+				MediaOreClasse media = new MediaOreClasse();
+				media.setClasse(classe);
+				classiMediaMap.put(classe, media);
 			}
 			MediaOreClasse mediaOre = classiMediaMap.get(classe);
 			if(mediaOre != null) {
@@ -140,11 +142,21 @@ public class DashboardIstitutoManager extends DataEntityManager {
 			query.setParameter("studenteId", s.getId());			
 			Long oreEsterne = query.getSingleResult();
 			
+			//ore da validare
+			String qValidare = "SELECT SUM(pg.oreSvolte) FROM AttivitaAlternanza aa, EsperienzaSvolta es, PresenzaGiornaliera pg WHERE"
+					+ " es.attivitaAlternanzaId=aa.id AND pg.esperienzaSvoltaId=es.id AND aa.istitutoId=(:istitutoId)"
+					+ " AND es.studenteId=(:studenteId) AND pg.verificata=false";
+			query = em.createQuery(qValidare, Long.class);
+			query.setParameter("istitutoId", istitutoId);
+			query.setParameter("studenteId", s.getId());			
+			Long oreDaValidare = query.getSingleResult();
+			
 			OreStudente oreStudente = new OreStudente();
 			oreStudente.setStudenteId(s.getId());
 			oreStudente.setNominativo(s.getSurname() + " " + s.getName());
 			oreStudente.setOreInterne(oreInterne != null ? oreInterne : 0);
 			oreStudente.setOreEsterne(oreEsterne != null ? oreEsterne : 0);
+			oreStudente.setOreDaValidare(oreDaValidare != null ? oreDaValidare : 0);
 			oreStudentiMap.put(oreStudente.getNominativo(), oreStudente);
 		}
 

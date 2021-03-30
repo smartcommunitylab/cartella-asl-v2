@@ -3,6 +3,7 @@ package it.smartcommunitylab.cartella.asl.model.report;
 public class OreStudente {
   private long oreInterne = 0;
   private long oreEsterne = 0;
+  private long oreDaValidare = 0;
   private String studenteId;
   private String nominativo;
   
@@ -29,6 +30,12 @@ public class OreStudente {
 	}
 	public void setNominativo(String nominativo) {
 		this.nominativo = nominativo;
+	}
+	public long getOreDaValidare() {
+		return oreDaValidare;
+	}
+	public void setOreDaValidare(long oreDaValidare) {
+		this.oreDaValidare = oreDaValidare;
 	}
   
 }

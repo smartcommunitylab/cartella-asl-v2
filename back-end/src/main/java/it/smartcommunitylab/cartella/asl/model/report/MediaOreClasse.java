@@ -1,6 +1,7 @@
 package it.smartcommunitylab.cartella.asl.model.report;
 
 public class MediaOreClasse {
+	String classe;
 	long oreSvolte = 0;
 	int numStudenti = 0;
 	double media = 0.0;
@@ -28,5 +29,13 @@ public class MediaOreClasse {
 	}
 	public void setMedia(double media) {
 		this.media = media;
+	}
+
+	public String getClasse() {
+		return classe;
+	}
+
+	public void setClasse(String classe) {
+		this.classe = classe;
 	}
 }
