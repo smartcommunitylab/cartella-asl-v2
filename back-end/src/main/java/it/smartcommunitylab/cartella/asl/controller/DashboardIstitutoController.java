@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
@@ -26,8 +28,22 @@ public class DashboardIstitutoController {
 	private DashboardIstitutoManager dashboardManager;
 	@Autowired
 	private ASLRolesValidator usersValidator;
+	
+	@GetMapping("/api/dashboard-ist/classi")
+	public @ResponseBody List<String> getClassi(
+			@RequestParam String istitutoId,
+			@RequestParam String annoScolastico,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		List<String> classi = dashboardManager.getClassi(istitutoId, annoScolastico);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getClassi:%s - %s", istitutoId, annoScolastico));
+		}
+		return classi;
+	}
 
-	@GetMapping("/api/dashboard-ist/sistema")
+	@GetMapping("/api/dashboard-ist/rep-sistema")
 	public @ResponseBody ReportDashboardIstituto getReportUtilizzoIstituto (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
@@ -41,7 +57,7 @@ public class DashboardIstitutoController {
 		return report;
 	}
 		
-	@GetMapping("/api/dashboard-ist/classe")
+	@GetMapping("/api/dashboard-ist/rep-classe")
 	public @ResponseBody ReportDashboardIstituto getReportUtilizzoClasse (
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,

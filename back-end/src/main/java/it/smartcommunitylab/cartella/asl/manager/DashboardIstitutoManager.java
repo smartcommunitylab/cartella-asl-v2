@@ -38,6 +38,16 @@ public class DashboardIstitutoManager extends DataEntityManager {
 	@Autowired
 	EsperienzaAllineamentoManager allineamentoManager;
 
+	public List<String> getClassi(String istitutoId, String annoScolastico) throws Exception {
+		String q = "SELECT DISTINCT r0.classroom FROM Registration r0 WHERE r0.instituteId=(:istitutoId)"
+				+ " AND r0.schoolYear=(:annoScolastico)";
+		TypedQuery<String> query = em.createQuery(q, String.class);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("annoScolastico", annoScolastico);		
+		List<String> list = query.getResultList();
+		return list;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public ReportDashboardIstituto getReportUtilizzoIstituto(String istitutoId, String annoScolastico) throws Exception {
 		String q = "SELECT aa FROM AttivitaAlternanza aa"
