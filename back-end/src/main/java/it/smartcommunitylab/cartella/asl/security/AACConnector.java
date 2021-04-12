@@ -106,6 +106,7 @@ public class AACConnector {
 				}
 				
 				if (user == null) {
+					logger.warn(String.format("User not found:%s - %s", type, result));
 					throw new UnauthorizedException(String.format(errorLabelManager.get("user.notfound"), accountProfile.getName(), accountProfile.getSurname()));
 				}
 
