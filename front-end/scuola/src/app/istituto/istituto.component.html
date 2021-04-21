@@ -49,5 +49,44 @@
                 <span class="row"><span class="text-semibold">Mail:&nbsp;</span>{{ istituto.email }}</span>
             </div>
         </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="title">
+                Dashboard <br />
+            </div>
+        </div>
+         <br />
+        <br />
+        <div class="row">
+            <div class="title">
+                Tipologie Attività <br />
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-6">
+                <div class="chartjs-container">
+                    <canvas  
+                    width="480"
+                    height="380" 
+                    baseChart
+                    [data]="pieChartData"
+                    [labels]="pieChartLabels"
+                    [chartType]="pieChartType"
+                    [options]="pieChartOptions"
+                    [plugins]="pieChartPlugins"
+                    [colors]="pieChartColors"
+                    [legend]="pieChartLegend">
+                    </canvas>
+                </div>
+            </div>
+            <div class="col-4">
+    
+            </div>
+        </div>
+ 
+
+        
     </div>
 </div>
