@@ -22,14 +22,20 @@ export class IstitutoComponent implements OnInit {
   timeoutTooltip = 250;
   env = environment;
   istituto;
+  showDashboard: boolean = false;
   tipologie;
+  classe;
+  classi;
+  sistemaDataset;
   numeroAttivitaInAttesa;
   numeroAttivitaInCorso;
   numeroAttivitaInRevisione;
   oreTotali;
-
+ 
+  // PIE chart.
   pieChartOptions: ChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     legend: {
       position: 'left',
     },
@@ -40,7 +46,7 @@ export class IstitutoComponent implements OnInit {
         label: function (tooltipItems, data) {
           var multistringText = [];
           multistringText.push(data.labels[tooltipItems.index]);
-          
+
           return multistringText;
         },
         footer: function (tooltipItems, data) {
@@ -51,7 +57,7 @@ export class IstitutoComponent implements OnInit {
             oreTotali = oreTotali + data.datasets[0].data[key];
           });
           multistringText.push(data.datasets[0].data[tooltipItems[0].index] + ' ore');
-          multistringText.push(Math.round(Number(data.datasets[0].data[tooltipItems[0].index])/oreTotali * 100) + ' % del totali')
+          multistringText.push(Math.round(Number(data.datasets[0].data[tooltipItems[0].index]) / oreTotali * 100) + ' % del totali')
 
           return multistringText;
         }
@@ -69,7 +75,6 @@ export class IstitutoComponent implements OnInit {
     },
   ];
 
-
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
@@ -82,22 +87,56 @@ export class IstitutoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getIstituto();
-     // GET classes.
-     this.dataService.getAttivitaTipologie().subscribe((res) => {
+    // GET classes.
+    this.dataService.getAttivitaTipologie().subscribe((res) => {
       this.tipologie = res;
-      var report;
-      this.initPieChart(report);
-     });
+      this.dataService.getDashboardIstitutoClasse()
+        .subscribe((response) => {
+          this.classi = response;
+          // default selection.
+          this.classe = this.classi[0];
+          this.initIstitutoDashboard();
+        },
+          (err: any) => console.log(err),
+          () => console.log('get dashboard istituto classi api'));
+    },
+      (err: any) => console.log(err),
+      () => console.log('getAttivitaTipologie'));
 
   }
 
+  initIstitutoDashboard() {
+    this.showDashboard = false;
+    // GET sistema report.
+    this.dataService.getDashboardIstitutoSistemaReport()
+      .subscribe((response) => {
+        this.sistemaDataset = response;
+        this.initPieChart(this.sistemaDataset);
+        this.showDashboard = true;
+      },
+        (err: any) => console.log(err),
+        () => console.log('get dashboard istituto report api'));
+  }
+
   initPieChart(report) {
+    this.numeroAttivitaInAttesa = report.numeroAttivitaInAttesa;
+    this.numeroAttivitaInCorso = report.numeroAttivitaInCorso; 
+    this.numeroAttivitaInRevisione = report.numeroAttivitaInRevisione;
+    this.oreTotali = report.numeroOreTotali;
 
     this.pieChartLabels =[];
     this.pieChartData = [];
  
-    this.samplePieChartData();
+    // this.samplePieChartData();
     
+    Object.keys(report.oreTipologiaMap).map(key => {
+      this.tipologie.forEach(tipo => {
+        if (tipo.id == Number(key)) {
+          this.pieChartLabels.push(tipo.titolo);
+          this.pieChartData.push(report.oreTipologiaMap[key]);
+        }
+      })
+    });
    
   }
 

@@ -82,7 +82,36 @@
                 </div>
             </div>
             <div class="col-4">
-    
+                <div class="float-right">
+                    <br />
+                    <br />
+                    <div class="row">
+                        <button class="btn btn-rectangle v-center-inline rectangle-in_corso" (click)="listAttivita('in_corso')">
+                            {{ numeroAttivitaInCorso }} Attività
+                            <br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in corso&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <button class="btn btn-rectangle v-center-inline rectangle-da_revisionare"
+                            (click)="listAttivita('revisione')">
+                            {{ numeroAttivitaInRevisione }} Attività
+                            <br />
+                            da revisionare
+                        </button>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <button class="btn btn-rectangle v-center-inline rectangle-in_attesa" (click)="listAttivita('in_attesa')">
+                            {{ numeroAttivitaInAttesa }} Attività
+                            <br />
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in attesa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
  
