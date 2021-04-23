@@ -31,7 +31,7 @@ export class IstitutoComponent implements OnInit {
   numeroAttivitaInCorso;
   numeroAttivitaInRevisione;
   oreTotali;
- 
+
   // PIE chart.
   pieChartOptions: ChartOptions = {
     responsive: true,
@@ -81,21 +81,7 @@ export class IstitutoComponent implements OnInit {
   public barChartIstitutoType: ChartType = 'bar';
   public barChartIstitutoLegend = true;
   public barChartIstitutoPlugins = [];
-  // additionalDataSistema = [];
-  public barChartIstitutoOptions: ChartOptions = {
-    responsive: true,
-    tooltips: {
-      enabled: true,
-      mode: 'single',
-      callbacks: {
-        afterBody: function(t, d) {
-          console.log(this.additionalDataSistema[t[0].index]);
-          return 'loss 15%';  // return a string that you wish to append
-       },
-      }
-    },
-  };
-
+  barChartIstitutoOptions: ChartOptions = {};
 
   constructor(
     private dataService: DataService,
@@ -143,15 +129,15 @@ export class IstitutoComponent implements OnInit {
 
   initPieChart(report) {
     this.numeroAttivitaInAttesa = report.numeroAttivitaInAttesa;
-    this.numeroAttivitaInCorso = report.numeroAttivitaInCorso; 
+    this.numeroAttivitaInCorso = report.numeroAttivitaInCorso;
     this.numeroAttivitaInRevisione = report.numeroAttivitaInRevisione;
     this.oreTotali = report.numeroOreTotali;
 
-    this.pieChartLabels =[];
+    this.pieChartLabels = [];
     this.pieChartData = [];
- 
+
     // this.samplePieChartData();
-    
+
     Object.keys(report.oreTipologiaMap).map(key => {
       this.tipologie.forEach(tipo => {
         if (tipo.id == Number(key)) {
@@ -160,22 +146,49 @@ export class IstitutoComponent implements OnInit {
         }
       })
     });
-   
+
   }
 
   samplePieChartData() {
     this.tipologie.forEach(element => {
       this.pieChartLabels.push(element.titolo);
-      this.pieChartData.push(Math.floor(Math.random() * 8) + 1  );
+      this.pieChartData.push(Math.floor(Math.random() * 8) + 1);
       console.log(element.titolo);
     });
   }
 
   initGraphIsituto(report) {
     this.barChartIstitutoLabels = [];
-    this.barChartIstitutoData =[];
-    
-    this.sampleSistemaData();
+    this.barChartIstitutoData = [];
+
+    // this.sampleSistemaData();
+
+    Object.keys(report.oreClassiMap).map(key => {
+      var value = report.oreClassiMap[key];
+      var data = {};
+      data['data'] = value.oreSvolte;
+      data['hoverBorderColor'] = '#00CF86';
+      data['backgroundColor'] = '#00CF86';
+      data['hoverBackgroundColor'] = '#00CF86';
+      data['label'] = 'ore svolte';
+      this.barChartIstitutoLabels.push(value.classe);
+      this.barChartIstitutoData.push(data);
+    });
+
+    this.barChartIstitutoOptions = {
+      responsive: true,
+      tooltips: {
+        enabled: true,
+        mode: 'single',
+        callbacks: {
+          afterBody: function (t, d) {
+            console.log(this.additionalDataSistema[t[0].index]);
+            return 'loss 15%';  // return a string that you wish to append
+          },
+        }
+      },
+    };
+
 
   }
 
@@ -186,20 +199,20 @@ export class IstitutoComponent implements OnInit {
     this.sistemaDataset.numeroAttivitaInAttesa = 0;
     this.sistemaDataset.numeroAttivitaInCorso = 2;
     this.sistemaDataset.numeroAttivitaInRevisione = 3;
-    for (var i=1; i<=24; i++) {
+    for (var i = 1; i <= 24; i++) {
       var data = {};
       data['data'] = Math.floor(Math.random() * 400) + 1;
       data['hoverBorderColor'] = '#00CF86';
       data['backgroundColor'] = '#00CF86';
       data['hoverBackgroundColor'] = '#00CF86';
       data['label'] = 'ore svolte';
-      this.barChartIstitutoLabels.push(i+'° INFC');    
+      this.barChartIstitutoLabels.push(i + '° INFC');
       this.barChartIstitutoData.push(data);
       var entry = {};
       entry['oreSvolte'] = data['data'];
       entry['media'] = Math.floor(Math.random() * 50) + 1;
       entry['numStudenti'] = Math.floor(Math.random() * 5) + 1;
-      entry['label'] = i+'° INFC';
+      entry['label'] = i + '° INFC';
       this.sistemaDataset.oreClassiMap[entry['label']] = entry;
     }
   }
