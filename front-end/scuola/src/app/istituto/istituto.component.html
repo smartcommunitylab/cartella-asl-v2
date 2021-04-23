@@ -114,6 +114,19 @@
                 </div>
             </div>
         </div>
+        <br/>
+        <br/>
+        <div *ngIf="showDashboard">
+            <div class="title">
+                Media ore per classe <br />
+            </div>
+            <div style="display: block;" >
+                <canvas baseChart [datasets]="barChartIstitutoData" [labels]="barChartIstitutoLabels"
+                    [options]="barChartIstitutoOptions" [plugins]="barChartIstitutoPlugins"
+                    [legend]="barChartIstitutoLegend" [chartType]="barChartIstitutoType">
+                </canvas>
+            </div>
+        </div>
  
 
         

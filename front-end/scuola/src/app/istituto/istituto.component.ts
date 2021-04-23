@@ -75,6 +75,28 @@ export class IstitutoComponent implements OnInit {
     },
   ];
 
+  // Istituto bar graph.
+  public barChartIstitutoLabels: Label[] = [];
+  public barChartIstitutoData: ChartDataSets[] = [];
+  public barChartIstitutoType: ChartType = 'bar';
+  public barChartIstitutoLegend = true;
+  public barChartIstitutoPlugins = [];
+  // additionalDataSistema = [];
+  public barChartIstitutoOptions: ChartOptions = {
+    responsive: true,
+    tooltips: {
+      enabled: true,
+      mode: 'single',
+      callbacks: {
+        afterBody: function(t, d) {
+          console.log(this.additionalDataSistema[t[0].index]);
+          return 'loss 15%';  // return a string that you wish to append
+       },
+      }
+    },
+  };
+
+
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
@@ -112,6 +134,7 @@ export class IstitutoComponent implements OnInit {
       .subscribe((response) => {
         this.sistemaDataset = response;
         this.initPieChart(this.sistemaDataset);
+        this.initGraphIsituto(this.sistemaDataset);
         this.showDashboard = true;
       },
         (err: any) => console.log(err),
@@ -146,6 +169,39 @@ export class IstitutoComponent implements OnInit {
       this.pieChartData.push(Math.floor(Math.random() * 8) + 1  );
       console.log(element.titolo);
     });
+  }
+
+  initGraphIsituto(report) {
+    this.barChartIstitutoLabels = [];
+    this.barChartIstitutoData =[];
+    
+    this.sampleSistemaData();
+
+  }
+
+  sampleSistemaData() {
+    this.sistemaDataset = {};
+    this.sistemaDataset.oreClassiMap = {};
+    this.sistemaDataset.numeroOreTotali = 84;
+    this.sistemaDataset.numeroAttivitaInAttesa = 0;
+    this.sistemaDataset.numeroAttivitaInCorso = 2;
+    this.sistemaDataset.numeroAttivitaInRevisione = 3;
+    for (var i=1; i<=24; i++) {
+      var data = {};
+      data['data'] = Math.floor(Math.random() * 400) + 1;
+      data['hoverBorderColor'] = '#00CF86';
+      data['backgroundColor'] = '#00CF86';
+      data['hoverBackgroundColor'] = '#00CF86';
+      data['label'] = 'ore svolte';
+      this.barChartIstitutoLabels.push(i+'° INFC');    
+      this.barChartIstitutoData.push(data);
+      var entry = {};
+      entry['oreSvolte'] = data['data'];
+      entry['media'] = Math.floor(Math.random() * 50) + 1;
+      entry['numStudenti'] = Math.floor(Math.random() * 5) + 1;
+      entry['label'] = i+'° INFC';
+      this.sistemaDataset.oreClassiMap[entry['label']] = entry;
+    }
   }
 
   getIstituto() {
