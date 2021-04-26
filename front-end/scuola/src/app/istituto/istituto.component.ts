@@ -12,6 +12,7 @@ import { Label } from 'ng2-charts';
 })
 
 export class IstitutoComponent implements OnInit {
+
   filtro;
   filterSearch = false;
   closeResult: string;
@@ -56,7 +57,6 @@ export class IstitutoComponent implements OnInit {
           });
           multistringText.push(data.datasets[0].data[tooltipItems[0].index] + ' ore');
           multistringText.push(Math.round(Number(data.datasets[0].data[tooltipItems[0].index]) / oreTotali * 100) + ' % del totali')
-
           return multistringText;
         }
       }
@@ -69,7 +69,21 @@ export class IstitutoComponent implements OnInit {
   pieChartPlugins = [];
   pieChartColors = [
     {
-      backgroundColor: ['#FF9700', '#00CF86', '#0066CC', '#F83E5A', '#7FB2E5', '#5A6772', '#E5E5E5', '#5A41F3', '#05FF00', '#FF6AA0', '#00FFFF', '#AD00FF', '#04111C'],
+      backgroundColor: [
+        '#FF9700',
+        '#00CF86',
+        '#0066CC',
+        '#F83E5A',
+        '#7FB2E5',
+        '#5A6772',
+        '#E5E5E5',
+        '#5A41F3',
+        '#05FF00',
+        '#FF6AA0',
+        '#00FFFF',
+        '#AD00FF',
+        '#04111C'
+      ],
     },
   ];
 
@@ -85,9 +99,7 @@ export class IstitutoComponent implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.getIstituto();
@@ -106,7 +118,6 @@ export class IstitutoComponent implements OnInit {
     },
       (err: any) => console.log(err),
       () => console.log('getAttivitaTipologie'));
-
   }
 
   initIstitutoDashboard() {
@@ -128,12 +139,10 @@ export class IstitutoComponent implements OnInit {
     this.numeroAttivitaInCorso = report.numeroAttivitaInCorso;
     this.numeroAttivitaInRevisione = report.numeroAttivitaInRevisione;
     this.oreTotali = report.numeroOreTotali;
-
     this.pieChartLabels = [];
     this.pieChartData = [];
 
     // this.samplePieChartData();
-
     Object.keys(report.oreTipologiaMap).map(key => {
       this.tipologie.forEach(tipo => {
         if (tipo.id == Number(key)) {
@@ -158,7 +167,6 @@ export class IstitutoComponent implements OnInit {
     this.barChartIstitutoData = [];
 
     // this.sampleSistemaData();
-
     Object.keys(report.oreClassiMap).map(key => {
       var value = report.oreClassiMap[key];
       var data = {};
@@ -179,7 +187,7 @@ export class IstitutoComponent implements OnInit {
         callbacks: {
           afterBody: function (t, d) {
             console.log(this.additionalDataSistema[t[0].index]);
-            return '';  // return a string that you wish to append
+            return '';
           },
         }
       },
@@ -195,6 +203,19 @@ export class IstitutoComponent implements OnInit {
             stepSize: 40,
             suggestedMax: 440
         }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: false,
+          padding: 50,
+        },
+        ticks: {
+          display: false,
+          autoSkip: false,
+          stepSize: 20,
+          maxRotation: 90,
+          minRotation: 90,
+        }
       }]
       }
     };
@@ -207,6 +228,7 @@ export class IstitutoComponent implements OnInit {
     this.sistemaDataset.numeroAttivitaInAttesa = 0;
     this.sistemaDataset.numeroAttivitaInCorso = 2;
     this.sistemaDataset.numeroAttivitaInRevisione = 3;
+    
     for (var i = 1; i <= 24; i++) {
       var data = {};
       data['data'] = Math.floor(Math.random() * 400) + 1;
@@ -223,6 +245,7 @@ export class IstitutoComponent implements OnInit {
       entry['label'] = i + '° INFC';
       this.sistemaDataset.oreClassiMap[entry['label']] = entry;
     }
+
   }
 
   getIstituto() {
