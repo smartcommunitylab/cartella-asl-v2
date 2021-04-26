@@ -1,3 +1,4 @@
+
 .list-container{
     margin-top: 40px;
     padding: 12px;
@@ -5,13 +6,16 @@
     >.row {
         margin: 0px;
     }
+
     .btn-txt {
         color: white;
         font-size: 16px;
     }
+
     .fill-darkblue {
         fill: #06c;
     }
+
     .title{
         text-align: left;
         letter-spacing: 0;
@@ -20,11 +24,18 @@
         font-size: 25px;
         font-weight: bold;
     }
+
     .table-head {
         white-space: nowrap;
         font-size: larger;
     }
+   
 }
+
+.chart-custom {
+    width: 1200px!important;
+}
+
 .btn-rectangle {
     max-width: 220px!important;
 }
@@ -44,4 +55,8 @@
     color: #FFFFFF!important;
 }
 
+.bar-chart {
+    width: 400px;
+    height: 200px;
+}
 

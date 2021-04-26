@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Location } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
@@ -87,8 +85,6 @@ export class IstitutoComponent implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location,
-    private modalService: NgbModal
   ) {
 
   }
@@ -183,13 +179,25 @@ export class IstitutoComponent implements OnInit {
         callbacks: {
           afterBody: function (t, d) {
             console.log(this.additionalDataSistema[t[0].index]);
-            return 'loss 15%';  // return a string that you wish to append
+            return '';  // return a string that you wish to append
           },
         }
       },
+      scales: {
+        yAxes: [{
+          position: 'left',
+          scaleLabel: {
+              display: true,
+              labelString: 'Ore',
+          },
+          ticks: {
+            beginAtZero: true,
+            stepSize: 40,
+            suggestedMax: 440
+        }
+      }]
+      }
     };
-
-
   }
 
   sampleSistemaData() {
