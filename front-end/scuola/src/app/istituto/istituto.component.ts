@@ -174,7 +174,7 @@ export class IstitutoComponent implements OnInit {
       data['hoverBorderColor'] = '#00CF86';
       data['backgroundColor'] = '#00CF86';
       data['hoverBackgroundColor'] = '#00CF86';
-      data['label'] = 'ore svolte';
+      data['label'] = 'media ore svolte';
       this.barChartIstitutoLabels.push(value.classe);
       this.barChartIstitutoData.push(data);
     });
@@ -185,10 +185,17 @@ export class IstitutoComponent implements OnInit {
         enabled: true,
         mode: 'single',
         callbacks: {
-          afterBody: function (t, d) {
-            console.log(this.additionalDataSistema[t[0].index]);
-            return '';
+          label: function (tooltipItems, data) {
+            var multistringText = [];
+            multistringText.push(data.labels[tooltipItems.index]);
+  
+            return multistringText;
           },
+          footer: function (tooltipItems, data) {
+            var multistringText = [];
+            multistringText.push(data.datasets[0].data[tooltipItems[0].index] + ' alunni');
+            return multistringText;
+          }
         }
       },
       scales: {
@@ -199,9 +206,7 @@ export class IstitutoComponent implements OnInit {
               labelString: 'Ore',
           },
           ticks: {
-            beginAtZero: true,
-            stepSize: 40,
-            suggestedMax: 440
+            beginAtZero: true,        
         }
       }],
       xAxes: [{
@@ -231,7 +236,7 @@ export class IstitutoComponent implements OnInit {
     
     for (var i = 1; i <= 24; i++) {
       var data = {};
-      data['data'] = Math.floor(Math.random() * 400) + 1;
+      data['data'] = Math.floor(Math.random() * 80) + 1;
       data['hoverBorderColor'] = '#00CF86';
       data['backgroundColor'] = '#00CF86';
       data['hoverBackgroundColor'] = '#00CF86';
@@ -239,8 +244,8 @@ export class IstitutoComponent implements OnInit {
       this.barChartIstitutoLabels.push(i + '° INFC');
       this.barChartIstitutoData.push(data);
       var entry = {};
-      entry['oreSvolte'] = data['data'];
-      entry['media'] = Math.floor(Math.random() * 50) + 1;
+      entry['media'] = data['data'];
+      entry['oreSvolte'] = Math.floor(Math.random() * 50) + 1;
       entry['numStudenti'] = Math.floor(Math.random() * 5) + 1;
       entry['label'] = i + '° INFC';
       this.sistemaDataset.oreClassiMap[entry['label']] = entry;
