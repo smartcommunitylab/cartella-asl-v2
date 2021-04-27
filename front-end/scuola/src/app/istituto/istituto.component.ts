@@ -182,20 +182,17 @@ export class IstitutoComponent implements OnInit {
     this.barChartIstitutoOptions = {
       responsive: true,
       tooltips: {
-        enabled: true,
+        backgroundColor: '#FAFBF0',
+        bodyFontColor: '#707070',
+        titleFontColor: '#707070',
         mode: 'single',
+        enabled: true,
         callbacks: {
-          label: function (tooltipItems, data) {
+          label: function(t, d) {
             var multistringText = [];
-            multistringText.push(data.labels[tooltipItems.index]);
-  
             return multistringText;
           },
-          footer: function (tooltipItems, data) {
-            var multistringText = [];
-            multistringText.push(data.datasets[0].data[tooltipItems[0].index] + ' alunni');
-            return multistringText;
-          }
+          afterBody: this.createTooltipSistemaCallback(this.sistemaDataset),
         }
       },
       scales: {
@@ -268,6 +265,18 @@ export class IstitutoComponent implements OnInit {
 
   modifica() {
     this.router.navigate(['../modifica', this.dataService.istitutoId], { relativeTo: this.route });
+  }
+
+  createTooltipSistemaCallback(sistemaDataset) {
+    return function (tooltipItem, data) {
+      var tooltipItemHovered = tooltipItem[0];
+      var info = sistemaDataset.oreClassiMap[tooltipItemHovered.label];
+      var multistringText = [];
+      multistringText.push('\n');
+      multistringText.push('Media ' + info.media + ' ore');
+      multistringText.push(info.numStudenti + ' alunni');
+      return multistringText;
+    }
   }
 
 }
