@@ -87,6 +87,38 @@ export class IstitutoComponent implements OnInit {
     },
   ];
 
+    // Classe stack bar graph.
+    public barChartClasseOptions: ChartOptions = {
+      responsive: true,
+    maintainAspectRatio: false,
+    legend: {
+      position: 'left',
+    },
+    tooltips: {
+      enabled: true,
+      mode: 'single',
+      callbacks: {
+        label: function (tooltipItems, data) {
+          var multistringText = [];
+          return multistringText;
+        },
+        footer: function (tooltipItems, data) {
+          var multistringText = [];
+          return multistringText;
+        }
+      }
+    },
+    };
+    public barChartClasseType: ChartType = 'bar';
+    public barChartClasseLegend = true;
+    public barChartClassePlugins = [];
+    public barChartClasseLabels: Label[] = ['1', '2', '3', '3IN', '4IN', '3MCA', '4MCA'];
+  
+    public barChartClasseData: ChartDataSets[] = [
+        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A', stack: 'a' },
+        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B', stack: 'a' }
+      ];
+
   // Istituto bar graph.
   public barChartIstitutoLabels: Label[] = [];
   public barChartIstitutoData: ChartDataSets[] = [];

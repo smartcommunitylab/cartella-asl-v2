@@ -115,6 +115,21 @@
         </div>
         <br/>
         <br/>
+        <div *ngIf="showDashboard">
+            <div class="title">
+                Ore studenti <br />
+            </div>
+            <div style="display: block;">
+               <canvas baseChart
+               [datasets]="barChartClasseData"
+               [labels]="barChartClasseLabels"
+               [options]="barChartClasseOptions"
+               [plugins]="barChartClassePlugins"
+               [legend]="barChartClasseLegend"
+               [chartType]="barChartClasseType">
+               </canvas>
+            </div>
+        </div>
         <div *ngIf="!classReport && showDashboard">
             <div class="title">
                 Media ore per classe <br />
