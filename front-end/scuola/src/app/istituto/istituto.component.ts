@@ -143,6 +143,7 @@ export class IstitutoComponent implements OnInit {
           this.classi = response;
           // default selection.
           this.classe = this.classi[0];
+          this.initClasseDashboard();
           this.initIstitutoDashboard();
         },
           (err: any) => console.log(err),
@@ -150,6 +151,23 @@ export class IstitutoComponent implements OnInit {
     },
       (err: any) => console.log(err),
       () => console.log('getAttivitaTipologie'));
+  }
+
+  initClasseDashboard() {
+    // GET classes report.
+    // this.dataService.getDashboardIstitutoClasseReport(this.classe)
+    //   .subscribe((response) => {
+    //     this.classeDataset = response;
+    //     if (Object.keys(this.classeDataset.oreTipologiaMap).length === 0) {
+    //       this.showDashboard = false;
+    //     } else {
+    //       this.initPieChart(this.classeDataset);
+          this.initGraphClasse(); //this.classeDataset
+          this.showDashboard = true;
+      //   }        
+      // },
+      //   (err: any) => console.log(err),
+      //   () => console.log('get dashboard classi report api'));
   }
 
   initIstitutoDashboard() {
@@ -192,6 +210,32 @@ export class IstitutoComponent implements OnInit {
       this.pieChartData.push(Math.floor(Math.random() * 8) + 1);
       console.log(element.titolo);
     });
+  }
+
+  initGraphClasse() {
+    this.barChartClasseLabels=[];
+    this.barChartClasseData = [];
+
+    this.sampleClasseData();
+
+  }
+
+  sampleClasseData() {
+    let data1 = [];
+    var data2 = [];
+    for (var i=1; i<=15; i++) {
+      let temp1 = Math.floor(Math.random() * 200) + 1;
+      let temp2 = Math.floor(Math.random() * 200) + 1;
+      data1.push(temp1);
+      data2.push(temp2);      
+      this.barChartClasseLabels.push('Studente-' + i);
+    }
+
+    this.barChartClasseData = [
+      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
+      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
+    ];
+
   }
 
   initGraphIsituto(report) {
