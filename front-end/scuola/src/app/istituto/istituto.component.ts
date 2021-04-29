@@ -25,6 +25,7 @@ export class IstitutoComponent implements OnInit {
   tipologie;
   classe;
   classi;
+  classeDataset;
   sistemaDataset;
   numeroAttivitaInAttesa;
   numeroAttivitaInCorso;
@@ -221,6 +222,12 @@ export class IstitutoComponent implements OnInit {
   }
 
   sampleClasseData() {
+    this.classeDataset = {};
+    this.classeDataset.oreStudentiMap = {};
+    this.classeDataset.numeroOreTotali = 84;
+    this.classeDataset.numeroAttivitaInAttesa = 0;
+    this.classeDataset.numeroAttivitaInCorso = 2;
+    this.classeDataset.numeroAttivitaInRevisione = 3;
     let data1 = [];
     var data2 = [];
     for (var i=1; i<=15; i++) {
@@ -229,6 +236,14 @@ export class IstitutoComponent implements OnInit {
       data1.push(temp1);
       data2.push(temp2);      
       this.barChartClasseLabels.push('Studente-' + i);
+      var entry = {};
+      entry['oreEsterne'] = temp1;
+      entry['oreInterne'] = temp2;
+      entry['oreDaValidare'] = (temp1+temp2)/2;
+      entry['nominativo'] = 'ERCERC CERFE';
+      entry['studenteId'] = 'eeee-fff-gggg-hhhh-iii';
+      entry['label'] = 'Studente-' + i;
+      this.classeDataset.oreStudentiMap[entry['label']] = entry;
     }
 
     this.barChartClasseData = [
