@@ -261,7 +261,7 @@ export class IstitutoComponent implements OnInit {
     Object.keys(report.oreClassiMap).map(key => {
       var value = report.oreClassiMap[key];
       var data = {};
-      data['data'] = value.oreSvolte;
+      data['data'] = value.media;
       data['hoverBorderColor'] = '#00CF86';
       data['backgroundColor'] = '#00CF86';
       data['hoverBackgroundColor'] = '#00CF86';
