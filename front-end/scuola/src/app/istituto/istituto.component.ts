@@ -156,19 +156,19 @@ export class IstitutoComponent implements OnInit {
 
   initClasseDashboard() {
     // GET classes report.
-    // this.dataService.getDashboardIstitutoClasseReport(this.classe)
-    //   .subscribe((response) => {
-    //     this.classeDataset = response;
-    //     if (Object.keys(this.classeDataset.oreTipologiaMap).length === 0) {
-    //       this.showDashboard = false;
-    //     } else {
-    //       this.initPieChart(this.classeDataset);
-          this.initGraphClasse(); //this.classeDataset
+    this.dataService.getDashboardIstitutoClasseReport(this.classe)
+      .subscribe((response) => {
+        this.classeDataset = response;
+        if (Object.keys(this.classeDataset.oreTipologiaMap).length === 0) {
+          this.showDashboard = false;
+        } else {
+          this.initPieChart(this.classeDataset);
+          this.initGraphClasse(this.classeDataset); 
           this.showDashboard = true;
-      //   }        
-      // },
-      //   (err: any) => console.log(err),
-      //   () => console.log('get dashboard classi report api'));
+        }        
+      },
+        (err: any) => console.log(err),
+        () => console.log('get dashboard classi report api'));
   }
 
   initIstitutoDashboard() {
@@ -213,11 +213,26 @@ export class IstitutoComponent implements OnInit {
     });
   }
 
-  initGraphClasse() {
+  initGraphClasse(report) {
     this.barChartClasseLabels=[];
     this.barChartClasseData = [];
 
-    this.sampleClasseData();
+    // this.sampleClasseData();
+
+    let data1 = [];
+    var data2 = [];
+    Object.keys(report.oreStudentiMap).map(key => {
+      var value = report.oreStudentiMap[key];
+      data1.push(value.oreEsterne);
+      data2.push(value.oreInterne); 
+      this.barChartClasseLabels.push(value.nominativo);    
+    });
+
+    this.barChartClasseData = [
+      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
+      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
+    ];
+
 
   }
 
