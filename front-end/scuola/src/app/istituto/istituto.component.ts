@@ -46,7 +46,7 @@ export class IstitutoComponent implements OnInit {
         label: function (tooltipItems, data) {
           var multistringText = [];
           multistringText.push(data.labels[tooltipItems.index]);
-
+          
           return multistringText;
         },
         footer: function (tooltipItems, data) {
@@ -57,7 +57,8 @@ export class IstitutoComponent implements OnInit {
             oreTotali = oreTotali + data.datasets[0].data[key];
           });
           multistringText.push(data.datasets[0].data[tooltipItems[0].index] + ' ore');
-          multistringText.push(Math.round(Number(data.datasets[0].data[tooltipItems[0].index]) / oreTotali * 100) + ' % del totali')
+          multistringText.push(Math.round(Number(data.datasets[0].data[tooltipItems[0].index])/oreTotali * 100) + ' % del totali')
+
           return multistringText;
         }
       }
@@ -70,55 +71,19 @@ export class IstitutoComponent implements OnInit {
   pieChartPlugins = [];
   pieChartColors = [
     {
-      backgroundColor: [
-        '#FF9700',
-        '#00CF86',
-        '#0066CC',
-        '#F83E5A',
-        '#7FB2E5',
-        '#5A6772',
-        '#E5E5E5',
-        '#5A41F3',
-        '#05FF00',
-        '#FF6AA0',
-        '#00FFFF',
-        '#AD00FF',
-        '#04111C'
-      ],
+      backgroundColor: ['#FF9700', '#00CF86', '#0066CC', '#F83E5A', '#7FB2E5', '#5A6772', '#E5E5E5', '#5A41F3', '#05FF00', '#FF6AA0', '#00FFFF', '#AD00FF', '#04111C'],
     },
   ];
 
-    // Classe stack bar graph.
-    public barChartClasseOptions: ChartOptions = {
-      responsive: true,
-    maintainAspectRatio: false,
-    legend: {
-      position: 'left',
-    },
-    tooltips: {
-      enabled: true,
-      mode: 'single',
-      callbacks: {
-        label: function (tooltipItems, data) {
-          var multistringText = [];
-          return multistringText;
-        },
-        footer: function (tooltipItems, data) {
-          var multistringText = [];
-          return multistringText;
-        }
-      }
-    },
-    };
-    public barChartClasseType: ChartType = 'bar';
-    public barChartClasseLegend = true;
-    public barChartClassePlugins = [];
-    public barChartClasseLabels: Label[] = ['1', '2', '3', '3IN', '4IN', '3MCA', '4MCA'];
-  
-    public barChartClasseData: ChartDataSets[] = [
-        { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A', stack: 'a' },
-        { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B', stack: 'a' }
-      ];
+  // Classe stack bar graph.
+  public barChartClasseOptions: ChartOptions = {
+    responsive: true,
+  };
+  public barChartClasseLabels: Label[] =[];
+  public barChartClasseType: ChartType = 'bar';
+  public barChartClasseLegend = true;
+  public barChartClassePlugins = [];
+  public barChartClasseData: ChartDataSets[] = [];
 
   // Istituto bar graph.
   public barChartIstitutoLabels: Label[] = [];
@@ -132,7 +97,7 @@ export class IstitutoComponent implements OnInit {
     private dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getIstituto();
@@ -163,26 +128,12 @@ export class IstitutoComponent implements OnInit {
           this.showDashboard = false;
         } else {
           this.initPieChart(this.classeDataset);
-          this.initGraphClasse(this.classeDataset); 
+          this.initGraphClasse(this.classeDataset);
           this.showDashboard = true;
-        }        
+        }
       },
         (err: any) => console.log(err),
         () => console.log('get dashboard classi report api'));
-  }
-
-  initIstitutoDashboard() {
-    this.showDashboard = false;
-    // GET sistema report.
-    this.dataService.getDashboardIstitutoSistemaReport()
-      .subscribe((response) => {
-        this.sistemaDataset = response;
-        this.initPieChart(this.sistemaDataset);
-        this.initGraphIsituto(this.sistemaDataset);
-        this.showDashboard = true;
-      },
-        (err: any) => console.log(err),
-        () => console.log('get dashboard istituto report api'));
   }
 
   initPieChart(report) {
@@ -202,8 +153,42 @@ export class IstitutoComponent implements OnInit {
         }
       })
     });
-
   }
+
+  initGraphClasse(report) {
+    this.barChartClasseLabels = [];
+    this.barChartClasseData = [];
+
+    // this.sampleClasseData();
+    let data1 = [];
+    var data2 = [];
+    Object.keys(report.oreStudentiMap).map(key => {
+      var value = report.oreStudentiMap[key];
+      data1.push(value.oreEsterne);
+      data2.push(value.oreInterne);
+      this.barChartClasseLabels.push(value.nominativo);
+    });
+
+    this.barChartClasseData = [
+      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
+      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
+    ];
+  }
+
+  initIstitutoDashboard() {
+    this.showDashboard = false;
+    // GET sistema report.
+    this.dataService.getDashboardIstitutoSistemaReport()
+      .subscribe((response) => {
+        this.sistemaDataset = response;
+        this.initPieChart(this.sistemaDataset);
+        this.initGraphIsituto(this.sistemaDataset);
+        this.showDashboard = true;
+      },
+        (err: any) => console.log(err),
+        () => console.log('get dashboard istituto report api'));
+  }
+
 
   samplePieChartData() {
     this.tipologie.forEach(element => {
@@ -211,29 +196,6 @@ export class IstitutoComponent implements OnInit {
       this.pieChartData.push(Math.floor(Math.random() * 8) + 1);
       console.log(element.titolo);
     });
-  }
-
-  initGraphClasse(report) {
-    this.barChartClasseLabels=[];
-    this.barChartClasseData = [];
-
-    // this.sampleClasseData();
-
-    let data1 = [];
-    var data2 = [];
-    Object.keys(report.oreStudentiMap).map(key => {
-      var value = report.oreStudentiMap[key];
-      data1.push(value.oreEsterne);
-      data2.push(value.oreInterne); 
-      this.barChartClasseLabels.push(value.nominativo);    
-    });
-
-    this.barChartClasseData = [
-      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
-      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
-    ];
-
-
   }
 
   sampleClasseData() {
@@ -245,16 +207,16 @@ export class IstitutoComponent implements OnInit {
     this.classeDataset.numeroAttivitaInRevisione = 3;
     let data1 = [];
     var data2 = [];
-    for (var i=1; i<=15; i++) {
+    for (var i = 1; i <= 15; i++) {
       let temp1 = Math.floor(Math.random() * 200) + 1;
       let temp2 = Math.floor(Math.random() * 200) + 1;
       data1.push(temp1);
-      data2.push(temp2);      
+      data2.push(temp2);
       this.barChartClasseLabels.push('Studente-' + i);
       var entry = {};
       entry['oreEsterne'] = temp1;
       entry['oreInterne'] = temp2;
-      entry['oreDaValidare'] = (temp1+temp2)/2;
+      entry['oreDaValidare'] = (temp1 + temp2) / 2;
       entry['nominativo'] = 'ERCERC CERFE';
       entry['studenteId'] = 'eeee-fff-gggg-hhhh-iii';
       entry['label'] = 'Studente-' + i;
@@ -294,7 +256,7 @@ export class IstitutoComponent implements OnInit {
         mode: 'single',
         enabled: true,
         callbacks: {
-          label: function(t, d) {
+          label: function (t, d) {
             var multistringText = [];
             return multistringText;
           },
@@ -305,26 +267,26 @@ export class IstitutoComponent implements OnInit {
         yAxes: [{
           position: 'left',
           scaleLabel: {
-              display: true,
-              labelString: 'Ore',
+            display: true,
+            labelString: 'Ore',
           },
           ticks: {
-            beginAtZero: true,        
-        }
-      }],
-      xAxes: [{
-        scaleLabel: {
-          display: false,
-          padding: 50,
-        },
-        ticks: {
-          display: false,
-          autoSkip: false,
-          stepSize: 20,
-          maxRotation: 90,
-          minRotation: 90,
-        }
-      }]
+            beginAtZero: true,
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: false,
+            padding: 50,
+          },
+          ticks: {
+            display: false,
+            autoSkip: false,
+            stepSize: 20,
+            maxRotation: 90,
+            minRotation: 90,
+          }
+        }]
       }
     };
   }
@@ -336,7 +298,7 @@ export class IstitutoComponent implements OnInit {
     this.sistemaDataset.numeroAttivitaInAttesa = 0;
     this.sistemaDataset.numeroAttivitaInCorso = 2;
     this.sistemaDataset.numeroAttivitaInRevisione = 3;
-    
+
     for (var i = 1; i <= 24; i++) {
       var data = {};
       data['data'] = Math.floor(Math.random() * 80) + 1;
