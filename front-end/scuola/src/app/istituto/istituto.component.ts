@@ -189,47 +189,6 @@ export class IstitutoComponent implements OnInit {
         () => console.log('get dashboard istituto report api'));
   }
 
-
-  samplePieChartData() {
-    this.tipologie.forEach(element => {
-      this.pieChartLabels.push(element.titolo);
-      this.pieChartData.push(Math.floor(Math.random() * 8) + 1);
-      console.log(element.titolo);
-    });
-  }
-
-  sampleClasseData() {
-    this.classeDataset = {};
-    this.classeDataset.oreStudentiMap = {};
-    this.classeDataset.numeroOreTotali = 84;
-    this.classeDataset.numeroAttivitaInAttesa = 0;
-    this.classeDataset.numeroAttivitaInCorso = 2;
-    this.classeDataset.numeroAttivitaInRevisione = 3;
-    let data1 = [];
-    var data2 = [];
-    for (var i = 1; i <= 15; i++) {
-      let temp1 = Math.floor(Math.random() * 200) + 1;
-      let temp2 = Math.floor(Math.random() * 200) + 1;
-      data1.push(temp1);
-      data2.push(temp2);
-      this.barChartClasseLabels.push('Studente-' + i);
-      var entry = {};
-      entry['oreEsterne'] = temp1;
-      entry['oreInterne'] = temp2;
-      entry['oreDaValidare'] = (temp1 + temp2) / 2;
-      entry['nominativo'] = 'ERCERC CERFE';
-      entry['studenteId'] = 'eeee-fff-gggg-hhhh-iii';
-      entry['label'] = 'Studente-' + i;
-      this.classeDataset.oreStudentiMap[entry['label']] = entry;
-    }
-
-    this.barChartClasseData = [
-      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
-      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
-    ];
-
-  }
-
   initGraphIsituto(report) {
     this.barChartIstitutoLabels = [];
     this.barChartIstitutoData = [];
@@ -291,6 +250,46 @@ export class IstitutoComponent implements OnInit {
     };
   }
 
+  samplePieChartData() {
+    this.tipologie.forEach(element => {
+      this.pieChartLabels.push(element.titolo);
+      this.pieChartData.push(Math.floor(Math.random() * 8) + 1);
+      console.log(element.titolo);
+    });
+  }
+
+  sampleClasseData() {
+    this.classeDataset = {};
+    this.classeDataset.oreStudentiMap = {};
+    this.classeDataset.numeroOreTotali = 84;
+    this.classeDataset.numeroAttivitaInAttesa = 0;
+    this.classeDataset.numeroAttivitaInCorso = 2;
+    this.classeDataset.numeroAttivitaInRevisione = 3;
+    let data1 = [];
+    var data2 = [];
+    for (var i = 1; i <= 15; i++) {
+      let temp1 = Math.floor(Math.random() * 200) + 1;
+      let temp2 = Math.floor(Math.random() * 200) + 1;
+      data1.push(temp1);
+      data2.push(temp2);
+      this.barChartClasseLabels.push('Studente-' + i);
+      var entry = {};
+      entry['oreEsterne'] = temp1;
+      entry['oreInterne'] = temp2;
+      entry['oreDaValidare'] = (temp1 + temp2) / 2;
+      entry['nominativo'] = 'ERCERC CERFE';
+      entry['studenteId'] = 'eeee-fff-gggg-hhhh-iii';
+      entry['label'] = 'Studente-' + i;
+      this.classeDataset.oreStudentiMap[entry['label']] = entry;
+    }
+
+    this.barChartClasseData = [
+      { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
+      { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
+    ];
+
+  }
+
   sampleSistemaData() {
     this.sistemaDataset = {};
     this.sistemaDataset.oreClassiMap = {};
@@ -343,6 +342,21 @@ export class IstitutoComponent implements OnInit {
       multistringText.push('\n');
       multistringText.push('Media ' + info.media + ' ore');
       multistringText.push(info.numStudenti + ' alunni');
+      return multistringText;
+    }
+  }
+
+  createTooltipClasseCallback(classeDataset) {
+    return  function(tooltipItem, data) {
+      var tooltipItemHovered = tooltipItem[0];
+      var info = classeDataset.oreStudentiMap[tooltipItemHovered.label];
+      var multistringText = [];
+      multistringText.push('\n');
+      var oreTotali = info.oreEsterne + info.oreInterne;
+      multistringText.push(oreTotali + ' ore totali');
+      multistringText.push(info.oreDaValidare + ' ore da validare');
+      // multistringText.push(info.oreInterne + ' ore interne');
+      // multistringText.push(info.oreEsterne + ' ore esterne');
       return multistringText;
     }
   }
