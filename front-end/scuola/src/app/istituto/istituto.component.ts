@@ -173,6 +173,52 @@ export class IstitutoComponent implements OnInit {
       { data: data1, label: 'ore esterne', stack: 'a', backgroundColor: '#0066CC', hoverBackgroundColor: '#0066CC', barPercentage: 0.5 },
       { data: data2, label: 'ore interne', stack: 'a', backgroundColor: '#00CF86', hoverBackgroundColor: '#00CF86', barPercentage: 0.5 },
     ];
+
+    this.barChartClasseOptions = {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        yAxes: [{
+          position: 'left',
+          scaleLabel: {
+            display: true,
+            labelString: 'Ore',
+          },
+          ticks: {
+            beginAtZero: true,
+            stepSize: 40,
+            suggestedMax: 440
+          }
+        }],
+        xAxes: [{
+          scaleLabel: {
+            display: false,
+            padding: 50,
+          },
+          ticks: {
+            display: false,
+            // autoSkip: false,
+            // stepSize: 20,
+            // maxRotation: 90,
+            // minRotation: 90,
+          }
+        }]
+      },
+      legend: {
+        display: true
+      },
+      tooltips: {
+        enabled: true,
+        backgroundColor: '#FAFBF0',
+        bodyFontColor: '#707070',
+        titleFontColor: '#707070',
+        mode: 'single',
+        callbacks: {
+          afterBody: this.createTooltipClasseCallback(this.classeDataset),
+        }
+      },
+    };
+
   }
 
   initIstitutoDashboard() {
