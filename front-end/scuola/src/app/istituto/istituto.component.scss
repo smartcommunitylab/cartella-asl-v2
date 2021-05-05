@@ -1,4 +1,3 @@
-
 .list-container{
     margin-top: 40px;
     padding: 12px;
@@ -6,16 +5,13 @@
     >.row {
         margin: 0px;
     }
-
     .btn-txt {
         color: white;
         font-size: 16px;
     }
-
     .fill-darkblue {
         fill: #06c;
     }
-
     .title{
         text-align: left;
         letter-spacing: 0;
@@ -24,35 +20,23 @@
         font-size: 25px;
         font-weight: bold;
     }
-
     .table-head {
         white-space: nowrap;
         font-size: larger;
     }
-   
 }
-
 .btn-rectangle {
     max-width: 220px!important;
 }
-
 .rectangle-in_attesa {
     background: #7FB2E5!important;
     color: #FFFFFF!important;
 }
-
 .rectangle-in_corso {
     background: #00CF86!important;
     color: #FFFFFF!important;
 }
-
 .rectangle-da_revisionare {
     background: #F83E5A!important;
     color: #FFFFFF!important;
 }
-
-.bar-chart {
-    width: 400px;
-    height: 200px;
-}
-
