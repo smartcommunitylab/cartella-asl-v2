@@ -56,14 +56,36 @@
                 Dashboard <br />
             </div>
         </div>
-         <br />
-        <br />
         <div class="row">
-            <div class="title">
-                Tipologie Attività <br /><br/>
+            <div class="form-check form-check-inline">
+                <input name="gruppo2" type="radio" id="radio4" [checked]="classeReport"
+                    (change)="onFilterChange($event)" checked>
+                <label for="radio4">Visualizza dati classe</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input name="gruppo2" type="radio" id="radio5" (change)="onFilterChange($event)">
+                <label for="radio5">Visualizza dati istituto</label>
             </div>
         </div>
-        <div class="row">
+        <div class="row v-center form-group" *ngIf="classeReport">
+            <div class="col-2">Seleziona classe:</div> 
+            <div class="col-4">
+                <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="classe"
+                    (ngModelChange)="selectClasseFilter()">
+                    <!-- <option selected="selected">Classi</option> -->
+                    <option [value]="classe" *ngFor="let classe of classi">{{classe}}</option>
+                </select>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row" *ngIf="showDashboard">
+            <div class="row">
+                <div class="title">
+                    Tipologie Attività <br />
+                </div>
+            </div>
+            <br/>
             <div class="col-6">
                 <div class="chartjs-container">
                     <canvas  
@@ -113,14 +135,16 @@
                 </div>
             </div>
         </div>
-        <br/>
-        <br/>
-        <div *ngIf="showDashboard">
+        <br />
+        <br />
+        <div *ngIf="classeReport && showDashboard">
             <div class="title">
                 Ore studenti <br />
             </div>
-            <div style="display: block;">
+            <div>
                <canvas baseChart
+               width="1500"
+               height="380" 
                [datasets]="barChartClasseData"
                [labels]="barChartClasseLabels"
                [options]="barChartClasseOptions"
@@ -130,12 +154,14 @@
                </canvas>
             </div>
         </div>
-        <div *ngIf="!classReport && showDashboard">
+        <div *ngIf="!classeReport && showDashboard">
             <div class="title">
                 Media ore per classe <br />
             </div>
-            <div style="display: block;" >
+            <div>
                 <canvas baseChart
+                width="1500"
+                height="380" 
                 [datasets]="barChartIstitutoData"
                 [labels]="barChartIstitutoLabels"
                 [options]="barChartIstitutoOptions"
@@ -144,6 +170,16 @@
                 [chartType]="barChartIstitutoType">
                 </canvas>
             </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="!showDashboard">
+        <div class="col-xl-12 text-center errorIconPaddingTop">
+            <svg class="icon icon-lightGrey icon-xl">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+            </svg>
+        </div>
+        <div class="col-xl-12 text-center">
+            <span class="searchError">Non ci sono dati da visualizzare!</span>
         </div>
     </div>
 </div>
