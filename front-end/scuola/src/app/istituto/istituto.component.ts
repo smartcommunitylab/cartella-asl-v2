@@ -33,6 +33,10 @@ export class IstitutoComponent implements OnInit {
     maintainAspectRatio: false,
     legend: {
       position: 'left',
+      labels: {
+        fontSize: 14,
+        fontFamily: "Titillium Web"
+      }
     },
     tooltips: {
       enabled: true,
@@ -209,7 +213,11 @@ export class IstitutoComponent implements OnInit {
         }]
       },
       legend: {
-        display: true
+        display: true,
+        labels: {
+          fontSize: 14,
+          fontFamily: "Titillium Web"
+        }
       },
       tooltips: {
         enabled: true,
@@ -279,7 +287,11 @@ export class IstitutoComponent implements OnInit {
         }],
       },
       legend: {
-        display: true
+        display: true,
+        labels: {
+          fontSize: 14,
+          fontFamily: "Titillium Web"
+        }        
       },
       tooltips: {
         enabled: true,
@@ -451,6 +463,31 @@ export class IstitutoComponent implements OnInit {
       //FILL THE LINES
       ctx.fill();
     };
+  }
+
+  listAttivita(stato) {
+    this.filtro = {
+      tipologia: '',
+      titolo: '',
+      stato: stato
+    };
+    localStorage.setItem('filtroAttivita', JSON.stringify(this.filtro));
+    this.router.navigateByUrl('/attivita/list');
+  }
+
+  onFilterChange(ev) {
+    this.classeReport = !this.classeReport;
+    this.showDashboard = true;
+    if (this.classeReport) {
+      this.initClasseDashboard();
+    } else {
+      this.initIstitutoDashboard();
+    }
+  }
+
+  selectClasseFilter() {
+    // console.log(this.classe);
+    this.initClasseDashboard();
   }
 
 }
