@@ -40,7 +40,7 @@ public class DashboardIstitutoManager extends DataEntityManager {
 
 	public List<String> getClassi(String istitutoId, String annoScolastico) throws Exception {
 		String q = "SELECT DISTINCT r0.classroom FROM Registration r0 WHERE r0.instituteId=(:istitutoId)"
-				+ " AND r0.schoolYear=(:annoScolastico)";
+				+ " AND r0.schoolYear=(:annoScolastico) ORDER BY r0.classroom ASC";
 		TypedQuery<String> query = em.createQuery(q, String.class);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("annoScolastico", annoScolastico);		
