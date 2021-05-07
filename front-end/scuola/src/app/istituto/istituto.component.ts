@@ -108,8 +108,8 @@ export class IstitutoComponent implements OnInit {
         .subscribe((response) => {
           this.classi = response;
           // default selection.
-          this.classe = this.classi[0];
-          this.initClasseDashboard();
+          // this.classe = this.classi[0];
+          // this.initClasseDashboard();
         },
           (err: any) => console.log(err),
           () => console.log('get dashboard istituto classi api'));
