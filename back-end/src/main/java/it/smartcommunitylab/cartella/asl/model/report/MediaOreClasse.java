@@ -10,6 +10,7 @@ public class MediaOreClasse {
 		oreSvolte += ore;
 		numStudenti++;
 		media = (double) oreSvolte / numStudenti; 
+		media = Math.round(media*100)/100.0d;
 	}
 	
 	public long getOreSvolte() {
