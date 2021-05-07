@@ -79,7 +79,7 @@
         </div>
         <br />
         <br />
-        <div class="row" *ngIf="showDashboard">
+        <div class="row" *ngIf="(showDashboard && !classeReport) || (showDashboard && classeReport && classe)">
             <div class="row">
                 <div class="title">
                     Tipologie Attività <br />
@@ -137,7 +137,7 @@
         </div>
         <br />
         <br />
-        <div *ngIf="classeReport && showDashboard">
+        <div *ngIf="classeReport && showDashboard && classe">
             <div class="title">
                 Ore studenti <br />
             </div>

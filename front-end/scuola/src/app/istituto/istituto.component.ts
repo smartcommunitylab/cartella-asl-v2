@@ -18,7 +18,7 @@ export class IstitutoComponent implements OnInit {
   showDashboard: boolean = false;
   classeReport: boolean = true;
   tipologie;
-  classe;
+  classe = null;
   classi;
   classeDataset;
   sistemaDataset;
@@ -107,9 +107,6 @@ export class IstitutoComponent implements OnInit {
       this.dataService.getDashboardIstitutoClasse()
         .subscribe((response) => {
           this.classi = response;
-          // default selection.
-          // this.classe = this.classi[0];
-          // this.initClasseDashboard();
         },
           (err: any) => console.log(err),
           () => console.log('get dashboard istituto classi api'));
@@ -129,7 +126,8 @@ export class IstitutoComponent implements OnInit {
 
   initClasseDashboard() {
     // GET classes report.
-    this.dataService.getDashboardIstitutoClasseReport(this.classe)
+    if (this.classe) {
+      this.dataService.getDashboardIstitutoClasseReport(this.classe)
       .subscribe((response) => {
         this.classeDataset = response;
         if (Object.keys(this.classeDataset.oreTipologiaMap).length === 0) {
@@ -142,6 +140,7 @@ export class IstitutoComponent implements OnInit {
       },
         (err: any) => console.log(err),
         () => console.log('get dashboard classi report api'));
+    }
   }
 
   initPieChart(report) {
@@ -479,6 +478,7 @@ export class IstitutoComponent implements OnInit {
     this.classeReport = !this.classeReport;
     this.showDashboard = true;
     if (this.classeReport) {
+      this.classe = null;
       this.initClasseDashboard();
     } else {
       this.initIstitutoDashboard();
