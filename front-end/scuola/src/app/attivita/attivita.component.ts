@@ -47,24 +47,30 @@ export class AttivitaComponent implements OnInit {
         private router: Router,
         private location: Location,
         private modalService: NgbModal
-    ) {
-        // force route reload whenever params change;
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.filtro = {
-            tipologia: '',
-            titolo: '',
-            stato: ''
-        }
-    }
+    ) {}
 
     ngOnInit(): void {
         this.title = 'Lista attività';
+        // retrieve filter states.
+        this.filtro = JSON.parse(localStorage.getItem('filtroAttivita'));
+        if (!this.filtro) {
+            this.filtro = {
+                tipologia: '',
+                titolo: '',
+                stato: ''
+            };
+        }
+        if (this.filtro.stato)
+        this.stato = this.filtro.stato;
+        if (this.filtro.tipologia) {
+            this.tipologia = this.filtro.tipologia;
+        } else {
+            this.tipologia = 'Tipologia';
+        }
+        
         console.log(this.route);
         this.dataService.getAttivitaTipologie().subscribe((res) => {
             this.tipologie = res;
-            if (this.tipologia) {
-                this.filtro.tiologia = this.tipologia;
-            }
             this.getAttivitaAltPage(1);
         },
             (err: any) => console.log(err),
@@ -336,5 +342,9 @@ export class AttivitaComponent implements OnInit {
         this.stato = undefined;
         this.filterSearch = false;
         this.getAttivitaAltPage(1);
+    }
+
+    ngOnDestroy() {
+        localStorage.setItem('filtroAttivita', JSON.stringify(this.filtro));
     }
 }
