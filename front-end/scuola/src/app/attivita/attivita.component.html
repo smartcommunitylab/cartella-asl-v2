@@ -47,7 +47,7 @@
             <div class="form-group center-formGroup">
                 <input type="text" id="cercaAttivita" class="form-control search-input" [(ngModel)]="filtro.titolo"
                     (keyup.enter)="cerca()">
-                <label for="cercaAttivita">Cerca titolo, studente o classe</label>
+                <label *ngIf="!filtro.titolo" for="cercaAttivita">Cerca titolo, studente o classe</label>
             </div>
             <it-button class="v-center-inline" (click)="cerca()">
                 <svg class="icon icon-primary">
