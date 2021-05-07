@@ -46,7 +46,7 @@
     "leaflet": "^1.2.0",
     "ng-circle-progress": "1.2.0",
     "ng-pick-datetime": "^5.1.0",
-    "ng2-charts": "^2.2.3",
+    "ng2-charts": "2.2.3",
     "ng2-date-picker": "^2.7.4",
     "ng2-datepicker": "^2.2.2",
     "ng2-datetime-picker": "^0.15.1",
