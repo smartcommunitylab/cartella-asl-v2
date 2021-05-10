@@ -12,6 +12,7 @@ export class PianoAlternanza {
     corsoDiStudio:string;
     titolo:string;
     stato: any;
+    oreSecondoAnno: number;
     oreTerzoAnno: number;
     oreQuartoAnno: number;
     oreQuintoAnno: number;
