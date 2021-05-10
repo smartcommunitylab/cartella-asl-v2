@@ -18,6 +18,7 @@ public class CorsoMetaInfo {
 	private String extId;
 	private String origin;
 	private String codMiur;
+	private Integer years;
 
 	public String getId() {
 		return id;
@@ -57,6 +58,14 @@ public class CorsoMetaInfo {
 
 	public void setCodMiur(String codMiur) {
 		this.codMiur = codMiur;
+	}
+
+	public Integer getYears() {
+		return years;
+	}
+
+	public void setYears(Integer years) {
+		this.years = years;
 	}
 
 }
