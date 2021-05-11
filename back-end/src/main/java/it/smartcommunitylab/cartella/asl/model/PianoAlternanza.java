@@ -59,7 +59,9 @@ public class PianoAlternanza {
 	@Transient
 	private String periodo;
 	@Transient
-	private PianoAlternanzaBean pianoCorrelato; 
+	private PianoAlternanzaBean pianoCorrelato;
+	@Transient
+	private Boolean corsoSperimentale;
 
 	public static enum Stati {
 		bozza, attivo, in_scadenza, scaduto, in_attesa
@@ -222,6 +224,14 @@ public class PianoAlternanza {
 
 	public void setOreSecondoAnno(int oreSecondoAnno) {
 		this.oreSecondoAnno = oreSecondoAnno;
+	}
+
+	public Boolean getCorsoSperimentale() {
+		return corsoSperimentale;
+	}
+
+	public void setCorsoSperimentale(Boolean corsoSperimentale) {
+		this.corsoSperimentale = corsoSperimentale;
 	}
 
 }
