@@ -113,6 +113,10 @@ export class PianificaComponent implements OnInit {
         }
     }
 
+    getAnniString(piano) {
+       return piano.anni;
+    }
+
     recreateFilterUrl() {
         let queryParams: any = {};
         if (this.filtro.corsoStudio) {

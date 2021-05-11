@@ -87,7 +87,7 @@
             <tbody>
                 <tr *ngFor="let piano of pianiAlternanza" (click)="openDetail(piano)">
                     <td class="align-middle pointer">{{piano.titolo}}</td>
-                    <td class="align-middle pointer">{{piano.anni}}</td>
+                    <td class="align-middle pointer">{{getAnniString(piano)}}</td>
                     <td class="align-middle pointer">{{getCorsoDiStudioString(piano.corsoDiStudio)}}</td>
                     <td class="align-middle pointer">{{piano.periodo }}</td>
                     <td class="align-middle pointer">{{piano.oreTerzoAnno + piano.oreQuartoAnno + piano.oreQuintoAnno}}
