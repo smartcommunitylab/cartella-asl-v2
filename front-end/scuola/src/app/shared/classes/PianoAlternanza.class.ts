@@ -26,4 +26,5 @@ export class PianoAlternanza {
     uuid: string;
     anni: string;   
     pianoCorrelato: PianoAlternanza;
+    corsoSperimentale: boolean;
 }
