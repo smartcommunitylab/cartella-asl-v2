@@ -97,22 +97,36 @@
                 <label class="col-sm-4 detail-label text-semibold">Anni riferimento:</label>
                 <div class="col-sm-8">{{piano.periodo}}</div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="!piano.corsoSperimentale">
                 <label class="col-sm-4 detail-label text-semibold">Monte ore 3º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreTerzoAnno}}
                 </div>
-            </div>
-            <div class="row">
+                <br>            
                 <label class="col-sm-4 detail-label text-semibold">Monte ore 4º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreQuartoAnno}}
                 </div>
-            </div>
-            <div class="row">
+                <br>
                 <label class="col-sm-4 detail-label text-semibold">Monte ore 5º anno:</label>
                 <div class="col-sm-8">
                     {{piano.oreQuintoAnno}}
+                </div>
+            </div>
+            <div class="row" *ngIf="piano.corsoSperimentale">
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 2º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreSecondoAnno}}
+                </div>
+                <br>
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 3º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreTerzoAnno}}
+                </div>
+                <br>
+                <label class="col-sm-4 detail-label text-semibold">Monte ore 4º anno:</label>
+                <div class="col-sm-8">
+                    {{piano.oreQuartoAnno}}
                 </div>
             </div>
             <div class="row">

@@ -48,7 +48,7 @@ export class PianoDettaglioComponent implements OnInit {
   stati = [{ "name": "Attivo", "value": "attivo" }, { "name": "Bozza", "value": "bozza" }, { "name": "In scadenza", "value": "in_scadenza" }, {"name": "Scaduto", "value": "scaduto"}, {"name": "In attesa", "value": "in_attesa"}];
   menuContent = "";
   showContent: boolean = false;
-  
+
   breadcrumbItems = [
     {
       title: "Lista piani",
@@ -58,7 +58,6 @@ export class PianoDettaglioComponent implements OnInit {
       title: "Dettaglio piano"
     }
   ];
-
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -73,7 +72,7 @@ export class PianoDettaglioComponent implements OnInit {
       this.dataService.getPianoById(id).subscribe((piano: PianoAlternanza) => {
         this.piano = piano;
         this.navTitle = piano.titolo;
-
+        // this.piano.corsoSperimentale = true;
         this.dataService.downloadPianoDocumenti(piano.uuid).subscribe((docs) => {
           this.documenti = docs;
         });
