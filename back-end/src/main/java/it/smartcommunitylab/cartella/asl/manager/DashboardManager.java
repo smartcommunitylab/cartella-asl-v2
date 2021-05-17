@@ -63,6 +63,14 @@ public class DashboardManager extends DataEntityManager {
 		query.setParameter("annoScolastico", annoScolastico);		
 		Long numeroStudentiConEsperienze = query.getSingleResult();
 
+		q = "SELECT COUNT(DISTINCT es.id) FROM AttivitaAlternanza aa, EsperienzaSvolta es"
+				+ " WHERE es.attivitaAlternanzaId=aa.id"
+				+ " AND aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
+		query = em.createQuery(q, Long.class);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("annoScolastico", annoScolastico);		
+		Long numeroEsperienze = query.getSingleResult();
+
 		q = "SELECT COUNT(*), aa.tipologia FROM AttivitaAlternanza aa"
 				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)"
 				+ " GROUP BY aa.tipologia";
@@ -83,6 +91,7 @@ public class DashboardManager extends DataEntityManager {
 		report.setNumeroStudentiIscritti(numeroStudentiIscritti);
 		report.setNumeroStudentiConEsperienze(numeroStudentiConEsperienze);
 		report.setNumeroAttivita(numeroAttivita);
+		report.setNumeroEsperienze(numeroEsperienze);
 		report.setTipologiaMap(tipologiaMap);
 		return report;
 	}
@@ -208,7 +217,7 @@ public class DashboardManager extends DataEntityManager {
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
-		query.setMaxResults(50);
+		query.setMaxResults(1000);
 		List<Object[]> result = query.getResultList();
 		List<ReportDashboardEsperienza> list = new ArrayList<>();
 		for (Object[] obj : result) {
@@ -267,6 +276,7 @@ public class DashboardManager extends DataEntityManager {
 		Query query = em.createQuery(q);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("cf", cf.trim().toUpperCase());
+		query.setMaxResults(1000);
 		List<Object[]> result = query.getResultList();
 		for (Object[] obj : result) {
 			Registration r = (Registration) obj[0];
@@ -306,6 +316,7 @@ public class DashboardManager extends DataEntityManager {
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
+		query.setMaxResults(1000);
 		
 		List<AttivitaAlternanza> aaList = query.getResultList();
 		

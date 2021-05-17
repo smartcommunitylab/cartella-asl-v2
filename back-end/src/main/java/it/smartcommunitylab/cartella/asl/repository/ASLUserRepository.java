@@ -14,9 +14,16 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 @Repository
 public interface ASLUserRepository extends JpaRepository<ASLUser, Long> {
 	
+	@Query("SELECT u FROM ASLUser u WHERE UPPER(u.cf)=UPPER(:cf)")
 	public ASLUser findByCf(String cf);
+	
+	@Query("SELECT u FROM ASLUser u WHERE LOWER(u.email)=LOWER(:email)")
 	public ASLUser findByEmail(String email);
+	
+	@Query("SELECT u FROM ASLUser u WHERE LOWER(u.email)=LOWER(:email) OR UPPER(u.cf)=UPPER(:cf)")
 	public ASLUser findByCfOrEmail(String cf, String email);
+	
+	@Query("SELECT u FROM ASLUser u WHERE LOWER(u.email)=LOWER(:email) AND UPPER(u.cf)=UPPER(:cf)")
 	public ASLUser findByCfAndEmail(String cf, String email);
 	
 	public ASLUser findByUsername(String username);

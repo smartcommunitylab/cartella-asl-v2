@@ -6,6 +6,7 @@ import { IstitutoRoutingModule } from './istituto-routing.module';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DesignAngularKitModule } from 'design-angular-kit'
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -15,7 +16,9 @@ import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
     CommonModule,
     FormsModule,
     DesignAngularKitModule,
-    SubNavbarModule],
+    SubNavbarModule,
+    ChartsModule
+  ],
   providers: [
     NgbActiveModal,
   ],

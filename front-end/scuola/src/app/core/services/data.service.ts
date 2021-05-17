@@ -1354,6 +1354,67 @@ export class DataService {
     return forkJoin(singleObservables);
   }
 
+  getDashboardIstitutoClasse(): Observable<String[]> {
+    let url = this.host + '/dashboard-ist/classi';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('annoScolastico', this.schoolYear);
+    
+    return this.http.get<String[]>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getDashboardIstitutoClasseReport(classe): Observable<any> {
+    let url = this.host + '/dashboard-ist/rep-classe';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('annoScolastico', this.schoolYear);
+    params = params.append('classe', classe);
+
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getDashboardIstitutoSistemaReport(): Observable<any> {
+    let url = this.host + '/dashboard-ist/rep-sistema';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('annoScolastico', this.schoolYear);
+   
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   apiFormat(D) {
     var yyyy = D.getFullYear().toString();
     var mm = (D.getMonth() + 1).toString(); // getMonth() is zero-based         

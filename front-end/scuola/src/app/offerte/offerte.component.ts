@@ -25,7 +25,7 @@ export class OfferteComponent implements OnInit {
     tipologia = "Tipologia";
     stato;
     owner;
-    filterText;
+    // filterText;
     menuContent = "In questa pagina trovi tutte le offerte accessibili al tuo istituto. Puoi crearne di nuove, o cercare nella lista. Per creare un’attività a partire da un’offerta, clicca sulla riga e vai alla sua pagina.";
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
@@ -44,25 +44,36 @@ export class OfferteComponent implements OnInit {
         private router: Router,
         private location: Location,
         private modalService: NgbModal
-    ) {
-        // force route reload whenever params change;
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.filtro = {
-            tipologia: '',
-            titolo: '',
-            stato: '',
-            ownerIstituto: null
-        }
-    }
+    ) {}
 
     ngOnInit(): void {
         this.title = 'Lista offerte';
+        // retrieve filter states.
+        this.filtro = JSON.parse(localStorage.getItem('filtroOfferte'));
+        if (!this.filtro) {
+            this.filtro = {
+                tipologia: '',
+                titolo: '',
+                stato: '',
+                ownerIstituto: null
+            };
+        }
+        if (this.filtro.stato)
+        this.stato = this.filtro.stato;
+        if (this.filtro.tipologia) {
+            this.tipologia = this.filtro.tipologia;
+        } else {
+            this.tipologia = 'Tipologia';
+        }
+        if (this.filtro.ownerIstituto != null) {
+            this.filtro.ownerIstituto?this.owner='istituto':this.owner='ente';
+        }
         console.log(this.route);
         this.dataService.getAttivitaTipologie().subscribe((res) => {
             this.tipologie = res;
-            if (this.tipologia && this.tipologia != 'Tipologia') {
-                this.filtro.tipologia = this.tipologia;
-            }
+            // if (this.tipologia && this.tipologia != 'Tipologia') {
+            //     this.filtro.tipologia = this.tipologia;
+            // }
             this.getOffertePage(1);
         },
             (err: any) => console.log(err),
@@ -111,11 +122,11 @@ export class OfferteComponent implements OnInit {
     cerca() {
         if (this.cmPagination)
             this.cmPagination.changePage(1);
-        if (this.filterText) {
-            this.filtro.titolo = this.filterText;
-        } else {
-            this.filtro.titolo = null;
-        }
+        // if (this.filterText) {
+        //     this.filtro.titolo = this.filterText;
+        // } else {
+        //     this.filtro.titolo = null;
+        // }
         this.filterSearch = true;
         this.getOffertePage(1);
     }
@@ -208,9 +219,13 @@ export class OfferteComponent implements OnInit {
         this.tipologia = "Tipologie"
         this.stato = undefined;
         this.owner = undefined;
-        this.filterText = undefined;
+        // this.filterText = undefined;
         this.filterSearch = false;
         this.getOffertePage(1);
+    }
+
+    ngOnDestroy() {
+        localStorage.setItem('filtroOfferte', JSON.stringify(this.filtro));
     }
 
 }
