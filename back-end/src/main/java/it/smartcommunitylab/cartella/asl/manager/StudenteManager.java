@@ -181,7 +181,7 @@ public class StudenteManager extends DataEntityManager {
 			studenteReport.setCorsoSperimentale(false);
 			CorsoMetaInfo corsoMetaInfo = corsoMetaInfoRepository.findById(s.getCorsoDiStudio().getCourseId()).orElse(null);
 			if(corsoMetaInfo != null) {
-	  		if(corsoMetaInfo.getYears() < 5) {
+	  		if((corsoMetaInfo.getYears() != null) && (corsoMetaInfo.getYears() < 5)) {
 	  			studenteReport.setCorsoSperimentale(true);
 	  		}
 	  	}

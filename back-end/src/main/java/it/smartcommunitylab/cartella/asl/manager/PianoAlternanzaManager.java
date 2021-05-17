@@ -177,7 +177,7 @@ public class PianoAlternanzaManager extends DataEntityManager {
     pa.setCorsoSperimentale(Boolean.FALSE);
   	CorsoMetaInfo corsoMetaInfo = corsoMetaInfoRepository.findById(pa.getCorsoDiStudioId()).orElse(null);
   	if(corsoMetaInfo != null) {
-  		if(corsoMetaInfo.getYears() < 5) {
+  		if((corsoMetaInfo.getYears() != null) && (corsoMetaInfo.getYears() < 5)) {
   			pa.setCorsoSperimentale(Boolean.TRUE);
   		}
   	}
