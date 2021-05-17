@@ -29,13 +29,13 @@ export class PianoModificaDatiComponent implements OnInit {
   showContent: boolean = false;
   annoRiferimento: any;
   fieldsError: string;
-  evn = environment;
-  
+  evn = environment;  
   corsiStudio;
-  @Output() editPianoListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
-
+  
+  @Output() editPianoListener = new EventEmitter<Object>();
+  
   constructor(private dataService: DataService,
     private router: Router,
     private activeRoute: ActivatedRoute) { }
@@ -46,6 +46,7 @@ export class PianoModificaDatiComponent implements OnInit {
       let id = params['id'];
       this.dataService.getPianoById(id).subscribe((piano: PianoAlternanza) => {
         this.piano = piano;
+        // this.piano.corsoSperimentale = true;
       },
         (err: any) => console.log(err),
         () => console.log('get piano tipologie'));
@@ -78,13 +79,24 @@ export class PianoModificaDatiComponent implements OnInit {
 
 
   allValidated() {
-    return (
-      (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
-      && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
-      && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
-      && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
-      && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
-      );
+    if (this.piano.corsoSperimentale) {
+      return (
+        (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
+        && (this.piano.oreSecondoAnno && this.piano.oreSecondoAnno > 0)
+        && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
+        && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
+        && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
+        );
+    } else  {
+      return (
+        (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
+        && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
+        && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
+        && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
+        && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
+        );
+    }
+    
   }
 
   
