@@ -36,6 +36,7 @@ export class PianoModificaTipologieComponent implements OnInit {
   annoRiferimento: number = 3;
   monteOre: number;
   pianoTipologie;
+  painoTipologieSecondo: any = [];
   painoTipologieTerza: any = [];
   painoTipologieQuarto: any = [];
   painoTipologieQuinto: any = [];
@@ -46,7 +47,7 @@ export class PianoModificaTipologieComponent implements OnInit {
   menuContent = "Qui puoi modificare le tipologie di attività associate al piano. Per aggiungerne una, seleziona la tipologia, l’anno di riferimento (3° 4° o 5°) e il monte ore, quindi usa il tasto blu per associarla. Per cancellarla premi sulla “x” rossa cerchiata.";
   showContent: boolean = false;
   evn = environment;
-
+  
   constructor(private dataService: DataService,
     private modalService: NgbModal,
     private router: Router,
@@ -67,6 +68,14 @@ export class PianoModificaTipologieComponent implements OnInit {
           this.tipologie = res;
           this.dataService.getPianoTipologie(id).subscribe((res) => {
             this.pianoTipologie = res;
+            // this.piano.corsoSperimentale = true;
+            // this.piano.oreSecondoAnno = 100;
+            if (this.piano.corsoSperimentale) {
+              this.anni = [2,3,4];
+              this.annoRiferimento = 2;
+            }
+            if (this.pianoTipologie[2])
+              this.painoTipologieSecondo = this.pianoTipologie[2];
             if (this.pianoTipologie[3])
               this.painoTipologieTerza = this.pianoTipologie[3];
             if (this.pianoTipologie[4])
@@ -96,6 +105,11 @@ export class PianoModificaTipologieComponent implements OnInit {
 
   updateTotale() {
     this.resetTotale();
+    if (this.painoTipologieSecondo != null) {
+      for (let pt of this.painoTipologieSecondo) {
+        this.totale[2] = this.totale[2] + pt.monteOre;
+      }
+    }
     if (this.painoTipologieTerza != null) {
       for (let pt of this.painoTipologieTerza) {
         this.totale[3] = this.totale[3] + pt.monteOre;
@@ -120,6 +134,24 @@ export class PianoModificaTipologieComponent implements OnInit {
     if (this.allValidated()) {
       this.forceErrorDisplay = false;
       switch (this.annoRiferimento + '') {
+        case '2':
+          this.painoTipologieSecondo.forEach(element => {
+            if (element.tipologia == this.tipologia) {
+              present = true;
+            }            
+          })
+          if ((this.totale[2] + this.monteOre) > this.piano.oreSecondoAnno) {
+            oreSuperato = true;
+          }
+          if (!present && !oreSuperato) {
+            this.painoTipologieSecondo.push({ pianoAlternanzaId: this.piano.id, tipologia: this.tipologia, annoRiferimento: 2, monteOre: this.monteOre });
+            this.updateTotale();
+          } else if (present) {
+            this.growler.growl("Tipologia già esistente nell'anno in corso", GrowlerMessageType.Warning);
+          } else if (oreSuperato) {
+            this.growler.growl("Ore superato monte ore secondo", GrowlerMessageType.Warning);
+          }
+          break;
         case '3':
           this.painoTipologieTerza.forEach(element => {
             if (element.tipologia == this.tipologia) {
@@ -184,6 +216,9 @@ export class PianoModificaTipologieComponent implements OnInit {
 
   removeTipologie(tipo) {
     switch (tipo.annoRiferimento + '') {
+      case '2':
+        this.painoTipologieSecondo.splice(this.painoTipologieSecondo.indexOf(tipo), 1);
+        break;
       case '3':
         this.painoTipologieTerza.splice(this.painoTipologieTerza.indexOf(tipo), 1);
         break;
@@ -211,6 +246,7 @@ export class PianoModificaTipologieComponent implements OnInit {
 
   save() {
     let saveTipo = {};
+    saveTipo[2] = this.painoTipologieSecondo;
     saveTipo[3] = this.painoTipologieTerza;
     saveTipo[4] = this.painoTipologieQuarto;
     saveTipo[5] = this.painoTipologieQuinto;
@@ -224,6 +260,7 @@ export class PianoModificaTipologieComponent implements OnInit {
   }
 
   resetTotale() {
+    this.totale[2] = 0;
     this.totale[3] = 0;
     this.totale[4] = 0;
     this.totale[5] = 0;
