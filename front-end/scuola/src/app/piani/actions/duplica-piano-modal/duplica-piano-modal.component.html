@@ -73,7 +73,36 @@
                     <div class="col-2"></div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-4" *ngIf="piano.corsoSperimentale">
+                <!-- Monte ore 2º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte2annoInput.invalid && (monte2annoInput.dirty || monte2annoInput.touched || forceErrorDisplay)">
+                        <label for="monte5anno" class="active">Monte ore 2º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="piano.oreSecondoAnno" id="monte2anno" #monte2annoInput="ngModel" placeholder="Monte ore 2º anno" required>                    <div class="invalid-feedback"
+                        [class.d-block]="monte2annoInput.invalid && (monte2annoInput.dirty || monte2annoInput.touched || forceErrorDisplay || monte2annoInput.value < 0)">Campo necessario.</div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <!-- Monte ore 3º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay)">
+                        <label for="monte3anno" class="active">Monte ore 3º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="piano.oreTerzoAnno" id="monte3anno" #monte3annoInput="ngModel" placeholder="Monte ore 3º anno" required>
+                        <div class="invalid-feedback" [class.d-block]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay || monte3annoInput.value < 0)">Campo necessario.</div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <!-- Monte ore 4º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte4annoInput.invalid && (monte4annoInput.dirty || monte4annoInput.touched || forceErrorDisplay)">
+                        <label for="monte4anno" class="active">Monte ore 4º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="piano.oreQuartoAnno" id="monte4anno" #monte4annoInput="ngModel" placeholder="Monte ore 4º anno" required>
+                        <div class="invalid-feedback" [class.d-block]="monte4annoInput.invalid && (monte4annoInput.dirty || monte4annoInput.touched || forceErrorDisplay || monte4annoInput.value < 0)">Campo necessario.</div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </div>
+            <div class="col-4" *ngIf="!piano.corsoSperimentale">
                 <!-- Monte ore 3º anno -->
                 <div class="row v-center form-group">
                     <div class="col-10" [class.has-danger]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay)">
