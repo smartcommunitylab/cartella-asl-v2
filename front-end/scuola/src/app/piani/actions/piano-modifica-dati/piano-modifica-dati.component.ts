@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PianoAlternanza } from '../../../shared/classes/PianoAlternanza.class';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -46,7 +46,6 @@ export class PianoModificaDatiComponent implements OnInit {
       let id = params['id'];
       this.dataService.getPianoById(id).subscribe((piano: PianoAlternanza) => {
         this.piano = piano;
-        // this.piano.corsoSperimentale = true;
       },
         (err: any) => console.log(err),
         () => console.log('get piano tipologie'));
@@ -54,13 +53,13 @@ export class PianoModificaDatiComponent implements OnInit {
     this.dataService.getCorsiStudio().subscribe((response) => {
       this.corsiStudio = response;
     })
-     
   }
+  
   ngOnDestroy(){
     this.evn.modificationFlag=false;
   }
+
   update() { //update
-    
     if (this.allValidated()) {
       this.piano.titolo = this.piano.titolo.trim();
       (this.piano.note)?this.piano.note=this.piano.note.trim(): null;
@@ -76,7 +75,6 @@ export class PianoModificaDatiComponent implements OnInit {
       this.forceErrorDisplay = true;
     }    
   }
-
 
   allValidated() {
     if (this.piano.corsoSperimentale) {
@@ -95,10 +93,8 @@ export class PianoModificaDatiComponent implements OnInit {
         && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
         && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
         );
-    }
-    
+    }    
   }
-
   
   trimValue(event, type) {  
     if(type == 'titolo'){

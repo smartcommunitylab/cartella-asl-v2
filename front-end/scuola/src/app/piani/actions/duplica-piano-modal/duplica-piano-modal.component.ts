@@ -1,6 +1,6 @@
 import { Component, Output, Input, EventEmitter, OnInit } from '@angular/core';
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { PianoAlternanza } from '../../../shared/classes/PianoAlternanza.class';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'cm-duplica-piano-modal',
   templateUrl: './duplica-piano-modal.component.html',
@@ -24,7 +24,6 @@ export class DuplicaPianoModal implements OnInit {
   }
 
   update() { //update
-
     if (this.allValidated()) {
       this.piano.dataAttivazione = null;
       this.piano.dataCreazione = null;
@@ -36,7 +35,6 @@ export class DuplicaPianoModal implements OnInit {
       this.forceErrorDisplay = true;
     }
   }
-
 
   allValidated() {
     if (this.piano.corsoSperimentale) {
