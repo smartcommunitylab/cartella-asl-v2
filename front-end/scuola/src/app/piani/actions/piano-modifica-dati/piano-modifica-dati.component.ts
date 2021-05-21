@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PianoAlternanza } from '../../../shared/classes/PianoAlternanza.class';
 import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -29,13 +29,13 @@ export class PianoModificaDatiComponent implements OnInit {
   showContent: boolean = false;
   annoRiferimento: any;
   fieldsError: string;
-  evn = environment;
-  
+  evn = environment;  
   corsiStudio;
-  @Output() editPianoListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
-
+  
+  @Output() editPianoListener = new EventEmitter<Object>();
+  
   constructor(private dataService: DataService,
     private router: Router,
     private activeRoute: ActivatedRoute) { }
@@ -53,13 +53,13 @@ export class PianoModificaDatiComponent implements OnInit {
     this.dataService.getCorsiStudio().subscribe((response) => {
       this.corsiStudio = response;
     })
-     
   }
+  
   ngOnDestroy(){
     this.evn.modificationFlag=false;
   }
+
   update() { //update
-    
     if (this.allValidated()) {
       this.piano.titolo = this.piano.titolo.trim();
       (this.piano.note)?this.piano.note=this.piano.note.trim(): null;
@@ -76,17 +76,25 @@ export class PianoModificaDatiComponent implements OnInit {
     }    
   }
 
-
   allValidated() {
-    return (
-      (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
-      && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
-      && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
-      && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
-      && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
-      );
+    if (this.piano.corsoSperimentale) {
+      return (
+        (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
+        && (this.piano.oreSecondoAnno && this.piano.oreSecondoAnno > 0)
+        && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
+        && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
+        && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
+        );
+    } else  {
+      return (
+        (this.piano.titolo && this.piano.titolo != '' && this.piano.titolo.trim().length > 0)
+        && (this.piano.oreTerzoAnno && this.piano.oreTerzoAnno > 0)
+        && (this.piano.oreQuartoAnno && this.piano.oreQuartoAnno > 0)
+        && (this.piano.oreQuintoAnno && this.piano.oreQuintoAnno > 0)
+        && (this.piano.corsoDiStudioId && this.piano.corsoDiStudioId != 'Corso di studio')    
+        );
+    }    
   }
-
   
   trimValue(event, type) {  
     if(type == 'titolo'){

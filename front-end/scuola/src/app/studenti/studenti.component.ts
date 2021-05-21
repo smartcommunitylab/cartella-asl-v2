@@ -56,22 +56,41 @@ export class StudentiComponent implements OnInit {
         this.studenti = response.content;
         this.studenti.forEach(studente => {
           if (studente.pianoId) {
-            if (studente.oreSvolteTerza.total > 0 && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total) {
-              studente.oreSvolteTerza.pgBType = 'success';
-            } else {
-              studente.oreSvolteTerza.pgBType = 'warning';
+
+            if (studente.oreSvolteSeconda) {
+              if (studente.oreSvolteSeconda.total > 0 && studente.oreSvolteSeconda.hours >= studente.oreSvolteSeconda.total) {
+                studente.oreSvolteSeconda.pgBType = 'success';
+              } else {
+                studente.oreSvolteSeconda.pgBType = 'warning';
+              }
             }
-            if (studente.oreSvolteQuarta.total > 0 && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total) {
-              studente.oreSvolteQuarta.pgBType = 'success';
-            } else {
-              studente.oreSvolteQuarta.pgBType = 'warning';
+
+            if (studente.oreSvolteTerza) {
+              if (studente.oreSvolteTerza.total > 0 && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total) {
+                studente.oreSvolteTerza.pgBType = 'success';
+              } else {
+                studente.oreSvolteTerza.pgBType = 'warning';
+              }
             }
-            if (studente.oreSvolteQuinta.total > 0 && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total) {
-              studente.oreSvolteQuinta.pgBType = 'success';
-            } else {
-              studente.oreSvolteQuinta.pgBType = 'warning';
+            
+            if (studente.oreSvolteQuarta) {
+              if (studente.oreSvolteQuarta.total > 0 && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total) {
+                studente.oreSvolteQuarta.pgBType = 'success';
+              } else {
+                studente.oreSvolteQuarta.pgBType = 'warning';
+              }
             }
+            
+            if (studente.oreSvolteQuinta) {
+              if (studente.oreSvolteQuinta.total > 0 && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total) {
+                studente.oreSvolteQuinta.pgBType = 'success';
+              } else {
+                studente.oreSvolteQuinta.pgBType = 'warning';
+              }
+            }
+            
           } else {
+            studente.oreSvolteSeconda.pgBType = 'error';
             studente.oreSvolteTerza.pgBType = 'error';
             studente.oreSvolteQuarta.pgBType = 'error';
             studente.oreSvolteQuinta.pgBType = 'error';
@@ -80,6 +99,29 @@ export class StudentiComponent implements OnInit {
       },
         (err: any) => console.log(err),
         () => console.log('get lista studenti'));
+  }
+
+  setProgressBarType(std, anno) {   
+    var label = '-';
+    switch (anno) {
+      case 2: {
+        label = std.oreSvolteSeconda.pgBType;
+        break;
+      }
+      case 3: {
+        label = std.oreSvolteTerza.pgBType;
+        break;
+      }
+      case 4: {
+        label = std.oreSvolteQuarta.pgBType;
+        break;
+      } 
+      case 5: {
+        label = std.oreSvolteQuinta.pgBType;
+        break;
+      }
+    }
+    return label;
   }
 
   openDetail(studente) {

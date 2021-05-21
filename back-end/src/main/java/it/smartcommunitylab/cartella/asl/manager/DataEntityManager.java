@@ -16,9 +16,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
+import it.smartcommunitylab.cartella.asl.model.CorsoMetaInfo;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
+import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 
 @Repository
@@ -30,6 +32,8 @@ public class DataEntityManager {
 	
 	@Autowired
 	private CorsoDiStudioRepository corsoDiStudioRepository;
+	@Autowired
+	CorsoMetaInfoRepository corsoMetaInfoRepository;	
 	@Autowired
 	private IstituzioneRepository istituzioneRepository;
 	@Autowired
@@ -61,11 +65,22 @@ public class DataEntityManager {
 	}
 	
 	public List<CorsoDiStudio> findCorsiDiStudio(String istitutoId, String annoScolastico) {
+		List<CorsoDiStudio> result = null;
 		if (annoScolastico == null || annoScolastico.isEmpty()) {
-			return corsoDiStudioRepository.findCorsoDiStudioByIstitutoId(istitutoId);
+			result = corsoDiStudioRepository.findCorsoDiStudioByIstitutoId(istitutoId);
 		} else {
-			return corsoDiStudioRepository.findCorsoDiStudioByIstitutoIdAndAnnoScolastico(istitutoId, annoScolastico);
+			result = corsoDiStudioRepository.findCorsoDiStudioByIstitutoIdAndAnnoScolastico(istitutoId, annoScolastico);
 		}
+		result.forEach(corso -> {
+			corso.setCorsoSperimentale(Boolean.FALSE);
+	  	CorsoMetaInfo corsoMetaInfo = corsoMetaInfoRepository.findById(corso.getCourseId()).orElse(null);
+	  	if(corsoMetaInfo != null) {
+	  		if((corsoMetaInfo.getYears() != null) && (corsoMetaInfo.getYears() < 5)) {
+	  			corso.setCorsoSperimentale(Boolean.TRUE);
+	  		}
+	  	}			
+		});
+		return result;
 	}
 	
 	public String getIstituzioneName(String id) {

@@ -13,7 +13,9 @@ public class ReportStudenteRicerca extends Report {
 	private Long pianoId;
 	private String cognomeNome;
 	private int oreValidate;
+	private boolean corsoSperimentale;
 
+	private OreSvolte oreSvolteSeconda = new OreSvolte();
 	private OreSvolte oreSvolteTerza = new OreSvolte();
 	private OreSvolte oreSvolteQuarta = new OreSvolte();
 	private OreSvolte oreSvolteQuinta = new OreSvolte();
@@ -102,6 +104,22 @@ public class ReportStudenteRicerca extends Report {
 
 	public void setOreValidate(int oreValidate) {
 		this.oreValidate = oreValidate;
+	}
+
+	public OreSvolte getOreSvolteSeconda() {
+		return oreSvolteSeconda;
+	}
+
+	public void setOreSvolteSeconda(OreSvolte oreSvolteSeconda) {
+		this.oreSvolteSeconda = oreSvolteSeconda;
+	}
+
+	public boolean isCorsoSperimentale() {
+		return corsoSperimentale;
+	}
+
+	public void setCorsoSperimentale(boolean corsoSperimentale) {
+		this.corsoSperimentale = corsoSperimentale;
 	}
 
 }

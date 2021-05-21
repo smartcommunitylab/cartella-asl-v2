@@ -4,14 +4,15 @@
             <span class="modifyTitleStyle m-left">Piano alternanza {{piano.corsoDiStudio}}</span>&nbsp;&nbsp;
             <span (click)="menuContentShow()" class="pointer">
                 <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
-                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
                 </svg>
                 <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
             </span>
         </div>
         <div class="col-6">
             <span class="row v-center float-right m0">
-                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla mLeft12" [routerLink]="['../../']" placement="bottom"  ngbTooltip="Annulla le modifiche">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla mLeft12"
+                    [routerLink]="['../../']" placement="bottom" ngbTooltip="Annulla le modifiche">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Annulla</span>
                         <span class="col-4 rightItem">
@@ -21,7 +22,8 @@
                         </span>
                     </span>
                 </button>
-                <button class="btn btn-success btn-icon btn-xs btnSave mLeft12" (click)="save()" placement="bottom"  ngbTooltip="Salva le modifiche">
+                <button class="btn btn-success btn-icon btn-xs btnSave mLeft12" (click)="save()" placement="bottom"
+                    ngbTooltip="Salva le modifiche">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Salva</span>
                         <span class="col-4 rightItem">
@@ -35,12 +37,17 @@
     <hr class="hr modifyHr" />
     <div *ngIf="showContent" class="row rectangle v-center-inline">
         <div class="col-1 helpMessageIcon-mRight">
-            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
         </div>
         <div class="col-10 helpMessage-mLeft">
             <span>{{menuContent}}</span>
         </div>
-        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
     </div>
     <div class="row m-subNav">
         <div class="col-12">
@@ -74,7 +81,8 @@
                         {{anno}}° anno
                     </option>
                 </select>
-                <div class="invalid-feedback" [class.d-block]="forceErrorDisplay && ((annoRiferimentoInput.value > 5) || (annoRiferimentoInput.value < 3))">
+                <div class="invalid-feedback"
+                    [class.d-block]="forceErrorDisplay && ((annoRiferimentoInput.value > 5) || (annoRiferimentoInput.value < 3))">
                     Anno di riferimento richiesto (es. 3,4,5)
                 </div>
                 <!-- [class.has-danger]="annoRiferimentoInput.invalid && (annoRiferimentoInput.dirty || annoRiferimentoInput.touched || forceErrorDisplay || (annoRiferimentoInput.value > 5 ))">
@@ -88,38 +96,41 @@
             </div>
             <div class="col-4"
                 [class.has-danger]="monteOreInput.invalid && (monteOreInput.dirty || monteOreInput.touched || forceErrorDisplay || monteOreInput.value <= 0)">
-                <input type="number" class="form-control" [(ngModel)]="monteOre" id="monteOre"
-                    #monteOreInput="ngModel" placeholder="Monte ore" required>
-                <div class="invalid-feedback"
-                    [class.d-block]="forceErrorDisplay && (monteOreInput.value <= 0)">
+                <input type="number" class="form-control" [(ngModel)]="monteOre" id="monteOre" #monteOreInput="ngModel"
+                    placeholder="Monte ore" required>
+                <div class="invalid-feedback" [class.d-block]="forceErrorDisplay && (monteOreInput.value <= 0)">
                     Monte ore richiesto.</div>
             </div>
         </div>
         <div class="row btnAdd">
             <div class="col-4"></div>
             <div class="col-4">
-                <button *ngIf="tipologia != 'Tipologia' && monteOre" class="btn btn-primary v-center-inline activeBtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano" (click)="addNewTipologie()">
+                <button *ngIf="tipologia != 'Tipologia' && monteOre" class="btn btn-primary v-center-inline activeBtn"
+                    placement="bottom" ngbTooltip="Aggiungi la tipologia selezionata al piano"
+                    (click)="addNewTipologie()">
                     Aggiungi tipologia attività&nbsp;&nbsp;&nbsp;<i class="material-icons">save</i></button>
-                <button *ngIf="tipologia == 'Tipologia' || !monteOre" class="btn btn-primary disabled v-center-inline auto inactivebtn" placement="bottom"  ngbTooltip="Aggiungi la tipologia selezionata al piano">
+                <button *ngIf="tipologia == 'Tipologia' || !monteOre"
+                    class="btn btn-primary disabled v-center-inline auto inactivebtn" placement="bottom"
+                    ngbTooltip="Aggiungi la tipologia selezionata al piano">
                     Aggiungi tipologia attività&nbsp;&nbsp;&nbsp;<i class="material-icons">save</i></button>
             </div>
-            
+
             <div class="col-4"></div>
         </div>
         <br>
         <div class="titleBody">
             Tipologie attività
         </div>
-        <div class="row mBottom">
+        <div class="row mBottom" *ngIf="!piano.corsoSperimentale">
             <div class="col-4"><span class="tableName">3º anno</span></div>
             <div class="col-4"><span class="tableName">4º anno</span></div>
             <div class="col-4"><span class="tableName">5º anno</span></div>
         </div>
-        <div class="row">
+        <div class="row" *ngIf="!piano.corsoSperimentale">
             <!-- 3º anno -->
-            <div class="col-4" >
+            <div class="col-4">
                 <div class="table-responsive">
-                    <table class="table table-fixed"  >
+                    <table class="table table-fixed">
                         <thead>
                             <tr>
                                 <th class="tableHeader" style="width: 70%;">Tipologia</th>
@@ -136,9 +147,11 @@
                                     {{pianoTipology.monteOre}}
                                 </td>
                                 <td style="width: 5%;">
-                                    <div placement="bottom"  ngbTooltip="Rimuovi">
-                                        <svg class="icon icon-danger icon-sm pointer m-left" (click)="removeTipologie(pianoTipology)">
-                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                    <div placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
                                         </svg>
                                     </div>
                                 </td>
@@ -157,9 +170,9 @@
                 </div>
             </div>
             <!-- 4º anno -->
-            <div class="col-4" >
+            <div class="col-4">
                 <div class="table-responsive">
-                    <table class="table table-fixed" >
+                    <table class="table table-fixed">
                         <thead>
                             <tr>
                                 <th class="tableHeader" style="width: 70%;">Tipologia</th>
@@ -172,9 +185,11 @@
                                 <td style="width: 70%;">{{getTipologia(pianoTipology.tipologia).titolo}}</td>
                                 <td style="width: 15%;">{{pianoTipology.monteOre}}</td>
                                 <td style="width: 5%;">
-                                    <div class="col-1" placement="bottom"  ngbTooltip="Rimuovi">
-                                        <svg class="icon icon-danger icon-sm pointer m-left12" (click)="removeTipologie(pianoTipology)">
-                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                    <div class="col-1" placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left12"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
                                         </svg>
                                     </div>
                                 </td>
@@ -195,7 +210,7 @@
             <!-- 5º anno -->
             <div class="col-4">
                 <div class="table-responsive">
-                    <table class="table table-fixed" >
+                    <table class="table table-fixed">
                         <thead>
                             <tr>
                                 <th class="tableHeader" style="width: 70%;">Tipologia</th>
@@ -208,9 +223,11 @@
                                 <td style="width: 70%;">{{getTipologia(pianoTipology.tipologia).titolo}}</td>
                                 <td style="width: 15%;">{{pianoTipology.monteOre}}</td>
                                 <td style="width: 5%;">
-                                    <div class="col-1" placement="bottom"  ngbTooltip="Rimuovi">
-                                        <svg class="icon icon-danger icon-sm pointer m-left12" (click)="removeTipologie(pianoTipology)">
-                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                    <div class="col-1" placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left12"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
                                         </svg>
                                     </div>
                                 </td>
@@ -229,96 +246,131 @@
                 </div>
             </div>
         </div>
-        <!-- old table -->
-        <!-- <div class="table list-group">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>3º anno</th>
-                        <th>4º anno</th>
-                        <th>5º anno</th>
-                    </tr>
-                    <tr>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tipologia</div>
-                                <div class="col-1">Ore</div>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tipologia</div>
-                                <div class="col-1">Ore</div>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tipologia</div>
-                                <div class="col-1">Ore</div>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="row" *ngFor="let pianoTipology of painoTipologieTerza">
-                                <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
-                                <div class="col-1">{{pianoTipology.monteOre}}</div>
-                                <div class="col-1" placement="bottom"  ngbTooltip="Rimuovi">
-                                    <svg class="icon icon-sm" (click)="removeTipologie(pianoTipology)">
-                                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
-                                    </svg>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row" *ngFor="let pianoTipology of painoTipologieQuarto">
-                                <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
-                                <div class="col-1">{{pianoTipology.monteOre}}</div>
-                                <div class="col-1" placement="bottom"  ngbTooltip="Rimuovi">
-                                    <svg class="icon icon-sm" (click)="removeTipologie(pianoTipology)">
-                                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
-                                    </svg>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row" *ngFor="let pianoTipology of painoTipologieQuinto">
-                                <div class="col-10">{{getTipologia(pianoTipology.tipologia).titolo}}</div>
-                                <div class="col-1">{{pianoTipology.monteOre}}</div>
-                                <div class="col-1" placement="bottom"  ngbTooltip="Rimuovi">
-                                    <svg class="icon icon-sm" (click)="removeTipologie(pianoTipology)">
-                                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
-                                    </svg>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tot</div>
-                                <div class="col-1">{{totale[3]}}</div>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tot</div>
-                                <div class="col-1">{{totale[4]}}</div>
-                            </div>
-                        </th>
-                        <th>
-                            <div class="row">
-                                <div class="col-10">Tot</div>
-                                <div class="col-1">{{totale[5]}}</div>
-                            </div>
-                        </th>
-                    </tr>
-                </tbody>
-            </table>
-        </div> -->
+        <div class="row mBottom" *ngIf="piano.corsoSperimentale">
+            <div class="col-4"><span class="tableName">2º anno</span></div>
+            <div class="col-4"><span class="tableName">3º anno</span></div>
+            <div class="col-4"><span class="tableName">4º anno</span></div>
+        </div>
+        <div class="row" *ngIf="piano.corsoSperimentale">
+            <!-- 2º anno -->
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                            <tr>
+                                <th class="tableHeader" style="width: 70%;">Tipologia</th>
+                                <th class="tableHeader" style="width: 15%;">Ore</th>
+                                <th class="tableHeader" style="width: 5%;">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pianoTipology of painoTipologieSecondo">
+                                <td style="width: 70%;">{{getTipologia(pianoTipology.tipologia).titolo}}</td>
+                                <td style="width: 15%;">{{pianoTipology.monteOre}}</td>
+                                <td style="width: 5%;">
+                                    <div class="col-1" placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left12"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tableTotalBG" style="width: 70%;">
+                                    <span class="tableTotal">Tot</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 15%;">
+                                    <span class="tableTotal">{{totale[2]}}</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 5%;"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 3º anno -->
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                            <tr>
+                                <th class="tableHeader" style="width: 70%;">Tipologia</th>
+                                <th class="tableHeader" style="width: 15%;">Ore</th>
+                                <th class="tableHeader" style="width: 5%;">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pianoTipology of painoTipologieTerza">
+                                <td style="width: 70%;">
+                                    {{getTipologia(pianoTipology.tipologia).titolo}}
+                                </td>
+                                <td style="width: 15%;">
+                                    {{pianoTipology.monteOre}}
+                                </td>
+                                <td style="width: 5%;">
+                                    <div placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tableTotalBG" style="width: 70%;">
+                                    <span class="tableTotal">Tot</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 15%;">
+                                    <span class="tableTotal">{{totale[3]}}</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 5%;"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 4º anno -->
+            <div class="col-4">
+                <div class="table-responsive">
+                    <table class="table table-fixed">
+                        <thead>
+                            <tr>
+                                <th class="tableHeader" style="width: 70%;">Tipologia</th>
+                                <th class="tableHeader" style="width: 15%;">Ore</th>
+                                <th class="tableHeader" style="width: 5%;">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pianoTipology of painoTipologieQuarto">
+                                <td style="width: 70%;">{{getTipologia(pianoTipology.tipologia).titolo}}</td>
+                                <td style="width: 15%;">{{pianoTipology.monteOre}}</td>
+                                <td style="width: 5%;">
+                                    <div class="col-1" placement="bottom" ngbTooltip="Rimuovi">
+                                        <svg class="icon icon-danger icon-sm pointer m-left12"
+                                            (click)="removeTipologie(pianoTipology)">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle">
+                                            </use>
+                                        </svg>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tableTotalBG" style="width: 70%;">
+                                    <span class="tableTotal">Tot</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 15%;">
+                                    <span class="tableTotal">{{totale[4]}}</span>
+                                </td>
+                                <td class="tableTotalBG" style="width: 5%;"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-
-
+    
 </div>

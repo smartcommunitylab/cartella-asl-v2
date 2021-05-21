@@ -12,6 +12,7 @@ export class PianoAlternanza {
     corsoDiStudio:string;
     titolo:string;
     stato: any;
+    oreSecondoAnno: number;
     oreTerzoAnno: number;
     oreQuartoAnno: number;
     oreQuintoAnno: number;
@@ -25,4 +26,5 @@ export class PianoAlternanza {
     uuid: string;
     anni: string;   
     pianoCorrelato: PianoAlternanza;
+    corsoSperimentale: boolean;
 }
