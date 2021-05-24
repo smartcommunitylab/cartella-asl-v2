@@ -133,5 +133,9 @@ public class PresenzaGiornalieraManager extends DataEntityManager {
 		}
 		return pg;
 	}
+	
+	public PresenzaGiornaliera savePresenza(PresenzaGiornaliera pg) {
+		return presenzaRepository.save(pg);
+	}
 
 }

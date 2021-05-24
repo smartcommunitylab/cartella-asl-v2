@@ -180,5 +180,9 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 		Page<ReportEsperienzaRegistration> page = new PageImpl<ReportEsperienzaRegistration>(espRegList, pageRequest, total);
 		return page;
 	}
+	
+	public void updateOreRendicontate(Long id, int ore) {
+		esperienzaSvoltaRepository.updateOreRendicontate(id, ore);
+	}
 
 }

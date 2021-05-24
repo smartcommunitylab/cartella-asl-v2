@@ -913,4 +913,34 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return aa;
 	}
 	
+	public List<ReportEsperienzaRegistration> getReportPresenzeCorpo(AttivitaAlternanza aa) {
+		List<ReportEsperienzaRegistration> result = new ArrayList<>();
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
+				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		for (EsperienzaSvolta esperienza : esperienze) {
+			ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienza);
+			result.add(espReg);
+		}
+		return result;
+	}
+	
+	public List<ReportEsperienzaRegistration> aggiornaReportPresenzeCorpo(AttivitaAlternanza aa, 
+			List<ReportEsperienzaRegistration> presenze) {
+		if(aa.getRendicontazioneCorpo()) {
+			for(ReportEsperienzaRegistration report : presenze) {
+				presenzaGiornalieraManager.deletePresenzeByEsperienza(report.getEsperienzaSvoltaId());
+				PresenzaGiornaliera pg = new PresenzaGiornaliera();
+				pg.setEsperienzaSvoltaId(report.getEsperienzaSvoltaId());
+				pg.setGiornata(aa.getDataInizio());
+				pg.setIstitutoId(aa.getIstitutoId());
+				pg.setOreSvolte(report.getOreRendicontate());
+				pg.setSmartWorking(false);
+				pg.setValidataEnte(false);
+				pg.setVerificata(true);
+				presenzaGiornalieraManager.savePresenza(pg);
+			}			
+		}
+		return getReportPresenzeCorpo(aa);
+	}
+	
 }

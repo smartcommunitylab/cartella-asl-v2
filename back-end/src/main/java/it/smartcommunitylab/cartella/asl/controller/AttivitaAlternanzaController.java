@@ -619,5 +619,50 @@ public class AttivitaAlternanzaController implements AslController {
 		}
 		return result;
 	}
+	
+	@GetMapping("/api/attivita/{id}/presenze/corpo")
+	public List<ReportEsperienzaRegistration> getReportPresenzeCorpo(
+			@PathVariable long id,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!aa.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istitutoId not corresponding");
+		}
+		List<ReportEsperienzaRegistration> result = attivitaAlternanzaManager.getReportPresenzeCorpo(aa);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getReportPresenzeCorpo:%s / %s", id, istitutoId));
+		}
+		return result;
+	}
+	
+	@PostMapping("/api/attivita/{id}/presenze/corpo")
+	public List<ReportEsperienzaRegistration> aggiornaReportPresenzeCorpo(
+			@PathVariable long id,
+			@RequestParam String istitutoId,
+			@RequestBody List<ReportEsperienzaRegistration> presenze,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
+		if(aa == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if(!aa.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istitutoId not corresponding");
+		}
+		List<ReportEsperienzaRegistration> result = attivitaAlternanzaManager.aggiornaReportPresenzeCorpo(aa, presenze);
+		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
+		auditManager.save(audit);					
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("aggiornaReportPresenzeCorpo:%s / %s", id, istitutoId));
+		}
+		return result;
+	}
 
 }

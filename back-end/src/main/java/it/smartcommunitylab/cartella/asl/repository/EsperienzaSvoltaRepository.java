@@ -65,5 +65,10 @@ public interface EsperienzaSvoltaRepository extends JpaRepository<EsperienzaSvol
   	public void updateStato(Long id, Stati stato);
 
 		public List<EsperienzaSvolta> findByAttivitaAlternanzaIdAndStudenteId(Long attivitaAlternanzaId, String studenteId);
+		
+  	@Modifying
+  	@Query("update EsperienzaSvolta es set es.oreRendicontate=(:ore) where es.id=(:id)")
+  	public void updateOreRendicontate(Long id, int ore);
+		
 
 }

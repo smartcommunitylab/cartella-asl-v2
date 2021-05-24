@@ -10,6 +10,7 @@ public class ReportEsperienzaRegistration {
 	private String cfStudente;
 	private String classeStudente;
 	private String registrazioneId;
+	private int oreRendicontate; 
 	
 	public ReportEsperienzaRegistration() {}
 	
@@ -21,6 +22,7 @@ public class ReportEsperienzaRegistration {
 		classeStudente = esperienza.getClasseStudente();
 		studenteId = esperienza.getStudenteId();
 		registrazioneId = esperienza.getRegistrazioneId();
+		oreRendicontate = esperienza.getOreRendicontate();
 	}
 	
 	public boolean isCompatible(EsperienzaSvolta esperienza) {
@@ -76,6 +78,14 @@ public class ReportEsperienzaRegistration {
 
 	public void setRegistrazioneId(String registrazioneId) {
 		this.registrazioneId = registrazioneId;
+	}
+
+	public int getOreRendicontate() {
+		return oreRendicontate;
+	}
+
+	public void setOreRendicontate(int oreRendicontate) {
+		this.oreRendicontate = oreRendicontate;
 	}
 
 }
