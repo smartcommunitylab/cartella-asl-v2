@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -70,6 +71,9 @@ public class AttivitaAlternanza {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataArchiviazione;
+	
+	@Column(columnDefinition = "bit default 0")
+	private Boolean aCorpo;
 	
 	@Transient
 	private int oreSvolte;
