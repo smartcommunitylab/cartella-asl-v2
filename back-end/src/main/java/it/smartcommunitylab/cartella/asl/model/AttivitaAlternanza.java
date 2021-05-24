@@ -73,7 +73,7 @@ public class AttivitaAlternanza {
 	private LocalDate dataArchiviazione;
 	
 	@Column(columnDefinition = "bit default 0")
-	private Boolean aCorpo;
+	private Boolean rendicontazioneCorpo;
 	
 	@Transient
 	private int oreSvolte;
@@ -380,5 +380,13 @@ public class AttivitaAlternanza {
 
 	public void setOreSvolte(int oreSvolte) {
 		this.oreSvolte = oreSvolte;
+	}
+
+	public Boolean getRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(Boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
 	}
 }
