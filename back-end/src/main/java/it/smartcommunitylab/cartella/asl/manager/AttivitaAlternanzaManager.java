@@ -657,17 +657,17 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 	}
 
-	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId) 
+	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId, Boolean rendicontazioneCorpo) 
 			throws BadRequestException {
 		Offerta offerta = offertaManager.getOfferta(offertaId);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
-		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId);
+		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId, rendicontazioneCorpo);
 		return saveAttivitaAlternanza(aa, istitutoId);
 	}
 
-	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta, String istitutoId) {
+	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta, String istitutoId, Boolean rendicontazioneCorpo) {
 		String titolo = offerta.getTitolo() + " - " + 
 				(attivitaAlternanzaRepository.countByOffertaIdAndIstitutoId(offerta.getId(), istitutoId) + 1);
 		AttivitaAlternanza aa = new AttivitaAlternanza();
@@ -693,6 +693,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		aa.setLuogoSvolgimento(offerta.getLuogoSvolgimento());
 		aa.setLatitude(offerta.getLatitude());
 		aa.setLongitude(offerta.getLongitude());
+		aa.setRendicontazioneCorpo(rendicontazioneCorpo);
 		return aa;
 	}
 
@@ -907,6 +908,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		aa.setTitolo(aaDb.getTitolo());
 		aa.setTitoloOfferta(aaDb.getTitoloOfferta());
 		aa.setUuid(Utils.getUUID());
+		aa.setRendicontazioneCorpo(aaDb.getRendicontazioneCorpo());
 		attivitaAlternanzaRepository.save(aa);
 		return aa;
 	}

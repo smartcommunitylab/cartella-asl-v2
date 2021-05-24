@@ -378,10 +378,11 @@ public class AttivitaAlternanzaController implements AslController {
 	public @ResponseBody AttivitaAlternanza associaOfferta(
 			@PathVariable long offertaId,
 			@RequestParam String istitutoId,
+			@RequestParam Boolean rendicontazioneCorpo,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		AttivitaAlternanza aa = attivitaAlternanzaManager.associaOfferta(offertaId, istitutoId);
+		AttivitaAlternanza aa = attivitaAlternanzaManager.associaOfferta(offertaId, istitutoId, rendicontazioneCorpo);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
