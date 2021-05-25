@@ -73,7 +73,7 @@ public class AttivitaAlternanza {
 	private LocalDate dataArchiviazione;
 	
 	@Column(columnDefinition = "bit default 0")
-	private Boolean rendicontazioneCorpo;
+	private Boolean rendicontazioneCorpo = Boolean.FALSE;
 	
 	@Transient
 	private int oreSvolte;

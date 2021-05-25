@@ -926,21 +926,29 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	
 	public List<ReportEsperienzaRegistration> aggiornaReportPresenzeCorpo(AttivitaAlternanza aa, 
 			List<ReportEsperienzaRegistration> presenze) {
+		List<ReportEsperienzaRegistration> result = new ArrayList<>();
 		if(aa.getRendicontazioneCorpo()) {
 			for(ReportEsperienzaRegistration report : presenze) {
-				presenzaGiornalieraManager.deletePresenzeByEsperienza(report.getEsperienzaSvoltaId());
-				PresenzaGiornaliera pg = new PresenzaGiornaliera();
-				pg.setEsperienzaSvoltaId(report.getEsperienzaSvoltaId());
-				pg.setGiornata(aa.getDataInizio());
-				pg.setIstitutoId(aa.getIstitutoId());
-				pg.setOreSvolte(report.getOreRendicontate());
-				pg.setSmartWorking(false);
-				pg.setValidataEnte(false);
-				pg.setVerificata(true);
-				presenzaGiornalieraManager.savePresenza(pg);
+				EsperienzaSvolta esperienzaSvolta = esperienzaSvoltaManager.findById(report.getEsperienzaSvoltaId());
+				if((esperienzaSvolta != null) && (esperienzaSvolta.getAttivitaAlternanzaId() == aa.getId())) {
+					presenzaGiornalieraManager.deletePresenzeByEsperienza(report.getEsperienzaSvoltaId());
+					PresenzaGiornaliera pg = new PresenzaGiornaliera();
+					pg.setEsperienzaSvoltaId(report.getEsperienzaSvoltaId());
+					pg.setGiornata(aa.getDataInizio());
+					pg.setIstitutoId(aa.getIstitutoId());
+					pg.setOreSvolte(report.getOreRendicontate());
+					pg.setSmartWorking(false);
+					pg.setValidataEnte(false);
+					pg.setVerificata(true);
+					presenzaGiornalieraManager.savePresenza(pg);
+					esperienzaSvoltaManager.updateOreRendicontate(report.getEsperienzaSvoltaId(), report.getOreRendicontate());
+					esperienzaSvolta.setOreRendicontate(report.getOreRendicontate());
+					ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienzaSvolta);
+					result.add(espReg);					
+				}
 			}			
 		}
-		return getReportPresenzeCorpo(aa);
+		return result;
 	}
 	
 }
