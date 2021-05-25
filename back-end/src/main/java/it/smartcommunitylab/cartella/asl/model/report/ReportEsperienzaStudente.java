@@ -32,6 +32,7 @@ public class ReportEsperienzaStudente {
 	private int oreSmartWorking;
 	private Long attivitaAlternanzaId;
 	private String referenteScuola;
+	private boolean rendicontazioneCorpo;
 	
 	public ReportEsperienzaStudente() {}
 	
@@ -46,6 +47,7 @@ public class ReportEsperienzaStudente {
 		oreTotali = aa.getOre();
 		attivitaAlternanzaId = aa.getId();
 		referenteScuola = aa.getReferenteScuola();
+		rendicontazioneCorpo = aa.getRendicontazioneCorpo();
 	}
 
 	public String getTitolo() {
@@ -163,6 +165,14 @@ public class ReportEsperienzaStudente {
 
 	public void setOreSmartWorking(int oreSmartWorking) {
 		this.oreSmartWorking = oreSmartWorking;
+	}
+
+	public boolean isRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
 	}	
 	
 }
