@@ -5,7 +5,6 @@ import { OfferteComponent } from './offerte.component';
 import { OfferteContainerComponent } from './offerte-container.component';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
 import { OfferteDettaglioComponent } from './actions/offerte-dettaglio/offerte-dettaglio.component';
-import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
 import { OffertaModificaCompetenzeComponent } from './actions/offerta-modifica-competenze/offerta-modifica-competenze.component';
 import { OffertaCancellaModal } from './actions/cancella-offerta-modal/offerta-cancella-modal.component';
 import { OffertaDettaglioModificaComponent } from './actions/offerta-modifica-dettaglio/offerta-modifica.component';
@@ -17,7 +16,6 @@ const routes: Routes = [
       { path: 'list', component: OfferteComponent },
       { path: 'detail/:id', component: OfferteDettaglioComponent },
       { path: 'detail/:id/modifica/offerta', component: OffertaDettaglioModificaComponent },
-      { path: 'detail/:id/associa/offerta', component: AssociaOffertaComponent },
       { path: 'detail/:id/modifica/competenze', component: OffertaModificaCompetenzeComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
@@ -35,7 +33,6 @@ export class OfferteRoutingModule {
     CreaOffertaModalComponent,
     OfferteDettaglioComponent,
     OffertaDettaglioModificaComponent,
-    AssociaOffertaComponent,
     OffertaModificaCompetenzeComponent,
     OffertaCancellaModal
   ];
