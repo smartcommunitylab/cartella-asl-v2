@@ -88,7 +88,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         } else {
             this.dataService.setIstitutoPosition(config.defaultPosition);
         } 
-        this.router.navigate(['/attivita', istituto.id]);    
+        this.router.navigate(['/attivita']);    
         // this.router.navigateByUrl('/gestione', { skipLocationChange: true }).then(() => {
         //     this.router.navigate(['/piani']);
         // }); 
