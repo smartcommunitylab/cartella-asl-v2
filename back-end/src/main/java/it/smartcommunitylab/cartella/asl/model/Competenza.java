@@ -1,5 +1,6 @@
 package it.smartcommunitylab.cartella.asl.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +20,9 @@ public class Competenza {
 	private String classificationCode;
 	private String uri;
 	private String titolo;
+	@Column(columnDefinition="BLOB")
 	private String[] conoscenze;
+	@Column(columnDefinition="BLOB")
 	private String[] abilita;
 	private int livelloEQF;
 	private Boolean attiva;
