@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class PresenzaGiornaliera {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate giornata;
+	@Column(columnDefinition="VARCHAR(2048)")
 	private String attivitaSvolta;
 	private int oreSvolte;
 	private Boolean verificata;
