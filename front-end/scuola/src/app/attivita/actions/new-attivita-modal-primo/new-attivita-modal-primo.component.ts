@@ -15,10 +15,12 @@ export class NewAttivtaModalPrimo {
   create(option) {
     
     if (option == 1) {
-      this.activeModal.dismiss('Crea nuova attività a partire da un’offerta');;
+      this.activeModal.dismiss(1);
+      //rendicontazione corpo
       this.modalitaListener.emit(1);  
     } else {
-      this.activeModal.dismiss('Crea nuova attività');
+      this.activeModal.dismiss(2);
+      //rendicontazione ore giornaliera
       this.modalitaListener.emit(2);
     }
 

@@ -31,6 +31,7 @@ export class AttivitaAlternanza {
     classSet;
     groupRigaTip: any;
     studenti: any;
+    rendicontazioneCorpo: boolean;
     constructor() {}
     
 }
