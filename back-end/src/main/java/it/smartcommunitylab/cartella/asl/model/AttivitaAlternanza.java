@@ -109,6 +109,7 @@ public class AttivitaAlternanza {
 		aa.setTitolo(titolo);
 		aa.setTitoloOfferta(titoloOfferta);
 		aa.setUuid(uuid);
+		aa.setRendicontazioneCorpo(rendicontazioneCorpo);
 		return aa;
 	}
 
