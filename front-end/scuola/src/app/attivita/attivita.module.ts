@@ -13,6 +13,7 @@ import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-m
 import { DpDatePickerModule } from 'ng2-date-picker';
 import { SkillsSelectorModule } from '../shared/skills-selector/skills-selector.module';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
+import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-attivita-modal-primo.component';
 import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal.component';
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -35,6 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbActiveModal,
   ],
   entryComponents: [
+    NewAttivtaModalPrimo,
     NewAttivtaModal,
     CreaAttivitaModalComponent,
     DocumentUploadModalComponent,
