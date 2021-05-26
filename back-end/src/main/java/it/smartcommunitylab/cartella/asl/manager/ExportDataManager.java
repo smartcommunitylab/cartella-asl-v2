@@ -184,7 +184,12 @@ public class ExportDataManager {
 				sb.append("\"\";");
 			}
 			if(Utils.isNotEmpty(esp.getErrore())) {
-				sb.append("\"" + cleanString(esp.getErrore()) + "\"\n");
+				String s = cleanString(esp.getErrore());
+				int i = s.indexOf("{'sistemaOrigine'");
+				if(i > 0) {
+					s = s.substring(0, i);
+				}
+				sb.append("\"" + s + "\"\n");
 			} else {
 				sb.append("\"\"\n");
 			}
@@ -214,7 +219,8 @@ public class ExportDataManager {
 	
 	private String cleanString(String text) {
 		if(Utils.isNotEmpty(text)) {
-			return text.replace("\"", "'").replace('\n', ' ').replace('\r', ' ');
+			return text.replace("\"", "'");
+			//return text.replace("\"", "'").replace('\n', ' ').replace('\r', ' ');
 		}
 		return "";
 	}
