@@ -83,7 +83,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(!aaDb.getDataInizio().isEqual(aa.getDataInizio()) || 
 					!aaDb.getDataFine().isEqual(aa.getDataFine())) {
 				for(EsperienzaSvolta esperienza : esperienze) {
-					esperienzaSvoltaManager.changeDateRange(esperienza, aa.getDataInizio(), aa.getDataFine());
+					if(aa.getRendicontazioneCorpo()) {
+						setPresenzeCorpo(aa, esperienza);
+					} else {
+						esperienzaSvoltaManager.changeDateRange(esperienza, aa.getDataInizio(), aa.getDataFine());
+					}
 				}
 			}
 			attivitaAlternanzaRepository.updateAttivitaAlternanza(aa);
@@ -931,24 +935,28 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			for(ReportEsperienzaRegistration report : presenze) {
 				EsperienzaSvolta esperienzaSvolta = esperienzaSvoltaManager.findById(report.getEsperienzaSvoltaId());
 				if((esperienzaSvolta != null) && (esperienzaSvolta.getAttivitaAlternanzaId() == aa.getId())) {
-					presenzaGiornalieraManager.deletePresenzeByEsperienza(report.getEsperienzaSvoltaId());
-					PresenzaGiornaliera pg = new PresenzaGiornaliera();
-					pg.setEsperienzaSvoltaId(report.getEsperienzaSvoltaId());
-					pg.setGiornata(aa.getDataInizio());
-					pg.setIstitutoId(aa.getIstitutoId());
-					pg.setOreSvolte(report.getOreRendicontate());
-					pg.setSmartWorking(false);
-					pg.setValidataEnte(false);
-					pg.setVerificata(true);
-					presenzaGiornalieraManager.savePresenza(pg);
-					esperienzaSvoltaManager.updateOreRendicontate(report.getEsperienzaSvoltaId(), report.getOreRendicontate());
 					esperienzaSvolta.setOreRendicontate(report.getOreRendicontate());
+					setPresenzeCorpo(aa, esperienzaSvolta);
+					esperienzaSvoltaManager.updateOreRendicontate(report.getEsperienzaSvoltaId(), report.getOreRendicontate());
 					ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienzaSvolta);
 					result.add(espReg);					
 				}
 			}			
 		}
 		return result;
+	}
+	
+	private void setPresenzeCorpo(AttivitaAlternanza aa, EsperienzaSvolta es) {
+		presenzaGiornalieraManager.deletePresenzeByEsperienza(es.getId());
+		PresenzaGiornaliera pg = new PresenzaGiornaliera();
+		pg.setEsperienzaSvoltaId(es.getId());
+		pg.setGiornata(aa.getDataInizio());
+		pg.setIstitutoId(aa.getIstitutoId());
+		pg.setOreSvolte(es.getOreRendicontate());
+		pg.setSmartWorking(false);
+		pg.setValidataEnte(false);
+		pg.setVerificata(true);
+		presenzaGiornalieraManager.savePresenza(pg);		
 	}
 	
 }
