@@ -239,4 +239,12 @@ export class AttivitaDettaglioComponent implements OnInit {
     return removable;
   }
 
+  isRendicontazioneOre(aa) {
+    if (aa.rendicontazioneCorpo) {
+      return 'Rendicontazione a corpo';
+    } else {
+      return 'Rendicontazione ore giornaliera';
+    }
+  }
+
 }

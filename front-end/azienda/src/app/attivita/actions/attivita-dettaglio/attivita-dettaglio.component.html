@@ -96,15 +96,16 @@
                         aziendale::&nbsp;</span>{{attivita.referenteEsternoTelefono}}</span>
             </div>
             <div class="col-6">
-                <span class="row mb-1"><span
-                        class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}}&nbsp;<span
-                        class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
+                <span class="row mb-1"><span class="text-semibold">Modalità
+                        rendicontazione:&nbsp;</span><span>{{isRendicontazioneOre(attivita)}}</span> </span>
+                <span class="row mb-1"><span class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date:
+                    'dd/MM/yyyy'}}&nbsp;<span class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date:
+                    'dd/MM/yyyy'}}</span>
                 <span class="row mb-1"><span class="text-semibold">Dalle:&nbsp;</span>{{attivita.oraInizio}}&nbsp;<span
                         class="text-semibold">Alle:&nbsp;</span>{{attivita.oraFine}}</span>
                 <span class="row mb-1"><span class="text-semibold">Anno
                         accademico:&nbsp;</span>{{ attivita.annoScolastico }}</span>
-                <span class="row mb-1"><span
-                        class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
+                <span class="row mb-1"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
                 <span class="row mb-1"><span class="text-semibold">Formatore: </span>{{attivita.formatore}}</span>
                 <span class="row mb-1"><span class="text-semibold">CF
                         Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
@@ -127,7 +128,7 @@
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
                 </svg>
             </button>
-            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale"
+            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent && individuale && !attivita.rendicontazioneCorpo"
                 class="btn btn-primary v-center-inline" placement="right"
                 ngbTooltip="Gestisci le presenze degli studenti associati a quest’attività"
                 (click)="gestionePresenze()">
