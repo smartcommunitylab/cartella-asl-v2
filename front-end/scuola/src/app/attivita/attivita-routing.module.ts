@@ -6,6 +6,7 @@ import { AttivitaContainerComponent } from './attivita-container.component';
 import { AttivitaDettaglioComponent } from './actions/attivita-dettaglio/attivita-dettaglio.component';
 import { AttivitaModificaCompetenzeComponent } from './actions/attivita-modifica-competenze/attivita-modifica-competenze.component';
 import { AttivitaDettaglioModificaComponent } from './actions/attivita-modifica-dettaglio/attivita-modifica.component';
+import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-attivita-modal-primo.component';
 import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal.component';
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
 import { DocumentUploadModalComponent } from './actions/documento-upload-modal/document-upload-modal.component';
@@ -15,14 +16,12 @@ import { AttivitaCancellaModal } from './actions/cancella-attivita-modal/attivit
 import { GestionePresenzeIndividualeComponent } from './actions/gestione-presenze-individuale/gestione-preseneze-individuale.component';
 import { GestionePresenzeGruppoComponent } from './actions/gestione-presenze-gruppo/gestione-preseneze-gruppo.component';
 import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-modal/archiaviazione-attivita.component';
-import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
 
 const routes: Routes = [
   {
     path: '', component: AttivitaContainerComponent,
     children: [
       { path: 'list', component: AttivitaComponent },
-      { path: 'list/associa/offerta', component: AssociaOffertaComponent },
       { path: 'detail/:id', component: AttivitaDettaglioComponent },
       { path: 'detail/:id/modifica/attivita', component: AttivitaDettaglioModificaComponent },
       { path: 'detail/:id/modifica/studenti', component: AttivitaModificaStudentiComponent},
@@ -42,6 +41,7 @@ export class AttivitaRoutingModule {
   static components = [
     AttivitaContainerComponent,
     AttivitaComponent,
+    NewAttivtaModalPrimo,
     NewAttivtaModal,
     CreaAttivitaModalComponent,
     AttivitaDettaglioComponent,
