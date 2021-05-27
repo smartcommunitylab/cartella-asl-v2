@@ -9,6 +9,7 @@ import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-a
 import { AttivitaAlternanza } from '../shared/classes/AttivitaAlternanza.class';
 import { environment } from '../../environments/environment';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-attivita-modal-primo.component';
 
 @Component({
     selector: 'attivita',
@@ -81,21 +82,34 @@ export class AttivitaComponent implements OnInit {
         this.router.navigate(['../detail', aa.id], { relativeTo: this.route });
     }
 
-    openCreate() {
-        const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
-        modalRef.componentInstance.newPianoListener.subscribe((option) => {
-            if (option == 1) {
-                this.router.navigate(['associa/offerta'], { relativeTo: this.route });
+    openPrimoModalCreateAttivita() {
+        const modalRef = this.modalService.open(NewAttivtaModalPrimo, { windowClass: "archiviazioneModalClass" });
+        modalRef.componentInstance.modalitaListener.subscribe((option) => {
+            if (option == 1) { 
+                // rendicontazione corpo
+                this.openCreate(true);
             } else if (option == 2) {
-                this.openCreateNewAttivita();
+                this.openCreate(false);
             }
         });
     }
 
-    openCreateNewAttivita() {
+    openCreate(modalita) {
+        const modalRef = this.modalService.open(NewAttivtaModal, { windowClass: "creaAttivitaModalClass" });
+        modalRef.componentInstance.newAttivitaListener.subscribe((option) => {
+            if (option == 1) {
+                this.router.navigate(['associa/offerta', modalita], { relativeTo: this.route });
+            } else if (option == 2) {
+                this.openCreateNewAttivita(modalita);
+            }
+        });
+    }
+
+    openCreateNewAttivita(modalita) {
         const modalRef = this.modalService.open(CreaAttivitaModalComponent, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.tipologie = this.tipologie;
         modalRef.componentInstance.newAttivitaListener.subscribe((attivita) => {
+            attivita.rendicontazioneCorpo = modalita;
             this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
                 this.router.navigate(['../detail', response.id], { relativeTo: this.route });
             },
