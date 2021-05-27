@@ -479,10 +479,11 @@ export class DataService {
       );
   }
 
-  associaOffertaToAttivita(offertaId): Observable<AttivitaAlternanza> {
+  associaOffertaToAttivita(offertaId, rendicontazioneCorpo): Observable<AttivitaAlternanza> {
     let url = this.host + "/attivita/offerta/" + offertaId + '/associa';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
+    params = params.append('rendicontazioneCorpo', rendicontazioneCorpo);
 
     return this.http.post<AttivitaAlternanza>(url, null,
       {
