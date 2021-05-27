@@ -19,6 +19,8 @@ public class ReportAttivitaAlternanzaRicerca {
 	private int tipologia;
 	private String stato;
 	private String nomeEnte;
+	private boolean rendicontazioneCorpo;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;
@@ -44,6 +46,7 @@ public class ReportAttivitaAlternanzaRicerca {
 		this.setDataInizio(attivita.getDataInizio());
 		this.setDataFine(attivita.getDataFine());
 		this.setDataArchiviazione(attivita.getDataArchiviazione());
+		this.setRendicontazioneCorpo(attivita.getRendicontazioneCorpo());
 	}
 	
 	public Long getId() {
@@ -129,6 +132,14 @@ public class ReportAttivitaAlternanzaRicerca {
 
 	public void setClassi(List<String> classi) {
 		this.classi = classi;
+	}
+
+	public boolean isRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
 	}
 
 
