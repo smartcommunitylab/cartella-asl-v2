@@ -91,8 +91,14 @@
         </div>
         <br>
         <div class="row">
-            <span class="col-12"><span class="text-semibold">Stato:&nbsp;</span><span
-                    class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span> </span>
+            <span class="col-6">
+                <span class="text-semibold">Stato:&nbsp;</span>
+                <span class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span>
+            </span>
+            <span class="">
+                <span class="text-semibold">Modalità rendicontazione:&nbsp;</span>
+                <span>{{ isRendicontazioneOre(attivita) }}</span>
+            </span> 
         </div>
         <div class="p-1 middle-div row">
             <div class="col-6">
@@ -109,7 +115,6 @@
                         esterno:&nbsp;</span>{{attivita.referenteEsterno}}</span>
             </div>
             <div class="col-6">
-                <span class="row"> </span>
                 <span class="row"><span
                         class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;<span
                         class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
@@ -130,16 +135,23 @@
         <br />
         <div class="title">
             Studenti Associati<br />
-            <button *ngIf="attivita.stato=='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
-                ngbTooltip="Vedi le presenze e i diari dell’attività" (click)="gestionePresenze()">
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato=='archiviata'"
+                class="btn btn-primary v-center-inline" placement="bottom" ngbTooltip="Vedi le presenze e i diari dell’attività"
+                (click)="gestionePresenze()">
                 Vedi presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
-            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent" class="btn btn-primary v-center-inline"
-                placement="bottom" ngbTooltip="Valida le presenze e i diari dell’attività" (click)="gestionePresenze()">
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato!='archiviata' && !zeroStudent"
+                class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Valida le presenze e i diari dell’attività" (click)="gestionePresenze()">
                 Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
-            <button *ngIf="attivita.stato!='archiviata' && zeroStudent" class="btn v-center-inline btnZeroStudent"
-                placement="bottom" ngbTooltip="Associa almeno uno studente all'attività!">
-                Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
-            <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato!='archiviata' && zeroStudent"
+                class="btn v-center-inline btnZeroStudent" placement="bottom"
+                ngbTooltip="Associa almeno uno studente all'attività!">
+                Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+            <button *ngIf="attivita.rendicontazioneCorpo" class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="modificaOreStudenti()">
+                Modifica Ore Studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
+            <button *ngIf="attivita.stato!='archiviata'"
+                class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="updateStudentiAssociate()">
                 Modifica studenti associati&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>
@@ -151,6 +163,7 @@
                             <th>Nome</th>
                             <th>CF</th>
                             <th>Classe</th>
+                            <th *ngIf="attivita.rendicontazioneCorpo">Ore svolte</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -158,6 +171,7 @@
                             <td>{{esp.nominativoStudente}}</td>
                             <td>{{esp.cfStudente}}</td>
                             <td>{{esp.classeStudente}}</td>
+                            <td *ngIf="attivita.rendicontazioneCorpo">{{esp.oreRendicontate}}</td>
                         </tr>
                     </tbody>
                 </table>
