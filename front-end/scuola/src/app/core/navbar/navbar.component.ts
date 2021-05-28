@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -36,7 +36,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, private growler: GrowlerService, private dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { 
+    constructor(
+        private router: Router,
+        private route: ActivatedRoute,
+        private growler: GrowlerService,
+        private dataService: DataService,
+        private authService: AuthenticationService,
+        private _eref: ElementRef) { 
         this.titleAnnoScolastico = dataService.schoolYear;
     }
 
@@ -87,12 +93,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.dataService.setIstitutoPosition(istituto.coordinate);
         } else {
             this.dataService.setIstitutoPosition(config.defaultPosition);
-        } 
-        this.router.navigate(['/attivita']);    
-        // this.router.navigateByUrl('/gestione', { skipLocationChange: true }).then(() => {
-        //     this.router.navigate(['/piani']);
-        // }); 
-
+        }
+        // navigate to 'attivita'
+        this.navigateToAttivita();         
     }
     
     ngOnDestroy() {
@@ -135,6 +138,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
             return true;
         }
     }
-    
+
+    navigateToAttivita() {
+        let filtro = {
+            tipologia: null,
+            titolo: null,
+            stato: null
+        };
+        localStorage.setItem('filtroAttivita', JSON.stringify(filtro));
+        this.router.navigate(['/attivita/list', (new Date()).getTime()], {skipLocationChange: true});
+    }
 
 }

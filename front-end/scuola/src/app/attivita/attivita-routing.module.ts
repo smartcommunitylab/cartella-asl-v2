@@ -16,12 +16,14 @@ import { AttivitaCancellaModal } from './actions/cancella-attivita-modal/attivit
 import { GestionePresenzeIndividualeComponent } from './actions/gestione-presenze-individuale/gestione-preseneze-individuale.component';
 import { GestionePresenzeGruppoComponent } from './actions/gestione-presenze-gruppo/gestione-preseneze-gruppo.component';
 import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-modal/archiaviazione-attivita.component';
+import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
 
 const routes: Routes = [
   {
     path: '', component: AttivitaContainerComponent,
     children: [
       { path: 'list', component: AttivitaComponent },
+      { path: 'list/:refresh', component: AttivitaComponent },
       { path: 'detail/:id', component: AttivitaDettaglioComponent },
       { path: 'detail/:id/modifica/attivita', component: AttivitaDettaglioModificaComponent },
       { path: 'detail/:id/modifica/studenti', component: AttivitaModificaStudentiComponent},
@@ -54,7 +56,7 @@ export class AttivitaRoutingModule {
     GestionePresenzeIndividualeComponent,
     GestionePresenzeGruppoComponent,
     ArchiaviazioneAttivitaModal,
-    AssociaOffertaComponent
+    AssociaOffertaComponent,
   ];
 }
 
