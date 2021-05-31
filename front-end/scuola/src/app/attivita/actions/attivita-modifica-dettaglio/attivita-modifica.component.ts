@@ -76,6 +76,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   attivitaStato: string = "";
   evn = environment;
+  modalita;
+
   breadcrumbItems = [
     {
       title: "Dettaglio attività",
@@ -168,6 +170,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
             referenteScuolaCF: new FormControl(),
             referenteEsternoCF: new FormControl()
           });
+
+          this.isRendicontazioneOre(this.attivita);
 
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
@@ -422,6 +426,14 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     n = parseInt(n); //ex. if already passed '05' it will be converted to number 5
     var ret = n > 9 ? "" + n: "0" + n;
     return ret;
+  }
+
+  isRendicontazioneOre(aa) {
+    if (aa.rendicontazioneCorpo) {
+      this.modalita = 'Rendicontazione a corpo';
+    } else {
+      this.modalita = 'Rendicontazione ore giornaliera';
+    }
   }
   
 }
