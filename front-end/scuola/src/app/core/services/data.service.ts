@@ -695,6 +695,27 @@ export class DataService {
       );
   }
 
+  getAttivitaPresenzeCorpo(id: any) {
+    let url = this.host + "/attivita/" + id + '/presenze/corpo';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   deleteAttivita(id: number): Observable<any> {
     let url = this.host + "/attivita/" + id;
     let params = new HttpParams();

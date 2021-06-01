@@ -89,6 +89,17 @@ export class AttivitaDettaglioComponent implements OnInit {
           this.atttivitaCompetenze = res;
         });
 
+        if (this.attivita.rendicontazioneCorpo) {
+          this.dataService.getAttivitaPresenzeCorpo(id).subscribe((res) => {
+            this.esperienze = res;
+            this.esperienze.forEach(esp => {
+              if (esp.oreRendicontate < 1) {
+                esp.oreRendicontate = '-';
+              }
+            });
+          });
+        }
+
       },
         (err: any) => console.log(err),
         () => console.log('getAttivita'));
@@ -141,6 +152,10 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   updateStudentiAssociate() {
     this.router.navigate(['modifica/studenti/'], { relativeTo: this.route });
+  }
+
+  modificaOreStudenti() {
+    this.router.navigate(['modifica/studenti/ore'], { relativeTo: this.route });
   }
 
   updateCompetenzePiano() {
