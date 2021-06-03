@@ -1,0 +1,58 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row" *ngIf="attivita">
+        <div class="col-6 v-center">
+            <span class="title">{{attivita.titolo}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+        <div class="col-6">
+            <div class="row v-center float-right">
+                <button type="button" class="btn btn-danger btn-icon btn-xs" placement="bottom"
+                    ngbTooltip="Annulla le modifiche" (click)="cancel()">
+                    <span class="row modalButtonTextStyle">
+                        <span class="v-center">Annulla&nbsp;</span>&nbsp;
+                        <span>
+                            <i class="material-icons">close</i>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-success btn-icon btn-xs" placement="bottom" ngbTooltip="Modifica o elimina gli account che possono operare su questo ente"
+                    (click)="save()">
+                    <span class="row modalButtonTextStyle">
+                        <span class="v-center">Salva&nbsp;</span>&nbsp;
+                        <span>
+                            <i class="material-icons">save</i>
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <div class="card-body modify-card-body">
+    </div>
+</div>
