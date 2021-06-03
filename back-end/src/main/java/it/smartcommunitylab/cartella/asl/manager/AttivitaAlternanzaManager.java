@@ -934,7 +934,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(aa.getRendicontazioneCorpo()) {
 			for(ReportEsperienzaRegistration report : presenze) {
 				EsperienzaSvolta esperienzaSvolta = esperienzaSvoltaManager.findById(report.getEsperienzaSvoltaId());
-				if((esperienzaSvolta != null) && (esperienzaSvolta.getAttivitaAlternanzaId() == aa.getId())) {
+				if((esperienzaSvolta != null) && (esperienzaSvolta.getAttivitaAlternanzaId().equals(aa.getId()))) {
 					esperienzaSvolta.setOreRendicontate(report.getOreRendicontate());
 					setPresenzeCorpo(aa, esperienzaSvolta);
 					esperienzaSvoltaManager.updateOreRendicontate(report.getEsperienzaSvoltaId(), report.getOreRendicontate());
