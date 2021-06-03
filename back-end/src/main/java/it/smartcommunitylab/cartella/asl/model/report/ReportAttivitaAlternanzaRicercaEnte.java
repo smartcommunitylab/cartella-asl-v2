@@ -30,6 +30,7 @@ public class ReportAttivitaAlternanzaRicercaEnte {
 	private LocalDate dataArchiviazione;
 	private List<String> studenti = new ArrayList<String>();
 	private String referenteEsterno;
+	private Boolean rendicontazioneCorpo = Boolean.FALSE;
 	
 	public ReportAttivitaAlternanzaRicercaEnte() {}
 	
@@ -44,6 +45,7 @@ public class ReportAttivitaAlternanzaRicercaEnte {
 		this.setDataFine(attivita.getDataFine());
 		this.setDataArchiviazione(attivita.getDataArchiviazione());
 		this.setReferenteEsterno(attivita.getReferenteEsterno());
+		this.setRendicontazioneCorpo(attivita.getRendicontazioneCorpo());
 	}
 	
 	public Long getId() {
@@ -131,6 +133,14 @@ public class ReportAttivitaAlternanzaRicercaEnte {
 
 	public void setReferenteEsterno(String referenteEsterno) {
 		this.referenteEsterno = referenteEsterno;
+	}
+
+	public Boolean getRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(Boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
 	}
 
 }
