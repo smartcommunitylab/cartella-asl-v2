@@ -17,6 +17,7 @@ import { GestionePresenzeIndividualeComponent } from './actions/gestione-presenz
 import { GestionePresenzeGruppoComponent } from './actions/gestione-presenze-gruppo/gestione-preseneze-gruppo.component';
 import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-modal/archiaviazione-attivita.component';
 import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
+import { ModificaOreStudentiComponent } from'./actions/modifica-ore-studenti/modifica-ore-studenti';
 
 const routes: Routes = [
   {
@@ -24,12 +25,14 @@ const routes: Routes = [
     children: [
       { path: 'list', component: AttivitaComponent },
       { path: 'list/:refresh', component: AttivitaComponent },
+      { path: 'list/associa/offerta/:modalita', component: AssociaOffertaComponent },
       { path: 'detail/:id', component: AttivitaDettaglioComponent },
       { path: 'detail/:id/modifica/attivita', component: AttivitaDettaglioModificaComponent },
       { path: 'detail/:id/modifica/studenti', component: AttivitaModificaStudentiComponent},
       { path: 'detail/:id/modifica/competenze', component: AttivitaModificaCompetenzeComponent },
       { path: 'detail/:id/modifica/studenti/presenze/individuale', component: GestionePresenzeIndividualeComponent },
       { path: 'detail/:id/modifica/studenti/presenze/gruppo', component: GestionePresenzeGruppoComponent },
+      { path: 'detail/:id/modifica/studenti/ore', component: ModificaOreStudentiComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -57,6 +60,7 @@ export class AttivitaRoutingModule {
     GestionePresenzeGruppoComponent,
     ArchiaviazioneAttivitaModal,
     AssociaOffertaComponent,
+    ModificaOreStudentiComponent
   ];
 }
 
