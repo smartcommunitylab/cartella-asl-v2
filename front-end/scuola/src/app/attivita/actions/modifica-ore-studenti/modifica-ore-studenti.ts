@@ -68,6 +68,31 @@ export class ModificaOreStudentiComponent implements OnInit {
     }
   }
 
+  save() {
+
+    if (!this.forceErrorDisplay) {
+      let toBeSaved = this.prepareSaveArray();
+      this.dataService.validaPresenzeAttivitaCorpo(this.attivita.id, toBeSaved).subscribe((res) => {
+        this.growler.growl('Presenze corpo validate con successo', GrowlerMessageType.Success);
+        this.cancel();
+      },
+        (err: any) => {
+          console.log(err)
+        },
+        () => console.log('valida presenze corpo'));
+    }
+  }
+
+  prepareSaveArray() {
+    var toBeSaved = [];
+    this.esperienze.forEach(es => {
+      if (es.oreRendicontate == '-')
+        es.oreRendicontate = 0;
+      toBeSaved.push(es);
+    });
+    return toBeSaved;
+  }
+
   menuContentShow() {
     this.showContent = !this.showContent;
   }

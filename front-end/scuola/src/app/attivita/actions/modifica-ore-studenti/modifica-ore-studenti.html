@@ -82,6 +82,18 @@
                         </td>
                         <!-- Ore svolte -->
                         <td class="pointer">
+                            <!-- <span class="align-middle">{{ esp.oreSvolte }}</span> -->
+                            <input type="text" class="form-control" pattern="[0-9\-]+$" [(ngModel)]="esp.oreRendicontate" id="oreSvolte" name="oreSvolte"
+                            #oreSvolteInput="ngModel" placeholder="Ore svolte" (ngModelChange)="edit(esp)" required>
+                            <!-- <input type="text" class="form-control" pattern="[0-9\-]+$" [ngModel]="esp.oreRendicontate < 1? '-':esp.oreRendicontate" id="oreSvolte" name="oreSvolte"
+                            #oreSvolteInput="ngModel" placeholder="Ore svolte" (ngModelChange)="edit(esp)" required> -->
+                        <div class="invalid-feedback"
+                            [class.d-block]="oreSvolteInput.invalid && (oreSvolteInput.dirty || oreSvolteInput.touched || forceErrorDisplay)">
+                            Campo necessario.
+                        </div>
+                        <div class="invalid-feedback" [class.d-block]="oreSvolteInput.value > attivita.ore">
+                            Impossibile inserire<br>un numero di ore<br>superiore al monte<br>ore totale dell’attività
+                        </div>
                         </td>
                     </tr>
                 </tbody>
