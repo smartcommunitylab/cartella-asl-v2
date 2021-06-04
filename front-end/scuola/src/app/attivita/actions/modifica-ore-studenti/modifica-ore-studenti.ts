@@ -60,6 +60,14 @@ export class ModificaOreStudentiComponent implements OnInit {
     this.router.navigate(['../../..'], { relativeTo: this.route });
   }
 
+  edit(es) {
+    if (!es.oreRendicontate || es.oreRendicontate < 0 || es.oreRendicontate > this.attivita.ore) {
+      this.forceErrorDisplay = true;
+    } else {
+      this.forceErrorDisplay = false;
+    }
+  }
+
   menuContentShow() {
     this.showContent = !this.showContent;
   }

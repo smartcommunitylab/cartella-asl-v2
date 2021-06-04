@@ -54,5 +54,39 @@
         </div>
     </div>
     <div class="card-body modify-card-body">
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+        <div class="list-group" *ngIf="esperienze && esperienze.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CF</th>
+                        <th>Classe</th>
+                        <th>Ore svolte</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let esp of esperienze">
+                        <!-- Nome -->
+                        <td class="pointer">
+                            <span class="align-middle color-blu text-underline">{{ esp.nominativoStudente }}</span>
+                        </td>
+                        <!-- CF -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ esp.cfStudente }}</span>
+                        </td>
+                        <!-- Classe -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ esp.classeStudente }}</span>
+                        </td>
+                        <!-- Ore svolte -->
+                        <td class="pointer">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>
