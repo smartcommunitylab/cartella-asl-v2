@@ -48,7 +48,13 @@ export class AttivitaComponent implements OnInit {
         private router: Router,
         private location: Location,
         private modalService: NgbModal
-    ) {}
+    ) {
+        route.params.subscribe(params => {
+            if(params['refresh']) {
+                this.ngOnInit();
+            }
+        })
+    }
 
     ngOnInit(): void {
         this.title = 'Lista attività';
@@ -83,7 +89,7 @@ export class AttivitaComponent implements OnInit {
     }
 
     openPrimoModalCreateAttivita() {
-        const modalRef = this.modalService.open(NewAttivtaModalPrimo, { windowClass: "archiviazioneModalClass" });
+        const modalRef = this.modalService.open(NewAttivtaModalPrimo, { windowClass: "creaAttivitaModalClass" });
         modalRef.componentInstance.modalitaListener.subscribe((option) => {
             if (option == 1) { 
                 // rendicontazione corpo
@@ -331,11 +337,15 @@ export class AttivitaComponent implements OnInit {
     }
 
     gestionePresenze(aa) {
-        if (aa.individuale) {
-            this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/individuale');
+        if (!aa.rendicontazioneCorpo) {
+            if (aa.individuale) {
+                this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/individuale');
+            } else {
+                this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/gruppo');
+            }
         } else {
-            this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/gruppo');
-        }
+            this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/ore');
+        }       
     }
 
     getStatoNome(statoValue) {
