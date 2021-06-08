@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionService } from '../../core/services/permission.service';
 import { DeleteEsperienzaModalComponent } from '../modals/delete-esperienza-modal/delete-esperienza-modal.component';
+import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-modal/activate-attivita-modal.component';
 import { ngCopy } from 'angular-6-clipboard';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
@@ -136,6 +137,19 @@ export class DashboardEsperienzeComponent implements OnInit {
     modalRef.componentInstance.onDelete.subscribe(res => {
       console.log('deleteEsperienza');
       this.dataService.deleteEsperienza(esp.esperienzaId).subscribe(r => {
+        if(r) {
+          this.getReport();
+        }
+      });
+    });
+  }
+
+  activateAttivita(esp: any) {
+    const modalRef = this.modalService.open(ActivateAttivitaModalComponent);
+    modalRef.componentInstance.titolo = esp.titolo;
+    modalRef.componentInstance.onActivate.subscribe(res => {
+      console.log('activateAttivita');
+      this.dataService.activateAttivita(esp.attivitaAlternanzaId).subscribe(r => {
         if(r) {
           this.getReport();
         }
