@@ -54,7 +54,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   showContent: boolean = false;
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   tipiDoc = [{ "name": "Piano formativo", "value": "piano_formativo" }, { "name": "Convenzione", "value": "convenzione" }, { "name": "Valutazione studente", "value": "valutazione_studente" }, { "name": "Valutazione esperienza", "value": "valutazione_esperienza" }, { "name": "Altro", "value": "doc_generico" }, { "name": "Pregresso", "Altro": "pregresso" }];
-  removableDoc = ["valutazione_studente","doc_generico"];
+  removableDoc = ["valutazione_studente", "doc_generico"];
   zeroStudent: boolean;
   breadcrumbItems = [
     {
@@ -68,7 +68,6 @@ export class AttivitaDettaglioComponent implements OnInit {
 
 
   ngOnInit() {
-
     this.route.params.subscribe(params => {
       let id = params['id'];
       this.dataService.getAttivita(id).subscribe((res) => {
@@ -112,7 +111,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   getAttivitaType() { }
-  
+
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
   }
@@ -171,8 +170,6 @@ export class AttivitaDettaglioComponent implements OnInit {
   gestionePresenze() {
     if (this.individuale) {
       this.router.navigate(['modifica/studenti/presenze/individuale'], { relativeTo: this.route });
-    } else {
-      this.router.navigate(['modifica/studenti/presenze/gruppo'], { relativeTo: this.route });
     }
   }
 
@@ -203,7 +200,7 @@ export class AttivitaDettaglioComponent implements OnInit {
         label = off.istitutiAssociati.length + ' istituti';
       } else {
         label = off.istitutiAssociati.length + ' istituto';
-      }      
+      }
     } else {
       label = '0 istituto';
     }
@@ -235,7 +232,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     let removable = false;
     if (this.removableDoc.indexOf(doc.tipo) > -1 && this.attivita.stato != 'archiviata') {
       removable = true;
-    }    
+    }
     return removable;
   }
 
