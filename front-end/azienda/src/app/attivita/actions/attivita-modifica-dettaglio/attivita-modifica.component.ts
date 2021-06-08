@@ -16,7 +16,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService) { }
+    private dataService: DataService) {}
 
   attivita: AttivitaAlternanza;
   esperienze;
@@ -32,7 +32,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   attivitaStato: string = "";
   evn = environment;
   forceReferenteEsternoErrorDisplay: boolean = false;
-  
+  modalita;
+
   breadcrumbItems = [
     {
       title: "Dettaglio attività",
@@ -68,7 +69,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.evn.modificationFlag=true;
+    this.evn.modificationFlag = true;
     this.date = {
       dataInizio: moment(),
       dataFine: moment()
@@ -83,6 +84,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.attivita.nomeIstituto = res.nomeIstituto;
           this.attivitaStato = this.getStatoNome(this.attivita.stato);
           this.esperienze = res.esperienze;
+
           this.tipologie.filter(tipo => {
             if (tipo.id == this.attivita.tipologia) {
               this.attivitaTipologia = tipo.titolo;
@@ -93,17 +95,16 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.date.dataInizio = moment(dataInizio.getTime());
           var dataFine = new Date(this.attivita.dataFine);
           this.date.dataFine = moment(dataFine);
-
           this.titolo = this.attivita.titolo;
-         
+          this.isRendicontazioneOre(this.attivita);
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
       });
     });
   }
 
-  ngOnDestroy(){
-    this.evn.modificationFlag=false;
+  ngOnDestroy() {
+    this.evn.modificationFlag = false;
   }
 
   getTipologiaString(tipologiaId) {
@@ -130,12 +131,12 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
   save() {
 
-      if (this.attivita.referenteEsterno && this.attivita.referenteEsterno != '' && this.attivita.referenteEsterno.trim().length > 0) {
-        this.attivita.referenteEsterno =  this.attivita.referenteEsterno.trim();
-        this.forceReferenteEsternoErrorDisplay = false;
-      } else {
-        this.forceReferenteEsternoErrorDisplay = true;
-      }
+    if (this.attivita.referenteEsterno && this.attivita.referenteEsterno != '' && this.attivita.referenteEsterno.trim().length > 0) {
+      this.attivita.referenteEsterno = this.attivita.referenteEsterno.trim();
+      this.forceReferenteEsternoErrorDisplay = false;
+    } else {
+      this.forceReferenteEsternoErrorDisplay = true;
+    }
 
     this.attivita.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
     this.attivita.dataFine = moment(this.date.dataFine, 'YYYY-MM-DD').valueOf();
@@ -143,7 +144,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     if (!this.forceReferenteEsternoErrorDisplay) {
       (this.attivita.referenteEsternoCF) ? this.attivita.referenteEsternoCF = this.attivita.referenteEsternoCF.trim() : this.attivita.referenteEsternoCF = null;
       (this.attivita.referenteEsternoTelefono) ? this.attivita.referenteEsternoTelefono = this.attivita.referenteEsternoTelefono.trim() : this.attivita.referenteEsternoTelefono = null;
-  
+
       this.dataService.updateAttivitaAlternanza(this.attivita).subscribe((res => {
         this.router.navigate(['../../'], { relativeTo: this.route });
       }));
@@ -163,12 +164,20 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
   }
 
-  trimValue(event, type) { 
+  trimValue(event, type) {
     if (type == 'esterno') {
       (event.target.value.trim().length == 0) ? this.forceReferenteEsternoErrorDisplay = true : this.forceReferenteEsternoErrorDisplay = false;
-    }else if(type == 'trim'){
-      event.target.value = event.target.value.trim(); 
+    } else if (type == 'trim') {
+      event.target.value = event.target.value.trim();
     }
   }
-  
+
+  isRendicontazioneOre(aa) {
+    if (aa.rendicontazioneCorpo) {
+      this.modalita = 'Rendicontazione a corpo';
+    } else {
+      this.modalita = 'Rendicontazione ore giornaliera';
+    }
+  }
+
 }
