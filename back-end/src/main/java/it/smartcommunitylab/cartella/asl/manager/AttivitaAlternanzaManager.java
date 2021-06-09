@@ -667,6 +667,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
+		if(Utils.isEmpty(offerta.getEnteId()) || Utils.isEmpty(offerta.getReferenteEsterno())) {
+			throw new BadRequestException("offerta di riferimento con dati incompleti");
+		}
 		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId, rendicontazioneCorpo);
 		return saveAttivitaAlternanza(aa, istitutoId);
 	}
