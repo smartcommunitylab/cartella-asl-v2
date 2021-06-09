@@ -1,11 +1,9 @@
 
 .list-container{
     margin-top: 40px;
-
     >.row {
         margin: 0px;
     }
-
     .card-body {
         >.space-row {
             margin-bottom:5px;
@@ -32,7 +30,6 @@
             color: white;
         }
     }
-
     .list-group {
         margin-top: 20px;
         .row {
@@ -46,17 +43,14 @@
             font-size: 20px;
         }
     }
-
     .menu-content {
         border-bottom: 10px solid #3DBBD2;
     }
-
     .middle-table {
         position: relative;
         max-width: 50%;        
         left: 20%;
     }
-
     .title{
         text-align: left;
         letter-spacing: 0;
@@ -65,7 +59,6 @@
         font-size: larger;
         font-weight: bold;
     }
-
     .underline {
        text-decoration: underline
     }

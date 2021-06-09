@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule }   from '../shared/shared.module';
 import { AttivitaRoutingModule } from './attivita-routing.module';
 import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { from } from 'rxjs/observable/from';
 import { DesignAngularKitModule } from 'design-angular-kit' 
 import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 import { DocumentUploadModalComponent } from './actions/documento-upload-modal/document-upload-modal.component';
@@ -34,4 +33,4 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
 declarations: [AttivitaRoutingModule.components]
 })
-export class AttivitaModule { }
+export class AttivitaModule {}

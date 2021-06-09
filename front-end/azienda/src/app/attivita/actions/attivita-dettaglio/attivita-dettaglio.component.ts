@@ -4,7 +4,7 @@ import { DataService } from '../../../core/services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AttivitaAlternanza } from '../../../shared/classes/AttivitaAlternanza.class';
 import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
-import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
+import { GrowlerService } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
@@ -24,7 +24,6 @@ export class AttivitaDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   attivita: AttivitaAlternanza;
