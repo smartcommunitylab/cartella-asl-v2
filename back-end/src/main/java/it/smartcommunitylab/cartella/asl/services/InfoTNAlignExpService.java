@@ -139,7 +139,7 @@ public class InfoTNAlignExpService {
 		ae.setDataFineEsperienzaASL(aa.getDataFine().format(formatter));
 		ae.setEsperienzaASLAziendaScuola(infoTNAslAS.get(mappedCodeASL));
 		ae.setTutorInternoEsperienzaASL(aa.getReferenteScuola());
-		ae.setNumeroOreFrequentateStudente(String.valueOf(presenzaGiornaliereRepository.getOreValidateByEsperienzaId(es.getId())));
+		ae.setNumeroOreFrequentateStudente(getOreValidate(es.getId()));
 		/**
 		 * Fix for tackling topologies
 		 * (Anno all'estero | Impresa formativa simulata/Cooperativa Formativa Scolastica)
@@ -182,6 +182,14 @@ public class InfoTNAlignExpService {
 
 		return httpsUtils.sendPOSTSAA(url, "application/json", "application/json", token, json);
 
+	}
+	
+	private String getOreValidate(Long espId) {
+		Long ore = presenzaGiornaliereRepository.getOreValidateByEsperienzaId(espId);
+		if(ore == null) {
+			return "0";
+		}
+		return String.valueOf(ore);
 	}
 
 	private String getSchoolYear(String annoScolastico) {
