@@ -172,7 +172,7 @@ export class CreaAttivitaModalComponent implements OnInit {
       } else {
         this.forceErrorDisplayOraFine = false;
       }
-      if (this.azienda) {
+      if (this.azienda && this.azienda.id != undefined) {
         this.forceEnteDisplay = false;
       } else {
         this.forceEnteDisplay = true;
@@ -199,7 +199,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
-        && (this.azienda && this.azienda.id != '')
+        && (this.azienda && this.azienda.id != undefined)
         && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine <= this.date.maxFine))
       );

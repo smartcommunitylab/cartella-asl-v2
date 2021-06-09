@@ -274,7 +274,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
 
     if (!this.tipoInterna) {
-      if (this.azienda && this.azienda.id != '') {
+      if (this.azienda && this.azienda.id != undefined) {
         this.attivita.nomeEnte = this.azienda.nome;
         this.attivita.enteId = this.azienda.id;
         this.forceEnteDisplay = false;
