@@ -90,14 +90,14 @@ export class AttivitaDettaglioComponent implements OnInit {
         });
 
         if (this.attivita.rendicontazioneCorpo) {
-          this.dataService.getAttivitaPresenzeCorpo(id).subscribe((res) => {
-            this.esperienze = res;
+          // this.dataService.getAttivitaPresenzeCorpo(id).subscribe((res) => {
+            // this.esperienze = res;
             this.esperienze.forEach(esp => {
               if (esp.oreRendicontate < 1) {
                 esp.oreRendicontate = '-';
               }
             });
-          });
+          // });
         }
 
       },
