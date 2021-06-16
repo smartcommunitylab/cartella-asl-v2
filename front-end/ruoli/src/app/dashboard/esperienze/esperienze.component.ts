@@ -8,6 +8,7 @@ import { ActivateAttivitaModalComponent } from '../modals/activate-attivita-moda
 import { ngCopy } from 'angular-6-clipboard';
 import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
+import { GrowlerService, GrowlerMessageType } from '../../core/growler/growler.service';
 import * as moment from 'moment';
 
 @Component({
@@ -23,6 +24,7 @@ export class DashboardEsperienzeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
+    private growler: GrowlerService,
     private permissionService: PermissionService) { }
 
   profile;
@@ -95,7 +97,13 @@ export class DashboardEsperienzeComponent implements OnInit {
   formatterIstituto = (x: {name: string}) => x.name;
 
   getReport() {
-    this.dataService.getReportEsperienze(this.istituto.id, this.annoScolastico, this.text, this.findErrors)
+    if(!this.findErrors) {
+      if(!this.istituto || !this.annoScolastico) {
+        this.growler.growl("selezionare istituto ed anno scolastico", GrowlerMessageType.Danger, 5000);
+        return;
+      }
+    }
+    this.dataService.getReportEsperienze(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.findErrors)
       .subscribe(r => {
         if(r) {
           this.esperienze = r;
@@ -120,7 +128,13 @@ export class DashboardEsperienzeComponent implements OnInit {
   }
 
   getEsperienzeCsv() {
-    this.dataService.getEsperienzeCsv(this.istituto.id, this.annoScolastico, this.text, this.findErrors).subscribe((doc) => {
+    if(!this.findErrors) {
+      if(!this.istituto || !this.annoScolastico) {
+        this.growler.growl("selezionare istituto ed anno scolastico", GrowlerMessageType.Danger, 5000);
+        return;
+      }
+    }
+    this.dataService.getEsperienzeCsv(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.findErrors).subscribe((doc) => {
       const downloadLink = document.createElement("a");
       downloadLink.href = doc.url;
       downloadLink.download = doc.filename;
