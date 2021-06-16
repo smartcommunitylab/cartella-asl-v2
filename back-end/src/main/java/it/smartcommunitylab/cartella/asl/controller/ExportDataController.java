@@ -66,8 +66,8 @@ public class ExportDataController implements AslController {
 	
 	@GetMapping("/api/export/csv/dashboard/esperienze")
 	public void getDashboardReportEsperienze(
-			@RequestParam String istitutoId,
-			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String istitutoId,
+			@RequestParam(required=false) String annoScolastico,
 			@RequestParam(required=false) String text,
 			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request,

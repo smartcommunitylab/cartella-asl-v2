@@ -100,8 +100,8 @@ public class DashboardController {
 	
 	@GetMapping("/api/dashboard/esperienze")
 	public @ResponseBody List<ReportDashboardEsperienza> getReportEsperienze (
-			@RequestParam String istitutoId,
-			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String istitutoId,
+			@RequestParam(required=false) String annoScolastico,
 			@RequestParam(required=false) String text,
 			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request) throws Exception {

@@ -19,6 +19,7 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.Registration;
 import it.smartcommunitylab.cartella.asl.model.Studente;
@@ -199,31 +200,48 @@ public class DashboardManager extends DataEntityManager {
 	@SuppressWarnings("unchecked")
 	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, 
 			String text, boolean getErrors) {
-		String q = "SELECT es, aa, esa FROM EsperienzaSvolta es LEFT JOIN AttivitaAlternanza aa"
-				+ " ON es.attivitaAlternanzaId=aa.id"
-				+ " LEFT JOIN EsperienzaSvoltaAllineamento esa"
-				+ " ON es.id=esa.espSvoltaId"
-				+ " WHERE aa.istitutoId=(:istitutoId) AND aa.annoScolastico=(:annoScolastico)";
+		String q = "SELECT es, aa, esa, i FROM EsperienzaSvolta es"
+				+ " LEFT JOIN AttivitaAlternanza aa ON es.attivitaAlternanzaId=aa.id"
+				+ " LEFT JOIN Istituzione i ON aa.istitutoId=i.id"
+				+ " LEFT JOIN EsperienzaSvoltaAllineamento esa ON es.id=esa.espSvoltaId";
+		boolean firstParam = true;
+		if(Utils.isNotEmpty(istitutoId)) {
+			q += " WHERE aa.istitutoId=(:istitutoId)";
+			firstParam = false;
+		}
+		if(Utils.isNotEmpty(annoScolastico)) {
+			q += firstParam ? " WHERE" : " AND"; 
+			q += " aa.annoScolastico=(:annoScolastico)";
+			firstParam = false;
+		}
 		if(Utils.isNotEmpty(text)) {
-			q += " AND (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text))";
+			q += firstParam ? " WHERE" : " AND"; 
+			q += " (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text))";
+			firstParam = false;
 		}
 		if(getErrors) {
-			q += " AND esa.allineato = false AND esa.numeroTentativi > 0";
+			q += firstParam ? " WHERE" : " AND"; 
+			q += " esa.allineato = false AND esa.numeroTentativi > 0";
 		}
 		q += " ORDER BY aa.dataInizio DESC";
 		Query query = em.createQuery(q);
-		query.setParameter("istitutoId", istitutoId);
-		query.setParameter("annoScolastico", annoScolastico);
+		if(Utils.isNotEmpty(istitutoId)) {
+			query.setParameter("istitutoId", istitutoId);
+		}
+		if(Utils.isNotEmpty(annoScolastico)) {
+			query.setParameter("annoScolastico", annoScolastico);
+		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
-		query.setMaxResults(1000);
+		query.setMaxResults(5000);
 		List<Object[]> result = query.getResultList();
 		List<ReportDashboardEsperienza> list = new ArrayList<>();
 		for (Object[] obj : result) {
 			EsperienzaSvolta es = (EsperienzaSvolta) obj[0];
 			AttivitaAlternanza aa = (AttivitaAlternanza) obj[1];
 			EsperienzaSvoltaAllineamento esa = (EsperienzaSvoltaAllineamento)obj[2];
+			Istituzione i = (Istituzione)obj[3];
 			int oreValidate = getOreValidate(es.getId());
 			ReportDashboardEsperienza report = new ReportDashboardEsperienza();
 			report.setAttivitaAlternanzaId(es.getAttivitaAlternanzaId());
@@ -239,6 +257,9 @@ public class DashboardManager extends DataEntityManager {
 			report.setStato(es.getStato());
 			report.setOreTotali(aa.getOre());
 			report.setOreValidate(oreValidate);
+			report.setAnnoScolastico(aa.getAnnoScolastico());
+			report.setIstitutoId(aa.getIstitutoId());
+			report.setIstituto(i.getName());
 			if(esa != null) {
 				report.setAllineato(esa.isAllineato());
 				report.setNumeroTentativi(esa.getNumeroTentativi());

@@ -35,6 +35,9 @@ public class ReportDashboardEsperienza {
 	private String errore;
 	private String invio;
 	private Long ultimoAllineamento;
+	private String annoScolastico;
+	private String istitutoId;
+	private String istituto;
 	
 	public Long getEsperienzaId() {
 		return esperienzaId;
@@ -143,5 +146,23 @@ public class ReportDashboardEsperienza {
 	}
 	public void setUltimoAllineamento(Long ultimoAllineamento) {
 		this.ultimoAllineamento = ultimoAllineamento;
+	}
+	public String getAnnoScolastico() {
+		return annoScolastico;
+	}
+	public void setAnnoScolastico(String annoScolastico) {
+		this.annoScolastico = annoScolastico;
+	}
+	public String getIstitutoId() {
+		return istitutoId;
+	}
+	public void setIstitutoId(String istitutoId) {
+		this.istitutoId = istitutoId;
+	}
+	public String getIstituto() {
+		return istituto;
+	}
+	public void setIstituto(String istituto) {
+		this.istituto = istituto;
 	}
 }

@@ -163,9 +163,11 @@ public class ExportDataManager {
 		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, getErrors);
 		String filename = "esperienze.csv";
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"invio\";\"errore\"\n");
+		StringBuffer sb = new StringBuffer("esperienzaId;\"istituto\";\"annoScolastico\";\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\";\"invio\"\n");
 		for(ReportDashboardEsperienza esp : list) {
 			sb.append(esp.getEsperienzaId() + ";");
+			sb.append("\"" + esp.getIstituto() + "\";");
+			sb.append("\"" + esp.getAnnoScolastico() + "\";");
 			sb.append("\"" + esp.getStudenteId() + "\";");
 			sb.append("\"" + esp.getNominativoStudente() + "\";");
 			sb.append("\"" + esp.getCfStudente() + "\";");
@@ -178,18 +180,18 @@ public class ExportDataManager {
 			sb.append(esp.getOreTotali() + ";");
 			sb.append(esp.getOreValidate() + ";");
 			sb.append("\"" + esp.isAllineato() + "\";");
-			if(Utils.isNotEmpty(esp.getInvio())) {
-				sb.append("\"" + cleanString(esp.getInvio()) + "\";");
-			} else {
-				sb.append("\"\";");
-			}
 			if(Utils.isNotEmpty(esp.getErrore())) {
 				String s = cleanString(esp.getErrore());
 				int i = s.indexOf("{'sistemaOrigine'");
 				if(i > 0) {
 					s = s.substring(0, i);
 				}
-				sb.append("\"" + s + "\"\n");
+				sb.append("\"" + s + "\";");
+			} else {
+				sb.append("\"\";");
+			}
+			if(Utils.isNotEmpty(esp.getInvio())) {
+				sb.append("\"" + cleanString(esp.getInvio()) + "\"\n");
 			} else {
 				sb.append("\"\"\n");
 			}
