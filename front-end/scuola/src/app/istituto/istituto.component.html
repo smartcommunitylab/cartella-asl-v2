@@ -57,6 +57,9 @@
             </div>
         </div>
         <div class="row">
+            <i>Puoi visualizzare i dati dell'intero istituto o delle singole classi. Seleziona l'opzione che preferisci.</i>
+        </div>
+        <div class="row">
             <div class="form-check form-check-inline">
                 <input name="gruppo2" type="radio" id="radio4" [checked]="classeReport"
                     (change)="onFilterChange($event)" checked>
@@ -79,60 +82,70 @@
         </div>
         <br />
         <br />
-        <div class="row" *ngIf="(showDashboard && !classeReport) || (showDashboard && classeReport && classe)">
+        <div *ngIf="(showDashboard && !classeReport) || (showDashboard && classeReport && classe)">
             <div class="row">
                 <div class="title">
                     Tipologie Attività <br />
                 </div>
             </div>
-            <br/>
-            <div class="col-6">
-                <div class="chartjs-container">
-                    <canvas  
-                    width="480"
-                    height="380" 
-                    baseChart
-                    [data]="pieChartData"
-                    [labels]="pieChartLabels"
-                    [chartType]="pieChartType"
-                    [options]="pieChartOptions"
-                    [plugins]="pieChartPlugins"
-                    [colors]="pieChartColors"
-                    [legend]="pieChartLegend">
-                    </canvas>
-                </div>
+            <div class="row" *ngIf="classeReport">
+                <i>Questo grafico mostra la distribuzione delle tipologie di attività dei componenti della classe selezionata rispetto 
+                    al loro percorso formativo fino a qui svolto. Nei tre box a destra trovi invece il numero di attvità per stato.</i>
             </div>
-            <div class="col-4">
-                <div class="float-right">
-                    <br />
-                    <br />
-                    <div class="row">
-                        <button class="btn btn-rectangle v-center-inline rectangle-in_corso" (click)="listAttivita('in_corso')">
-                            {{ numeroAttivitaInCorso }} Attività
-                            <br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in corso&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </button>
-                    </div>
-                    <br />
-                    <br />
-                    <div class="row">
-                        <button class="btn btn-rectangle v-center-inline rectangle-da_revisionare"
-                            (click)="listAttivita('revisione')">
-                            {{ numeroAttivitaInRevisione }} Attività
-                            <br />
-                            da revisionare
-                        </button>
-                    </div>
-                    <br />
-                    <br />
-                    <div class="row">
-                        <button class="btn btn-rectangle v-center-inline rectangle-in_attesa" (click)="listAttivita('in_attesa')">
-                            {{ numeroAttivitaInAttesa }} Attività
-                            <br />
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in attesa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </button>
+            <div class="row" *ngIf="!classeReport">
+                <i>Questo grafico mostra la distribuzione delle tipologie di attività svolte nell'attuale anno scolastico. 
+                    Nei tre box a destra trovi invece il numero di attvità per stato.</i>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-6">
+                    <div class="chartjs-container">
+                        <canvas  
+                        width="480"
+                        height="380" 
+                        baseChart
+                        [data]="pieChartData"
+                        [labels]="pieChartLabels"
+                        [chartType]="pieChartType"
+                        [options]="pieChartOptions"
+                        [plugins]="pieChartPlugins"
+                        [colors]="pieChartColors"
+                        [legend]="pieChartLegend">
+                        </canvas>
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="float-right">
+                        <br />
+                        <br />
+                        <div class="row">
+                            <button class="btn btn-rectangle v-center-inline rectangle-in_corso" (click)="listAttivita('in_corso')">
+                                {{ numeroAttivitaInCorso }} Attività
+                                <br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in corso&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <button class="btn btn-rectangle v-center-inline rectangle-da_revisionare"
+                                (click)="listAttivita('revisione')">
+                                {{ numeroAttivitaInRevisione }} Attività
+                                <br />
+                                da revisionare
+                            </button>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <button class="btn btn-rectangle v-center-inline rectangle-in_attesa" (click)="listAttivita('in_attesa')">
+                                {{ numeroAttivitaInAttesa }} Attività
+                                <br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in attesa&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>    
             </div>
         </div>
         <br />
@@ -141,7 +154,11 @@
             <div class="title">
                 Ore studenti <br />
             </div>
-            <div>
+            <div class="row">
+                <i>Ogni barra dell'istogramma rappresenta il numero di ore <strong>validate</strong> svolte per studente. 
+                    In blu le attività esterne, in verde quelle interne. Passando il mouse sulla barra vengono mostrati i dati puntuali.</i>
+            </div>
+            <div class="row">
                <canvas baseChart
                width="1500"
                height="380" 
@@ -157,6 +174,10 @@
         <div *ngIf="!classeReport && showDashboard">
             <div class="title">
                 Media ore per classe <br />
+            </div>
+            <div class="row">
+                <i>Ogni barra dell'istogramma rappresenta la media delle ore <strong>validate</strong> per ciascuna classe. 
+                    Passando il mouse sulla barra vengono mostrati i dati puntuali.</i>
             </div>
             <div>
                 <canvas baseChart
