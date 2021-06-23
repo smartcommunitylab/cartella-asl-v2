@@ -14,6 +14,7 @@ import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.export.ExportCsv;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnte;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
@@ -203,6 +204,48 @@ public class ExportDataManager {
 		return exportCsv;
 	}
 	
+	public ExportCsv getEnteStudente(String enteId, String studenteId) {
+		ReportStudenteDettaglioEnte report = studenteManager.getStudenteDettaglioEnte(studenteId, enteId);
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+		LocalDate today = LocalDate.now();
+		String filename = "Resoconto_Attività_" + report.getStudente().getSurname() + "_" + report.getStudente().getName() + "_"
+				+ today.format(ldf) + ".csv";
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"dataNascita\";\"telefono\";\"email\";\"titolo attività\";\"tipo\";\"dataInizio\";\"dataFine\";oreProgrammate;\"tutorScolastico\";\"tutorEnte\"\n");
+		report.getAttivitaList().forEach(aa -> {
+			String cognome = report.getStudente().getSurname();
+			String nome = report.getStudente().getName();
+			String cf = report.getStudente().getCf();
+			String dataNascita = report.getStudente().getBirthdate();
+			String telefono = report.getStudente().getPhone();
+			String email = report.getStudente().getEmail();
+			String titolo = aa.getTitolo();
+			String tipo = getTipologia(aa);
+			String dataInizio = aa.getDataInizio().format(ldf);
+			String dataFine = aa.getDataFine().format(ldf);
+			String oreProgrammate = String.valueOf(aa.getOre());
+			String tutorScolastico = aa.getReferenteScuola();
+			String tutorEnte = aa.getReferenteEsterno();
+			sb.append("\"" + cognome + "\";");
+			sb.append("\"" + nome + "\";");
+			sb.append("\"" + cf + "\";");
+			sb.append("\"" + dataNascita + "\";");
+			sb.append("\"" + telefono + "\";");
+			sb.append("\"" + email + "\";");
+			sb.append("\"" + titolo.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + tipo + "\";");
+			sb.append("\"" + dataInizio + "\";");
+			sb.append("\"" + dataFine + "\";");
+			sb.append(oreProgrammate + ";");
+			sb.append("\"" + tutorScolastico + "\";");
+			sb.append("\"" + tutorEnte + "\"\n");		
+		});
+		ExportCsv exportCsv = new ExportCsv();
+		exportCsv.setFilename(filename);
+		exportCsv.setContentType("text/csv");
+		exportCsv.setContent(sb);
+		return exportCsv;
+	}
+
 	private String getTipologia(AttivitaAlternanza aa) {
 		TipologiaTipologiaAttivita tta = tipologiaAttivitaManager.getTipologiaTipologiaAttivitaByTipologia(aa.getTipologia());
 		if(tta != null) {
@@ -226,4 +269,5 @@ public class ExportDataManager {
 		}
 		return "";
 	}
+
 }

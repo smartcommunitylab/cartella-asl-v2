@@ -734,6 +734,34 @@ export class DataService {
   }
 
   /** EXPORT DATI **/
+  getEnteStudenteCsv(studenteId: string): Observable<any> {
+    let url = this.host + '/export/csv/ente/studente';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('studenteId', studenteId);
+    return this.http.get(
+      url,
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body], { type: response.headers.get('Content-Type')! });
+        const url = URL.createObjectURL(blob);
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=') + 1).replace(/\\\"/g, '');
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
+      },
+        catchError(this.handleError)
+      );
+  }
+
   getEsperienzeStudenteCsv(studente: any): Observable<any> {
     let url = this.host + '/export/csv/studente';
     let params = new HttpParams();
