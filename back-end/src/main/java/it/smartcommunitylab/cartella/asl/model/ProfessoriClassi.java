@@ -1,7 +1,6 @@
 package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,10 +21,46 @@ public class ProfessoriClassi {
 	private String origin;
 	private String classroom;
 	private String courseExtId;
+	private String corsoId;
+	private String corso;
+	private String instituteExtId;
+	private String istitutoId;
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
 	private String schoolYear;
 	private String teacherExtId;
+
+	public String getCorsoId() {
+		return corsoId;
+	}
+
+	public void setCorsoId(String corsoId) {
+		this.corsoId = corsoId;
+	}
+
+	public String getCorso() {
+		return corso;
+	}
+
+	public void setCorso(String corso) {
+		this.corso = corso;
+	}
+
+	public String getInstituteExtId() {
+		return instituteExtId;
+	}
+
+	public void setInstituteExtId(String instituteExtId) {
+		this.instituteExtId = instituteExtId;
+	}
+
+	public String getIstitutoId() {
+		return istitutoId;
+	}
+
+	public void setIstitutoId(String istitutoId) {
+		this.istitutoId = istitutoId;
+	}
 
 	public String getId() {
 		return id;
