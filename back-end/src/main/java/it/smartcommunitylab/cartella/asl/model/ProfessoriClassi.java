@@ -10,7 +10,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "professori_classi",
 	indexes = {
-			@Index(name = "extId_idx", columnList = "extId", unique = false)
+			@Index(name = "extId_idx", columnList = "extId", unique = false),
+			@Index(name = "istitutoId_idx", columnList = "istitutoId", unique = false)
 	}
 )
 public class ProfessoriClassi {
