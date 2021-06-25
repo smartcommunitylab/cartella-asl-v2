@@ -121,6 +121,9 @@ public class InfoTnImportProfessoriClassi {
 				if(!extIds.contains(professorClass.getExtIdInstitute())) {
 					continue;
 				}
+				// test
+				professorClass.setOrigin("INFOTNISTRUZIONE");
+				professorClass.getCourse().setOrigin("INFOTNISTRUZIONE");
 				ProfessoriClassi professorClassLocal = professoriClassiRepository
 						.findProfessoriClassiByExtId(professorClass.getExtId());
 				if (professorClassLocal != null) {

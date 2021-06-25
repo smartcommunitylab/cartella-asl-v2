@@ -21,6 +21,14 @@ public class MetaInfo {
 	private int schoolYear = -1;
 	private boolean blocked;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}

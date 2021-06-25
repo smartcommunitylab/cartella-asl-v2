@@ -7,13 +7,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.model.MetaInfo;
 import it.smartcommunitylab.cartella.asl.repository.MetaInfoRepository;
@@ -29,6 +29,7 @@ import it.smartcommunitylab.cartella.asl.services.InfoTnImportProfessori;
 import it.smartcommunitylab.cartella.asl.services.InfoTnImportProfessoriClassi;
 
 @Component
+@Transactional
 public class APIUpdateManager {
 
 	private static final transient Log logger = LogFactory.getLog(APIUpdateManager.class);

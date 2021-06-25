@@ -97,6 +97,8 @@ public class InfoTnImportProfessori {
 				total += 1;
 				it.smartcommunitylab.cartella.asl.model.ext.Professor professorExt = jp
 						.readValueAs(it.smartcommunitylab.cartella.asl.model.ext.Professor.class);
+				// test
+				professorExt.setOrigin("INFOTNISTRUZIONE");
 				// save.
 				ReferenteAlternanza professorLocal = referenteAlternanzaRepository
 						.findReferenteAlternanzaByExtId(professorExt.getExtId());

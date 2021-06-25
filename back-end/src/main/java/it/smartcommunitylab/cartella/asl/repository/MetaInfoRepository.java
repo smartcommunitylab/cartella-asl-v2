@@ -10,7 +10,7 @@ import it.smartcommunitylab.cartella.asl.model.MetaInfo;
 public interface MetaInfoRepository extends JpaRepository<MetaInfo, String> {
 
 	@Modifying
-	@Query("update MetaInfo meta0 set epocTimestamp=:#{#meta.epocTimestamp}, totalRead=:#{#meta.totalRead}, totalStore=:#{#meta.totalStore}, schoolYears=:#{#meta.schoolYears} where id = :#{#meta.id}")
+	@Query("update MetaInfo meta0 set epocTimestamp=:#{#meta.epocTimestamp}, totalRead=:#{#meta.totalRead}, totalStore=:#{#meta.totalStore}, schoolYear=:#{#meta.schoolYear} where id = :#{#meta.id}")
 	public void update(@Param("meta") MetaInfo meta);
 
 }
