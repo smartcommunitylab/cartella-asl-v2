@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -126,4 +127,48 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     registrazioneDocenteRepository.save(reg);
     return reg;
   }
+
+  public RegistrazioneDocente deleteRegistrazioneDocente(Long registrazioneId) throws Exception {
+    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
+    if(optional.isEmpty()) {
+      throw new BadRequestException("registrazione non trovata");
+    }
+    RegistrazioneDocente reg = optional.get();
+    ASLUser user = userManager.getASLUserById(reg.getUserId());
+		if(user == null) {
+			throw new BadRequestException("utente non trovato");
+		}
+		userManager.deleteASLUserRole(reg.getUserId(), ASLRole.TUTOR_SCOLASTICO, reg.getIstitutoId());
+    userManager.deleteASLUserRole(reg.getUserId(), ASLRole.TUTOR_CLASSE, reg.getIstitutoId());
+    registrazioneDocenteRepository.delete(reg);        
+    return reg;
+  }
+
+  List<ProfessoriClassi> getAssociazioneDocentiClassi(Long registrazioneId) {
+    StringBuilder sb = new StringBuilder("SELECT DISTINCT pc FROM ProfessoriClassi pc, AssociazioneDocentiClassi adc");
+		sb.append(" WHERE adc.registrazioneDocenteId=(:registrazioneId) AND adc.professoriClassiId=pc.id ORDER BY pc.corso ASC, classroom ASC");
+    String q = sb.toString();
+
+    TypedQuery<ProfessoriClassi> query = em.createQuery(q, ProfessoriClassi.class);
+    query.setParameter("registrazioneId", registrazioneId);
+    List<ProfessoriClassi> list = query.getResultList();
+    for(ProfessoriClassi pc : list) {
+      pc.setStudenti(getStudentiIscritti(pc));
+    }
+    return list;
+  }
+
+  private Long getStudentiIscritti(ProfessoriClassi pc) {
+    String q = "SELECT COUNT(DISTINCT r) FROM Registration r WHERE r.schoolYear=(:schoolYear) AND r.instituteId=(:istitutoId) AND r.courseId=(:corsoId)";
+    TypedQuery<Long> query = em.createQuery(q, Long.class);
+    query.setParameter("schoolYear", pc.getSchoolYear());
+    query.setParameter("istitutoId", pc.getIstitutoId());
+    query.setParameter("corsoId", pc.getCorsoId());
+    Long studenti = query.getSingleResult();
+    return studenti;
+  }
+
+  //public void updateClassi(Long registrazioneId, List<>)
+
+
 }

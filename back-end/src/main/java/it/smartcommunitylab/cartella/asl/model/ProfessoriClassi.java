@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "professori_classi",
@@ -31,6 +32,9 @@ public class ProfessoriClassi {
 	private String schoolYear;
 	private String teacherExtId;
 	private String referenteAlternanzaId;
+
+	@Transient
+	private Long studenti;
 
 	public String getCorsoId() {
 		return corsoId;
@@ -142,6 +146,14 @@ public class ProfessoriClassi {
 
 	public void setReferenteAlternanzaId(String referenteAlternanzaId) {
 		this.referenteAlternanzaId = referenteAlternanzaId;
+	}
+
+	public Long getStudenti() {
+		return studenti;
+	}
+
+	public void setStudenti(Long studenti) {
+		this.studenti = studenti;
 	}
 
 }

@@ -7,5 +7,4 @@ import it.smartcommunitylab.cartella.asl.model.AssociazioneDocentiClassi;
 
 @Repository
 public interface AssociazioneDocentiClassiRepository extends JpaRepository<AssociazioneDocentiClassi, Long> {
-  
 }
