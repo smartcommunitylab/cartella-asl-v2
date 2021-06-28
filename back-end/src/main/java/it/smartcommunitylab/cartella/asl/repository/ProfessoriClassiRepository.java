@@ -18,4 +18,6 @@ public interface ProfessoriClassiRepository extends JpaRepository<ProfessoriClas
 	public Long countByTeacherExtId(String teacherExtId);
 
 	public List<ProfessoriClassi> findByTeacherExtId(String teacherExtId);
+
+	public List<ProfessoriClassi> findByReferenteAlternanzaId(String referenteAlternanzaId);
 }

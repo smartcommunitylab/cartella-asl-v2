@@ -13,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "registrazione_docente", indexes = { 
 		@Index(name = "istitutoId_idx", columnList = "istitutoId", unique = false),
-		@Index(name = "emailDocente_idx", columnList = "emailDocente", unique = false)
+		@Index(name = "emailDocente_idx", columnList = "emailDocente", unique = false),
+    @Index(name = "cfDocente_idx", columnList = "cfDocente", unique = false)
   }
 )
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -23,6 +24,7 @@ public class RegistrazioneDocente {
 	private Long id;
 
   private String istitutoId;
+  private String nomeIstituto;
 
   private Long userId;
 
@@ -97,6 +99,14 @@ public class RegistrazioneDocente {
 
   public void setClassi(String classi) {
     this.classi = classi;
+  }
+
+  public String getNomeIstituto() {
+    return nomeIstituto;
+  }
+
+  public void setNomeIstituto(String nomeIstituto) {
+    this.nomeIstituto = nomeIstituto;
   }
 
 

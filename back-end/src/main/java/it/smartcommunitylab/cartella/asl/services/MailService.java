@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import it.smartcommunitylab.cartella.asl.controller.RegistrazioneEnteController;
 import it.smartcommunitylab.cartella.asl.exception.ServiceException;
+import it.smartcommunitylab.cartella.asl.model.RegistrazioneDocente;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 
 /**
@@ -129,5 +130,13 @@ public class MailService {
 		sendEmail(reg.getEmail(), "Attivazione account EDIT per conto di " + reg.getNomeEnte(), 
 				"ruoloReferenteAzienda", vars);
 	}
+
+  public void inviaRuoloDocente(RegistrazioneDocente reg) throws Exception {
+		Map<String, String> vars = new HashMap<String, String>();
+		vars.put("baseUrl", baseUrl);
+		vars.put("nomeIstituto", reg.getNomeIstituto());
+		sendEmail(reg.getEmailDocente(), "Attivazione account EDIT per conto di " + reg.getNomeIstituto(), 
+				"ruoloDuocente", vars);
+  }
 
 }
