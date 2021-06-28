@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,4 +16,6 @@ public interface ProfessoriClassiRepository extends JpaRepository<ProfessoriClas
 	
 	@Query("SELECT COUNT(pc) FROM ProfessoriClassi pc WHERE pc.teacherExtId = (:teacherExtId)")
 	public Long countByTeacherExtId(String teacherExtId);
+
+	public List<ProfessoriClassi> findByTeacherExtId(String teacherExtId);
 }

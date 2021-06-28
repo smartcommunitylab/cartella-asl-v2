@@ -30,6 +30,7 @@ public class ProfessoriClassi {
 	private LocalDate dateTo;
 	private String schoolYear;
 	private String teacherExtId;
+	private String referenteAlternanzaId;
 
 	public String getCorsoId() {
 		return corsoId;
@@ -133,6 +134,14 @@ public class ProfessoriClassi {
 
 	public void setTeacherExtId(String teacherExtId) {
 		this.teacherExtId = teacherExtId;
+	}
+
+	public String getReferenteAlternanzaId() {
+		return referenteAlternanzaId;
+	}
+
+	public void setReferenteAlternanzaId(String referenteAlternanzaId) {
+		this.referenteAlternanzaId = referenteAlternanzaId;
 	}
 
 }

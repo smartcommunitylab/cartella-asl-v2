@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.smartcommunitylab.cartella.asl.manager.APIUpdateManager;
 import it.smartcommunitylab.cartella.asl.model.MetaInfo;
+import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
 import it.smartcommunitylab.cartella.asl.model.ReferenteAlternanza;
 import it.smartcommunitylab.cartella.asl.model.ext.Professor;
 import it.smartcommunitylab.cartella.asl.repository.ProfessoriClassiRepository;
@@ -106,12 +107,18 @@ public class InfoTnImportProfessori {
 					logger.info("skipping existing Professor: " + professorExt.getExtId());
 					continue;
 				} 
-				Long count = professoriClassiRepository.countByTeacherExtId(professorExt.getExtId());
-				if(count == 0) {
+				List<ProfessoriClassi> classi = professoriClassiRepository.findByTeacherExtId(professorExt.getExtId());
+				if(classi.size() == 0) {
 					continue;
 				}
 				logger.info("converting " + professorExt.getExtId());
-				tobeSaved.add(convertToLocalReferenteAlternanzaBean(professorExt));				
+				ReferenteAlternanza ra = convertToLocalReferenteAlternanzaBean(professorExt);
+				tobeSaved.add(ra);
+				// update professori-classi
+				for(ProfessoriClassi pc : classi) {
+					pc.setReferenteAlternanzaId(ra.getId());
+					professoriClassiRepository.save(pc);
+				}
 			}
 
 			stored = tobeSaved.size();
