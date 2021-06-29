@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
+import it.smartcommunitylab.cartella.asl.model.AssociazioneDocentiClassi;
 import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
 import it.smartcommunitylab.cartella.asl.model.ReferenteAlternanza;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneDocente;
@@ -25,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.repository.AssociazioneDocentiClassiRepository;
 import it.smartcommunitylab.cartella.asl.repository.ProfessoriClassiRepository;
+import it.smartcommunitylab.cartella.asl.repository.ReferenteAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneDocenteRepository;
 import it.smartcommunitylab.cartella.asl.services.MailService;
 import it.smartcommunitylab.cartella.asl.util.Utils;
@@ -37,18 +39,20 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 	@Autowired
 	MailService mailService;
   @Autowired
+  ReferenteAlternanzaRepository referenteAlternanzaRepository;
+  @Autowired
   RegistrazioneDocenteRepository registrazioneDocenteRepository;
   @Autowired
   ProfessoriClassiRepository professoriClassiRepository;
   @Autowired
   AssociazioneDocentiClassiRepository associazioneDocentiClassiRepository;
 
-  List<RegistrazioneDocente> getRegistrazioneDocente(String istitutoId) throws Exception {
+  public List<RegistrazioneDocente> getRegistrazioneDocente(String istitutoId) throws Exception {
     List<RegistrazioneDocente> list = registrazioneDocenteRepository.findByIstitutoId(istitutoId, Sort.by(Sort.Direction.ASC, "emailDocente"));
     return list;
   }
 
-  Page<ReportDocenteClasse> getDocentiClassi(String istitutoId, String annoScolastico, 
+  public Page<ReportDocenteClasse> getDocentiClassi(String istitutoId, String annoScolastico, 
   String text, Pageable pageRequest) {
     StringBuilder sb = new StringBuilder("SELECT DISTINCT ra FROM ReferenteAlternanza ra, ProfessoriClassi pc");
 		sb.append(" WHERE pc.referenteAlternanzaId=ra.id AND pc.schoolYear=(:annoScolastico) AND pc.istitutoId=(:istitutoId)");
@@ -88,7 +92,11 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return page;
   }
 
-  public RegistrazioneDocente addRegistrazioneDocente(String istitutoId, ReferenteAlternanza ra) throws Exception {
+  public RegistrazioneDocente addRegistrazioneDocente(String istitutoId, String referenteAlternanzaId) throws Exception {
+    ReferenteAlternanza ra = referenteAlternanzaRepository.findById(referenteAlternanzaId).orElse(null);
+    if(ra == null) {
+      throw new BadRequestException("referente non trovato");
+    }
     if(Utils.isEmpty(ra.getEmail())) {
       throw new BadRequestException("codice fiscale " + ra.getCf() + " email non presente");
     }
@@ -128,7 +136,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return reg;
   }
 
-  public RegistrazioneDocente deleteRegistrazioneDocente(Long registrazioneId) throws Exception {
+  public RegistrazioneDocente deleteRegistrazioneDocente(String istitutoId, Long registrazioneId) throws Exception {
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
       throw new BadRequestException("registrazione non trovata");
@@ -138,13 +146,25 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 		if(user == null) {
 			throw new BadRequestException("utente non trovato");
 		}
+    if(reg.getIstitutoId().equals(istitutoId)) {
+      throw new BadRequestException("istituto non corrispondente");
+    }
 		userManager.deleteASLUserRole(reg.getUserId(), ASLRole.TUTOR_SCOLASTICO, reg.getIstitutoId());
     userManager.deleteASLUserRole(reg.getUserId(), ASLRole.TUTOR_CLASSE, reg.getIstitutoId());
     registrazioneDocenteRepository.delete(reg);        
     return reg;
   }
 
-  List<ProfessoriClassi> getAssociazioneDocentiClassi(Long registrazioneId) {
+  public List<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, Long registrazioneId) throws Exception {
+    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
+    if(optional.isEmpty()) {
+      throw new BadRequestException("registrazione non trovata");
+    }
+    RegistrazioneDocente reg = optional.get();
+    if(reg.getIstitutoId().equals(istitutoId)) {
+      throw new BadRequestException("istituto non corrispondente");
+    }
+
     StringBuilder sb = new StringBuilder("SELECT DISTINCT pc FROM ProfessoriClassi pc, AssociazioneDocentiClassi adc");
 		sb.append(" WHERE adc.registrazioneDocenteId=(:registrazioneId) AND adc.professoriClassiId=pc.id ORDER BY pc.corso ASC, classroom ASC");
     String q = sb.toString();
@@ -168,7 +188,49 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return studenti;
   }
 
-  //public void updateClassi(Long registrazioneId, List<>)
-
+  public List<ProfessoriClassi> updateAssociazioneDocentiClassi(String istitutoId, Long registrazioneId, 
+    List<String> docentiClassiIds) throws Exception {
+    List<ProfessoriClassi> result = new ArrayList<>();
+    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
+    if(optional.isEmpty()) {
+      throw new BadRequestException("registrazione non trovata");
+    }
+    RegistrazioneDocente reg = optional.get();
+    if(reg.getIstitutoId().equals(istitutoId)) {
+      throw new BadRequestException("istituto non corrispondente");
+    }
+    ASLUser user = userManager.getASLUserById(reg.getUserId());
+		if(user == null) {
+			throw new BadRequestException("utente non trovato");
+		}
+    List<AssociazioneDocentiClassi> classi = associazioneDocentiClassiRepository.findByRegistrazioneDocenteId(registrazioneId);
+    associazioneDocentiClassiRepository.deleteAll(classi);
+    boolean tutorClasse = false;
+    for(String docentiClassiId : docentiClassiIds) {
+      ProfessoriClassi pc = professoriClassiRepository.findById(docentiClassiId).orElse(null);
+      if(pc != null) {
+        AssociazioneDocentiClassi adc = new AssociazioneDocentiClassi();
+        adc.setRegistrazioneDocenteId(registrazioneId);
+        adc.setProfessoriClassiId(pc.getId());
+        adc.setAnnoScolastico(pc.getSchoolYear());
+        adc.setClasse(pc.getClassroom());
+        associazioneDocentiClassiRepository.save(adc);
+        result.add(pc);
+        tutorClasse = true;
+      }
+    }
+    ASLUserRole userRole = userManager.findASLUserRole(user.getId(), 
+      ASLRole.TUTOR_CLASSE, reg.getIstitutoId());
+    if(tutorClasse) {
+      if(userRole == null) {
+        userRole = userManager.addASLUserRole(user.getId(), ASLRole.TUTOR_CLASSE, istitutoId);
+      }		
+    } else {
+      if(userRole != null) {
+        userManager.deleteASLUserRole(user.getId(), ASLRole.TUTOR_CLASSE, istitutoId);
+      }
+    }
+    return result;
+  }
 
 }
