@@ -52,6 +52,32 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return list;
   }
 
+  public Page<RegistrazioneDocente> searchRegistrazioneDocente(String istitutoId, String text,
+    Pageable pageRequest) throws Exception {
+    StringBuilder sb = new StringBuilder("SELECT DISTINCT reg FROM RegistrazioneDocente reg");
+    sb.append(" WHERE reg.istitutoId=(:istitutoId)");
+    if(Utils.isNotEmpty(text)) {
+      sb.append(" AND (UPPER(reg.nominativoDocente) LIKE (:text) OR UPPER(reg.emailDocente) LIKE (:text) OR UPPER(reg.cfDocente) LIKE (:text))");
+    }
+    sb.append(" ORDER BY reg.nominativoDocente ASC");
+    String q = sb.toString();
+
+    TypedQuery<RegistrazioneDocente> query = em.createQuery(q, RegistrazioneDocente.class);
+    query.setParameter("istitutoId", istitutoId);
+    if(Utils.isNotEmpty(text)) {
+      query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+    }
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+    List<RegistrazioneDocente> list = query.getResultList();
+
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT reg","COUNT(DISTINCT reg)"), query);
+		long total = (Long) cQuery.getSingleResult();
+
+    Page<RegistrazioneDocente> page = new PageImpl<RegistrazioneDocente>(list, pageRequest, total);
+    return page;
+  }
+
   public Page<ReportDocenteClasse> getDocentiClassi(String istitutoId, String annoScolastico, 
   String text, Pageable pageRequest) {
     StringBuilder sb = new StringBuilder("SELECT DISTINCT ra FROM ReferenteAlternanza ra, ProfessoriClassi pc");
