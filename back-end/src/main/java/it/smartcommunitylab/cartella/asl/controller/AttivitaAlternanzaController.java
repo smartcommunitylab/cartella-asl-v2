@@ -271,14 +271,21 @@ public class AttivitaAlternanzaController implements AslController {
 			@RequestParam String istitutoId,
 			@RequestBody List<PresenzaGiornaliera> presenze,
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {
+			if(!user.getCf().equals(aa.getReferenteScuolaCF())) {
+				throw new BadRequestException("accesso all'attività non consentito");
+			}
 		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
@@ -362,14 +369,21 @@ public class AttivitaAlternanzaController implements AslController {
 			@RequestParam String istitutoId,
 			@RequestBody List<PresenzaGiornaliera> presenze,
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {
+			if(!user.getCf().equals(aa.getReferenteScuolaCF())) {
+				throw new BadRequestException("accesso all'attività non consentito");
+			}
 		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivita(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
@@ -631,8 +645,10 @@ public class AttivitaAlternanzaController implements AslController {
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
@@ -653,14 +669,21 @@ public class AttivitaAlternanzaController implements AslController {
 			@RequestParam String istitutoId,
 			@RequestBody List<ReportEsperienzaRegistration> presenze,
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {
+			if(!user.getCf().equals(aa.getReferenteScuolaCF())) {
+				throw new BadRequestException("accesso all'attività non consentito");
+			}
 		}
 		List<ReportEsperienzaRegistration> result = attivitaAlternanzaManager.aggiornaReportPresenzeCorpo(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
