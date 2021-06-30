@@ -114,8 +114,10 @@ public class FileController {
 			@PathVariable String istitutoId,
 			@PathVariable String uuid, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeIstitutoDocument(%s", uuid + ")"));
 		}
@@ -156,8 +158,10 @@ public class FileController {
 			@RequestParam("tipo") TipoDoc tipo,
 			@RequestParam("data") MultipartFile data, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForRisorsaIstituto:%s - %s", uuid, istitutoId));
 		}
