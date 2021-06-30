@@ -310,9 +310,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(user == null) {
 			return true;
 		}
-		if(usersValidator.hasRole(user, ASLRole.ADMIN)) {
+		/*if(usersValidator.hasRole(user, ASLRole.ADMIN)) {
 			return true;
-		}
+		}*/
 		if(usersValidator.hasRole(user, ASLRole.DIRIGENTE_SCOLASTICO, aa.getIstitutoId())) {
 			return true;
 		}
@@ -328,7 +328,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			}
 		}
 		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
-			if(user.getCf().equals(aa.getReferenteEsternoCF())) {
+			if(user.getCf().equals(aa.getReferenteScuolaCF()) && aa.getStato().equals(Stati.attiva)) {
 				return true;
 			}
 		}
@@ -530,7 +530,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeAttivitaIndividuale(AttivitaAlternanza aa, LocalDate dateFrom, 
-			LocalDate dateTo) {
+			LocalDate dateTo, ASLUser user) throws Exception {
+		//check accesso
+		getAttivitaAlternanzaDetails(aa, user);	
 		String q = "SELECT pg FROM EsperienzaSvolta es, PresenzaGiornaliera pg WHERE es.attivitaAlternanzaId=(:attivitaAlternanzaId)"
 				+ " AND pg.esperienzaSvoltaId=es.id AND pg.giornata >= (:dateFrom) AND pg.giornata <= (:dateTo) ORDER BY pg.giornata ASC";
 		
@@ -568,7 +570,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppo(AttivitaAlternanza aa, LocalDate dateFrom, 
-			LocalDate dateTo) throws Exception {
+			LocalDate dateTo, ASLUser user) throws Exception {
+		//check accesso
+		getAttivitaAlternanzaDetails(aa, user);	
+
 		List<ReportPresenzaGiornalieraGruppo> reportList = new ArrayList<ReportPresenzaGiornalieraGruppo>();
 		
 		String qEsperienze = "SELECT DISTINCT es FROM EsperienzaSvolta es WHERE es.attivitaAlternanzaId=(:attivitaAlternanzaId)"

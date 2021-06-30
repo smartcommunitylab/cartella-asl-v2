@@ -152,7 +152,10 @@ public class CompetenzaController implements AslController {
 			@PathVariable String uuid, 
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
+		usersValidator.validate(request, Lists.newArrayList(
+			new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+			new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+			new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getRisorsaCompetenzeIstituto(%s", uuid + ")"));
 		}

@@ -70,7 +70,8 @@ public class IstitutoController implements AslController {
 		String schoolYear = null;
 		ASLUser user = usersValidator.validate(request,
 				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+						new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 
 		if (user != null) {
 			if (dateFrom != null) {
