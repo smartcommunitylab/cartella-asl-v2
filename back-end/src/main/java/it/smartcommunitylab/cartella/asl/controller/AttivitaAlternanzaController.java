@@ -61,9 +61,9 @@ public class AttivitaAlternanzaController implements AslController {
 			@RequestParam(required = false) String stato,
 			Pageable pageRequest, 
 			HttpServletRequest request) throws Exception {		
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Page<ReportAttivitaAlternanzaRicerca> result = attivitaAlternanzaManager.findAttivita(istitutoId, text, tipologia, stato, pageRequest);
+		Page<ReportAttivitaAlternanzaRicerca> result = attivitaAlternanzaManager.findAttivita(istitutoId, text, tipologia, stato, pageRequest, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchAttivitaAlternanza:%s", text));
 		}

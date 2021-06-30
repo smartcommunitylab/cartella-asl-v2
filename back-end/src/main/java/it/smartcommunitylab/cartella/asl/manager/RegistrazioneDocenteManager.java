@@ -49,7 +49,35 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 
   public List<RegistrazioneDocente> getRegistrazioneDocente(String istitutoId) throws Exception {
     List<RegistrazioneDocente> list = registrazioneDocenteRepository.findByIstitutoId(istitutoId, Sort.by(Sort.Direction.ASC, "emailDocente"));
+    list.forEach(rd -> updateClassiRegistrazioneDocente(rd));
     return list;
+  }
+
+  private List<String> getClassiAssociateRegistrazioneDocente(Long registrazioneDocenteId) {
+    List<String> result = new ArrayList<>();
+    List<AssociazioneDocentiClassi> classi = associazioneDocentiClassiRepository.findByRegistrazioneDocenteId(registrazioneDocenteId);
+    for(AssociazioneDocentiClassi adc : classi) {
+      result.add(adc.getClasse());
+    }
+    return result;
+  }
+
+  private void updateClassiRegistrazioneDocente(RegistrazioneDocente reg) {
+    List<String> classiAssociate = getClassiAssociateRegistrazioneDocente(reg.getId());
+    StringBuffer sb = new StringBuffer();
+    classiAssociate.forEach(c -> {
+      sb.append(c + " - ");
+    });
+    reg.setClassi(sb.toString().substring(sb.length() - 3));
+  }
+
+  public List<String> getClassiAssociateRegistrazioneDocente(String istitutoId, String cfDocente) {
+    List<String> result = new ArrayList<>();
+    RegistrazioneDocente reg = registrazioneDocenteRepository.findOneByIstitutoIdAndCfDocente(istitutoId, cfDocente);
+    if(reg != null) {
+      result = getClassiAssociateRegistrazioneDocente(reg.getId());
+    }
+    return result;
   }
 
   public Page<RegistrazioneDocente> searchRegistrazioneDocente(String istitutoId, String text,
@@ -70,6 +98,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
     List<RegistrazioneDocente> list = query.getResultList();
+    list.forEach(rd -> updateClassiRegistrazioneDocente(rd));
 
 		Query cQuery = queryToCount(q.replaceAll("DISTINCT reg","COUNT(DISTINCT reg)"), query);
 		long total = (Long) cQuery.getSingleResult();

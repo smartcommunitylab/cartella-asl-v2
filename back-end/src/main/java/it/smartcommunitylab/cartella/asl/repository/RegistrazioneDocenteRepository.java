@@ -13,4 +13,6 @@ public interface RegistrazioneDocenteRepository extends JpaRepository<Registrazi
   public List<RegistrazioneDocente> findByIstitutoId(String istitutoId, Sort sort);
 
   public RegistrazioneDocente findOneByCfDocente(String cfDocente);
+
+  public RegistrazioneDocente findOneByIstitutoIdAndCfDocente(String istitutoId, String cfDocente);
 }

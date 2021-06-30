@@ -35,6 +35,8 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistrati
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzeAttvitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -59,7 +61,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	@Autowired
 	IstituzioneManager istituzioneManager;
 	@Autowired
+	RegistrazioneDocenteManager registrazioneDocenteManager;
+	@Autowired
 	ErrorLabelManager errorLabelManager;
+	@Autowired
+	ASLRolesValidator usersValidator;
 	
 	public AttivitaAlternanza saveAttivitaAlternanza(AttivitaAlternanza aa, String istitutoId) 
 			throws BadRequestException {
@@ -133,10 +139,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
-			Pageable pageRequest) {
-
+			Pageable pageRequest, ASLUser user) {
+		
+		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
+		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa LEFT JOIN EsperienzaSvolta es");
-		sb.append(" ON es.attivitaAlternanzaId=aa.id WHERE aa.istitutoId=(:istitutoId)");
+		sb.append(" ON es.attivitaAlternanzaId=aa.id");
+		if(tutorClasse) {
+			sb.append(" WHERE aa.istitutoId=(:istitutoId)");
+			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + Stati.archiviata.toString() + "')");
+			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+		} else {
+			if(tutorScolatico) {
+				sb.append(" WHERE aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
+				sb.append(" AND aa.stato!='" + Stati.archiviata.toString() + "'");
+			} else {
+				sb.append(" WHERE aa.istitutoId=(:istitutoId)");
+			}
+		}
 		
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
@@ -150,7 +171,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(stato)) {
 			Stati statoEnum = Stati.valueOf(stato);
 			if(statoEnum == Stati.archiviata) {
-				sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
+				if(tutorScolatico && !tutorClasse) {
+					sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
+				}
 			} else {
 				sb.append(" AND aa.stato='" + Stati.attiva.toString() + "'");
 				setDataParam = true;
@@ -183,6 +206,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(setDataParam) {
 			LocalDate localDate = LocalDate.now(); 
 			query.setParameter("data", localDate);
+		}
+		if(tutorScolatico) {
+			query.setParameter("referenteCf", user.getCf());
+		}
+		if(tutorClasse) {
+			query.setParameter("classiAssociate", classiAssociate);
 		}
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
