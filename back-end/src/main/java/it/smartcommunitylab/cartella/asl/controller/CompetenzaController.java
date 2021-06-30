@@ -65,11 +65,16 @@ public class CompetenzaController implements AslController {
 	}
 
 	@GetMapping("/api/competenze/orderBy/istituto/{istitutoId}")
-	public Page<Competenza> getCompetenzeOrderByIstitutoId(@PathVariable String istitutoId,
-			@RequestParam() List<String> ownerIds, @RequestParam(required = false) String filterText, @RequestParam(required = false) String stato,
+	public Page<Competenza> getCompetenzeOrderByIstitutoId(
+			@PathVariable String istitutoId,
+			@RequestParam() List<String> ownerIds, 
+			@RequestParam(required = false) String filterText, 
+			@RequestParam(required = false) String stato,
 			Pageable pageRequest, HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if (logger.isInfoEnabled()) {
 			logger.info(String.format("getCompetenzeOrderByIstitutoId(%s", istitutoId + ")"));
 		}
