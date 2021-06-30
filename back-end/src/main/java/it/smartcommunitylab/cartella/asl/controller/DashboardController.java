@@ -216,7 +216,7 @@ public class DashboardController {
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanza:%s", attivitaId));
 		}

@@ -75,13 +75,13 @@ public class AttivitaAlternanzaController implements AslController {
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId), new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanza:%s / %s", id, istitutoId));
 		}
@@ -159,7 +159,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("istitutoId not corresponding");
 		}
 		attivitaAlternanzaManager.setStudentList(aa, listaEsperienze);
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -205,7 +205,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("istitutoId not corresponding");
 		}
 		attivitaAlternanzaManager.archiveAttivitaAlternanza(aa, listaEsperienze);
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -439,7 +439,7 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("entity not visible");
 		}
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanzaByEnte:%s / %s", id, enteId));
 		}

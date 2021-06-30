@@ -285,7 +285,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return report;
 	}
 
-	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa) {
+	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa, ASLUser user) throws Exception {
 		AttivitaAlternanza attivita = aa.clona();
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
@@ -296,11 +296,43 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		if(!checkAccessoAttivita(aa, esperienze, user)) {
+			throw new BadRequestException("accesso all'attività non consentito");
+		}
 		for (EsperienzaSvolta esperienza : esperienze) {
 			ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienza);
 			report.getEsperienze().add(espReg);
 		}
 		return report;
+	}
+
+	private boolean checkAccessoAttivita(AttivitaAlternanza aa, List<EsperienzaSvolta> esperienze, ASLUser user) {
+		if(user == null) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.ADMIN)) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.DIRIGENTE_SCOLASTICO, aa.getIstitutoId())) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.FUNZIONE_STRUMENTALE, aa.getIstitutoId())) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, aa.getIstitutoId())) {
+			List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(aa.getIstitutoId(), user.getCf());
+			for(EsperienzaSvolta es : esperienze) {
+				if(classiAssociate.contains(es.getClasseStudente())) {
+					return true;
+				}
+			}
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
+			if(user.getCf().equals(aa.getReferenteEsternoCF())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void setStudentList(AttivitaAlternanza aa, List<ReportEsperienzaRegistration> listaEspReg) 
