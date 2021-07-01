@@ -19,6 +19,7 @@ import it.smartcommunitylab.cartella.asl.manager.DashboardIstitutoManager;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardIstituto;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 
 @RestController
 public class DashboardIstitutoController {
@@ -34,9 +35,11 @@ public class DashboardIstitutoController {
 			@RequestParam String istitutoId,
 			@RequestParam String annoScolastico,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		List<String> classi = dashboardManager.getClassi(istitutoId, annoScolastico);
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_CLASSE, istitutoId)));
+		List<String> classi = dashboardManager.getClassi(istitutoId, annoScolastico, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getClassi:%s - %s", istitutoId, annoScolastico));
 		}
@@ -63,9 +66,11 @@ public class DashboardIstitutoController {
 			@RequestParam String annoScolastico,
 			@RequestParam String classe,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		ReportDashboardIstituto report = dashboardManager.getReportUtilizzoClasse(istitutoId, annoScolastico, classe);
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_CLASSE, istitutoId)));
+		ReportDashboardIstituto report = dashboardManager.getReportUtilizzoClasse(istitutoId, annoScolastico, classe, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportUtilizzoClasse:%s - %s - %s", istitutoId, annoScolastico, classe));
 		}
