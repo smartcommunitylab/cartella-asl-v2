@@ -61,7 +61,7 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 
 
-backend-container-scanning:
+container_scanning:
   stage: container-scan
   variables:
     DOCKER_IMAGE: smartcommunitylab/cartella-backend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
@@ -70,8 +70,8 @@ backend-container-scanning:
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
 
-frontend-container-scanning:
-  extends: backend-container-scanning
+container_scanning_image2:
+  extends: container_scanning
   variables:
     DOCKER_IMAGE: smartcommunitylab/cartella-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
     DOCKERFILE_PATH: "front-end/Dockerfile"
