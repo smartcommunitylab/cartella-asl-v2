@@ -74,3 +74,4 @@ front-end/registrazione-ente/bin
 
 **/front-end/*/.vscode/settings.json
 **/front-end/*/target/
+docker-props/

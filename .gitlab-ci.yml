@@ -1,0 +1,111 @@
+image: docker:19
+
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - container-build
+  - container-scan
+  - deploy
+
+variables:
+  SECURE_LOG_LEVEL: info
+  DS_JAVA_VERSION: 8
+  DOCKER_DRIVER: overlay
+  CONTAINER_IMAGE_BACKEND: smartcommunitylab/cartella-backend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  CONTAINER_IMAGE_FRONTEND: smartcommunitylab/cartella-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+  MAVEN_CLI_OPTS: -DskipTests --batch-mode
+  SAST_JAVA_VERSION: 8
+
+# maven-test:
+#   image: maven:3-openjdk-8
+#   stage: test
+#   script:
+#     - mvn $MAVEN_REPO test
+
+# maven-build:
+#   image: maven:3-openjdk-8
+#   stage: build
+#   only:
+#     refs:
+#       - dev
+#       - master
+#   script:
+#     - mvn -DskipTests=true clean package
+
+backend-container-build:
+  stage: container-build
+  script:
+    - docker login -u $DHUB_USER -p $DHUB_PASS
+    - DOCKER_BUILDKIT=1 docker build -f backend/Dockerfile -t $CONTAINER_IMAGE_BACKEND back-end/
+    - docker push $CONTAINER_IMAGE_BACKEND
+  only:
+    - demo
+    - test
+
+fronted-container-build:
+  stage: container-build
+  script:
+    - docker login -u $DHUB_USER -p $DHUB_PASS
+    - DOCKER_BUILDKIT=1 docker build -f front-end/Dockerfile -t $CONTAINER_IMAGE_FRONTEND front-end/
+    - docker push $CONTAINER_IMAGE_FRONTEND
+  only:
+    - demo
+    - test
+
+include:
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+
+
+backend-container_scanning:
+  stage: container-scan
+  variables:
+    DOCKER_IMAGE: smartcommunitylab/cartella-backend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+    DOCKERFILE_PATH: "back-end/Dockerfile"
+    GIT_STRATEGY: fetch
+    DOCKER_USER: ""
+    DOCKER_PASSWORD: ""
+  only:
+    - demo
+    - test
+
+frontend-container_scanning:
+  extends: container-scan
+  variables:
+    DOCKER_IMAGE: smartcommunitylab/cartella-frontend:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+    DOCKERFILE_PATH: "front-end/Dockerfile"
+    DOCKER_USER: ""
+    DOCKER_PASSWORD: ""
+  only:
+    - demo
+    - test
+
+backend-deploy:
+  stage: deploy
+  image: smartcommunitylab/kubectl-alpine:latest
+  environment:
+    name: develop
+  script:
+    - echo "deploy backend"
+    - kubectl -n default set image deployments/cartella-backend-$CI_COMMIT_REF_NAME cartella-backend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_BACKEND --record=true
+    - kubectl -n default rollout status deployment cartella-backend-$CI_COMMIT_REF_NAME
+  only:
+    - dev
+    - demo
+
+frontend-deploy:
+  stage: deploy
+  image: smartcommunitylab/kubectl-alpine:latest
+  environment:
+    name: develop
+  script:
+    - echo "deploy frontend"
+    - kubectl -n default set image deployments/cartella-frontend-$CI_COMMIT_REF_NAME cartella-frontend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_FRONTEND --record=true
+    - kubectl -n default rollout status deployment cartella-frontend-$CI_COMMIT_REF_NAME
+  only:
+    - dev
+    - demo
