@@ -89,9 +89,11 @@ public class StudentController implements AslController {
 			@PathVariable String studenteId,
 			@RequestParam String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		ReportDettaglioStudente report = studentManager.getReportDettaglioStudente(istitutoId, studenteId);
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
+		ReportDettaglioStudente report = studentManager.getReportDettaglioStudente(istitutoId, studenteId, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportDettaglioStudente:%s / %s", istitutoId, studenteId));
 		}

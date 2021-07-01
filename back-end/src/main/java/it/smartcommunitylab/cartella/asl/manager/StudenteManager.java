@@ -36,6 +36,7 @@ import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.Registration;
 import it.smartcommunitylab.cartella.asl.model.Studente;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioAttivitaEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
@@ -350,7 +351,7 @@ public class StudenteManager extends DataEntityManager {
 		Page<Studente> studentsProfiles = findStudentiPaged(istitutoId, corsoId, annoScolastico, classe, pageRequest);
 		studentsProfiles.forEach(s -> {
 			if(classe.equalsIgnoreCase(s.getClassroom())) {
-				ReportDettaglioStudente studenteReport = getReportDettaglioStudente(istitutoId, s.getId());
+				ReportDettaglioStudente studenteReport = getReportDettaglioStudente(istitutoId, s.getId(), null);
 				studentsRicerca.add(studenteReport);				
 			}
 		});		
@@ -426,14 +427,40 @@ public class StudenteManager extends DataEntityManager {
 		return s;
 	}
 
-	public ReportDettaglioStudente getReportDettaglioStudente(String istitutoId, String studenteId) {
+	public ReportDettaglioStudente getReportDettaglioStudente(String istitutoId, String studenteId, ASLUser user) {
+		boolean tutorScolatico = false;
+		boolean tutorClasse = false;
+		List<String> classiAssociate = null;
+		if(user != null) {
+			tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
+			tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+			classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
+		}
+		
 		ReportDettaglioStudente result = new ReportDettaglioStudente();
 		Studente studente = findStudente(studenteId);
 		result.setStudente(studente);
 		
 		List<ReportEsperienzaStudente> esperienzeStudente = attivitaAlternanzaManager.getReportEsperienzaStudente(istitutoId, 
 				studenteId);
-		result.getEsperienze().addAll(esperienzeStudente);
+		for(ReportEsperienzaStudente esp : esperienzeStudente) {
+			if(tutorClasse) {
+				if(classiAssociate.contains(esp.getClasseStudente())) {
+					result.getEsperienze().add(esp);
+					continue;
+				}
+			}
+			if(tutorScolatico) {
+				AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(esp.getAttivitaAlternanzaId());
+				if(!aa.getStato().equals(Stati.archiviata) && user.getCf().equals(aa.getReferenteScuolaCF())) {
+					result.getEsperienze().add(esp);
+					continue;
+				}
+			} 
+			if(!tutorScolatico && !tutorClasse) {
+				result.getEsperienze().add(esp);
+			}
+		}
 		
 		List<Competenza> competenze = competenzaManager.getCompetenzeByStudente(istitutoId, studenteId);
 		result.getCompetenze().addAll(competenze);
