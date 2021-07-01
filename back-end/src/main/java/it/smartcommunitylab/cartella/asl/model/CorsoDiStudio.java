@@ -31,7 +31,6 @@ public class CorsoDiStudio {
 	private String extId;
 	private String origin;
 
-	// TODO
 	private int oreAlternanza = 200;
 
 	@Transient

@@ -720,7 +720,6 @@ public class StudenteManager extends DataEntityManager {
 	}
 
 	public Page<ReportStudenteEnte> findStudentiByEnte(String enteId, String text, Pageable pageRequest) {
-		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder("SELECT s.id FROM AttivitaAlternanza aa, EsperienzaSvolta es, Studente s, Istituzione i");
 		sb.append(" WHERE aa.id=es.attivitaAlternanzaId AND es.studenteId=s.id AND aa.istitutoId=i.id");
 		sb.append(" AND aa.enteId=(:enteId)");
