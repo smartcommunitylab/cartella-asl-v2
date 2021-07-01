@@ -5,9 +5,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/aslv2?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8
-    username: asl
-    password: asl
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/aslv2?autoReconnect=true&useSSL=false&useUnicode=true&characterEncoding=UTF-8}
+    username: ${DATASOURCE_USERNAME:asl}
+    password: ${DATASOURCE_PASSWORD:asl}
   jpa:
     generate-ddl: true
     properties:
@@ -27,7 +27,7 @@ storage:
   type: localStorage
   local:
     dir: /home/dev/tmp
-    
+
 import:
   dir:  /home/dev/tmp/dataset
 export:
@@ -37,22 +37,22 @@ cartella:
   api: http://localhost:6010/cs-engine
 
 infoTN:
-  api: https://webservices-test.infotn.it/RegistroEsterni
-  startingYear: 2017
-  user: 
-  pass: 
-  esAlignUri: https://saa-test11.infotn.it/rest/asl/importa
-  esAlignToken: 
-  esAlignOrigine:   
-  
+  api: ${INFOTN_API:https://webservices-test.infotn.it/RegistroEsterni}
+  startingYear: ${INFOTN_STARTINGYEAR:2017}
+  user: ${INFOTN_USER:}
+  pass: ${INFOTN_PASS:}
+  esAlignUri: ${INFOTN_ESALIGNURI:https://saa-test11.infotn.it/rest/asl/importa}
+  esAlignToken: ${INFOTN_ESALIGNTOKEN:}
+  esAlignOrigine: ${INFOTN_ESALIGNORIGINE:}
+
 security:
   oauth2:
     resource:
       id: ${AAC_CLIENT_ID:}
       jwk:
-        keySetUri: ${AAC_JWK_URI:https://aac.platform.smartcommunitylab.it/aac/jwk} 
+        keySetUri: ${AAC_JWK_URI:https://aac.platform.smartcommunitylab.it/aac/jwk}
 oauth:
-  serverUrl: https://aac.platform.smartcommunitylab.it/aac/
+  serverUrl: ${OAUTH_SERVERURL:https://aac.platform.smartcommunitylab.it/aac/}
 
 parix:
   endpoint: ${PARIX_ENDPOINT:}
@@ -69,7 +69,7 @@ mail:
   password: ${MAIL_PASSWORD:}
   from: ${MAIL_FROM:}
   url: ${MAIL_URL:}
-  
+
 management:
   security:
     enabled: false

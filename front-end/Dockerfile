@@ -25,11 +25,18 @@ COPY docker-props/azienda/serverAPIConfig.ts /tmp/azienda/src/app/core/serverAPI
 WORKDIR /tmp/azienda
 RUN mvn clean install -Dmaven.test.skip=true
 
+COPY front-end/registrazione-ente /tmp/registrazione-ente
+COPY docker-props/registrazione-ente/config.ts /tmp/registrazione-ente/src/app/config.ts
+COPY docker-props/registrazione-ente/serverAPIConfig.ts /tmp/registrazione-ente/src/app/core/serverAPIConfig.ts
+WORKDIR /tmp/registrazione-ente
+RUN mvn clean install -Dmaven.test.skip=true -P prod
+
 FROM nginx:alpine
 COPY --from=frontend-build /tmp/scuola/dist /usr/share/nginx/html/asl-scuola-v2
 COPY --from=frontend-build /tmp/ruoli/dist /usr/share/nginx/html/asl-ruoli-v2
 COPY --from=frontend-build /tmp/login/dist /usr/share/nginx/html/asl-login
 COPY --from=frontend-build /tmp/azienda/dist /usr/share/nginx/html/asl-azienda-v2
+COPY --from=frontend-build /tmp/registrazione-ente/dist /usr/share/nginx/html/asl-registrazione-ente
 RUN apk add --no-cache tzdata
 ENV TZ=Europe/Rome
 RUN rm /usr/share/nginx/html/50x.html /usr/share/nginx/html/index.html
