@@ -43,6 +43,8 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnt
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.NotificheStudenteRepository;
@@ -80,6 +82,10 @@ public class StudenteManager extends DataEntityManager {
 	private NotificheStudenteRepository notificheStudenteRepository;
 	@Autowired
 	private FirebaseService firebaseService;
+	@Autowired
+	RegistrazioneDocenteManager registrazioneDocenteManager;
+	@Autowired
+	ASLRolesValidator usersValidator;
 	
 	private static final String STUDENT_REGISTRATION = "SELECT r0 FROM Registration r0 WHERE r0.studentId = (:id) AND r0.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = (:id)) ";
 
@@ -139,8 +145,13 @@ public class StudenteManager extends DataEntityManager {
 	}
 
 	public Page<ReportStudenteRicerca> findStudentiRicercaPaged(String istitutoId, String annoScolastico, String corsoId,
-			String text, Pageable pageRequest) {
-		Page<Studente> studentsProfiles = findStudentiPaged(istitutoId, corsoId, annoScolastico, text, pageRequest);
+			String text, Pageable pageRequest, ASLUser user) {
+		Page<Studente> studentsProfiles = null;
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {		
+			studentsProfiles = findStudentiByTutor(istitutoId, corsoId, annoScolastico, text, pageRequest, user);
+		} else {
+			studentsProfiles = findStudentiPaged(istitutoId, corsoId, annoScolastico, text, pageRequest);
+		}
 
 		List<ReportStudenteRicerca> studentsRicerca = new ArrayList<>();
 		List<String> studentIds = new ArrayList<>();
@@ -266,6 +277,72 @@ public class StudenteManager extends DataEntityManager {
 		return pagedstudentsRicerca;
 	}
 	
+	private Page<Studente> findStudentiByTutor(String istitutoId, String corsoId, String annoScolastico, String text,
+			Pageable pageRequest, ASLUser user) {
+		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
+		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
+				
+		StringBuffer sb = new StringBuffer();
+		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r, EsperienzaSvolta es, AttivitaAlternanza aa");
+		sb.append(" WHERE s.id = r.studentId AND es.studenteId = s.id AND es.registrazioneId=r.id AND es.attivitaAlternanzaId=aa.id");
+		sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
+		if(tutorClasse) {
+			sb.append(" AND aa.istitutoId=(:istitutoId)");
+			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "')");
+			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+		} else {
+			if(tutorScolatico) {
+				sb.append(" AND aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
+				sb.append(" AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "'");
+			} else {
+				sb.append(" AND aa.istitutoId=(:istitutoId)");
+			}
+		}
+		if (Utils.isNotEmpty(corsoId)) {
+			sb.append(" AND r.courseId = (:courseId) ");
+		}
+		if (Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text))");
+		}
+		sb.append(" ORDER BY s.surname, s.name, r.classroom");
+		String q = sb.toString();
+
+		Query query = em.createQuery(q);
+
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("annoScolastico", annoScolastico);
+		if (Utils.isNotEmpty(corsoId)) {
+			query.setParameter("courseId", corsoId);
+		}
+		if (Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		if(tutorScolatico) {
+			query.setParameter("referenteCf", user.getCf());
+		}
+		if(tutorClasse) {
+			query.setParameter("classiAssociate", classiAssociate);
+		}
+
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Object[]> result = query.getResultList();
+
+		List<Studente> students = Lists.newArrayList();
+		for (Object[] obj : result) {
+			Studente s = fillStudenteWithRegistration(obj);
+			students.add(s);
+		}
+
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT s,r","COUNT(DISTINCT s)"), query);
+		long total = (Long) cQuery.getSingleResult();
+
+		Page<Studente> page = new PageImpl<Studente>(students, pageRequest, total);
+
+		return page;
+	}
+
 	public List<ReportDettaglioStudente> getReportDettaglioStudente(String istitutoId, String annoScolastico, 
 			String corsoId, String classe) {
 		List<ReportDettaglioStudente> studentsRicerca = new ArrayList<>();
