@@ -319,6 +319,7 @@ public class OffertaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> rows = query.getResultList();
 		List<Offerta> list = new ArrayList<>();
 		for (Object[] obj : rows) {

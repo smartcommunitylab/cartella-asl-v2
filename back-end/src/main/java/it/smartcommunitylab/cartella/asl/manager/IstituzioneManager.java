@@ -134,6 +134,7 @@ public class IstituzioneManager extends DataEntityManager {
 		}
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> rows = query.getResultList();
 		List<ReportIstitutoEnte> list = new ArrayList<>();
 		for (Object[] obj : rows) {

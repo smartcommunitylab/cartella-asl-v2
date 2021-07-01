@@ -632,6 +632,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		Query query = em.createQuery(qEsperienze);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("studenteId", studenteId);
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
@@ -684,6 +685,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
@@ -776,7 +778,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 				+ " ORDER BY aa.dataInizio DESC, aa.titolo ASC";
 		Query query = em.createQuery(qEsperienze);
 		query.setParameter("studenteId", studenteId);
-		
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();

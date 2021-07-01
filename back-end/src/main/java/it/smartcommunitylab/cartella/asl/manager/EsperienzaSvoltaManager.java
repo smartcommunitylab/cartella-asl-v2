@@ -158,6 +158,7 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaRegistration> espRegList = new ArrayList<ReportEsperienzaRegistration>();

@@ -328,6 +328,7 @@ public class StudenteManager extends DataEntityManager {
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 
 		List<Studente> students = Lists.newArrayList();
