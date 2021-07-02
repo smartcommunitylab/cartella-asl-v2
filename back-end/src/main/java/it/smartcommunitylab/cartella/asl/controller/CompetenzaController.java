@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
+import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.CompetenzaManager;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
@@ -38,6 +41,8 @@ public class CompetenzaController implements AslController {
 
 	@Autowired
 	private CompetenzaManager competenzaManager;
+	@Autowired
+	private AttivitaAlternanzaManager attivitaAlternanzaManager;
 	@Autowired
 	private ASLRolesValidator usersValidator;
 	@Autowired
@@ -193,11 +198,19 @@ public class CompetenzaController implements AslController {
 	}
 	
 	@PutMapping("/api/risorsa/{uuid}/competenze/istituto/{istitutoId}")
-	public Boolean updateCompetenzeToRisorsa(@PathVariable String uuid, @PathVariable String istitutoId, @RequestBody List<Long> ids, HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+	public Boolean updateCompetenzeToRisorsa(
+			@PathVariable String uuid, 
+			@PathVariable String istitutoId, 
+			@RequestBody List<Long> ids, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+			new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+			new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+			new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateCompetenzeToRisorsa(%s", uuid + ")"));
 		}
+		checkAccessoAttivita(uuid, user);
 		Boolean result =  competenzaManager.addCompetenzeToPianoAlternanza(uuid, ids);
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), PianoAlternanza.class, uuid, user, new Object(){});
@@ -205,5 +218,12 @@ public class CompetenzaController implements AslController {
 		}
 		return result;
 	}	
+	
+	private void checkAccessoAttivita(String uuid, ASLUser user) throws BadRequestException {
+		AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(uuid);
+		if(aa != null) {
+			attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, user);
+		}		
+	}
 
 }
