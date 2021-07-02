@@ -36,7 +36,9 @@ variables:
 #     - mvn -DskipTests=true clean package
 
 before_script:
-  - "sed -ri 's/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g' front-end/azienda/src/app/config.ts"
+  environment:
+    name: $CI_COMMIT_REF_NAME
+
   # - sed -i 's|aacClientId: \"\"|aacClientId: \"$AAC_CLIENT_ID\"|g' front-end/registrazione-ente/src/app/config.ts
   # - sed -i 's|aacClientId: \"\"|aacClientId: \"$AAC_CLIENT_ID\"|g' front-end/ruoli/src/app/config.ts
 
@@ -52,15 +54,18 @@ backend-container-build:
 
 fronted-container-build:
   stage: container-build
+  environment:
+    name: $CI_COMMIT_REF_NAME
   script:
+    - "sed -ri "s/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g" front-end/azienda/src/app/config.ts"
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f front-end/Dockerfile -t $CONTAINER_IMAGE_FRONTEND .
     - docker push $CONTAINER_IMAGE_FRONTEND
   artifacts:
     paths:
       - front-end/azienda/src/app/config.ts
-      - front-end/registrazione-ente/src/app/config.ts
-      - front-end/ruoli/src/app/config.ts
+      # - front-end/registrazione-ente/src/app/config.ts
+      # - front-end/ruoli/src/app/config.ts
     expire_in: 1 week
   only:
     - demo
