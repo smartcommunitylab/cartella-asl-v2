@@ -14,7 +14,7 @@ COPY front-end/ruoli /tmp/ruoli
 # COPY docker-props/serverAPIConfig.ts /tmp/ruoli/src/app/core/serverAPIConfig.ts
 WORKDIR /tmp/ruoli
 RUN mvn clean install -Dmaven.test.skip=true
-# COPY front-end/login /tmp/login
+COPY front-end/login /tmp/login
 # COPY docker-props/login/config.ts /tmp/login/src/app/config.ts
 WORKDIR /tmp/login
 RUN mvn clean install -Dmaven.test.skip=true
