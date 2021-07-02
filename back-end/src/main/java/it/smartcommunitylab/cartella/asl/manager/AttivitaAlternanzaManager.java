@@ -285,7 +285,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return report;
 	}
 
-	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa, ASLUser user) throws Exception {
+	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa, ASLUser user) throws BadRequestException {
 		AttivitaAlternanza attivita = aa.clona();
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
