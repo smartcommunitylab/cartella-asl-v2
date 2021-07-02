@@ -80,6 +80,16 @@ container_scanning:
     GIT_STRATEGY: fetch
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
+  rules:
+    - if: '$CI_COMMIT_REF_NAME != "test"'
+
+gemnasium-dependency_scanning:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME != "test"'
+
+spotbugs-sast:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME != "test"'
 
 container_scanning_image2:
   extends: container_scanning

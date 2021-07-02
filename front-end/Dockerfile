@@ -4,12 +4,12 @@ ENV PATH="${NODEJS_HOME}:${PATH}"
 RUN echo $PATH
 RUN cd /opt && wget https://nodejs.org/dist/v12.19.0/node-v12.19.0-linux-x64.tar.xz && tar xvf node-v12.19.0-linux-x64.tar.xz
 RUN node -v
-# COPY front-end/scuola /tmp/scuola
+COPY front-end/scuola /tmp/scuola
 # COPY docker-props/config.ts /tmp/scuola/src/app/config.ts
 # COPY docker-props/serverAPIConfig.ts /tmp/scuola/src/app/core/serverAPIConfig.ts
 WORKDIR /tmp/scuola
 RUN mvn clean install -Dmaven.test.skip=true
-# COPY front-end/ruoli /tmp/ruoli
+COPY front-end/ruoli /tmp/ruoli
 # COPY docker-props/ruoli/config.ts /tmp/ruoli/src/app/config.ts
 # COPY docker-props/serverAPIConfig.ts /tmp/ruoli/src/app/core/serverAPIConfig.ts
 WORKDIR /tmp/ruoli
