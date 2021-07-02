@@ -38,9 +38,16 @@ variables:
 backend-container-build:
   stage: container-build
   script:
+    - "sed -ri \"s/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g\" front-end/azienda/src/app/config.ts"
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f back-end/Dockerfile -t $CONTAINER_IMAGE_BACKEND .
     - docker push $CONTAINER_IMAGE_BACKEND
+  artifacts:
+    paths:
+      - front-end/azienda/src/app/config.ts
+      # - front-end/registrazione-ente/src/app/config.ts
+      # - front-end/ruoli/src/app/config.ts
+    expire_in: 1 week
   only:
     - demo
     - test
@@ -50,16 +57,9 @@ fronted-container-build:
   environment:
     name: $CI_COMMIT_REF_NAME
   script:
-    - "sed -ri \"s/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g\" front-end/azienda/src/app/config.ts"
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f front-end/Dockerfile -t $CONTAINER_IMAGE_FRONTEND .
     - docker push $CONTAINER_IMAGE_FRONTEND
-  artifacts:
-    paths:
-      - front-end/azienda/src/app/config.ts
-      # - front-end/registrazione-ente/src/app/config.ts
-      # - front-end/ruoli/src/app/config.ts
-    expire_in: 1 week
   only:
     - demo
     - test
