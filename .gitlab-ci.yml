@@ -40,7 +40,7 @@ backend-container-build:
   environment:
     name: $CI_COMMIT_REF_NAME
   script:
-    - "sed -ri 's/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g' front-end/azienda/src/app/config.ts"
+    - "sed -ri \"s/aacClientId: \"\"/aacClientId: \"${AAC_CLIENT_ID}\"/g\" front-end/azienda/src/app/config.ts"
     - docker login -u $DHUB_USER -p $DHUB_PASS
     - DOCKER_BUILDKIT=1 docker build -f back-end/Dockerfile -t $CONTAINER_IMAGE_BACKEND .
     - docker push $CONTAINER_IMAGE_BACKEND
