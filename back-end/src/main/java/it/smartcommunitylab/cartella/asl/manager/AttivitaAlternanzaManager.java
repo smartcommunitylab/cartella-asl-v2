@@ -296,7 +296,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
-		if(!checkAccessoAttivita(aa, esperienze, user)) {
+		if(!checkAccessoAttivita(attivita, esperienze, user)) {
 			throw new BadRequestException("accesso all'attività non consentito");
 		}
 		for (EsperienzaSvolta esperienza : esperienze) {
@@ -319,17 +319,18 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(usersValidator.hasRole(user, ASLRole.FUNZIONE_STRUMENTALE, aa.getIstitutoId())) {
 			return true;
 		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
+			if(user.getCf().equals(aa.getReferenteScuolaCF()) && aa.getStato().equals(Stati.attiva)) {
+				aa.setTutorScolastico(true);
+				return true;
+			}
+		}
 		if(usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, aa.getIstitutoId())) {
 			List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(aa.getIstitutoId(), user.getCf());
 			for(EsperienzaSvolta es : esperienze) {
 				if(classiAssociate.contains(es.getClasseStudente())) {
 					return true;
 				}
-			}
-		}
-		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
-			if(user.getCf().equals(aa.getReferenteScuolaCF()) && aa.getStato().equals(Stati.attiva)) {
-				return true;
 			}
 		}
 		return false;

@@ -77,6 +77,9 @@ public class AttivitaAlternanza {
 	
 	@Transient
 	private int oreSvolte;
+
+	@Transient
+	private boolean tutorScolastico;
 	
 	public AttivitaAlternanza clona() {
 		AttivitaAlternanza aa = new AttivitaAlternanza();
@@ -390,4 +393,14 @@ public class AttivitaAlternanza {
 	public void setRendicontazioneCorpo(Boolean rendicontazioneCorpo) {
 		this.rendicontazioneCorpo = rendicontazioneCorpo;
 	}
+
+	public boolean isTutorScolastico() {
+		return tutorScolastico;
+	}
+
+	public void setTutorScolastico(boolean tutorScolastico) {
+		this.tutorScolastico = tutorScolastico;
+	}
+
+	
 }
