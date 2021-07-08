@@ -203,7 +203,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 		if(user == null) {
 			throw new BadRequestException("utente non trovato");
 		}
-    if(reg.getIstitutoId().equals(istitutoId)) {
+    if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
 		userManager.deleteASLUserRole(reg.getUserId(), ASLRole.TUTOR_SCOLASTICO, reg.getIstitutoId());
@@ -253,7 +253,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       throw new BadRequestException("registrazione non trovata");
     }
     RegistrazioneDocente reg = optional.get();
-    if(reg.getIstitutoId().equals(istitutoId)) {
+    if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
     ASLUser user = userManager.getASLUserById(reg.getUserId());
