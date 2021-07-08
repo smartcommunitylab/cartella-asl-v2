@@ -1,5 +1,6 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,19 +86,23 @@ public class RegistrazioneDocenteController implements AslController {
   }
 
   @PostMapping("/api/registrazione-docente")
-  public RegistrazioneDocente addRegistrazioneDocente(
+  public List<RegistrazioneDocente> addRegistrazioneDocente(
     @RequestParam String istitutoId,
-    @RequestParam String referenteAlternanzaId,
+    @RequestBody List<String> referenteAlternanzaIdList,
     HttpServletRequest request) throws Exception {
     ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
       new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-    RegistrazioneDocente registrazione = registrazioneDocenteManager.addRegistrazioneDocente(istitutoId, referenteAlternanzaId);
-		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneDocente.class, registrazione.getId(), user, new Object(){});
-		auditManager.save(audit);			
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("addRegistrazioneDocente:%s - %s", istitutoId, referenteAlternanzaId));
-		}		
-    return registrazione;
+    List<RegistrazioneDocente> result = new ArrayList<>();
+    for(String referenteAlternanzaId : referenteAlternanzaIdList) {
+      RegistrazioneDocente registrazione = registrazioneDocenteManager.addRegistrazioneDocente(istitutoId, referenteAlternanzaId);
+      AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneDocente.class, registrazione.getId(), user, new Object(){});
+      auditManager.save(audit);			
+      if(logger.isInfoEnabled()) {
+        logger.info(String.format("addRegistrazioneDocente:%s - %s", istitutoId, referenteAlternanzaId));
+      }
+      result.add(registrazione);		  
+    }
+    return result;
   }
 
   @DeleteMapping("/api/registrazione-docente")
