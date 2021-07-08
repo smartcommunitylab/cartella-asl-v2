@@ -68,7 +68,9 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     classiAssociate.forEach(c -> {
       sb.append(c + " - ");
     });
-    reg.setClassi(sb.toString().substring(sb.length() - 3));
+    if(sb.length() > 4) {
+      reg.setClassi(sb.toString().substring(sb.length() - 3));
+    }
   }
 
   public List<String> getClassiAssociateRegistrazioneDocente(String istitutoId, String cfDocente) {
