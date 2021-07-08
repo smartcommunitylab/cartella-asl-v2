@@ -218,7 +218,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       throw new BadRequestException("registrazione non trovata");
     }
     RegistrazioneDocente reg = optional.get();
-    if(reg.getIstitutoId().equals(istitutoId)) {
+    if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
 
