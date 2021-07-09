@@ -124,11 +124,12 @@ public class RegistrazioneDocenteController implements AslController {
   @GetMapping("/api/registrazione-docente/reg/classi")
   public List<ProfessoriClassi> getAssociazioneDocentiClassi(
     @RequestParam String istitutoId,
+    @RequestParam String annoScolastico,
     @RequestParam Long registrazioneId,
     HttpServletRequest request) throws Exception {
     usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
       new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-    List<ProfessoriClassi> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, registrazioneId);
+    List<ProfessoriClassi> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, annoScolastico, registrazioneId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAssociazioneDocentiClassi:%s - %s", istitutoId, registrazioneId));
 		}		

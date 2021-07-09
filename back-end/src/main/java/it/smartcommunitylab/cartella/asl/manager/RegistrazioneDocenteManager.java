@@ -212,7 +212,8 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return reg;
   }
 
-  public List<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, Long registrazioneId) throws Exception {
+  public List<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, 
+      String annoScolastico, Long registrazioneId) throws Exception {
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
       throw new BadRequestException("registrazione non trovata");
@@ -221,13 +222,21 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
+    ReferenteAlternanza docente = referenteAlternanzaRepository.findReferenteAlternanzaByCf(reg.getCfDocente());
+    if(docente == null) {
+      throw new BadRequestException("cf docente non trovato");
+    }
 
-    StringBuilder sb = new StringBuilder("SELECT DISTINCT pc FROM ProfessoriClassi pc, AssociazioneDocentiClassi adc");
-		sb.append(" WHERE adc.registrazioneDocenteId=(:registrazioneId) AND adc.professoriClassiId=pc.id ORDER BY pc.corso ASC, classroom ASC");
+    StringBuilder sb = new StringBuilder("SELECT DISTINCT pc FROM ProfessoriClassi pc");
+		sb.append(" WHERE pc.referenteAlternanzaId=(:referenteAlternanzaId) AND pc.istitutoId=(:istitutoId)");
+    sb.append(" AND pc.schoolYear=(:annoScolastico) ORDER BY pc.corso ASC, classroom ASC");
     String q = sb.toString();
 
     TypedQuery<ProfessoriClassi> query = em.createQuery(q, ProfessoriClassi.class);
-    query.setParameter("registrazioneId", registrazioneId);
+    query.setParameter("referenteAlternanzaId", docente.getId());
+    query.setParameter("annoScolastico", annoScolastico);
+    query.setParameter("istitutoId", istitutoId);
+
     List<ProfessoriClassi> list = query.getResultList();
     for(ProfessoriClassi pc : list) {
       pc.setStudenti(getStudentiIscritti(pc));
