@@ -58,7 +58,7 @@
                     Campo necessario.</div>
             </div>
 
-            <div class="col-sm-4"
+            <!-- <div class="col-sm-4"
                 [class.has-danger]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                 <label for="referenteScuola" *ngIf="referenteScuola" class="active">Referente scolastico</label>
                 <input type="text" class="form-control" [(ngModel)]="referenteScuola" id="referenteScuola"
@@ -68,6 +68,21 @@
                     [class.d-block]="forceErrorDisplayRS || referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                     Campo necessario.
                 </div>
+            </div> -->
+            <div class="col-sm-4">
+                <ng-template #rtReferente let-riferente="result" let-term="term">
+                    <div class="row">
+                        <ngb-highlight [result]="riferente.nominativoDocente" [term]="term"></ngb-highlight>
+                    </div>
+                </ng-template>
+                <input type="text" class="form-control" [(ngModel)]="riferente" value="riferente.nominativoDocente" id="referente" name="referente"
+                    [ngbTypeahead]="getRiferente" [resultTemplate]="rtReferente" [inputFormatter]="formatterReferente" (selectItem)="selectedRiferente($event)">
+                    <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
+                        <span  class="sr-only">Caricamento...</span>
+                    </small>
+                <label for="referente" *ngIf="referente" class="active">Referente scolastico</label>
+                <label for="referente" *ngIf="!referente">Referente scolastico</label>
+                <div class="invalid-feedback" [class.d-block]="forcereferenteDisplay">Campo necessario.</div>
             </div>
 
         </div>
