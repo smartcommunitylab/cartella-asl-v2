@@ -77,7 +77,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       sb.append(c + " - ");
     });
     if(sb.length() > 4) {
-      reg.setClassi(sb.toString().substring(sb.length() - 3));
+      reg.setClassi(sb.toString().substring(0, sb.length() - 3));
     }
   }
 
