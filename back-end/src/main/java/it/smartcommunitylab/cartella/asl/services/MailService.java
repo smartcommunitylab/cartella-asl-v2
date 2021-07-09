@@ -135,7 +135,7 @@ public class MailService {
 		Map<String, String> vars = new HashMap<String, String>();
 		vars.put("baseUrl", baseUrl);
 		vars.put("nomeIstituto", reg.getNomeIstituto());
-		sendEmail(reg.getEmailDocente(), "Attivazione account EDIT per conto di " + reg.getNomeIstituto(), 
+		sendEmail(reg.getEmailDocente(), "Attivazione accesso account Docente su sistema EDIT" + reg.getNomeIstituto(), 
 				"ruoloDuocente", vars);
   }
 
