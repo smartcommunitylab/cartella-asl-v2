@@ -58,6 +58,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     if(rd == null) {
       throw new BadRequestException("registrazione non trovata");
     }
+    updateClassiRegistrazioneDocente(rd);
     return rd;
   }
 
