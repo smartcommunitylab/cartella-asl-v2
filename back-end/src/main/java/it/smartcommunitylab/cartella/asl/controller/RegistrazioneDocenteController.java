@@ -54,6 +54,20 @@ public class RegistrazioneDocenteController implements AslController {
     return registrazioni;
   }
 
+  @GetMapping("/api/registrazione-docente/detail")
+  public RegistrazioneDocente getRegistrazioneDocenteDetail (
+    @RequestParam String istitutoId,
+    @RequestParam Long registrazioneId,
+    HttpServletRequest request) throws Exception {
+    usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+      new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+    RegistrazioneDocente rd = registrazioneDocenteManager.getRegistrazioneDocente(registrazioneId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getRegistrazioneDocenteDetail:%s - %s", istitutoId, registrazioneId));
+		}		
+    return rd;
+  }
+
   @GetMapping("/api/registrazione-docente/search")
   public Page<RegistrazioneDocente> searchRegistrazioneDocente(
     @RequestParam String istitutoId,

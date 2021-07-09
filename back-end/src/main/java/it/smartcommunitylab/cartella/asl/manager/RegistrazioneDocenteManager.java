@@ -53,6 +53,14 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return list;
   }
 
+  public RegistrazioneDocente getRegistrazioneDocente(Long registrazioneDocenteId) throws Exception {
+    RegistrazioneDocente rd = registrazioneDocenteRepository.findById(registrazioneDocenteId).orElse(null);
+    if(rd == null) {
+      throw new BadRequestException("registrazione non trovata");
+    }
+    return rd;
+  }
+
   private List<String> getClassiAssociateRegistrazioneDocente(Long registrazioneDocenteId) {
     List<String> result = new ArrayList<>();
     List<AssociazioneDocentiClassi> classi = associazioneDocentiClassiRepository.findByRegistrazioneDocenteId(registrazioneDocenteId);
