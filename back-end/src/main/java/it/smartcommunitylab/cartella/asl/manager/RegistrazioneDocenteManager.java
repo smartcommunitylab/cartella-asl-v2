@@ -221,8 +221,8 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return reg;
   }
 
-  public List<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, 
-      String annoScolastico, Long registrazioneId) throws Exception {
+  public Page<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, 
+      String annoScolastico, Long registrazioneId, Pageable pageRequest) throws Exception {
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
       throw new BadRequestException("registrazione non trovata");
@@ -245,12 +245,19 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     query.setParameter("referenteAlternanzaId", docente.getId());
     query.setParameter("annoScolastico", annoScolastico);
     query.setParameter("istitutoId", istitutoId);
+    query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
 
     List<ProfessoriClassi> list = query.getResultList();
     for(ProfessoriClassi pc : list) {
       pc.setStudenti(getStudentiIscritti(pc));
     }
-    return list;
+
+    Query cQuery = queryToCount(q.replaceAll("DISTINCT pc","COUNT(DISTINCT pc)"), query);
+		long total = (Long) cQuery.getSingleResult();
+
+    Page<ProfessoriClassi> page = new PageImpl<ProfessoriClassi>(list, pageRequest, total);
+    return page;
   }
 
   private Long getStudentiIscritti(ProfessoriClassi pc) {

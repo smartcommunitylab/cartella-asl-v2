@@ -136,14 +136,16 @@ public class RegistrazioneDocenteController implements AslController {
   } 
   
   @GetMapping("/api/registrazione-docente/reg/classi")
-  public List<ProfessoriClassi> getAssociazioneDocentiClassi(
+  public Page<ProfessoriClassi> getAssociazioneDocentiClassi(
     @RequestParam String istitutoId,
     @RequestParam String annoScolastico,
     @RequestParam Long registrazioneId,
+    Pageable pageRequest, 
     HttpServletRequest request) throws Exception {
     usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-      new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-    List<ProfessoriClassi> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, annoScolastico, registrazioneId);
+        new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+    Page<ProfessoriClassi> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, 
+        annoScolastico, registrazioneId, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAssociazioneDocentiClassi:%s - %s", istitutoId, registrazioneId));
 		}		
