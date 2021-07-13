@@ -263,7 +263,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       reportList.add(report);
     }
 
-    Query cQuery = queryToCount(q.replaceAll("DISTINCT r.courseId, r.course, r.classroom","COUNT(DISTINCT r.courseId, r.course, r.classroom)"), query);
+    Query cQuery = queryToCount(q.replaceAll("DISTINCT r.courseId, r.course, r.classroom","COUNT(DISTINCT r.classroom)"), query);
 		long total = (Long) cQuery.getSingleResult();
 
     Page<DocentiClassiReport> page = new PageImpl<DocentiClassiReport>(reportList, pageRequest, total);
