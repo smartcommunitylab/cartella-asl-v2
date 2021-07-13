@@ -20,6 +20,7 @@ import it.smartcommunitylab.cartella.asl.model.AssociazioneDocentiClassi;
 import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
 import it.smartcommunitylab.cartella.asl.model.ReferenteAlternanza;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneDocente;
+import it.smartcommunitylab.cartella.asl.model.report.DocentiClassiReport;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDocenteClasse;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -221,7 +222,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return reg;
   }
 
-  public Page<ProfessoriClassi> getAssociazioneDocentiClassi(String istitutoId, 
+  public Page<DocentiClassiReport> getAssociazioneDocentiClassi(String istitutoId, 
       String annoScolastico, Long registrazioneId, Pageable pageRequest) throws Exception {
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
@@ -236,43 +237,54 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       throw new BadRequestException("cf docente non trovato");
     }
 
-    StringBuilder sb = new StringBuilder("SELECT DISTINCT pc FROM ProfessoriClassi pc");
-		sb.append(" WHERE pc.referenteAlternanzaId=(:referenteAlternanzaId) AND pc.istitutoId=(:istitutoId)");
-    sb.append(" AND pc.schoolYear=(:annoScolastico) ORDER BY pc.corso ASC, classroom ASC");
+    StringBuilder sb = new StringBuilder("SELECT DISTINCT r.courseId, r.course, r.classroom FROM Registration r");
+		sb.append(" WHERE r.instituteId=(:istitutoId)");
+    sb.append(" AND r.schoolYear=(:annoScolastico) ORDER BY r.course ASC, r.classroom ASC");
     String q = sb.toString();
 
-    TypedQuery<ProfessoriClassi> query = em.createQuery(q, ProfessoriClassi.class);
-    query.setParameter("referenteAlternanzaId", docente.getId());
+    Query query = em.createQuery(q);
     query.setParameter("annoScolastico", annoScolastico);
     query.setParameter("istitutoId", istitutoId);
     query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+    List<Object[]> result = query.getResultList();
 
-    List<ProfessoriClassi> list = query.getResultList();
-    for(ProfessoriClassi pc : list) {
-      pc.setStudenti(getStudentiIscritti(pc));
+    List<DocentiClassiReport> reportList = new ArrayList<>();
+    for(Object[] obj : result) {
+      String corsoId = (String) obj[0];
+      String corso = (String) obj[1];
+      String classe = (String) obj[2];
+      DocentiClassiReport report = new DocentiClassiReport();
+      report.setAnnoScolastico(annoScolastico);
+      report.setClasse(classe);
+      report.setCorso(corso);
+      report.setCorsoId(corsoId);
+      report.setStudenti(getStudentiIscritti(istitutoId, corsoId, annoScolastico, classe));
+      reportList.add(report);
     }
 
-    Query cQuery = queryToCount(q.replaceAll("DISTINCT pc","COUNT(DISTINCT pc)"), query);
+    Query cQuery = queryToCount(q.replaceAll("DISTINCT r.courseId, r.course, r.classroom","COUNT(DISTINCT r.courseId, r.course, r.classroom)"), query);
 		long total = (Long) cQuery.getSingleResult();
 
-    Page<ProfessoriClassi> page = new PageImpl<ProfessoriClassi>(list, pageRequest, total);
+    Page<DocentiClassiReport> page = new PageImpl<DocentiClassiReport>(reportList, pageRequest, total);
     return page;
   }
 
-  private Long getStudentiIscritti(ProfessoriClassi pc) {
-    String q = "SELECT COUNT(DISTINCT r) FROM Registration r WHERE r.schoolYear=(:schoolYear) AND r.instituteId=(:istitutoId) AND r.courseId=(:corsoId)";
+  private Long getStudentiIscritti(String istitutoId, String corsoId, String annoScolastico, String classe) {
+    String q = "SELECT COUNT(DISTINCT r) FROM Registration r WHERE r.schoolYear=(:annoScolastico) AND r.instituteId=(:istitutoId)" 
+      + " AND r.courseId=(:corsoId) AND r.classroom=(:classe)";
     TypedQuery<Long> query = em.createQuery(q, Long.class);
-    query.setParameter("schoolYear", pc.getSchoolYear());
-    query.setParameter("istitutoId", pc.getIstitutoId());
-    query.setParameter("corsoId", pc.getCorsoId());
+    query.setParameter("annoScolastico", annoScolastico);
+    query.setParameter("istitutoId", istitutoId);
+    query.setParameter("corsoId", corsoId);
+    query.setParameter("classe", classe);
     Long studenti = query.getSingleResult();
     return studenti;
   }
 
-  public List<ProfessoriClassi> updateAssociazioneDocentiClassi(String istitutoId, Long registrazioneId, 
-    List<String> docentiClassiIds) throws Exception {
-    List<ProfessoriClassi> result = new ArrayList<>();
+  public List<AssociazioneDocentiClassi> updateAssociazioneDocentiClassi(String istitutoId, String annoScolastico,
+      Long registrazioneId, List<String> classi) throws Exception {
+    List<AssociazioneDocentiClassi> result = new ArrayList<>();
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
       throw new BadRequestException("registrazione non trovata");
@@ -285,21 +297,17 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 		if(user == null) {
 			throw new BadRequestException("utente non trovato");
 		}
-    List<AssociazioneDocentiClassi> classi = associazioneDocentiClassiRepository.findByRegistrazioneDocenteId(registrazioneId);
-    associazioneDocentiClassiRepository.deleteAll(classi);
+    List<AssociazioneDocentiClassi> associazioni = associazioneDocentiClassiRepository.findByRegistrazioneDocenteId(registrazioneId);
+    associazioneDocentiClassiRepository.deleteAll(associazioni);
     boolean tutorClasse = false;
-    for(String docentiClassiId : docentiClassiIds) {
-      ProfessoriClassi pc = professoriClassiRepository.findById(docentiClassiId).orElse(null);
-      if(pc != null) {
-        AssociazioneDocentiClassi adc = new AssociazioneDocentiClassi();
-        adc.setRegistrazioneDocenteId(registrazioneId);
-        adc.setProfessoriClassiId(pc.getId());
-        adc.setAnnoScolastico(pc.getSchoolYear());
-        adc.setClasse(pc.getClassroom());
-        associazioneDocentiClassiRepository.save(adc);
-        result.add(pc);
-        tutorClasse = true;
-      }
+    for(String classe : classi) {
+      AssociazioneDocentiClassi adc = new AssociazioneDocentiClassi();
+      adc.setRegistrazioneDocenteId(registrazioneId);
+      adc.setAnnoScolastico(annoScolastico);
+      adc.setClasse(classe);
+      associazioneDocentiClassiRepository.save(adc);
+      result.add(adc);
+      tutorClasse = true;
     }
     ASLUserRole userRole = userManager.findASLUserRole(user.getId(), 
       ASLRole.TUTOR_CLASSE, reg.getIstitutoId());

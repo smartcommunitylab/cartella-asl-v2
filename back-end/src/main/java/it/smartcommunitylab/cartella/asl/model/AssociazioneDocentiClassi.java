@@ -21,10 +21,8 @@ public class AssociazioneDocentiClassi {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-  private String professoriClassiId;
   private Long registrazioneDocenteId;
   private String classe;
-  private String corso;
   private String annoScolastico;
 
   @Transient  
@@ -36,14 +34,6 @@ public class AssociazioneDocentiClassi {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getProfessoriClassiId() {
-    return professoriClassiId;
-  }
-
-  public void setProfessoriClassiId(String professoriClassiId) {
-    this.professoriClassiId = professoriClassiId;
   }
 
   public Long getRegistrazioneDocenteId() {
@@ -60,14 +50,6 @@ public class AssociazioneDocentiClassi {
 
   public void setClasse(String classe) {
     this.classe = classe;
-  }
-
-  public String getCorso() {
-    return corso;
-  }
-
-  public void setCorso(String corso) {
-    this.corso = corso;
   }
 
   public String getAnnoScolastico() {

@@ -22,9 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.RegistrazioneDocenteManager;
-import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
+import it.smartcommunitylab.cartella.asl.model.AssociazioneDocentiClassi;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneDocente;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
+import it.smartcommunitylab.cartella.asl.model.report.DocentiClassiReport;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDocenteClasse;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
@@ -136,7 +137,7 @@ public class RegistrazioneDocenteController implements AslController {
   } 
   
   @GetMapping("/api/registrazione-docente/reg/classi")
-  public Page<ProfessoriClassi> getAssociazioneDocentiClassi(
+  public Page<DocentiClassiReport> getAssociazioneDocentiClassi(
     @RequestParam String istitutoId,
     @RequestParam String annoScolastico,
     @RequestParam Long registrazioneId,
@@ -144,7 +145,7 @@ public class RegistrazioneDocenteController implements AslController {
     HttpServletRequest request) throws Exception {
     usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
         new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-    Page<ProfessoriClassi> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, 
+    Page<DocentiClassiReport> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, 
         annoScolastico, registrazioneId, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAssociazioneDocentiClassi:%s - %s", istitutoId, registrazioneId));
@@ -153,20 +154,22 @@ public class RegistrazioneDocenteController implements AslController {
   }
 
   @PostMapping("/api/registrazione-docente/reg/classi") 
-  public List<ProfessoriClassi> updateAssociazioneDocentiClassi(
+  public List<AssociazioneDocentiClassi> updateAssociazioneDocentiClassi(
     @RequestParam String istitutoId,
+    @RequestParam String annoScolastico,
     @RequestParam Long registrazioneId,
-    @RequestBody List<String> docentiClassiIds,
+    @RequestBody List<String> classi,
     HttpServletRequest request) throws Exception {
     ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
       new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-    List<ProfessoriClassi> classi = registrazioneDocenteManager.updateAssociazioneDocentiClassi(istitutoId, registrazioneId, docentiClassiIds);      
+    List<AssociazioneDocentiClassi> result = registrazioneDocenteManager.updateAssociazioneDocentiClassi(istitutoId, annoScolastico,
+      registrazioneId, classi);      
 		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneDocente.class, registrazioneId, user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateAssociazioneDocentiClassi:%s - %s", istitutoId, registrazioneId));
 		}		
-    return classi;
+    return result;
   }
 
 }
