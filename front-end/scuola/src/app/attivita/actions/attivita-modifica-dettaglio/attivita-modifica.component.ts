@@ -41,6 +41,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   tipologie;
   azienda: any;
   place: any;
+  riferente: any;
   date: {
     dataInizio: moment.Moment,
     dataFine: moment.Moment,
@@ -131,6 +132,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.place = {};
           this.place.name = this.attivita.luogoSvolgimento;
           this.place.location = [this.attivita.latitude, this.attivita.longitude];
+          this.riferente = {};
+          this.riferente.nominativoDocente = this.attivita.referenteScuola;
           this.esperienze = res.esperienze;
           this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
           this.tipologie.filter(tipo => {
@@ -435,5 +438,48 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
       this.modalita = 'Rendicontazione ore giornaliera';
     }
   }
+
+  searchingRIF = false;
+  searchFailedRIF = false;
+  
+  getRiferente = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingRIF = true),
+      switchMap(term => this.dataService.getRiferente(term).pipe(
+        map(items => {
+          // non existing riferente hack
+          if (items.length < 1) {
+            this.attivita.referenteScuolaCF = null;
+            this.attivita.referenteScuola = this.riferente;
+          }
+          return items;
+        }),
+        tap(() => {
+          this.searchFailedRIF = false
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.searchFailedRIF = true;
+          return of([]);
+        })
+      )),
+      tap(() => this.searching = false)
+    )
+
+  formatterReferente = (x: { nominativoDocente: string }) => x.nominativoDocente;
+
+  selectedRiferente($event) {
+    this.attivita.referenteScuolaCF = null;
+    if ($event.item.cfDocente) {
+      this.attivita.referenteScuolaCF = $event.item.cfDocente;
+    }
+    if ($event.item.nominativoDocente) {
+      this.attivita.referenteScuola = $event.item.nominativoDocente;
+    }
+  }
+
+  
   
 }
