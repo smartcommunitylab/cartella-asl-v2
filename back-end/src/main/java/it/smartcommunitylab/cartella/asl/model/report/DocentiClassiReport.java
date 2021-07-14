@@ -5,7 +5,6 @@ public class DocentiClassiReport {
   private String corso;
   private String annoScolastico;
   private String classe;
-  private Long studenti;
 
   public String getCorsoId() {
     return corsoId;
@@ -30,12 +29,6 @@ public class DocentiClassiReport {
   }
   public void setClasse(String classe) {
     this.classe = classe;
-  }
-  public Long getStudenti() {
-    return studenti;
-  }
-  public void setStudenti(Long studenti) {
-    this.studenti = studenti;
   }
   
 }

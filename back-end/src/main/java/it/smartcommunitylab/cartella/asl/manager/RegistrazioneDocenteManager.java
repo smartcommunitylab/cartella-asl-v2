@@ -266,7 +266,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       report.setClasse(classe);
       report.setCorso(corso);
       report.setCorsoId(corsoId);
-      report.setStudenti(getStudentiIscritti(istitutoId, corsoId, annoScolastico, classe));
+      //report.setStudenti(getStudentiIscritti(istitutoId, corsoId, annoScolastico, classe));
       reportList.add(report);
     }
 
