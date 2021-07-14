@@ -222,8 +222,8 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     return reg;
   }
 
-  public Page<DocentiClassiReport> getAssociazioneDocentiClassi(String istitutoId, 
-      String annoScolastico, Long registrazioneId, Pageable pageRequest) throws Exception {
+  public Page<DocentiClassiReport> getAssociazioneDocentiClassi(String istitutoId, String annoScolastico, 
+      Long registrazioneId, String text, Pageable pageRequest) throws Exception {
     Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
     if(optional.isEmpty()) {
       throw new BadRequestException("registrazione non trovata");
@@ -239,12 +239,19 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 
     StringBuilder sb = new StringBuilder("SELECT DISTINCT r.courseId, r.course, r.classroom FROM Registration r");
 		sb.append(" WHERE r.instituteId=(:istitutoId)");
-    sb.append(" AND r.schoolYear=(:annoScolastico) ORDER BY r.course ASC, r.classroom ASC");
+    sb.append(" AND r.schoolYear=(:annoScolastico)");
+    if(Utils.isNotEmpty(text)) {
+      sb.append(" AND (UPPER(r.course) LIKE (:text) OR UPPER(r.classroom) LIKE (:text))");
+    }
+    sb.append(" ORDER BY r.course ASC, r.classroom ASC");
     String q = sb.toString();
 
     Query query = em.createQuery(q);
     query.setParameter("annoScolastico", annoScolastico);
     query.setParameter("istitutoId", istitutoId);
+    if(Utils.isNotEmpty(text)) {
+      query.setParameter("text", text);
+    }
     query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
     List<Object[]> result = query.getResultList();

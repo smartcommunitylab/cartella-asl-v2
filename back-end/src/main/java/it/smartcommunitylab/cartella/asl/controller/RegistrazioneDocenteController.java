@@ -141,12 +141,13 @@ public class RegistrazioneDocenteController implements AslController {
     @RequestParam String istitutoId,
     @RequestParam String annoScolastico,
     @RequestParam Long registrazioneId,
+    @RequestParam(required = false) String text,
     Pageable pageRequest, 
     HttpServletRequest request) throws Exception {
     usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
         new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
     Page<DocentiClassiReport> classi = registrazioneDocenteManager.getAssociazioneDocentiClassi(istitutoId, 
-        annoScolastico, registrazioneId, pageRequest);
+        annoScolastico, registrazioneId, text, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAssociazioneDocentiClassi:%s - %s", istitutoId, registrazioneId));
 		}		
