@@ -7,6 +7,7 @@ import { DeleteRoleSingleModalComponent } from '../modals/delete-role-single-mod
 import { DeleteRoleModalComponent } from '../modals/delete-role-modal/delete-role-modal.component';
 import { UtenteAddRoleComponent } from '../utente-add-role/utente-add-role.component';
 import { PermissionService } from '../../core/services/permission.service';
+import { isDoStatement } from 'typescript';
 
 @Component({
   selector: 'cm-utente-detail',
@@ -76,6 +77,16 @@ export class UtenteDetailComponent implements OnInit {
     }
     return false;
     // return this.user.roles.find(el => el == role);
+  }
+
+  getDomainIds(role) {
+    var idList = [];
+    this.user.roles.forEach(element => {
+      if(element.role == role) {
+        idList.push(element.domainId);
+      }
+    });
+    return idList;
   }
 
   saveUser() {
