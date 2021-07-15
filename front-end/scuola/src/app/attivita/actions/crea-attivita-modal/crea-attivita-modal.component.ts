@@ -72,6 +72,7 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceErrorDisplayRE: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
+  forcereferenteDisplay: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -180,6 +181,11 @@ export class CreaAttivitaModalComponent implements OnInit {
         this.forceEnteDisplay = false;
       } else {
         this.forceEnteDisplay = true;
+      }
+      if (this.nomeDocente && this.nomeDocente != '' && this.nomeDocente.trim().length > 0) {
+        this.forcereferenteDisplay = false;
+      } else {
+        this.forcereferenteDisplay = true
       }
     }
   }
