@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Rx';
-import { forkJoin } from 'rxjs';  // RxJS 6 syntax
+import { of,forkJoin } from 'rxjs';  // RxJS 6 syntax
 import { catchError, map, } from 'rxjs/operators';
 import { Competenza } from '../../shared/classes/Competenza.class';
 import { PianoAlternanza } from '../../shared/classes/PianoAlternanza.class';
@@ -21,9 +21,8 @@ const httpOptions = {
 
 @Injectable()
 export class DataService {
-
-  istitutoId: string = "19a46a53-8e10-4cd0-a7d0-fb2da217d1be";
-  schoolYear: string = "2019-20";
+  istitutoId: string = "";
+  schoolYear: string = "";
   listIstituteIds = [];
   istituto: string = "Centro Formazione Professionale Agrario - S. Michele all'Adige'";
   host: string = serverAPIConfig.host;
@@ -751,6 +750,7 @@ export class DataService {
         )
       );
   }
+  
 
   getAttivitaReportStudenti(id): Observable<any> {
     let url = this.host + "/attivita/" + id + '/report/studenti';
@@ -981,6 +981,28 @@ export class DataService {
     let url = this.host + "/studente/" + studenteId + '/istituto/report/details';
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getRegistrazioneDocenteDetail(id) {
+    let url = this.host + '/registrazione-docente/detail';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('registrazioneId', id);
 
     return this.http.get<any>(
       url,
@@ -1480,6 +1502,55 @@ export class DataService {
 
   generateArray(obj) {
     return Object.keys(obj).map((key) => { return obj[key] });
+  }
+
+  getRiferente(term: string): Observable<any> {
+    let url = this.host + "/registrazione-docente/search";
+    let params = new HttpParams();
+    params = params.append('page', '0');
+    params = params.append('size', '20');
+    params = params.append('istitutoId', this.istitutoId);
+    
+    if (term) {
+      params = params.append('text', term);
+    }
+
+    environment.globalSpinner = false;
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          environment.globalSpinner = true;
+          return (res.body.content)
+        }),
+        catchError((err) => {
+          environment.globalSpinner = true;
+          return this.handleError(err);
+        })
+      );
+  }
+
+  getRegistrazioneDocente() : Observable<any> {
+    let url = this.host + "/registrazione-docente";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+        );
   }
 
   private handleError(error: HttpErrorResponse) {
