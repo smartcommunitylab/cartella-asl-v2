@@ -203,4 +203,70 @@
             <span class="searchError">Non ci sono dati da visualizzare!</span>
         </div>
     </div>
+    <br>
+    <div class="title">
+        Account abilitati <br />
+        <button class="btn btn-primary v-center-inline" placement="bottom" ngbTooltip="Aggiungi un account con i permessi per operare su questo ente"
+            >
+            Aggiungi account&nbsp;&nbsp;&nbsp;
+            <svg class="icon icon-white icon-sm btnModificationIcon">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+            </svg>
+        </button>
+    </div>
+    <br>
+    <div class="list-group" *ngIf="registeredDocenti && registeredDocenti.length > 0">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Indirizzo email</th>
+                    <th>Nome</th>
+                    <th>Codice fiscale</th>
+                    <th>Classe associate</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ruolo of registeredDocenti">
+                    <!-- Indirizzo email -->
+                    <td class="pointer">
+                        <span class="align-middle color-blu text-underline">{{ ruolo.emailDocente }}</span>
+                    </td>
+                    <!-- Nome -->
+                    <td class="pointer">
+                        <span class="align-middle">{{ ruolo.nominativoDocente }}</span>
+                    </td>
+                    <!-- Ruolo -->
+                    <td class="pointer">
+                        <span class="align-middle">{{ ruolo.cfDocente }}</span>
+                    </td>
+                    <!-- Creato il -->
+                    <td class="pointer">
+                        <span class="align-middle">{{ ruolo.classi }}</span>
+                    </td>
+                    <!-- associa classe -->
+                    <td class="pointer">
+                        <div class="btn btn-primary btn-icon btn-xs float-right" placement="right-bottom"
+                            ngbTooltip="Modifica o elimina gli account che possono operare su questo ente">
+                            Studenti associate&nbsp;&nbsp;&nbsp;
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil">
+                                </use>
+                            </svg>
+                        </div>
+                    </td>
+                    <!-- delete -->
+                    <td class="pointer">
+                        <div class='btn btn-danger btn-icon btn-xs float-right">
+                            Elimina&nbsp;&nbsp;&nbsp;
+                            <svg class="icon icon-white icon-sm">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                            </svg>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

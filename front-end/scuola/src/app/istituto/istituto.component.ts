@@ -3,6 +3,9 @@ import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartDataSets, ChartOptions, ChartType, Chart } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
 
 @Component({
   selector: 'istituto',
@@ -26,6 +29,7 @@ export class IstitutoComponent implements OnInit {
   numeroAttivitaInCorso;
   numeroAttivitaInRevisione;
   oreTotali;
+  registeredDocenti;
 
   // PIE chart.
   pieChartOptions: ChartOptions = {
@@ -96,7 +100,8 @@ export class IstitutoComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +112,11 @@ export class IstitutoComponent implements OnInit {
       this.dataService.getDashboardIstitutoClasse()
         .subscribe((response) => {
           this.classi = response;
+          this.dataService.getRegistrazioneDocente().subscribe((response) => {
+            this.registeredDocenti = response;
+          },
+          (err: any) => console.log(err),
+          () => console.log('get registrazione docente api'));
         },
           (err: any) => console.log(err),
           () => console.log('get dashboard istituto classi api'));
