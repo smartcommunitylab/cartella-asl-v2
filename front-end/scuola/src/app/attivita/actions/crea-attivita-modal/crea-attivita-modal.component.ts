@@ -151,7 +151,7 @@ export class CreaAttivitaModalComponent implements OnInit {
       attivita = {
         titolo: this.titolo.trim(),
         referenteScuola: this.nomeDocente.trim(),
-        referenteScuolaCF: this.cfDocente.trim(),
+        referenteScuolaCF: this.cfDocente?this.cfDocente.trim():null,
         referenteEsterno: this.tipoInterna ? null : this.referenteEsterno.trim(),
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
@@ -262,6 +262,7 @@ export class CreaAttivitaModalComponent implements OnInit {
       switchMap(term => this.dataService.getRiferente(term).pipe(
         map(items => {
           // non existing riferente hack
+          this.nomeDocente = null;
           if (items.length < 1) {
             this.cfDocente = null;
             this.nomeDocente = this.riferente;
