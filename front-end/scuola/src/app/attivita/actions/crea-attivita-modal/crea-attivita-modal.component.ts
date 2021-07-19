@@ -254,7 +254,6 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   searching = false;
   searchFailed = false;
-
   getRiferente = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(500),
