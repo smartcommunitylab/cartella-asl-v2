@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angu
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginationComponent } from '../../../shared/pagination/pagination.component';
 import { DataService } from '../../../core/services/data.service';
+import { ValidationService } from '../../../core/services/validation.service';
 
 @Component({
   selector: 'update-docente-modal',
@@ -22,15 +23,14 @@ export class UpdateDocenteModalComponent implements OnInit {
   forceErrorDisplayCF: boolean = false;
   forceErrorDisplayMail: boolean = false;
 
-  profile = { 'name': null, 'surname': null, 'cf': null, 'email': null };
-
   @Output() newUtenteListener = new EventEmitter<Object>();
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
 
   constructor(
     public activeModal: NgbActiveModal,
-    public dataService: DataService
-    ) { }
+    public dataService: DataService,
+    private validationService: ValidationService,
+    ) {}
 
   ngOnInit() {
     this.getListPage(1);
@@ -43,6 +43,8 @@ export class UpdateDocenteModalComponent implements OnInit {
         .subscribe((response) => {
           this.totalRecords = response.totalElements;
           this.professori = response.content;
+          // set checkboxes.
+         
         },
           (err: any) => console.log(err),
           () => console.log('get list per aggiungi account api'));
@@ -52,6 +54,31 @@ export class UpdateDocenteModalComponent implements OnInit {
 
   }
 
-    
+  cerca() {
+    this.cmPagination.changePage(1);
+    this.getListPage(1);
+  }
+
+  pageChanged(page: number) {
+    this.currentpage = page;
+    this.getListPage(page);
+  }
+
+  trimValue(event, type) {
+    if (type == 'nome') {
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayNome = true : this.forceErrorDisplayNome = false;
+    } else if (type == 'cognome') {
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayCognome = true : this.forceErrorDisplayCognome = false;
+    } else if (type == 'cf') {
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayCF = true : this.forceErrorDisplayCF = false;
+    } else if (type == 'mail') {
+      (event.target.value.trim().length == 0) ? this.forceErrorDisplayMail = true : this.forceErrorDisplayMail = false;
+    } else if (type == 'trim') {
+      event.target.value = event.target.value.trim();
+    }
+  }
+
+
+  
 
 }
