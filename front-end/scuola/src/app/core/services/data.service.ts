@@ -35,7 +35,7 @@ export class DataService {
   static growler;
   timeout: number = 120000;
   coorindateIstituto;
-
+  
   constructor(
     private http: HttpClient,
     private growler: GrowlerService,
@@ -1552,6 +1552,31 @@ export class DataService {
         catchError(this.handleError)
         );
   }
+
+  listPerAggiungiAccount(page: number, pageSize: number, filtro) : Observable<any> {
+    let url = this.host + "/registrazione-docente/docenti-classi";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('annoScolastico', this.schoolYear);
+    params = params.append('page', page + '');
+    params = params.append('size', pageSize + '');
+    if (filtro)
+    params = params.append('text', filtro);
+    
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+        );
+  }
+ 
 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
