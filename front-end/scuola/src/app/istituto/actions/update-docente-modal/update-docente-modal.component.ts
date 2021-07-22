@@ -43,8 +43,7 @@ export class UpdateDocenteModalComponent implements OnInit {
         .subscribe((response) => {
           this.totalRecords = response.totalElements;
           this.professori = response.content;
-          // set checkboxes.
-         
+
         },
           (err: any) => console.log(err),
           () => console.log('get list per aggiungi account api'));
@@ -57,11 +56,6 @@ export class UpdateDocenteModalComponent implements OnInit {
   cerca() {
     this.cmPagination.changePage(1);
     this.getListPage(1);
-  }
-
-  pageChanged(page: number) {
-    this.currentpage = page;
-    this.getListPage(page);
   }
 
   trimValue(event, type) {
@@ -77,8 +71,5 @@ export class UpdateDocenteModalComponent implements OnInit {
       event.target.value = event.target.value.trim();
     }
   }
-
-
-  
 
 }

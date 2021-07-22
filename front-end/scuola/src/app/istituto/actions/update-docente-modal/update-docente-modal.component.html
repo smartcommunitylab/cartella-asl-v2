@@ -17,7 +17,7 @@
             </button>
             &nbsp;&nbsp;
             <button class="btn btn-success btn-icon btn-xs btnSave" placement="bottom"
-                ngbTooltip="Archivia definitivamente l’attività">
+                ngbTooltip="Archivia definitivamente l’attività" (click)="confirm()">
                 <span class="row btnModificationText">
                     <span class="col-8 leftItem">Attiva account</span>
                     <span class="col-4 rightItem">
@@ -74,5 +74,41 @@
                 </svg>
             </it-button>
         </div>
-
+        <div class="table list-group">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Indirizzo email </th>
+                        <th>Nome</th>
+                        <th>Codice fiscale</th>
+                        <th>Classi associate</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prof of professori">
+                        <td>
+                            {{ prof.referenteAlternanza.email }}
+                        </td>
+                        <td>
+                            {{ prof.referenteAlternanza.surname }} {{ prof.referenteAlternanza.name }}
+                        </td>
+                        <td>
+                            {{ prof.referenteAlternanza.cf }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="!professori?.length" class="font-14 text-center font-weight-bold">
+            <span>Nessun professore trovata</span>
+        </div>
+    </div>
 </div>
