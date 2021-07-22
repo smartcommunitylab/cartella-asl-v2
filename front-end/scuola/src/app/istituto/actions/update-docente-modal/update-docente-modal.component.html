@@ -110,5 +110,11 @@
         <div *ngIf="!professori?.length" class="font-14 text-center font-weight-bold">
             <span>Nessun professore trovata</span>
         </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+                    #cmPagination></cm-pagination>
+            </div>
+        </div>
     </div>
 </div>

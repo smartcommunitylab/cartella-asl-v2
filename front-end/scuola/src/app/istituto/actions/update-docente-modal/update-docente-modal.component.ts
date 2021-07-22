@@ -58,6 +58,11 @@ export class UpdateDocenteModalComponent implements OnInit {
     this.getListPage(1);
   }
 
+  pageChanged(page: number) {
+    this.currentpage = page;
+    this.getListPage(page);
+  }
+
   trimValue(event, type) {
     if (type == 'nome') {
       (event.target.value.trim().length == 0) ? this.forceErrorDisplayNome = true : this.forceErrorDisplayNome = false;
