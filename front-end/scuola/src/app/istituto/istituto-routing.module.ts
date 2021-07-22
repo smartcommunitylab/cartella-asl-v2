@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IstitutoDettaglioModificaComponent } from './actions/ente-modifica-dettaglio/istituto-modifica.component';
+import { IstitutoDettaglioModificaComponent } from './actions/istituto-modifica-dettaglio/istituto-modifica.component';
+import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
 import { IstitutoContainerComponent } from './istituto-container.component';
 import { IstitutoComponent } from './istituto.component';
 
@@ -23,7 +24,8 @@ export class IstitutoRoutingModule {
   static components = [
     IstitutoContainerComponent,
     IstitutoComponent,
-    IstitutoDettaglioModificaComponent
+    IstitutoDettaglioModificaComponent,
+    UpdateDocenteModalComponent,
   ];
 }
 

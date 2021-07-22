@@ -7,6 +7,7 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DesignAngularKitModule } from 'design-angular-kit'
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ChartsModule } from 'ng2-charts';
+import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,9 @@ import { ChartsModule } from 'ng2-charts';
   providers: [
     NgbActiveModal,
   ],
-  entryComponents: [],
+  entryComponents: [
+    UpdateDocenteModalComponent,
+  ],
   declarations: [IstitutoRoutingModule.components]
 })
 export class IstitutoModule { }
