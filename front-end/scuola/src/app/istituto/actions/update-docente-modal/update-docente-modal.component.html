@@ -4,8 +4,8 @@
             <span>Aggiungi account Docente</span>
         </div>
         <div class="row v-center float-right">
-            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" placement="bottom" ngbTooltip="Annulla"
-                (click)="activeModal.close('Close click')">
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" placement="bottom"
+                ngbTooltip="Annulla" (click)="activeModal.close('Close click')">
                 <span class="row btnModificationText">
                     <span class="col-8 leftItem">Annulla</span>
                     <span class="col-4 rightItem">
@@ -24,7 +24,7 @@
                         <svg class="icon icon-white icon-sm btnModificationIcon">
                             <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
                         </svg>
-                    </span>                       
+                    </span>
                 </span>
             </button>
         </div>
@@ -39,29 +39,36 @@
                     </svg>&nbsp;&nbsp;
                     <span class="title">ATTENZIONE</span>
                 </div>
-                <p><b>In questa tabella sono riportati tutti i nominativi e gli indirizzi mail ufficiali dei docenti associati
+                <p><b>In questa tabella sono riportati tutti i nominativi e gli indirizzi mail ufficiali dei docenti
+                        associati
                         all’istituto per l’anno scolastico {{dataService.schoolYear}}.<br />
                         Ricordati che:</b>
                 </p>
                 <ul>
-                    <li>Tutti gli account selezionati riceveranno <b>una mail per accedere ad EDIT</b> e iniziare ad operare sul
+                    <li>Tutti gli account selezionati riceveranno <b>una mail per accedere ad EDIT</b> e iniziare ad
+                        operare sul
                         portale</li>
-                    <li>Gli account possono essere associati ad una o più classi. Potrai modificare le classi associate tramite
+                    <li>Gli account possono essere associati ad una o più classi. Potrai modificare le classi associate
+                        tramite
                         il tasto <b>“Studenti associati”</b> nella sezione “Gestione account” nella tab “Istituto” </li>
-                    <li><b>Gli account avranno automaticamente accesso ai dati ASL</b> degli studenti a cui sono associati.</li>
-                    <li>Potranno visualizzare il percorso ASL, allegare documenti o modificare le competenze associate alle
+                    <li><b>Gli account avranno automaticamente accesso ai dati ASL</b> degli studenti a cui sono
+                        associati.</li>
+                    <li>Potranno visualizzare il percorso ASL, allegare documenti o modificare le competenze associate
+                        alle
                         attività</li>
-                    <li><b>NON potranno però vedere le presenze e validare le ore:</b> per aggiungere questa funzione ad ogni account
+                    <li><b>NON potranno però vedere le presenze e validare le ore:</b> per aggiungere questa funzione ad
+                        ogni account
                         sarà necessario indicarlo come <b>tutor scolastico</b> per <b>ciascuna attività</b></li>
-                    <li>La creazione, l’archiviazione e l’associazione studenti ad un’attività NON saranno in ogni caso MAI
+                    <li>La creazione, l’archiviazione e l’associazione studenti ad un’attività NON saranno in ogni caso
+                        MAI
                         possibili per un account docente, <b>ma solo dall’account SCUOLA</b></li>
                 </ul>
                 <br />
                 <br />
             </div>
         </div>
-       <p><b>Seleziona gli account che vuoi attivare, e poi premi il tasto “attiva account”.</b></p>
-        <br/>
+        <p><b>Seleziona gli account che vuoi attivare, e poi premi il tasto “attiva account”.</b></p>
+        <br />
         <div class="col-4 v-center-inline">
             <div class="form-group center-formGroup">
                 <input type="text" id="cercaDocente" class="form-control search-input" [(ngModel)]="filtro"
@@ -106,7 +113,8 @@
                             <span class="in_attesa" *ngIf="prof.attivo == -1">Selezionato per attivazione</span>
                         </td>
                         <td>
-                            <input [disabled]="prof.referenteAlternanza.disabled" type="checkbox" [checked]="prof.referenteAlternanza.checked" (change)="onFilterChange(prof)">                            
+                            <input [disabled]="prof.referenteAlternanza.disabled" type="checkbox"
+                                [checked]="prof.referenteAlternanza.checked" (change)="onFilterChange(prof)">
                         </td>
                     </tr>
                 </tbody>

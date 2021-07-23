@@ -1,8 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input } from '@angular/core';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PaginationComponent } from '../../../shared/pagination/pagination.component';
 import { DataService } from '../../../core/services/data.service';
-import { ValidationService } from '../../../core/services/validation.service';
 
 @Component({
   selector: 'update-docente-modal',
@@ -28,9 +27,8 @@ export class UpdateDocenteModalComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
-    public dataService: DataService,
-    private validationService: ValidationService,
-    ) {}
+    public dataService: DataService
+  ) {}
 
   ngOnInit() {
     this.getListPage(1);
@@ -45,15 +43,13 @@ export class UpdateDocenteModalComponent implements OnInit {
           this.professori = response.content;
           // set checkboxes.
           this.updateCheckBoxes();
-
         },
           (err: any) => console.log(err),
           () => console.log('get list per aggiungi account api'));
     },
       (err: any) => console.log(err),
       () => console.log('get registrazione docente api'));
-
-  }
+ }
 
   updateCheckBoxes() {
     this.registeredDocenti.forEach(regDocente => {
@@ -62,7 +58,7 @@ export class UpdateDocenteModalComponent implements OnInit {
           regDocente.id = elem2.referenteAlternanza.id;
           elem2.referenteAlternanza.checked = true;
           elem2.referenteAlternanza.disabled = true;
-        }          
+        }
       });
     });
   }
@@ -103,8 +99,8 @@ export class UpdateDocenteModalComponent implements OnInit {
   onFilterChange(prof) {
     prof.attivo = -1;
     prof.referenteAlternanza.checked = !prof.referenteAlternanza.checked;
-    
-   var index = this.tobeSaved.findIndex(x => x.id == prof.referenteAlternanza.id)
+
+    var index = this.tobeSaved.findIndex(x => x.id == prof.referenteAlternanza.id)
     if (index > -1) {
       //found.
       if (!prof.referenteAlternanza.checked) {
@@ -113,21 +109,15 @@ export class UpdateDocenteModalComponent implements OnInit {
     } else {
       if (prof.referenteAlternanza.checked) {
         var registerNewDocente = {};
-        registerNewDocente['id'] =  prof.referenteAlternanza.id;
+        registerNewDocente['id'] = prof.referenteAlternanza.id;
         this.tobeSaved.push(registerNewDocente);
       }
     }
   }
 
   confirm() {
-      // let tobeSaved = [];
-      // this.registeredDocenti.forEach(docente => {
-      //   if (docente.attivo == -1) {
-      //     tobeSaved.push(docente);
-      //   }
-      // })
-      this.newUtenteListener.emit(this.tobeSaved);
-      this.activeModal.dismiss();
+    this.newUtenteListener.emit(this.tobeSaved);
+    this.activeModal.dismiss();
   }
 
 }
