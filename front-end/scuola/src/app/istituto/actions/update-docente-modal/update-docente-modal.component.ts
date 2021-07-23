@@ -53,6 +53,8 @@ export class UpdateDocenteModalComponent implements OnInit {
 
   }
 
+
+
   cerca() {
     this.cmPagination.changePage(1);
     this.getListPage(1);
@@ -76,5 +78,15 @@ export class UpdateDocenteModalComponent implements OnInit {
       event.target.value = event.target.value.trim();
     }
   }
+
+  setClasseAssociate(listClasse) {
+    let classeString = '';
+    listClasse.forEach(element => {
+      classeString += element.classroom + '-';
+    });
+    classeString = classeString.replace(/.$/, "");
+    return classeString;
+  }
+
 
 }
