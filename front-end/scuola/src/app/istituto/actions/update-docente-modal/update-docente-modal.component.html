@@ -100,9 +100,13 @@
                         <td>
                             {{ setClasseAssociate(prof.associazioneClassi) }}
                         </td>
-                        <td>                           
+                        <td>
+                            <span class="disponibile" *ngIf="prof.attivo != -1 && prof.attivo">Attivo</span>
+                            <span class="scaduto" *ngIf="prof.attivo != -1 && !prof.attivo">Non attivo</span>
+                            <span class="in_attesa" *ngIf="prof.attivo == -1">Selezionato per attivazione</span>
                         </td>
                         <td>
+                            <input [disabled]="prof.referenteAlternanza.disabled" type="checkbox" [checked]="prof.referenteAlternanza.checked" (change)="onFilterChange(prof)">                            
                         </td>
                     </tr>
                 </tbody>

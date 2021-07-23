@@ -43,6 +43,8 @@ export class UpdateDocenteModalComponent implements OnInit {
         .subscribe((response) => {
           this.totalRecords = response.totalElements;
           this.professori = response.content;
+          // set checkboxes.
+          this.updateCheckBoxes();
 
         },
           (err: any) => console.log(err),
@@ -53,7 +55,17 @@ export class UpdateDocenteModalComponent implements OnInit {
 
   }
 
-
+  updateCheckBoxes() {
+    this.registeredDocenti.forEach(regDocente => {
+      this.professori.forEach((elem2) => {
+        if (elem2.referenteAlternanza.cf === regDocente.cfDocente) {
+          regDocente.id = elem2.referenteAlternanza.id;
+          elem2.referenteAlternanza.checked = true;
+          elem2.referenteAlternanza.disabled = true;
+        }          
+      });
+    });
+  }
 
   cerca() {
     this.cmPagination.changePage(1);
@@ -88,5 +100,34 @@ export class UpdateDocenteModalComponent implements OnInit {
     return classeString;
   }
 
+  onFilterChange(prof) {
+    prof.attivo = -1;
+    prof.referenteAlternanza.checked = !prof.referenteAlternanza.checked;
+    
+   var index = this.tobeSaved.findIndex(x => x.id == prof.referenteAlternanza.id)
+    if (index > -1) {
+      //found.
+      if (!prof.referenteAlternanza.checked) {
+        this.tobeSaved.splice(index, 1);
+      }
+    } else {
+      if (prof.referenteAlternanza.checked) {
+        var registerNewDocente = {};
+        registerNewDocente['id'] =  prof.referenteAlternanza.id;
+        this.tobeSaved.push(registerNewDocente);
+      }
+    }
+  }
+
+  confirm() {
+      // let tobeSaved = [];
+      // this.registeredDocenti.forEach(docente => {
+      //   if (docente.attivo == -1) {
+      //     tobeSaved.push(docente);
+      //   }
+      // })
+      this.newUtenteListener.emit(this.tobeSaved);
+      this.activeModal.dismiss();
+  }
 
 }
