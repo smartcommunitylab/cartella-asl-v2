@@ -500,4 +500,17 @@ export class IstitutoComponent implements OnInit {
     this.initClasseDashboard();
   }
 
+  aggiungiAccount() {
+    const modalRef = this.modalService.open(UpdateDocenteModalComponent, { windowClass: "archiviazioneModalClass" });
+    modalRef.componentInstance.registeredDocente = this.registeredDocenti;
+    modalRef.componentInstance.newUtenteListener.subscribe((registeredDocente) => {
+      var ids = [];
+      registeredDocente.forEach(element => {
+        ids.push(element.id);
+      });
+      this.dataService.aggiungiDocentiAccount(ids).subscribe(res => {
+          this.ngOnInit();
+      });
+    });
+  }
 }
