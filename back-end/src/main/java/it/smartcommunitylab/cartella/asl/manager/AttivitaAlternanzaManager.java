@@ -140,7 +140,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	
 	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
 			Pageable pageRequest, ASLUser user) {
-		
+		Map<String, Object> parameters = new HashMap<>();
 		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
 		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
 		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
@@ -197,21 +197,28 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("istitutoId", istitutoId);
+		parameters.put("istitutoId", istitutoId);
 		if(Utils.isNotEmpty(text)) {
-			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+			String like = "%" + text.trim().toUpperCase() + "%";
+			query.setParameter("text", like);
+			parameters.put("text", like);
 		}
 		if(tipologia > 0) {
 			query.setParameter("tipologia", tipologia);
+			parameters.put("tipologia", tipologia);
 		}
 		if(setDataParam) {
 			LocalDate localDate = LocalDate.now(); 
 			query.setParameter("data", localDate);
+			parameters.put("data", localDate);
 		}
 		if(tutorScolatico) {
 			query.setParameter("referenteCf", user.getCf());
+			parameters.put("referenteCf", user.getCf());
 		}
 		if(tutorClasse) {
 			query.setParameter("classiAssociate", classiAssociate);
+			parameters.put("classiAssociate", classiAssociate);
 		}
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
@@ -238,7 +245,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			}
 		}
 		
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), query);
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), parameters);
 		long total = (Long) cQuery.getSingleResult();
 		
 		Page<ReportAttivitaAlternanzaRicerca> page = new PageImpl<ReportAttivitaAlternanzaRicerca>(reportList, pageRequest, total);
