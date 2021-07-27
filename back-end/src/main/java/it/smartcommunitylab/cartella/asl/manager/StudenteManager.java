@@ -280,6 +280,7 @@ public class StudenteManager extends DataEntityManager {
 	
 	private Page<Studente> findStudentiByTutor(String istitutoId, String corsoId, String annoScolastico, String text,
 			Pageable pageRequest, ASLUser user) {
+		Map<String, Object> parameters = new HashMap<>();
 		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
 		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
 		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
@@ -312,18 +313,25 @@ public class StudenteManager extends DataEntityManager {
 		Query query = em.createQuery(q);
 
 		query.setParameter("istitutoId", istitutoId);
+		parameters.put("istitutoId", istitutoId);
 		query.setParameter("annoScolastico", annoScolastico);
+		parameters.put("annoScolastico", annoScolastico);
 		if (Utils.isNotEmpty(corsoId)) {
 			query.setParameter("courseId", corsoId);
+			parameters.put("courseId", corsoId);
 		}
 		if (Utils.isNotEmpty(text)) {
-			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+			String like = "%" + text.trim().toUpperCase() + "%";
+			query.setParameter("text", like);
+			parameters.put("text", like);
 		}
 		if(tutorScolatico) {
 			query.setParameter("referenteCf", user.getCf());
+			parameters.put("referenteCf", user.getCf());
 		}
 		if(tutorClasse) {
 			query.setParameter("classiAssociate", classiAssociate);
+			parameters.put("classiAssociate", classiAssociate);
 		}
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
@@ -337,7 +345,7 @@ public class StudenteManager extends DataEntityManager {
 			students.add(s);
 		}
 
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT s,r","COUNT(DISTINCT s)"), query);
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT s,r","COUNT(DISTINCT s)"), parameters);
 		long total = (Long) cQuery.getSingleResult();
 
 		Page<Studente> page = new PageImpl<Studente>(students, pageRequest, total);
