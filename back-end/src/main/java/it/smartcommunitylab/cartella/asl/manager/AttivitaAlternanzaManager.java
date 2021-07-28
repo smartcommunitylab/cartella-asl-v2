@@ -336,6 +336,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(aa.getIstitutoId(), user.getCf());
 			for(EsperienzaSvolta es : esperienze) {
 				if(classiAssociate.contains(es.getClasseStudente())) {
+					aa.setTutorClasse(true);
 					return true;
 				}
 			}

@@ -81,6 +81,9 @@ public class AttivitaAlternanza {
 	@Transient
 	private boolean tutorScolastico;
 	
+	@Transient
+	private boolean tutorClasse;
+
 	public AttivitaAlternanza clona() {
 		AttivitaAlternanza aa = new AttivitaAlternanza();
 		aa.setAnnoScolastico(annoScolastico);
@@ -400,6 +403,14 @@ public class AttivitaAlternanza {
 
 	public void setTutorScolastico(boolean tutorScolastico) {
 		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
 	}
 
 	
