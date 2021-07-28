@@ -34,6 +34,7 @@ public class ReportEsperienzaStudente {
 	private String referenteScuola;
 	private boolean rendicontazioneCorpo;
 	private boolean tutorScolastico;
+	private boolean tutorClasse;
 	
 	public ReportEsperienzaStudente() {}
 	
@@ -182,6 +183,14 @@ public class ReportEsperienzaStudente {
 
 	public void setTutorScolastico(boolean tutorScolastico) {
 		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
 	}	
 	
 	

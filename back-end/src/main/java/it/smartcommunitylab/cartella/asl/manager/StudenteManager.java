@@ -455,7 +455,7 @@ public class StudenteManager extends DataEntityManager {
 		for(ReportEsperienzaStudente esp : esperienzeStudente) {
 			if(tutorScolatico) {
 				AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(esp.getAttivitaAlternanzaId());
-				if(aa.getStato().equals(Stati.attiva) && user.getCf().equals(aa.getReferenteScuolaCF())) {
+				if(!aa.getStato().equals(Stati.archiviata) && user.getCf().equals(aa.getReferenteScuolaCF())) {
 					esp.setTutorScolastico(true);
 					result.getEsperienze().add(esp);
 					continue;
@@ -463,6 +463,7 @@ public class StudenteManager extends DataEntityManager {
 			} 
 			if(tutorClasse) {
 				if(classiAssociate.contains(esp.getClasseStudente())) {
+					esp.setTutorClasse(true);
 					result.getEsperienze().add(esp);
 					continue;
 				}
