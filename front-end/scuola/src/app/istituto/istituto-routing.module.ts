@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DocenteModificaStudentiComponent } from './actions/docente-modifica-studenti/docente-modifica-studenti.component';
 import { IstitutoDettaglioModificaComponent } from './actions/istituto-modifica-dettaglio/istituto-modifica.component';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
 import { IstitutoContainerComponent } from './istituto-container.component';
@@ -11,6 +12,7 @@ const routes: Routes = [
     children: [
       { path: 'scheda', component: IstitutoComponent },
       { path: 'modifica/:id', component: IstitutoDettaglioModificaComponent},
+      { path: 'modificaStudenti/:id', component: DocenteModificaStudentiComponent},
       { path: '**', pathMatch:'full', redirectTo: 'scheda' }
     ]
   }
@@ -25,7 +27,8 @@ export class IstitutoRoutingModule {
     IstitutoContainerComponent,
     IstitutoComponent,
     IstitutoDettaglioModificaComponent,
-    UpdateDocenteModalComponent,
+    DocenteModificaStudentiComponent,
+    UpdateDocenteModalComponent
   ];
 }
 

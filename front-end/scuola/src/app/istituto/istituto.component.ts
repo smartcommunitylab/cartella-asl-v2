@@ -112,11 +112,13 @@ export class IstitutoComponent implements OnInit {
       this.dataService.getDashboardIstitutoClasse()
         .subscribe((response) => {
           this.classi = response;
-          this.dataService.getRegistrazioneDocente().subscribe((response) => {
-            this.registeredDocenti = response;
-          },
-          (err: any) => console.log(err),
-          () => console.log('get registrazione docente api'));
+          if (this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])) {
+            this.dataService.getRegistrazioneDocente().subscribe((response) => {
+              this.registeredDocenti = response;
+            },
+            (err: any) => console.log(err),
+            () => console.log('get registrazione docente api'));
+          }          
         },
           (err: any) => console.log(err),
           () => console.log('get dashboard istituto classi api'));
@@ -512,5 +514,12 @@ export class IstitutoComponent implements OnInit {
           this.ngOnInit();
       });
     });
+  
   }
+  
+  modificaStudenti(docente) {
+    this.router.navigate(['../modificaStudenti', docente.id], { relativeTo: this.route });
+  }
+
+
 }
