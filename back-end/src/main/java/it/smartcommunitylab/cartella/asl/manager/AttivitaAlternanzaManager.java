@@ -327,7 +327,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			return true;
 		}
 		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
-			if(user.getCf().equals(aa.getReferenteScuolaCF()) && aa.getStato().equals(Stati.attiva)) {
+			if(user.getCf().equals(aa.getReferenteScuolaCF()) && !aa.getStato().equals(Stati.archiviata)) {
 				aa.setTutorScolastico(true);
 				return true;
 			}
