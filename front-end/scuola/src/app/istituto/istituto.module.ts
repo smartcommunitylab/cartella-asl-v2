@@ -8,6 +8,7 @@ import { DesignAngularKitModule } from 'design-angular-kit'
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ChartsModule } from 'ng2-charts';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
+import { ConfirmModalClasseComponent } from './actions/confirm-modal-classe/confirm-modal-classe.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { UpdateDocenteModalComponent } from './actions/update-docente-modal/upda
   ],
   entryComponents: [
     UpdateDocenteModalComponent,
-  ],
+    ConfirmModalClasseComponent,
+   ],
   declarations: [IstitutoRoutingModule.components]
 })
 export class IstitutoModule { }

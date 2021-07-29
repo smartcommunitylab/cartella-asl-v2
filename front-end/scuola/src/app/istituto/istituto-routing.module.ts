@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ConfirmModalClasseComponent } from './actions/confirm-modal-classe/confirm-modal-classe.component';
 import { DocenteModificaStudentiComponent } from './actions/docente-modifica-studenti/docente-modifica-studenti.component';
 import { IstitutoDettaglioModificaComponent } from './actions/istituto-modifica-dettaglio/istituto-modifica.component';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
@@ -28,7 +29,8 @@ export class IstitutoRoutingModule {
     IstitutoComponent,
     IstitutoDettaglioModificaComponent,
     DocenteModificaStudentiComponent,
-    UpdateDocenteModalComponent
+    UpdateDocenteModalComponent,
+    ConfirmModalClasseComponent,
   ];
 }
 
