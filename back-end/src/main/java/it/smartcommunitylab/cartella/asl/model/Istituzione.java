@@ -36,6 +36,12 @@ public class Istituzione {
 	private Double latitude;
 	private Double longitude;		
 	
+	private String rdpAddress;
+	private String rdpEmail;
+	private String rdpName;
+	private String rdpPhoneFax;
+	private String privacyLink;
+	
 	public String getId() {
 		return id;
 	}
@@ -146,5 +152,45 @@ public class Istituzione {
 
 	public void setPec(String pec) {
 		this.pec = pec;
+	}
+
+	public String getRdpAddress() {
+		return rdpAddress;
+	}
+
+	public void setRdpAddress(String rdpAddress) {
+		this.rdpAddress = rdpAddress;
+	}
+
+	public String getRdpEmail() {
+		return rdpEmail;
+	}
+
+	public void setRdpEmail(String rdpEmail) {
+		this.rdpEmail = rdpEmail;
+	}
+
+	public String getRdpName() {
+		return rdpName;
+	}
+
+	public void setRdpName(String rdpName) {
+		this.rdpName = rdpName;
+	}
+
+	public String getRdpPhoneFax() {
+		return rdpPhoneFax;
+	}
+
+	public void setRdpPhoneFax(String rdpPhoneFax) {
+		this.rdpPhoneFax = rdpPhoneFax;
+	}
+
+	public String getPrivacyLink() {
+		return privacyLink;
+	}
+
+	public void setPrivacyLink(String privacyLink) {
+		this.privacyLink = privacyLink;
 	}
 }
