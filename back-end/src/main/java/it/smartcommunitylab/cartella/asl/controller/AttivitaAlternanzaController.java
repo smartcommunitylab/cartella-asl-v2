@@ -301,14 +301,21 @@ public class AttivitaAlternanzaController implements AslController {
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {
+			if(!user.getCf().equals(aa.getReferenteScuolaCF())) {
+				throw new BadRequestException("accesso all'attività non consentito");
+			}
 		}
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaIndividuale(aa);
 		if(logger.isInfoEnabled()) {
@@ -322,14 +329,21 @@ public class AttivitaAlternanzaController implements AslController {
 			@PathVariable long id,
 			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
 		if(!aa.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istitutoId not corresponding");
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId)) {
+			if(!user.getCf().equals(aa.getReferenteScuolaCF())) {
+				throw new BadRequestException("accesso all'attività non consentito");
+			}
 		}
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaGruppo(aa);
 		if(logger.isInfoEnabled()) {
