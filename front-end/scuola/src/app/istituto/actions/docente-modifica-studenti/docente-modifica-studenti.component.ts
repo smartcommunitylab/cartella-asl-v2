@@ -133,6 +133,46 @@ export class DocenteModificaStudentiComponent implements OnInit {
     this.getDocenteAssociate(1);
   }
 
+  updateAssociazioneDocentiClassi() {
+    if (this.addRemovalState == 'both') {
+      this.popupGeneral();
+    } else if (this.addRemovalState == 'add') {
+      this.popupAddClasse();
+    } else {
+      this.popupRemoveClasse();
+    }
+  }
+
+  popupRemoveClasse() {
+    const modalRef = this.modalService.open(ConfirmModalRemoveClasseComponent, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.nomeAccount = this.nomeAccount;
+    modalRef.componentInstance.actionListener.subscribe((res) => {
+      if (res == 'ok') {
+        this.performSave();
+      }
+    });
+  }
+
+  popupAddClasse() {
+    const modalRef = this.modalService.open(ConfirmModalAddClasseComponent, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.nomeAccount = this.nomeAccount;
+    modalRef.componentInstance.actionListener.subscribe((res) => {
+      if (res == 'ok') {
+        this.performSave();
+      }
+    });
+  }
+
+  popupGeneral() {
+    const modalRef = this.modalService.open(ConfirmModalClasseComponent, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.nomeAccount = this.nomeAccount;
+    modalRef.componentInstance.actionListener.subscribe((res) => {
+      if (res == 'ok') {
+        this.performSave();
+      }
+    });
+  }
+
   performSave() {
     this.dataService.updateAssociazioneDocentiClassi(this.registrazioneId, this.attachedClassi)
       .subscribe((res) => {

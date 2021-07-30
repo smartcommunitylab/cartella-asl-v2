@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ConfirmModalAddClasseComponent } from './actions/confirm-modal-add-classe/confirm-modal--add-classe.component';
 import { ConfirmModalClasseComponent } from './actions/confirm-modal-classe/confirm-modal-classe.component';
+import { ConfirmModalRemoveClasseComponent } from './actions/confirm-modal-remove-classe/confirm-modal-remove-classe.component';
 import { DocenteModificaStudentiComponent } from './actions/docente-modifica-studenti/docente-modifica-studenti.component';
 import { IstitutoDettaglioModificaComponent } from './actions/istituto-modifica-dettaglio/istituto-modifica.component';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
@@ -33,7 +34,8 @@ export class IstitutoRoutingModule {
     UpdateDocenteModalComponent,
     ConfirmModalClasseComponent,
     ConfirmModalAddClasseComponent,
-   ];
+    ConfirmModalRemoveClasseComponent
+  ];
 }
 
 
