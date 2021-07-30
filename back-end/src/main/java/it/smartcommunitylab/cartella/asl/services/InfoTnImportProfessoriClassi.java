@@ -30,7 +30,6 @@ import it.smartcommunitylab.cartella.asl.model.MetaInfo;
 import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
 import it.smartcommunitylab.cartella.asl.model.ext.ProfessorClassInfoTn;
 import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
-import it.smartcommunitylab.cartella.asl.repository.IstitutoAttivoRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.ProfessoriClassiRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
@@ -59,8 +58,6 @@ public class InfoTnImportProfessoriClassi {
 	@Autowired
 	private ProfessoriClassiRepository professoriClassiRepository;
 	@Autowired
-	private IstitutoAttivoRepository istitutoAttivoRepository;
-	@Autowired
 	private IstituzioneRepository istituzioneRepository;
 	@Autowired
 	private CorsoMetaInfoRepository corsoMetaInfoRepository;
@@ -79,8 +76,6 @@ public class InfoTnImportProfessoriClassi {
 	}
 	
 	public void updateProfessoriClassi(MetaInfo metaInfo) throws Exception {
-
-		List<String> extIds = istitutoAttivoRepository.getExtIds();
 		int total = 0;
 		int stored = 0;
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -117,10 +112,6 @@ public class InfoTnImportProfessoriClassi {
 				total += 1;
 				it.smartcommunitylab.cartella.asl.model.ext.ProfessorClassInfoTn professorClass = jp
 						.readValueAs(it.smartcommunitylab.cartella.asl.model.ext.ProfessorClassInfoTn.class);
-				// check active institute
-				if(!extIds.contains(professorClass.getExtIdInstitute())) {
-					continue;
-				}
 				// test
 				professorClass.setOrigin("INFOTNISTRUZIONE");
 				professorClass.getCourse().setOrigin("INFOTNISTRUZIONE");
