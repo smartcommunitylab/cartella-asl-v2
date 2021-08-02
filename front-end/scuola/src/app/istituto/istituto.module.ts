@@ -8,6 +8,7 @@ import { DesignAngularKitModule } from 'design-angular-kit'
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { ChartsModule } from 'ng2-charts';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
+import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
 import { ConfirmModalClasseComponent } from './actions/confirm-modal-classe/confirm-modal-classe.component';
 import { ConfirmModalAddClasseComponent } from './actions/confirm-modal-add-classe/confirm-modal--add-classe.component';
 import { ConfirmModalRemoveClasseComponent } from './actions/confirm-modal-remove-classe/confirm-modal-remove-classe.component';
@@ -28,6 +29,7 @@ import { ConfirmModalRemoveClasseComponent } from './actions/confirm-modal-remov
   ],
   entryComponents: [
     UpdateDocenteModalComponent,
+    RuoloCancellaModal,
     ConfirmModalClasseComponent,
     ConfirmModalAddClasseComponent,
     ConfirmModalRemoveClasseComponent
