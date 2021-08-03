@@ -659,6 +659,7 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
+
   }
 
   validaPresenzeAttivitaIndividuale(id, presenze): Observable<any> {
@@ -1640,6 +1641,27 @@ export class DataService {
         catchError(this.handleError)
         );
   }
+
+  deleteRegistrazioneDocente(id): Observable<any> {
+    let url = this.host + "/registrazione-docente";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('registrazioneId', id);
+    
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }  
 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";

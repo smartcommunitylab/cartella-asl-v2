@@ -521,5 +521,18 @@ export class IstitutoComponent implements OnInit {
     this.router.navigate(['../modificaStudenti', docente.id], { relativeTo: this.route });
   }
 
+  deleteDocente(registeredDocente) {
+    const modalRef = this.modalService.open(RuoloCancellaModal, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.registeredDocente = registeredDocente;
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      if (res == 'DELETED') {
+        this.dataService.deleteRegistrazioneDocente(registeredDocente.id).subscribe((id) => {
+          this.ngOnInit();
+        },
+          (err: any) => console.log(err),
+          () => console.log('delete registrazione docente'));
+      }
+    });
+  }
 
 }
