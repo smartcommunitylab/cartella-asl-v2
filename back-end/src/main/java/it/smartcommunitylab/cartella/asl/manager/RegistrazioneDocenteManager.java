@@ -2,7 +2,6 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -74,6 +73,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 
   private void updateClassiRegistrazioneDocente(RegistrazioneDocente reg) {
     List<String> classiAssociate = getClassiAssociateRegistrazioneDocente(reg.getId());
+    reg.setClassiList(classiAssociate);
     StringBuffer sb = new StringBuffer();
     classiAssociate.forEach(c -> {
       sb.append(c + " - ");
@@ -204,11 +204,10 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
   }
 
   public RegistrazioneDocente deleteRegistrazioneDocente(String istitutoId, Long registrazioneId) throws Exception {
-    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
-    if(optional.isEmpty()) {
+    RegistrazioneDocente reg = registrazioneDocenteRepository.findById(registrazioneId).orElse(null);
+    if(reg == null) {
       throw new BadRequestException("registrazione non trovata");
     }
-    RegistrazioneDocente reg = optional.get();
     ASLUser user = userManager.getASLUserById(reg.getUserId());
 		if(user == null) {
 			throw new BadRequestException("utente non trovato");
@@ -224,11 +223,10 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
 
   public Page<DocentiClassiReport> getAssociazioneDocentiClassi(String istitutoId, String annoScolastico, 
       Long registrazioneId, String text, Pageable pageRequest) throws Exception {
-    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
-    if(optional.isEmpty()) {
+    RegistrazioneDocente reg = registrazioneDocenteRepository.findById(registrazioneId).orElse(null);
+    if(reg == null) {
       throw new BadRequestException("registrazione non trovata");
     }
-    RegistrazioneDocente reg = optional.get();
     if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
@@ -292,11 +290,10 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
   public List<AssociazioneDocentiClassi> updateAssociazioneDocentiClassi(String istitutoId, String annoScolastico,
       Long registrazioneId, List<String> classi) throws Exception {
     List<AssociazioneDocentiClassi> result = new ArrayList<>();
-    Optional<RegistrazioneDocente> optional = registrazioneDocenteRepository.findById(registrazioneId);
-    if(optional.isEmpty()) {
+    RegistrazioneDocente reg = registrazioneDocenteRepository.findById(registrazioneId).orElse(null);
+    if(reg == null) {
       throw new BadRequestException("registrazione non trovata");
     }
-    RegistrazioneDocente reg = optional.get();
     if(!reg.getIstitutoId().equals(istitutoId)) {
       throw new BadRequestException("istituto non corrispondente");
     }
@@ -311,7 +308,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       AssociazioneDocentiClassi adc = new AssociazioneDocentiClassi();
       adc.setRegistrazioneDocenteId(registrazioneId);
       adc.setAnnoScolastico(annoScolastico);
-      adc.setClasse(classe);
+      adc.setClasse(classe.trim());
       associazioneDocentiClassiRepository.save(adc);
       result.add(adc);
       tutorClasse = true;

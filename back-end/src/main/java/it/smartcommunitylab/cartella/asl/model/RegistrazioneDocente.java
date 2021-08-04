@@ -1,5 +1,8 @@
 package it.smartcommunitylab.cartella.asl.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +39,8 @@ public class RegistrazioneDocente {
 
   @Transient
   private String classi;
+  @Transient
+  private List<String> classiList = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -108,6 +113,14 @@ public class RegistrazioneDocente {
   public void setNomeIstituto(String nomeIstituto) {
     this.nomeIstituto = nomeIstituto;
   }
+
+	public List<String> getClassiList() {
+		return classiList;
+	}
+
+	public void setClassiList(List<String> classiList) {
+		this.classiList = classiList;
+	}
 
 
   
