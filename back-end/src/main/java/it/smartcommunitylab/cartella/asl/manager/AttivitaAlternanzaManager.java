@@ -226,20 +226,13 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		List<AttivitaAlternanza> aaList = query.getResultList();
 		
 		List<ReportAttivitaAlternanzaRicerca> reportList = new ArrayList<>();
-		Map<Long, ReportAttivitaAlternanzaRicerca> reportMap = new HashMap<>();
-		List<Long> aaIdList = new ArrayList<>();
 		for (AttivitaAlternanza aa : aaList) {
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+			checkAccessoAttivita(aa, esperienze, user);
 			ReportAttivitaAlternanzaRicerca report = new ReportAttivitaAlternanzaRicerca(aa); 
 			report.setStato(getStato(aa).toString());
-			reportMap.put(aa.getId(), report);
 			reportList.add(report);
-			aaIdList.add(aa.getId());
-		}
-		
-		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaIds(aaIdList);
-		for(EsperienzaSvolta es : esperienze) {
-			ReportAttivitaAlternanzaRicerca report = reportMap.get(es.getAttivitaAlternanzaId());
-			if(report != null) {
+			for(EsperienzaSvolta es : esperienze) {
 				report.getStudenti().add(es.getNominativoStudente());
 				report.getClassi().add(es.getClasseStudente());
 			}

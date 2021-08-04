@@ -32,6 +32,8 @@ public class ReportAttivitaAlternanzaRicerca {
 	private LocalDate dataArchiviazione;
 	private List<String> studenti = new ArrayList<String>();
 	private List<String> classi = new ArrayList<String>();
+	private boolean tutorScolastico;
+	private boolean tutorClasse;	
 	
 	public ReportAttivitaAlternanzaRicerca() {}
 	
@@ -47,6 +49,8 @@ public class ReportAttivitaAlternanzaRicerca {
 		this.setDataFine(attivita.getDataFine());
 		this.setDataArchiviazione(attivita.getDataArchiviazione());
 		this.setRendicontazioneCorpo(attivita.getRendicontazioneCorpo());
+		this.setTutorScolastico(attivita.isTutorScolastico());
+		this.setTutorClasse(attivita.isTutorClasse());
 	}
 	
 	public Long getId() {
@@ -140,6 +144,22 @@ public class ReportAttivitaAlternanzaRicerca {
 
 	public void setRendicontazioneCorpo(boolean rendicontazioneCorpo) {
 		this.rendicontazioneCorpo = rendicontazioneCorpo;
+	}
+
+	public boolean isTutorScolastico() {
+		return tutorScolastico;
+	}
+
+	public void setTutorScolastico(boolean tutorScolastico) {
+		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
 	}
 
 
