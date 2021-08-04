@@ -58,8 +58,8 @@ export class DocenteModificaStudentiComponent implements OnInit {
         this.dataService.getRegistrazioneDocenteDetail(this.registrazioneId).subscribe((res) => {
           this.nomeAccount = res.nominativoDocente;
           this.breadcrumbItems[1].title = 'Gestione account docenti / ' + this.nomeAccount;
-          if (res.classi != null)
-            this.attachedClassi = res.classi.split("-");
+          if (res.classiList != null)
+            this.attachedClassi = res.classiList;//.split("-");
           this.totalRecordsAssociate = this.attachedClassi.length;
           this.mergeDocenti();
           this.getDocenteAssociate(1);

@@ -35,6 +35,7 @@ export class DataService {
   static growler;
   timeout: number = 120000;
   coorindateIstituto;
+  roles;
 
   constructor(
     private http: HttpClient,
@@ -82,6 +83,23 @@ export class DataService {
   getListId() {
     if (this.listIstituteIds)
       return this.listIstituteIds;
+  }
+
+  setRoles(roles: any) {
+    this.roles = roles;
+  }
+
+  validateRoles(rolesToCheck:any) {
+    let valid = false;
+    if (!!rolesToCheck && !!this.roles) {
+      rolesToCheck.forEach(role=> {
+        if (this.roles.findIndex(x => x.role == role) > -1) {
+          valid = true;
+          return valid;
+        }
+      })
+    }    
+    return valid;
   }
 
   getProfile(): Observable<any> {

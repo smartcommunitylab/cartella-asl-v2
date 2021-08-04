@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="col-8">
-            <button class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="openPrimoModalCreateAttivita()">
+            <button *ngIf="dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])" class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="openPrimoModalCreateAttivita()">
                 <span class="row btnCreateText">
                     <span class="col-8 m-left18" placement="bottom" ngbTooltip="Crea una nuova attività">Crea
                         attività</span>
@@ -136,8 +136,8 @@
                         </span>
                     </td>
                     <td class="pointer">
-                        <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
-                        <span *ngIf="aa.stato=='revisione' || aa.stato=='in_corso'" class="align-middle">
+                        <span *ngIf="aa.stato=='in_attesa' && !aa.tutorClasse" class="align-middle"></span>
+                        <span *ngIf="(aa.stato=='revisione' || aa.stato=='in_corso') && !aa.tutorClasse" class="align-middle">
                             <span *ngIf="!aa.rendicontazioneCorpo" #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
                                 (mouseenter)="showTipButton($event, aa, tooltipBotton);"
                                 (mouseleave)="hideTipButton($event, aa, tooltipStato);">
