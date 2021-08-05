@@ -98,7 +98,7 @@ export class IstitutoComponent implements OnInit {
   public barChartIstitutoOptions: ChartOptions = {};
 
   constructor(
-    private dataService: DataService,
+    public dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal

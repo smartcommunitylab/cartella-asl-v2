@@ -43,7 +43,7 @@ export class AttivitaComponent implements OnInit {
 
 
     constructor(
-        private dataService: DataService,
+        public dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
         private location: Location,
