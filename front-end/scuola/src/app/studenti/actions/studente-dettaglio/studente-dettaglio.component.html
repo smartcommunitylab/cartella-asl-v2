@@ -73,14 +73,14 @@
         </div>
         
         <div class="col-2 sub-div">
-            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO','TUTOR_CLASSE'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
             placement="bottom" ngbTooltip="Esporta le attività dello studente">
                 CSV dati studente
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
                 </svg>
             </label>
-            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO','TUTOR_CLASSE'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
             placement="bottom" ngbTooltip="Esporta le attività della classe">
                 CSV dati classe
                 <svg class="icon icon-white icon-sm">
@@ -145,7 +145,7 @@
                             <span (click)="goAttivitaDetail(esp)" class="{{esp.stato}}">{{ getStatoNome(esp.stato) }}</span>
                         </td>
                         <!-- button -->
-                        <td class="pointer" *ngIf="!esp.rendicontazioneCorpo">
+                        <td class="pointer" *ngIf="!esp.rendicontazioneCorpo && !esp.tutorClasse">
                             <span *ngIf="esp.stato == 'in_attesa' && esp.stato == 'archiviata'" class="align-middle"></span>
                             <span *ngIf="esp.stato != 'in_attesa' && esp.stato != 'archiviata'" class="align-middle">
                                 <span #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{esp.toolTipButton}}"
@@ -163,7 +163,7 @@
                                 </span>
                             </span>
                         </td>
-                        <td class="pointer" *ngIf="esp.rendicontazioneCorpo">
+                        <td class="pointer" *ngIf="esp.rendicontazioneCorpo && !esp.tutorClasse">
                             <span *ngIf="esp.stato == 'in_attesa' && esp.stato == 'archiviata'" class="align-middle"></span>
                             <span *ngIf="esp.stato != 'in_attesa' && esp.stato != 'archiviata'" class="align-middle">
                                 <span ngbTooltip="Attività con rendicontazione a corpo">

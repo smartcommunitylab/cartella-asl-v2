@@ -37,7 +37,7 @@
     </div>
     <div class="col-4 shadowDetails">
       <span class="float-right mRight">
-        <button *ngIf="!isArchivio" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia"
+        <button *ngIf="!isArchivio && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia"
           placement="bottom" ngbTooltip="Archivia definitivamente l’attività" (click)="archivia()">
           <span class="row btnModificationText">
             <span class="col-8 leftItem">Archivia</span>
