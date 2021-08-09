@@ -481,7 +481,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("entity not visible");
 		}
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}
 		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
@@ -521,7 +521,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}		
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaIndividuale(aa);
 		if(logger.isInfoEnabled()) {
@@ -545,7 +545,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}	
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}		
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaGruppo(aa);
 		if(logger.isInfoEnabled()) {
@@ -571,7 +571,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}		
 		List<PresenzaGiornaliera> result = attivitaAlternanzaManager.getPresenzeAttivitaIndividuale(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
@@ -597,7 +597,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}		
 		List<ReportPresenzaGiornalieraGruppo> reportList = attivitaAlternanzaManager.getPresenzeAttivitaGruppo(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
@@ -622,7 +622,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
@@ -649,7 +649,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
@@ -676,7 +676,7 @@ public class AttivitaAlternanzaController implements AslController {
 			throw new BadRequestException("enteId not corresponding");
 		}		
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}
 		ReportAttivitaAlternanzaStudentiEnte result = attivitaAlternanzaManager.getStudentInfoEnte(attivitaAlternanza);
 		if(logger.isInfoEnabled()) {

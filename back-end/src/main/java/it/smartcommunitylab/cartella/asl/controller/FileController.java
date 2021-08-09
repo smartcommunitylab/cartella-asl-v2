@@ -323,6 +323,9 @@ public class FileController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new UnauthorizedException("uuid not authorized");
 		}
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("typology not visible");
+		}		
 	}
 	
 	private void checkTipologia(TipoDoc tipo, ArrayList<TipoDoc> list) throws Exception {

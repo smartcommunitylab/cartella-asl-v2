@@ -897,7 +897,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
 		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("tipology not visible");
+			throw new BadRequestException("typology not visible");
 		}				
 		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
 		return getAttivitaAlternanza(aa.getId());
