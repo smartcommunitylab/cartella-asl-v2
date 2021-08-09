@@ -63,6 +63,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	@Autowired
 	RegistrazioneDocenteManager registrazioneDocenteManager;
 	@Autowired
+	ConvenzioneManager convenzioneManager;
+	@Autowired
 	ErrorLabelManager errorLabelManager;
 	@Autowired
 	ASLRolesValidator usersValidator;
@@ -923,13 +925,18 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 
 	public List<AttivitaAlternanza> findAttivitaByStudenteAndEnte(String studenteId, String enteId) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es, Convenzione c");
 		sb.append(" WHERE es.attivitaAlternanzaId=aa.id AND aa.enteId=(:enteId) AND es.studenteId=(:studenteId)");
+		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:annoFa)");
 		sb.append(" ORDER BY aa.dataInizio DESC");
 
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("studenteId", studenteId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("annoFa", LocalDate.now().minusYears(1));
 		List<AttivitaAlternanza> list = query.getResultList();
 		List<AttivitaAlternanza> result = new ArrayList<>();
 		for(AttivitaAlternanza aa : list) {
