@@ -155,10 +155,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
         switch (tab) {
             case 'attivita': {
                 valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE')
+                    || this.isGivenRole('TUTOR_SCOLASTICO')
+                    || this.isGivenRole('TUTOR_CLASSE');
                 break;
             }
             case 'studenti': {
                 valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE')
+                    || this.isGivenRole('TUTOR_SCOLASTICO')
+                    || this.isGivenRole('TUTOR_CLASSE');
                 break;
             }
             case 'enti': {
@@ -178,11 +184,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
             }
             case 'competenze': {
                 valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE')
+                    || this.isGivenRole('TUTOR_SCOLASTICO')
                     || this.isGivenRole('TUTOR_CLASSE');
                 break;
             }
             case 'istituto': {
                 valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE')
+                    || this.isGivenRole('TUTOR_CLASSE');
                 break;
             }
         }
