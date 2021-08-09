@@ -805,6 +805,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
 		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
 		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
+		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
 		if(Utils.isNotEmpty(istitutoId)) {
 			sb.append(" AND aa.istitutoId=(:istitutoId)");
 		}
