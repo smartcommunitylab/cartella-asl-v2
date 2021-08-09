@@ -2,12 +2,11 @@ import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild, Outp
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
-
-// import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
 import { config } from '../../config';
-import { AuthenticationService } from '../services/authentication.service';
+
 
 @Component({
     selector: 'cm-navbar',
@@ -41,7 +40,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private growler: GrowlerService,
         private dataService: DataService,
-        private authService: AuthenticationService,
+        private authService: AuthService,
         private _eref: ElementRef) { 
         this.titleAnnoScolastico = dataService.schoolYear;
     }
@@ -69,6 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             }                            
                             this.actualIstituto = this.istitutes[0];
                             this.dataService.setListId(this.istitutes);
+                            this.dataService.setRoles(this.profile.roles);
                         }
                     }
                         , err => {
@@ -94,6 +94,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         } else {
             this.dataService.setIstitutoPosition(config.defaultPosition);
         }
+        this.dataService.setRoles(this.profile.roles);
         // navigate to 'attivita'
         this.navigateToAttivita();         
     }
@@ -147,6 +148,60 @@ export class NavbarComponent implements OnInit, OnDestroy {
         };
         localStorage.setItem('filtroAttivita', JSON.stringify(filtro));
         this.router.navigate(['/attivita/list', (new Date()).getTime()], {skipLocationChange: true});
+    }
+
+    validateRole(tab) {
+        let valid = false;
+        switch (tab) {
+            case 'attivita': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                break;
+            }
+            case 'studenti': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                break;
+            }
+            case 'enti': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE');
+                break;
+            }
+            case 'offerte': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE');
+                break;
+            }
+            case 'piani': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('FUNZIONE_STRUMENTALE');
+                break;
+            }
+            case 'competenze': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                    || this.isGivenRole('TUTOR_CLASSE');
+                break;
+            }
+            case 'istituto': {
+                valid = this.isGivenRole('DIRIGENTE_SCOLASTICO')
+                break;
+            }
+        }
+        return valid;
+    }
+
+
+    isGivenRole(role): boolean {
+        let valid = false;
+        if (!!this.profile) {
+            var index = this.profile.roles.findIndex(x => x.role == role)
+            if (index > -1) {
+                // if (this.profile.roles[index].domainId == this.dataService.istitutoId) {
+                    valid = true;
+                // }
+            }
+        }
+        return valid;
+        
     }
 
 }
