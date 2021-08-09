@@ -480,6 +480,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("entity not visible");
 		}
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}
 		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanzaByEnte:%s / %s", id, enteId));
@@ -517,6 +520,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}		
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaIndividuale(aa);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportPresenzeAttvitaAlternanzaIndividualeByEnte:%s / %s", id, enteId));
@@ -537,6 +543,9 @@ public class AttivitaAlternanzaController implements AslController {
 		}
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
+		}	
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
 		}		
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaGruppo(aa);
 		if(logger.isInfoEnabled()) {
@@ -561,6 +570,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}		
 		List<PresenzaGiornaliera> result = attivitaAlternanzaManager.getPresenzeAttivitaIndividuale(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPresenzeAttivitaIndividualeByEnte:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
@@ -584,6 +596,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}		
 		List<ReportPresenzaGiornalieraGruppo> reportList = attivitaAlternanzaManager.getPresenzeAttivitaGruppo(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPresenzeAttivitaGruppo:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
@@ -606,6 +621,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
@@ -630,6 +648,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
@@ -654,6 +675,9 @@ public class AttivitaAlternanzaController implements AslController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("enteId not corresponding");
 		}		
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("tipology not visible");
+		}
 		ReportAttivitaAlternanzaStudentiEnte result = attivitaAlternanzaManager.getStudentInfoEnte(attivitaAlternanza);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("reportAttivitaAlternanzaStudentiByEnte:%s / %s", id, enteId));
