@@ -768,7 +768,6 @@ export class DataService {
         )
       );
   }
-  
 
   getAttivitaReportStudenti(id): Observable<any> {
     let url = this.host + "/attivita/" + id + '/report/studenti';
@@ -1302,7 +1301,6 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
-
   }
 
   addAzienda(az): Observable<any> {
@@ -1428,7 +1426,6 @@ export class DataService {
           return Observable.of(null);
         });
     });
-
     return forkJoin(singleObservables);
   }
 
