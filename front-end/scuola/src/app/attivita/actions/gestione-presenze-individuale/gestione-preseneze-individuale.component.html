@@ -54,18 +54,22 @@
   <br>
   <div *ngIf="report" class="callNote default">
     <span class="row">
-      <span class="col-2 font-weight-bold">Da validare</span>
-      <span class="col-2 font-weight-bold">Validate</span>
-      <span class="col-2 font-weight-bold">Inizio attività</span>
-      <span class="col-2 font-weight-bold">Fine attività</span>
-      <span class="col-2 font-weight-bold">Ore validate</span>
+      <span class="col font-weight-bold">Da validare</span>
+      <span class="col font-weight-bold">Validate</span>
+      <span class="col font-weight-bold">Inizio attività</span>
+      <span class="col font-weight-bold">Fine attività</span>
+      <span class="col font-weight-bold">Ore validate</span>
+      <span class="col font-weight-bold">Ore Inserite</span>
+      <span class="col font-weight-bold">Ore totali</span>
     </span> 
     <span class="row">
-      <span class="col-2">{{report.giornateDaValidare}} giornate</span>
-      <span class="col-2">{{report.giornateValidate}} giornate</span>
-      <span class="col-2">{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
-      <span class="col-2">{{report.dataFine | date:'dd/MM/yyyy'}}</span>
-      <span class="col-2">{{report.oreValidate}}/{{report.oreTotali}}</span>
+      <span class="col">{{report.giornateDaValidare}} giornate</span>
+      <span class="col">{{report.giornateValidate}} giornate</span>
+      <span class="col">{{report.dataInizio | date:'dd/MM/yyyy'}}</span>
+      <span class="col">{{report.dataFine | date:'dd/MM/yyyy'}}</span>
+      <span class="col">{{report.oreValidate}}</span>
+      <span class="col">{{report.oreInserite}}</span>
+      <span class="col">{{report.oreTotali}}</span>
     </span>
   </div>
   <br>

@@ -23,6 +23,7 @@ public class ReportPresenzeAttvitaAlternanza {
 	private LocalDate dataFine;
 	private int oreValidate;
 	private int oreTotali;
+	private int oreInserite;
 	private int giornateValidate;
 	private int giornateDaValidare;
 	private int studentiDaValidare; 
@@ -122,6 +123,14 @@ public class ReportPresenzeAttvitaAlternanza {
 
 	public void setStudentiDaValidare(int studentiDaValidare) {
 		this.studentiDaValidare = studentiDaValidare;
+	}
+
+	public int getOreInserite() {
+		return oreInserite;
+	}
+
+	public void setOreInserite(int oreInserite) {
+		this.oreInserite = oreInserite;
 	}
 	
 }

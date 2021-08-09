@@ -485,10 +485,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		EsperienzaSvolta esperienza = esperienze.get(0);
 		
 		int oreValidate = 0;
+		int oreInserite = 0;
 		int giornateValidate = 0;
 		int giornateDaValidare = 0;
 		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienza.getId());
 		for (PresenzaGiornaliera presenza : presenze) {
+			oreInserite += presenza.getOreSvolte();
 			if(presenza.getVerificata()) {
 				oreValidate += presenza.getOreSvolte();
 				giornateValidate++;
@@ -499,6 +501,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		
 		ReportPresenzeAttvitaAlternanza report = new ReportPresenzeAttvitaAlternanza(aa);
 		report.setOreValidate(oreValidate);
+		report.setOreInserite(oreInserite);
 		report.setGiornateValidate(giornateValidate);
 		report.setGiornateDaValidare(giornateDaValidare);
 		return report;
