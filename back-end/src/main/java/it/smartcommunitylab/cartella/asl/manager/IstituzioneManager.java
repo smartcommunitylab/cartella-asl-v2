@@ -117,8 +117,12 @@ public class IstituzioneManager extends DataEntityManager {
 	}	
 
 	public Page<ReportIstitutoEnte> findIstitutiByEnte(String enteId, String text, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT i.id, COUNT(aa.id) FROM Istituzione i LEFT JOIN"
-				+ " AttivitaAlternanza aa ON i.id=aa.istitutoId AND aa.enteId=(:enteId) AND aa.dataInizio<=(:date) AND aa.dataFine>=(:date)");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id, COUNT(aa.id) FROM Istituzione i, AttivitaAlternanza aa");
+		sb.append(" WHERE i.id=aa.istitutoId AND aa.dataInizio<=(:date) AND aa.dataFine>=(:date)");
+		sb.append(" AND aa.enteId=(:enteId) AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
+		
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
 		}
@@ -127,8 +131,9 @@ public class IstituzioneManager extends DataEntityManager {
 		
 		Query query = em.createQuery(q);
 		query.setParameter("enteId", enteId);
-		LocalDate localDate = LocalDate.now();
-		query.setParameter("date", localDate);
+		query.setParameter("date", LocalDate.now());
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));		
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
@@ -147,7 +152,7 @@ public class IstituzioneManager extends DataEntityManager {
 			list.add(report);
 		}
 
-		String counterQuery = q.replace("SELECT i.id, COUNT(aa.id)", "SELECT COUNT(DISTINCT i)")
+		String counterQuery = q.replace("SELECT DISTINCT i.id, COUNT(aa.id)", "SELECT COUNT(DISTINCT i)")
 				.replace("GROUP BY i.id ORDER BY COUNT(aa.id) DESC", "");
 		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();

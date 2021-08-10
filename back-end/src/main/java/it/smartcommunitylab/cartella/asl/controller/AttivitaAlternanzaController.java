@@ -26,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
+import it.smartcommunitylab.cartella.asl.manager.ConvenzioneManager;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
@@ -48,6 +49,8 @@ public class AttivitaAlternanzaController implements AslController {
 	
 	@Autowired
 	private AttivitaAlternanzaManager attivitaAlternanzaManager;
+	@Autowired
+	private ConvenzioneManager convenzioneManager;
 	@Autowired
 	private ASLRolesValidator usersValidator;
 	@Autowired
@@ -474,15 +477,7 @@ public class AttivitaAlternanzaController implements AslController {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("entity not visible");
-		}
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanzaByEnte:%s / %s", id, enteId));
@@ -538,15 +533,7 @@ public class AttivitaAlternanzaController implements AslController {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}	
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}		
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		ReportPresenzeAttvitaAlternanza report = attivitaAlternanzaManager.getReportPresenzeAttvitaAlternanzaGruppo(aa);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportPresenzeAttvitaAlternanzaGruppoByEnte:%s / %s", id, enteId));
@@ -564,15 +551,7 @@ public class AttivitaAlternanzaController implements AslController {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}		
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}		
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		List<PresenzaGiornaliera> result = attivitaAlternanzaManager.getPresenzeAttivitaIndividuale(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPresenzeAttivitaIndividualeByEnte:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
@@ -590,15 +569,7 @@ public class AttivitaAlternanzaController implements AslController {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}		
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}		
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		List<ReportPresenzaGiornalieraGruppo> reportList = attivitaAlternanzaManager.getPresenzeAttivitaGruppo(aa, dateFrom, dateTo, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getPresenzeAttivitaGruppo:%s / %s / %s / %s", id, enteId, dateFrom, dateTo));
@@ -615,15 +586,7 @@ public class AttivitaAlternanzaController implements AslController {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}		
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
@@ -642,15 +605,7 @@ public class AttivitaAlternanzaController implements AslController {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}		
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		List<PresenzaGiornaliera> list = attivitaAlternanzaManager.validaPresenzeAttivitaByEnte(aa, presenze);
 		AuditEntry audit = new AuditEntry(request.getMethod(), AttivitaAlternanza.class, aa.getId(), user, new Object(){});
 		auditManager.save(audit);			
@@ -669,15 +624,7 @@ public class AttivitaAlternanzaController implements AslController {
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		AttivitaAlternanza attivitaAlternanza = attivitaAlternanzaManager.getAttivitaAlternanza(id);
 		AttivitaAlternanza aa = attivitaAlternanzaManager.getAttivitaAlternanza(id);
-		if(aa == null) {
-			throw new BadRequestException("entity not found");
-		}
-		if(!enteId.equals(aa.getEnteId())) {
-			throw new BadRequestException("enteId not corresponding");
-		}		
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		ReportAttivitaAlternanzaStudentiEnte result = attivitaAlternanzaManager.getStudentInfoEnte(attivitaAlternanza);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("reportAttivitaAlternanzaStudentiByEnte:%s / %s", id, enteId));

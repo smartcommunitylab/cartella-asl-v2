@@ -804,10 +804,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, 
 			String stato, String istitutoId, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
-		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
-		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es, Istituzione i, Convenzione c");
+		sb.append(" WHERE es.attivitaAlternanzaId=aa.id");
+		sb.append(" AND aa.istitutoId=i.id AND aa.enteId=(:enteId)");
 		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		if(Utils.isNotEmpty(istitutoId)) {
 			sb.append(" AND aa.istitutoId=(:istitutoId)");
 		}
@@ -843,6 +845,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("enteId", enteId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));				
 		if(Utils.isNotEmpty(istitutoId)) {
 			query.setParameter("istitutoId", istitutoId);
 		}
@@ -888,20 +892,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return page;
 	}
 
-	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws BadRequestException {
+	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws Exception {
 		AttivitaAlternanza aaDb = getAttivitaAlternanza(aa.getId());
-		if(aaDb == null) {
-			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
-		}
-		if(!enteId.equals(aaDb.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
-		}		
 		if(aaDb.getStato().equals(Stati.archiviata)) {
 			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
-		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
-			throw new BadRequestException("typology not visible");
-		}				
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
 		return getAttivitaAlternanza(aa.getId());
 	}
@@ -929,14 +925,14 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		sb.append(" WHERE es.attivitaAlternanzaId=aa.id AND aa.enteId=(:enteId) AND es.studenteId=(:studenteId)");
 		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
 		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
-		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:annoFa)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		sb.append(" ORDER BY aa.dataInizio DESC");
 
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("studenteId", studenteId);
 		query.setParameter("oggi", LocalDate.now());
-		query.setParameter("annoFa", LocalDate.now().minusYears(1));
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));
 		List<AttivitaAlternanza> list = query.getResultList();
 		List<AttivitaAlternanza> result = new ArrayList<>();
 		for(AttivitaAlternanza aa : list) {
