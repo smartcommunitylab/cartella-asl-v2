@@ -35,7 +35,7 @@ public class ConvenzioneManager extends DataEntityManager {
 		LocalDate today = LocalDate.now();
 		LocalDate unAnnoFa = today.minusYears(1);
 		LocalDate dataConvenzioneAttiva = getDataConvenzioneAttiva(aa.getIstitutoId(), enteId);
-		if(today.isAfter(dataConvenzioneAttiva)) {
+		if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
 			throw new BadRequestException("convenzione scaduta");
 		}
 		if(unAnnoFa.isAfter(aa.getDataFine())) {
