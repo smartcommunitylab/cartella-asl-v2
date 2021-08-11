@@ -79,7 +79,10 @@ public class ConvenzioneManager extends DataEntityManager {
 		return list;
 	}
 
-	public Convenzione saveConvenzione(Convenzione c) {
+	public Convenzione saveConvenzione(Convenzione c) throws BadRequestException {
+		if(!c.getDataFine().isAfter(c.getDataInizio())) {
+			throw new BadRequestException("intervallo date errato");
+		}
 		Convenzione cDb =  null; 
 		if(c.getId() != null) {
 			cDb = convenzioneRepository.findById(c.getId()).orElse(null);

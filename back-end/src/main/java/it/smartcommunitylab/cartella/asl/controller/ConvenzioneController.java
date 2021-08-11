@@ -54,7 +54,7 @@ public class ConvenzioneController implements AslController {
 	}
 	
 	@GetMapping("/api/convenzione/istituto/{istitutoId}")
-	public @ResponseBody List<Convenzione> getConvenzioneByEnte(
+	public @ResponseBody List<Convenzione> getConvenzioneByIstituto(
 			@PathVariable String istitutoId,
 			@RequestParam String enteId,
 			HttpServletRequest request) throws Exception {
@@ -63,9 +63,28 @@ public class ConvenzioneController implements AslController {
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getConvenzioneByEnte:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getConvenzioneByIstituto:%s / %s", istitutoId, enteId));
 		}		
 		return convenzioni;
 	}
+	
+	@GetMapping("/api/convenzione/ente/{enteId}")
+	public @ResponseBody Convenzione getUltimaConvenzioneByEnte(
+			@RequestParam String istitutoId,
+			@PathVariable String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getUltimaConvenzioneByEnte:%s / %s", istitutoId, enteId));
+		}		
+		if(convenzioni.isEmpty()) {
+			return null;
+		}
+		return convenzioni.get(0);
+	}
+
 
 }
