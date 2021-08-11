@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -35,7 +36,7 @@ public class Convenzione {
 	private String nomeIstituto;
 	private String enteId;
 	private String nomeEnte;
-	
+		
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;
@@ -43,7 +44,16 @@ public class Convenzione {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataFine;
+
+	@Transient
+	private String stato;
 	
+	@Transient
+	private String nomeFile;
+	
+	@Transient
+	private String uuidFile;
+
 	public Long getId() {
 		return id;
 	}
@@ -119,6 +129,30 @@ public class Convenzione {
 
 	public void setDataFine(LocalDate dataFine) {
 		this.dataFine = dataFine;
+	}
+
+	public String getStato() {
+		return stato;
+	}
+
+	public void setStato(String stato) {
+		this.stato = stato;
+	}
+
+	public String getNomeFile() {
+		return nomeFile;
+	}
+
+	public void setNomeFile(String nomeFile) {
+		this.nomeFile = nomeFile;
+	}
+
+	public String getUuidFile() {
+		return uuidFile;
+	}
+
+	public void setUuidFile(String uuidFile) {
+		this.uuidFile = uuidFile;
 	}		
 	
 	
