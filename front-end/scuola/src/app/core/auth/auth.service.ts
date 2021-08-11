@@ -17,7 +17,7 @@ export function getClientSettings(): UserManagerSettings {
       response_type: 'code',
       scope: config.scope,
       filterProtocolClaims: true,
-      loadUserInfo: true
+      loadUserInfo: false
   };
 }
 
