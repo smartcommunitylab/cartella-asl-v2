@@ -13,11 +13,11 @@ export function getClientSettings(): UserManagerSettings {
       authority: config.aacUrl,
       client_id: config.aacClientId,
       redirect_uri: url,
-      post_logout_redirect_uri: url,
+      post_logout_redirect_uri: url + config.logout_redirect,
       response_type: 'code',
       scope: config.scope,
       filterProtocolClaims: true,
-      loadUserInfo: false
+      loadUserInfo: false,      
   };
 }
 
@@ -90,14 +90,15 @@ export class AuthService {
   }
 
   logout(): void{
-    var getUrl = window.location;
-    var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
-    var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`;        
-    this.user = null;
-    this.account = null;
-    sessionStorage.clear();
+    // var getUrl = window.location;
+    // var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
+    // var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`;        
+    
     this.manager.signoutRedirect().then(()=> {
-      window.location.href = logoutUrl;
+      sessionStorage.clear();
+      this.user = null;
+      this.account = null;
+      // window.location.href = logoutUrl;
     });    
   }
 
