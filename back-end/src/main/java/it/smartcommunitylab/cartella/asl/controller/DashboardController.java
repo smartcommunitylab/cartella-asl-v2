@@ -200,7 +200,7 @@ public class DashboardController {
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
-		Page<Azienda> page = aziendaManager.findAziende(text, pageRequest);
+		Page<Azienda> page = aziendaManager.findAziende(text, null, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchEnti:%s", text));
 		}		

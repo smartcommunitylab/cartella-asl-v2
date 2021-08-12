@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Convenzione;
+import it.smartcommunitylab.cartella.asl.model.Convenzione.Stato;
 import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.repository.ConvenzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.DocumentoRepository;
@@ -59,9 +60,9 @@ public class ConvenzioneManager extends DataEntityManager {
 	private void completaConvenzione(Convenzione c) {
 		LocalDate today = LocalDate.now();
 		if(today.isBefore(c.getDataInizio()) || today.isAfter(c.getDataFine())) {
-			c.setStato("non_attiva");
+			c.setStato(Stato.non_attiva);
 		} else {
-			c.setStato("attiva");
+			c.setStato(Stato.attiva);
 		}
 		List<Documento> list = documentoRepository.findDocumentoByRisorsaId(c.getUuid());
 		if(!list.isEmpty()) {
@@ -69,6 +70,16 @@ public class ConvenzioneManager extends DataEntityManager {
 			c.setNomeFile(doc.getNomeFile());
 			c.setUuidFile(doc.getUuid());
 		}
+	}
+	
+	public Convenzione getUltimaConvenzioneAttiva(String istitutoId, String enteId) {
+		List<Convenzione> convenzioni = getConvenzioni(istitutoId, enteId);
+		for(Convenzione c: convenzioni) {
+			if(Stato.attiva.equals(c.getStato())) {
+				return c;
+			}
+		}
+		return null;
 	}
 	
 	public List<Convenzione> getConvenzioni(String istitutoId, String enteId) {

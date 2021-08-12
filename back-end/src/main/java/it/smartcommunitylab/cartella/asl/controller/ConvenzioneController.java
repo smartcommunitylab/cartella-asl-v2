@@ -74,8 +74,8 @@ public class ConvenzioneController implements AslController {
 			@PathVariable String enteId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
-				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getUltimaConvenzioneByEnte:%s / %s", istitutoId, enteId));

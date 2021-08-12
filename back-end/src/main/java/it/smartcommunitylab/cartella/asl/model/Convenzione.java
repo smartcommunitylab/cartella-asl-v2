@@ -25,6 +25,10 @@ import it.smartcommunitylab.cartella.asl.beans.LocalDateDeserializer;
 		@Index(name = "enteId_idx", columnList = "enteId", unique = false)})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Convenzione {
+	
+	public static enum Stato {
+		attiva, non_attiva
+	};
 
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -46,7 +50,7 @@ public class Convenzione {
 	private LocalDate dataFine;
 
 	@Transient
-	private String stato;
+	private Stato stato;
 	
 	@Transient
 	private String nomeFile;
@@ -131,14 +135,6 @@ public class Convenzione {
 		this.dataFine = dataFine;
 	}
 
-	public String getStato() {
-		return stato;
-	}
-
-	public void setStato(String stato) {
-		this.stato = stato;
-	}
-
 	public String getNomeFile() {
 		return nomeFile;
 	}
@@ -153,6 +149,14 @@ public class Convenzione {
 
 	public void setUuidFile(String uuidFile) {
 		this.uuidFile = uuidFile;
+	}
+
+	public Stato getStato() {
+		return stato;
+	}
+
+	public void setStato(Stato stato) {
+		this.stato = stato;
 	}		
 	
 	

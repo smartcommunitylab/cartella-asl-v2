@@ -26,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.AziendaEstera;
+import it.smartcommunitylab.cartella.asl.model.Convenzione;
 import it.smartcommunitylab.cartella.asl.model.Offerta;
 import it.smartcommunitylab.cartella.asl.model.report.ReportUtilizzoAzienda;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
@@ -51,10 +52,12 @@ public class AziendaManager extends DataEntityManager {
 	AziendaEsteraRepository aziendaEsteraRepository;
 	@Autowired
 	RegistrazioneEnteManager registrazioneEnteManager;
+	@Autowired
+	ConvenzioneManager convenzioneManager;
 
 	private static final String AZIENDE = "SELECT DISTINCT az FROM Azienda az ";
 
-	public Page<Azienda> findAziende(String text, Pageable pageRequest) {
+	public Page<Azienda> findAziende(String text, String istitutoId, Pageable pageRequest) {
 
 		StringBuilder sb = new StringBuilder(AZIENDE);
 		if (Utils.isNotEmpty(text)) {
@@ -80,6 +83,9 @@ public class AziendaManager extends DataEntityManager {
 
 		for(Azienda a : result) {
 			addRegistrazioneEnte(a);
+			if(Utils.isNotEmpty(istitutoId)) {
+				addConvenzione(a, istitutoId);
+			}
 		}
 		Page<Azienda> page = new PageImpl<Azienda>(result, pageRequest, t);
 		return page;
@@ -208,6 +214,13 @@ public class AziendaManager extends DataEntityManager {
 	private void addRegistrazioneEnte(Azienda a) {
 		if(a != null) {
 			a.setRegistrazioneEnte(registrazioneEnteManager.getRichiestaRegistrazione(a.getId()));
+		}
+	}
+	
+	private void addConvenzione(Azienda a, String istitutoId) {
+		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, a.getId());
+		if(c != null) {
+			a.setConvenzione(c);
 		}
 	}
 	
