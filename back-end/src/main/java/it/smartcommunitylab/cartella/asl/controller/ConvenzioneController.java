@@ -68,22 +68,19 @@ public class ConvenzioneController implements AslController {
 		return convenzioni;
 	}
 	
-	@GetMapping("/api/convenzione/ente/{enteId}")
-	public @ResponseBody Convenzione getUltimaConvenzioneByEnte(
-			@RequestParam String istitutoId,
-			@PathVariable String enteId,
+	@GetMapping("/api/convenzione/istituto/{istitutoId}/attiva")
+	public @ResponseBody Convenzione getUltimaConvenzioneAttiva(
+			@PathVariable String istitutoId,
+			@RequestParam String enteId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
-				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
-				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, enteId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, enteId)));
+		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getUltimaConvenzioneByEnte:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getUltimaConvenzioneAttiva:%s / %s", istitutoId, enteId));
 		}		
-		if(convenzioni.isEmpty()) {
-			return null;
-		}
-		return convenzioni.get(0);
+		return c;
 	}
 
 
