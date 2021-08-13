@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
 import { config } from '../../config';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
     selector: 'cm-navbar',
@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
+    constructor(private router: Router, public dataService: DataService, private authService: AuthService, private _eref: ElementRef) { }
 
     ngOnInit() {
 
