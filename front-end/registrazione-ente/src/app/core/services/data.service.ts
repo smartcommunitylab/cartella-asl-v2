@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { serverAPIConfig } from '../serverAPIConfig'
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from '../auth/auth.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -24,7 +25,8 @@ export class DataService {
   constructor(
     private http: HttpClient,
     private growler: GrowlerService,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private authService: AuthService) {
     DataService.growler = growler;
   }
 
@@ -78,7 +80,7 @@ export class DataService {
 
   getProfile(): Observable<any> {
     let headers = new HttpHeaders();
-    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    const authHeader = this.authService.getAuthorizationHeaderValue();
 
     let url = this.host + '/profile';
     return this.http.get<any>(url, {
@@ -110,7 +112,7 @@ export class DataService {
 
   getAziendaInfoRiferente(aziendaId: any) {
     let headers = new HttpHeaders();
-    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    const authHeader = this.authService.getAuthorizationHeaderValue();
     let url = this.host + "/azienda/" + aziendaId + '/ente';
 
     return this.http.get<any>(url,
@@ -130,7 +132,7 @@ export class DataService {
 
   getAzienda() {
     let headers = new HttpHeaders();
-    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    const authHeader = this.authService.getAuthorizationHeaderValue();
     let url = this.host + "/azienda/" + this.aziendaId + "/ente";
 
     return this.http.get<any>(url,
@@ -151,7 +153,7 @@ export class DataService {
 
   addAzienda(az): Observable<any> {
     let headers = new HttpHeaders();
-    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    const authHeader = this.authService.getAuthorizationHeaderValue();
     let url = this.host + "/azienda/ente";
 
     return this.http.post<any>(
@@ -176,7 +178,7 @@ export class DataService {
 
   aggiornaDatiUser(data): Observable<any> {
     let headers = new HttpHeaders();
-    const authHeader = `Bearer ${sessionStorage.getItem('access_token')}`;
+    const authHeader = this.authService.getAuthorizationHeaderValue();
     let url = this.host + "/registrazione-ente/user";
 
     let params = new HttpParams();
