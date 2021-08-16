@@ -112,7 +112,7 @@ public class InfoTnImportProfessoriClassi {
 				total += 1;
 				it.smartcommunitylab.cartella.asl.model.ext.ProfessorClassInfoTn professorClass = jp
 						.readValueAs(it.smartcommunitylab.cartella.asl.model.ext.ProfessorClassInfoTn.class);
-				// test
+				//TODO test
 				professorClass.setOrigin("INFOTNISTRUZIONE");
 				professorClass.getCourse().setOrigin("INFOTNISTRUZIONE");
 				ProfessoriClassi professorClassLocal = professoriClassiRepository

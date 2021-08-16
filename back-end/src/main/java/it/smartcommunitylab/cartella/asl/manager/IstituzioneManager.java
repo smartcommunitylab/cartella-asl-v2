@@ -117,7 +117,7 @@ public class IstituzioneManager extends DataEntityManager {
 	}	
 
 	public Page<ReportIstitutoEnte> findIstitutiByEnte(String enteId, String text, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id, COUNT(aa.id) FROM Istituzione i, AttivitaAlternanza aa");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id, COUNT(aa.id) FROM Istituzione i, AttivitaAlternanza aa, Convenzione c");
 		sb.append(" WHERE i.id=aa.istitutoId AND aa.dataInizio<=(:date) AND aa.dataFine>=(:date)");
 		sb.append(" AND aa.enteId=(:enteId) AND (aa.tipologia=7 OR aa.tipologia=10)");
 		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
