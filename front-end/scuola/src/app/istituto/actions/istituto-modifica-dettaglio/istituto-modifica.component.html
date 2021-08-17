@@ -86,7 +86,58 @@
                         </div>
                     </div>
                     <div class="row v-center form-group">
-
+                        <div class="col-sm-5"
+                            [class.has-danger]="NomeRDPInput.invalid && (NomeRDPInput.dirty || NomeRDPInput.touched || forceErrorDisplay)">
+                            <label for="nomeRDP" *ngIf="istituto.rdpName" class="active">Nome RDP</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.rdpName" id="nomeRDP" name="nomeRDP"
+                                #NomeRDPInput="ngModel" placeholder="Nome RDP">
+                            <!-- <div class="invalid-feedback"
+                                [class.d-block]="forceTitoloErrorDisplay || (NomeRDPInput.invalid && (NomeRDPInput.dirty || NomeRDPInput.touched || forceErrorDisplay))">
+                                Campo necessario.</div> -->
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-sm-5"
+                            [class.has-danger]="EmailRDPInput.invalid && (EmailRDPInput.dirty || EmailRDPInput.touched || forceErrorDisplay)">
+                            <label for="emailRDP" *ngIf="istituto.rdpEmail" class="active">Email RDP</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.rdpEmail" id="emailRDP" name="emailRDP"
+                                #EmailRDPInput="ngModel" placeholder="Email RDP">
+                            <!-- <div class="invalid-feedback"
+                                [class.d-block]="forceErrorDisplayMail || (EmailRDPInput.invalid && (EmailRDPInput.dirty || EmailRDPInput.touched || forceErrorDisplay))">
+                                Campo necessario.
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="row v-center form-group">
+                        <div class="col-sm-5"
+                            [class.has-danger]="IndirizzoRDPInput.invalid && (IndirizzoRDPInput.dirty || IndirizzoRDPInput.touched || forceErrorDisplay)">
+                            <label for="IndirizzoRDP" *ngIf="istituto.rdpAddress" class="active">Indirizzo RDP</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.rdpAddress" id="indirizzoRDP" name="indirizzoRDP"
+                                #IndirizzoRDPInput="ngModel" placeholder="Indirizzo RDP">
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-sm-5"
+                            [class.has-danger]="TelefonoRDPInput.invalid && (TelefonoRDPInput.dirty || TelefonoRDPInput.touched || forceErrorDisplay)">
+                            <label for="telefonoRDP" *ngIf="istituto.rdpPhoneFax" class="active">Telefono/Fax RDP</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.rdpPhoneFax" id="telefonoRDP" name="telefonoRDP"
+                                #TelefonoRDPInput="ngModel" placeholder="Telefono/Fax RDP">
+                        </div>
+                    </div>
+                    <div class="row v-center form-group">
+                        <div class="col-sm-5"
+                            [class.has-danger]="PrivacyLinkRDPInput.invalid && (PrivacyLinkRDPInput.dirty || PrivacyLinkRDPInput.touched || forceErrorDisplay)">
+                            <label for="PrivacyLinkRDP" *ngIf="istituto.privacyLink" class="active">Informativa privacy</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.privacyLink" id="privacyLinkRDP" name="privacyLinkRDP"
+                                #PrivacyLinkRDPInput="ngModel" placeholder="Informativa privacy link">
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-sm-5"
+                            [class.has-danger]="TelefonoInput.invalid && (TelefonoInput.dirty || TelefonoInput.touched || forceErrorDisplay)">
+                            <label for="phone" *ngIf="istituto.phone" class="active">Telefono</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.phone" id="phone" name="phone"
+                                #TelefonoInput="ngModel" placeholder="Telefono">
+                        </div>
+                    </div>
+                    <div class="row v-center form-group">
                         <div class="col-5">
                             <ng-template #rtAddress let-place="result" let-term="term">
                                 <div class="row">
@@ -103,15 +154,7 @@
                             <label for="luogoSvolgimento" *ngIf="istituto.address" class="active">Posizione</label>
                             <label for="luogoSvolgimento" *ngIf="!istituto.address">Posizione</label>
                             <div class="invalid-feedback" [class.d-block]="forceAddressDisplay">Campo necessario.</div>
-                        </div>
-
-                        <div class="col-2"></div>
-                        <div class="col-sm-5"
-                            [class.has-danger]="TelefonoInput.invalid && (TelefonoInput.dirty || TelefonoInput.touched || forceErrorDisplay)">
-                            <label for="phone" *ngIf="istituto.phone" class="active">Telefono</label>
-                            <input type="text" class="form-control" [(ngModel)]="istituto.phone" id="phone" name="phone"
-                                #TelefonoInput="ngModel" placeholder="Telefono">
-                        </div>
+                        </div>                      
                     </div>
                 </form>
             </div>
