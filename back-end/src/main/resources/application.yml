@@ -47,12 +47,14 @@ infoTN:
 
 security:
   oauth2:
-    resource:
-      id: ${AAC_CLIENT_ID:}
-      jwk:
-        keySetUri: ${AAC_JWK_URI:https://aac.platform.smartcommunitylab.it/aac/jwk}
-oauth:
-  serverUrl: ${OAUTH_SERVERURL:https://aac.platform.smartcommunitylab.it/aac/}
+    resourceserver:
+      jwt:
+        issuer-uri: 
+        client-id: 
+      opaque-token:
+        introspection-uri: ${AAC_INTROSPECTION_URI:https://aac-adc.platform.smartcommunitylab.it/oauth/introspect}
+        client-id: ${AAC_CLIENT_ID:}
+        client-secret: ${AAC_CLIENT_SECRET:}
 
 parix:
   endpoint: ${PARIX_ENDPOINT:}
