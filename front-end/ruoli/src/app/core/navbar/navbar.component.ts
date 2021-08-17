@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
 import { PermissionService } from '../services/permission.service';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
     selector: 'cm-navbar',
@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, private growler: GrowlerService, private dataService: DataService, public permissionService: PermissionService, public authService: AuthenticationService) { }
+    constructor(private router: Router, private growler: GrowlerService, private dataService: DataService, public permissionService: PermissionService, public authService: AuthService) { }
 
     ngOnInit() {
         this.dataService.getProfile().subscribe(profile => {
