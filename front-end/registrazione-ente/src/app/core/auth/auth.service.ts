@@ -12,7 +12,7 @@ export function getClientSettings(): UserManagerSettings {
   return {
       authority: config.aacUrl,
       client_id: config.aacClientId,
-      redirect_uri: url,
+      redirect_uri: config.redirectUrl,
       post_logout_redirect_uri: url,
       response_type: 'code',
       scope: config.scope,
