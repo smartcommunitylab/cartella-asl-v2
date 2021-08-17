@@ -76,6 +76,7 @@
                 <div *ngIf="isNewUser" class="text-center">
                     Salva l'utente che stai creando per poi aggiungere il ruolo.
                 </div>
+
                 <div *ngIf="isRolePresent('ADMIN') && this.permissionService.getMyPermissions()?.addRole.admin">
                     <h2 class="d-flex-inline">ADMIN
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('ADMIN')">
@@ -83,6 +84,7 @@
                         </button>
                     </h2>
                 </div>
+
                 <div *ngIf="isRolePresent('DIRIGENTE_SCOLASTICO') && this.permissionService.getMyPermissions()?.addRole.dirigenti_scolastici">
                     <h2 class="d-flex-inline">Dirigente scolastico:
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('DIRIGENTE_SCOLASTICO')">
@@ -90,7 +92,7 @@
                         </button>
                     </h2>
                     <div class="d-flex flex-wrap">
-                        <div class="ruolo-box" *ngFor="let istitutoId of objectKeys(user.istituti)">
+                        <div class="ruolo-box" *ngFor="let istitutoId of getDomainIds('DIRIGENTE_SCOLASTICO')">
                             <div>
                                 <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('DIRIGENTE_SCOLASTICO', istitutoId)">
                                     <i class="material-icons">delete</i>
@@ -100,6 +102,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div *ngIf="isRolePresent('FUNZIONE_STRUMENTALE') && this.permissionService.getMyPermissions()?.addRole.funzione_strumentale">
                     <h2 class="d-flex-inline">Funzione strumentale:
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('FUNZIONE_STRUMENTALE')">
@@ -107,7 +110,7 @@
                         </button>
                     </h2>
                     <div class="d-flex flex-wrap">
-                        <div class="ruolo-box" *ngFor="let istitutoId of objectKeys(user.istituti)">
+                        <div class="ruolo-box" *ngFor="let istitutoId of getDomainIds('FUNZIONE_STRUMENTALE')">
                             <div>
                                 <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('FUNZIONE_STRUMENTALE', istitutoId)">
                                     <i class="material-icons">delete</i>
@@ -117,6 +120,43 @@
                         </div>
                     </div>
                 </div>
+
+                <div *ngIf="isRolePresent('TUTOR_SCOLASTICO') && this.permissionService.getMyPermissions()?.addRole.admin">
+                    <h2 class="d-flex-inline">Tutor scolastico:
+                        <button disabled="true" class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('TUTOR_SCOLASTICO')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let istitutoId of getDomainIds('TUTOR_SCOLASTICO')">
+                            <div>
+                                <button disabled="true" class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('TUTOR_SCOLASTICO', istitutoId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.istituti[istitutoId].name}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="isRolePresent('TUTOR_CLASSE') && this.permissionService.getMyPermissions()?.addRole.admin">
+                    <h2 class="d-flex-inline">Tutor di classe:
+                        <button disabled="true" class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('TUTOR_CLASSE')">
+                            <i class="material-icons">delete</i> Elimina
+                        </button>
+                    </h2>
+                    <div class="d-flex flex-wrap">
+                        <div class="ruolo-box" *ngFor="let istitutoId of getDomainIds('TUTOR_CLASSE')">
+                            <div>
+                                <button disabled="true" class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('TUTOR_CLASSE', istitutoId)">
+                                    <i class="material-icons">delete</i>
+                                </button>
+                            </div>
+                            <div>{{user.istituti[istitutoId].name}}</div>
+                        </div>
+                    </div>
+                </div>
+
                 <div *ngIf="isRolePresent('LEGALE_RAPPRESENTANTE_AZIENDA') && this.permissionService.getMyPermissions()?.addRole.legali_rappresentati_azienda">
                     <h2 class="d-flex-inline">Legale rappresentante azienda:
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('LEGALE_RAPPRESENTANTE_AZIENDA')">
@@ -124,7 +164,7 @@
                         </button>
                     </h2>
                     <div class="d-flex flex-wrap">
-                        <div class="ruolo-box" *ngFor="let aziendaId of objectKeys(user.aziende)">
+                        <div class="ruolo-box" *ngFor="let aziendaId of getDomainIds('LEGALE_RAPPRESENTANTE_AZIENDA')">
                             <div>
                                 <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('LEGALE_RAPPRESENTANTE_AZIENDA', aziendaId)">
                                     <i class="material-icons">delete</i>
@@ -135,6 +175,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div *ngIf="isRolePresent('REFERENTE_AZIENDA') && this.permissionService.getMyPermissions()?.addRole.referenti_azienda">
                     <h2 class="d-flex-inline">Referente azienda:
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('REFERENTE_AZIENDA')">
@@ -142,7 +183,7 @@
                         </button>
                     </h2>
                     <div class="d-flex flex-wrap">
-                        <div class="ruolo-box" *ngFor="let aziendaId of objectKeys(user.aziende)">
+                        <div class="ruolo-box" *ngFor="let aziendaId of getDomainIds('REFERENTE_AZIENDA')">
                             <div>
                                 <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('REFERENTE_AZIENDA', aziendaId)">
                                     <i class="material-icons">delete</i>
@@ -153,6 +194,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div *ngIf="isRolePresent('STUDENTE') && this.permissionService.getMyPermissions()?.addRole.studenti">
                     <h2 class="d-flex-inline">Studente:
                         <button class="btn btn-danger v-center-inline ml-5" (click)="deleteRoleAll('STUDENTE')">
@@ -160,7 +202,7 @@
                         </button>
                     </h2>
                     <div class="d-flex flex-wrap">
-                        <div class="ruolo-box" *ngFor="let studenteId of objectKeys(user.studenti)">
+                        <div class="ruolo-box" *ngFor="let studenteId of getDomainIds('STUDENTE')">
                             <div>
                                 <button class="btn btn-flat btn-danger v-center ml-auto" (click)="deleteRoleSingle('STUDENTE', studenteId)">
                                     <i class="material-icons">delete</i>

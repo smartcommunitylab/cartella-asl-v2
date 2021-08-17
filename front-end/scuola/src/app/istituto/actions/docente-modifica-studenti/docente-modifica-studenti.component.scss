@@ -1,0 +1,83 @@
+.list-container{
+    margin-top: 40px;
+    >.row {
+        margin: 0px;
+    }
+    .card-body {
+        >.row {
+            align-items: center;
+            .filter-data {
+                span {
+                    position: absolute;
+                    right: 20px;
+                    bottom: 0px;
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            span {
+                margin: 4px;
+            }
+        }
+    }
+    .list-group {
+        margin-top: 20px;
+        .row {
+            align-items: center;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            font-size: 20px;
+        }
+    }
+    .menu-content {
+        border-bottom: 10px solid #3DBBD2;
+    }
+    .middle-table {
+        position: relative;
+        max-width: 50%;        
+        left: 20%;
+    }
+    .title{
+        text-align: left;
+        letter-spacing: 0;
+        color: #5A6772;
+        opacity: 1;
+        font-size: larger;
+        font-weight: bold;
+    }
+.card{
+    border: 0px solid rgba(0, 0, 0, .125);
+}
+.broderRight{
+    border-right: 2.5px solid #393939;
+}
+
+.broderLeft{
+    border-left: 2.5px solid #393939;
+}
+.iconPrimaryColor {
+    fill: #0066CC!important;
+}
+.iconDangerColor {
+    fill: #F83E5A!important;
+}
+.icon {
+    color: orange;
+    font-size: x-large;
+}
+.warning-text {
+    color: orange;
+}
+.align-top {
+    min-height: 63px!important;    
+}
+.align-top-label {
+    padding-top: 15px!important;
+}
+}
+

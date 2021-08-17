@@ -67,10 +67,8 @@ export class AttivitaDettaglioComponent implements OnInit {
           })
         }
 
-        this.dataService.getAttivitaPresenzeGruppoListaGiorni(id, moment(res.attivitaAlternanza.dataInizio).format('YYYY-MM-DD'), moment(res.attivitaAlternanza.dataFine).format('YYYY-MM-DD')).subscribe((studenti) => {
-          studenti.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
-        })
-
+        this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
+        
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
         });
@@ -291,5 +289,5 @@ export class AttivitaDettaglioComponent implements OnInit {
       return 'Rendicontazione ore giornaliera';
     }
   }
-
+  
 }

@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
@@ -21,8 +20,6 @@ public class AuditManager {
 	private Map<Thread, ASLUser> threads = Maps.newHashMap();
 	private Map<Thread, Object> read = Maps.newHashMap();
 	private Map<Thread, Object> write = Maps.newHashMap();
-	
-	private ObjectMapper mapper = new ObjectMapper();
 	
 	public void beginAudit(ASLUser user) {
 		threads.put(Thread.currentThread(), user);

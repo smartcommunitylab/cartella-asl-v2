@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../core/services/authentication.service';
+import { AuthService } from '../core/auth/auth.service';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
 
     constructor(
         private dataService: DataService,
-        private authService: AuthenticationService,
+        private authService: AuthService,
         private route: ActivatedRoute,
         private router: Router
     ) { }
@@ -53,16 +53,28 @@ export class HomeComponent implements OnInit {
 
     login() {
         // alert('login');
-        this.authService.checkLoginStatus().then(valid => {
-            if (!valid) {
-                console.log('come here for not valid');
-                this.authService.redirectAuth();
+        // this.authService.checkLoginStatus().then(valid => {
+        //     if (!valid) {
+        //         console.log('come here for not valid');
+        //         this.authService.redirectAuth();
+        //     } else {
+        //         // logged in.
+        //         this.router.navigateByUrl('/registrazione')
+        //     }
+
+        // });
+
+        this.authService.init().then(() => {
+            let isAuthenticated = this.authService.isLoggedIn();
+            if (!isAuthenticated) {
+                this.authService.startAuthentication();
             } else {
-                // logged in.
-                this.router.navigateByUrl('/registrazione')
+                 this.router.navigateByUrl('/registrazione')
             }
 
-        });
+        })
+
+        
     }
 
 }

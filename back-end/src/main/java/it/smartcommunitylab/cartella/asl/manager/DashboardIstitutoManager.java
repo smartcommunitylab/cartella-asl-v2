@@ -14,12 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.report.MediaOreClasse;
 import it.smartcommunitylab.cartella.asl.model.report.OreStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardIstituto;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 
 @Repository
@@ -37,13 +40,28 @@ public class DashboardIstitutoManager extends DataEntityManager {
 	CompetenzaManager competenzaManager;	
 	@Autowired
 	EsperienzaAllineamentoManager allineamentoManager;
+	@Autowired
+	RegistrazioneDocenteManager registrazioneDocenteManager;
+	@Autowired
+	ASLRolesValidator usersValidator;
 
-	public List<String> getClassi(String istitutoId, String annoScolastico) throws Exception {
+	public List<String> getClassi(String istitutoId, String annoScolastico, ASLUser user) throws Exception {
+		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
+
 		String q = "SELECT DISTINCT r0.classroom FROM Registration r0 WHERE r0.instituteId=(:istitutoId)"
-				+ " AND r0.schoolYear=(:annoScolastico) ORDER BY r0.classroom ASC";
+				+ " AND r0.schoolYear=(:annoScolastico)";
+		if(tutorClasse) {
+			q = q + " AND r0.classroom IN (:classiAssociate)";
+		}
+		q =	q + " ORDER BY r0.classroom ASC";
+
 		TypedQuery<String> query = em.createQuery(q, String.class);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("annoScolastico", annoScolastico);		
+		if(tutorClasse) {
+			query.setParameter("classiAssociate", classiAssociate);
+		}
 		List<String> list = query.getResultList();
 		return list;
 	}
@@ -118,7 +136,14 @@ public class DashboardIstitutoManager extends DataEntityManager {
 	
 	@SuppressWarnings("unchecked")
 	public ReportDashboardIstituto getReportUtilizzoClasse(String istitutoId, String annoScolastico,
-			String classe) throws Exception {
+			String classe, ASLUser user) throws Exception {
+		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
+		if(tutorClasse) {
+			if(!classiAssociate.contains(classe)) {
+				throw new BadRequestException("classe non gestita");
+			}
+		}
 		String q = "SELECT DISTINCT s0 FROM Studente s0, Registration r0 WHERE s0.id = r0.studentId"
 			+ " AND r0.instituteId=(:istitutoId) AND r0.schoolYear=(:annoScolastico) AND r0.classroom=(:classe)"
 			+ " ORDER BY s0.surname, s0.name";

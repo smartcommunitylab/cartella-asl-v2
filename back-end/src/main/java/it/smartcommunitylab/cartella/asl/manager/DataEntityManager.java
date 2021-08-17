@@ -64,6 +64,14 @@ public class DataEntityManager {
 		return query2;
 	}
 	
+	TypedQuery<Long> queryToCount(String q, Map<String, Object> parameters) {
+		TypedQuery<Long> query = em.createQuery(q, Long.class);
+		for(String key : parameters.keySet()) {
+			query.setParameter(key, parameters.get(key));
+		}
+		return query;
+	}
+	
 	public List<CorsoDiStudio> findCorsiDiStudio(String istitutoId, String annoScolastico) {
 		List<CorsoDiStudio> result = null;
 		if (annoScolastico == null || annoScolastico.isEmpty()) {

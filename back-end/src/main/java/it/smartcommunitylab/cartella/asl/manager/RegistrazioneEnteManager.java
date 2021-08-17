@@ -70,7 +70,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		RegistrazioneEnte reg = new RegistrazioneEnte(); 
 		reg.setAziendaId(enteId);
 		reg.setIstitutoId(istitutoId);
-		reg.setOwnerId(new Long(-1));
+		reg.setOwnerId(Long.valueOf(-1));
 		reg.setNominativoInvito("Sistema");
 		reg.setToken(Utils.getUUID());
 		reg.setDataInvito(LocalDate.now());

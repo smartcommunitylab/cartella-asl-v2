@@ -33,6 +33,8 @@ public class ReportEsperienzaStudente {
 	private Long attivitaAlternanzaId;
 	private String referenteScuola;
 	private boolean rendicontazioneCorpo;
+	private boolean tutorScolastico;
+	private boolean tutorClasse;
 	
 	public ReportEsperienzaStudente() {}
 	
@@ -173,6 +175,23 @@ public class ReportEsperienzaStudente {
 
 	public void setRendicontazioneCorpo(boolean rendicontazioneCorpo) {
 		this.rendicontazioneCorpo = rendicontazioneCorpo;
+	}
+
+	public boolean isTutorScolastico() {
+		return tutorScolastico;
+	}
+
+	public void setTutorScolastico(boolean tutorScolastico) {
+		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
 	}	
+	
 	
 }

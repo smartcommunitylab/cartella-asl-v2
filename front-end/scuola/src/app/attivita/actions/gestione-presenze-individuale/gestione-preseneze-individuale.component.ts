@@ -90,7 +90,7 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
   constructor(
     private activeRoute: ActivatedRoute,
     private router: Router,
-    private dataService: DataService,
+    public dataService: DataService,
     private growler: GrowlerService,
     private modalService: NgbModal) {
     this.date = {

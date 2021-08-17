@@ -48,10 +48,11 @@ public class EnteController implements AslController {
 	@GetMapping("/api/azienda/search")
 	public @ResponseBody Page<Azienda> searchAziende(
 			@RequestParam(required = false) String text,
+			@RequestParam(required = false) String istitutoId,
 			Pageable pageRequest, 
 			HttpServletRequest request) throws Exception {		
 		usersValidator.checkRoles(request,  Sets.newHashSet(ASLRole.DIRIGENTE_SCOLASTICO, ASLRole.FUNZIONE_STRUMENTALE));
-		Page<Azienda> result = aziendaManager.findAziende(text, pageRequest);
+		Page<Azienda> result = aziendaManager.findAziende(text, istitutoId, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchAziende:%s", text));
 		}

@@ -68,11 +68,14 @@ public class FileController {
 			@PathVariable String istitutoId, 
 			HttpServletRequest request, 
 			HttpServletResponse response) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("downloadFileIstituto(%s", uuid + ")"));
 		}
+		checkAccessoAttivita(uuid, istitutoId, true, user);
 		downloadContent(uuid, response, null);
 	}
 
@@ -112,11 +115,14 @@ public class FileController {
 			@PathVariable String istitutoId,
 			@PathVariable String uuid, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeIstitutoDocument(%s", uuid + ")"));
 		}
+		checkAccessoAttivita(uuid, istitutoId, true, user);
 		return removeDocument(uuid, request, user, null);
 	}
 	
@@ -154,11 +160,14 @@ public class FileController {
 			@RequestParam("tipo") TipoDoc tipo,
 			@RequestParam("data") MultipartFile data, 
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForRisorsaIstituto:%s - %s", uuid, istitutoId));
 		}
+		checkAccessoAttivita(uuid, istitutoId, false, user);
 		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
 		return documento;
 	}
@@ -203,8 +212,10 @@ public class FileController {
 			@PathVariable String uuid, 
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDocumentiIstitutoURLForRisorsaAttivita(%s", uuid + ")"));
 		}
@@ -249,6 +260,23 @@ public class FileController {
 		}
 		checkAttivitaEnte(uuid, enteId, false);
 		return documentManager.getDocumentByEnte(uuid);
+	}
+
+	private void checkAccessoAttivita(String uuid, String istitutoId, boolean doc, ASLUser user) throws BadRequestException {
+		if(doc) {
+			Documento document = documentManager.getEntity(uuid);
+			if(document != null) {
+				AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(document.getRisorsaId());
+				if(aa != null) {
+					attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, user);
+				}		
+			}
+		} else {
+			AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(uuid);
+			if(aa != null) {
+				attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, user);
+			}		
+		}
 	}
 	
 	private void checkEsperienzeStudente(String uuid, String studenteId, boolean doc)
@@ -295,6 +323,9 @@ public class FileController {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new UnauthorizedException("uuid not authorized");
 		}
+		if((aa.getTipologia() != 7) && (aa.getTipologia() != 10)) {
+			throw new BadRequestException("typology not visible");
+		}		
 	}
 	
 	private void checkTipologia(TipoDoc tipo, ArrayList<TipoDoc> list) throws Exception {

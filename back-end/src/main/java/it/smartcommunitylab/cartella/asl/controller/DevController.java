@@ -3,7 +3,6 @@ package it.smartcommunitylab.cartella.asl.controller;
 import java.io.File;
 import java.io.FileReader;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +28,6 @@ import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaAllineamentoManager;
 import it.smartcommunitylab.cartella.asl.manager.StudenteManager;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
-import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvoltaAllineamento;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;

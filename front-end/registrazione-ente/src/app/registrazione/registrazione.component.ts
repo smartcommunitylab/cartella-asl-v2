@@ -28,7 +28,7 @@ export class Registrazioneomponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private authService: AuthenticationService,
+    // private authService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal
@@ -95,7 +95,7 @@ export class Registrazioneomponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    // this.authService.logout();
   }
 
   updateAtecoCodiceList() {

@@ -41,6 +41,8 @@ public class OffertaManager extends DataEntityManager {
 	@Autowired
 	AziendaManager aziendaManager;
 	@Autowired
+	ConvenzioneManager convenzioneManager;
+	@Autowired
 	ErrorLabelManager errorLabelManager;
 
 	public void rimuoviPostiEsperienze(Long offertaId, int posti) {
@@ -254,7 +256,12 @@ public class OffertaManager extends DataEntityManager {
 			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		cancellaIstitutiAssociati(id);
+		LocalDate today = LocalDate.now();
 		for(OffertaIstitutoStub o : istituti) {
+			LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), enteId);
+			if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
+				continue;
+			}
 			OffertaIstituto entity = new OffertaIstituto();
 			entity.setOffertaId(id);
 			entity.setIstitutoId(o.getIstitutoId());
@@ -319,6 +326,7 @@ public class OffertaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> rows = query.getResultList();
 		List<Offerta> list = new ArrayList<>();
 		for (Object[] obj : rows) {

@@ -1,32 +1,27 @@
 package it.smartcommunitylab.cartella.asl.model.ext;
 
-import javax.persistence.Id;
-
 public class ProfessorClassInfoTn {
 
-	@Id
-	private String id;
 	private String extId;
 	private String origin;
 	private String classroom;
-
 	private Corso course;
-
 	private String datefrom;
 	private String dateto;
+	private String extIdInstitute;
 	private String schoolyear;
 	private Teacher teacher;
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getExtId() {
 		return extId;
+	}
+
+	public String getExtIdInstitute() {
+		return extIdInstitute;
+	}
+
+	public void setExtIdInstitute(String extIdInstitute) {
+		this.extIdInstitute = extIdInstitute;
 	}
 
 	public void setExtId(String extId) {

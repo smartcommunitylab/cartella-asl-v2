@@ -1,0 +1,155 @@
+<div class=" mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row">
+        <div class="col-6 v-center">
+            <span class="modifyTitleStyle m-left">Gestione account docenti</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg pointer">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon pointer">
+            </span>
+        </div>
+        <div class="col-6">
+            <span class="row v-center float-right m0">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla mLeft12"
+                    [routerLink]="['../../']" placement="bottom" ngbTooltip="Annulla le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                <button class="btn btn-success btn-icon btn-xs btnSave mLeft12" (click)="updateAssociazioneDocentiClassi()"
+                    placement="bottom" ngbTooltip="Salva le modifiche">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
+                        </span>
+                    </span>
+                </button>
+            </span>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+        <span class="v-center warning-text p-3 col-6">
+            <p><b>&nbsp;ATTENZIONE: la lista iscrizioni visualizzata è riferita al {{ dataService.schoolYear }}, anno attuale</b>
+            </p>
+        </span>
+    </div>
+    <div class="row">
+        <div class="col-6 card broderRight modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
+                    <div class="col-4">
+                        <label class="complementary-3-color-a6 font-weight-bold">Classe da associare:
+                            {{totalRecords}}</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-6 input-group">
+                        <div class="form-group center-formGroup">
+                            <input type="text" id="cercaClasseNome" class="form-control search-input"
+                                [(ngModel)]="filterText" (keyup.enter)="searchClasse()">
+                            <label for="cercaClasseNome">Cerca classe da associare</label>
+                        </div>
+                        <button class="btn btn-icon v-center-inline" (click)="searchClasse()">
+                            <svg class="icon icon-primary">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <table *ngIf="professoriClassi" class="table table-hover">
+                    <thead class="bg-white">
+                        <tr>
+                            <th>Classi</th>
+                            <th>Corso</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let profClass of professoriClassi" [class.disabled]="profClass.disabled">
+                            <td class="align-middle">{{profClass.classe}}</td>
+                            <td class="align-middle">{{profClass.corso}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-primary iconPrimaryColor icon-sm pointer"
+                                    *ngIf="!profClass.disabled" (click)="toggleClass(profClass)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row empty-list" *ngIf="professoriClassi.length==0">
+                    <div class="col">
+                        Nessuna classe trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5"
+                [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
+        </div>
+
+        <div class="col-6 card broderLeft modify-card-bgcolor">
+            <div class="card-body p0 modify-bgcolor">
+                <div class="row v-center bg-white">
+                    <div class="col-4 align-top-label">
+                        <label class="primary-color font-weight-bold">Classi associate:
+                            {{attachedClassi.length}}</label>
+                    </div>
+                    <div class="col-2 align-top"></div>
+                    <div class="col-6 align-top"></div>
+                </div>
+                <table class="table table-hover">
+                    <thead class="bg-white">
+                        <tr>
+                            <th>Classe</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="modify-card-body">
+                        <tr *ngFor="let class of classeAssociateWindow">
+                            <td class="align-middle">{{class}}</td>
+                            <td class="align-middle">
+                                <svg class="float-right icon icon-danger iconDangerColor icon-sm pointer"
+                                    (click)="deleteClasse(class)">
+                                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-circle"></use>
+                                </svg>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row empty-list" *ngIf="!classeAssociateWindow || classeAssociateWindow.length==0">
+                    <div class="col">
+                        Nessuna classe trovata con il filtro selezionato
+                    </div>
+                </div>
+            </div>
+            <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPaginationAssociate [maxPages]="5"
+                [totalItems]="totalRecordsAssociate" [pageSize]="pageSize" (pageChanged)="pageChangedAssociate($event)">
+            </cm-pagination>
+        </div>
+    </div>
+
+</div>

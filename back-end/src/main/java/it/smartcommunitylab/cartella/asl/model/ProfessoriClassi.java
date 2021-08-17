@@ -1,17 +1,18 @@
 package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "professori_classi",
 	indexes = {
-			@Index(name = "extId_idx", columnList = "extId", unique = false)
+			@Index(name = "extId_idx", columnList = "extId", unique = false),
+			@Index(name = "istitutoId_idx", columnList = "istitutoId", unique = false)
 	}
 )
 public class ProfessoriClassi {
@@ -22,10 +23,50 @@ public class ProfessoriClassi {
 	private String origin;
 	private String classroom;
 	private String courseExtId;
+	private String corsoId;
+	private String corso;
+	private String instituteExtId;
+	private String istitutoId;
 	private LocalDate dateFrom;
 	private LocalDate dateTo;
 	private String schoolYear;
 	private String teacherExtId;
+	private String referenteAlternanzaId;
+
+	@Transient
+	private Long studenti;
+
+	public String getCorsoId() {
+		return corsoId;
+	}
+
+	public void setCorsoId(String corsoId) {
+		this.corsoId = corsoId;
+	}
+
+	public String getCorso() {
+		return corso;
+	}
+
+	public void setCorso(String corso) {
+		this.corso = corso;
+	}
+
+	public String getInstituteExtId() {
+		return instituteExtId;
+	}
+
+	public void setInstituteExtId(String instituteExtId) {
+		this.instituteExtId = instituteExtId;
+	}
+
+	public String getIstitutoId() {
+		return istitutoId;
+	}
+
+	public void setIstitutoId(String istitutoId) {
+		this.istitutoId = istitutoId;
+	}
 
 	public String getId() {
 		return id;
@@ -97,6 +138,22 @@ public class ProfessoriClassi {
 
 	public void setTeacherExtId(String teacherExtId) {
 		this.teacherExtId = teacherExtId;
+	}
+
+	public String getReferenteAlternanzaId() {
+		return referenteAlternanzaId;
+	}
+
+	public void setReferenteAlternanzaId(String referenteAlternanzaId) {
+		this.referenteAlternanzaId = referenteAlternanzaId;
+	}
+
+	public Long getStudenti() {
+		return studenti;
+	}
+
+	public void setStudenti(Long studenti) {
+		this.studenti = studenti;
 	}
 
 }

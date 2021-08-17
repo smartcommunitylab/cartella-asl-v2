@@ -1,0 +1,37 @@
+<div class="modal-header">
+  <div class="row v-center">
+      <svg class="icon icon-white icon-lg">
+          <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+      </svg>&nbsp;&nbsp;
+      <h4 class="text-white">ATTENZIONE</h4>    
+  </div>    
+</div>
+<div class="modal-body text-center">
+  <p>Attenzione: hai aggiunto l’associazione di una o più classi con l’account <b>{{nomeAccount}}</b></p>
+  <br>
+  <p>Gli studenti che hai aggiunto ora saranno visibili dall’account {{nomeAccount}} sul portale EDIT</p>
+  <br>
+  <div class="text-bold">Sei sicuro di voler modificare gli studenti associati a {{nomeAccount}}?</div>    
+</div>
+<br>
+<div class="text-center">
+  <button class="btn btn-danger btn-icon" (click)="activeModal.close('Close click')">
+      <span class="row">
+          <span class="btn-txt v-center">Annulla</span>&nbsp;
+          <span>
+              <svg class="icon icon-white icon-sm">
+                  <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+              </svg>
+          </span>
+      </span>        
+  </button>&nbsp;
+  <button class="btn btn-flat btn-success" (click)="ok()">
+      <span class="row">
+          <span class="btn-txt v-center">Salva</span>&nbsp;
+          <span class="col-4 rightItem">
+            <i class="material-icons btnModificationIcon">save</i>
+        </span>
+      </span>
+  </button>
+</div>
+<br>

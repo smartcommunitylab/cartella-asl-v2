@@ -33,7 +33,7 @@ public class ExportDataManager {
 	
 	public ExportCsv getStudenteAttivitaReportCsv(String istitutoId, String studenteId) throws Exception {
 		LocalDate today = LocalDate.now();
-		ReportDettaglioStudente reportDettaglioStudente = studenteManager.getReportDettaglioStudente(istitutoId, studenteId);
+		ReportDettaglioStudente reportDettaglioStudente = studenteManager.getReportDettaglioStudente(istitutoId, studenteId, null);
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		String filename = "Resoconto_Attività_" + reportDettaglioStudente.getStudente().getName() + "_"
 				+ reportDettaglioStudente.getStudente().getSurname() + "_" + reportDettaglioStudente.getStudente().getCf() + "_"

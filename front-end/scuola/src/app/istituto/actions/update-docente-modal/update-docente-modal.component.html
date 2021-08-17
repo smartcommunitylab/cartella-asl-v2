@@ -1,0 +1,133 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title">
+            <span>Aggiungi account Docente</span>
+        </div>
+        <div class="row v-center float-right">
+            <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla" placement="bottom"
+                ngbTooltip="Annulla" (click)="activeModal.close('Close click')">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Annulla</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+            &nbsp;&nbsp;
+            <button class="btn btn-success btn-icon btn-xs btnSave" placement="bottom"
+                ngbTooltip="Archivia definitivamente l’attività" (click)="confirm()">
+                <span class="row btnModificationText">
+                    <span class="col-8 leftItem">Attiva account</span>
+                    <span class="col-4 rightItem">
+                        <svg class="icon icon-white icon-sm btnModificationIcon">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                        </svg>
+                    </span>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="modal-body" style="overflow: scroll; height: 900px; width: inherit">
+        <div class="row">
+            <div class="col-1"><span class="v-line"></span></div>
+            <div class="col-11 help-text">
+                <div class="row v-center text-orange">
+                    <svg class="icon icon-bg">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+                    </svg>&nbsp;&nbsp;
+                    <span class="title">ATTENZIONE</span>
+                </div>
+                <p><b>In questa tabella sono riportati tutti i nominativi e gli indirizzi mail ufficiali dei docenti
+                        associati
+                        all’istituto per l’anno scolastico {{dataService.schoolYear}}.<br />
+                        Ricordati che:</b>
+                </p>
+                <ul>
+                    <li>Tutti gli account selezionati riceveranno <b>una mail per accedere ad EDIT</b> e iniziare ad
+                        operare sul
+                        portale</li>
+                    <li>Gli account possono essere associati ad una o più classi. Potrai modificare le classi associate
+                        tramite
+                        il tasto <b>“Studenti associati”</b> nella sezione “Gestione account” nella tab “Istituto” </li>
+                    <li><b>Gli account avranno automaticamente accesso ai dati ASL</b> degli studenti a cui sono
+                        associati.</li>
+                    <li>Potranno visualizzare il percorso ASL, allegare documenti o modificare le competenze associate
+                        alle
+                        attività</li>
+                    <li><b>NON potranno però vedere le presenze e validare le ore:</b> per aggiungere questa funzione ad
+                        ogni account
+                        sarà necessario indicarlo come <b>tutor scolastico</b> per <b>ciascuna attività</b></li>
+                    <li>La creazione, l’archiviazione e l’associazione studenti ad un’attività NON saranno in ogni caso
+                        MAI
+                        possibili per un account docente, <b>ma solo dall’account SCUOLA</b></li>
+                </ul>
+                <br />
+                <br />
+            </div>
+        </div>
+        <p><b>Seleziona gli account che vuoi attivare, e poi premi il tasto “attiva account”.</b></p>
+        <br />
+        <div class="col-4 v-center-inline">
+            <div class="form-group center-formGroup">
+                <input type="text" id="cercaDocente" class="form-control search-input" [(ngModel)]="filtro"
+                    (keyup.enter)="cerca()">
+                <label *ngIf="!filtro" for="cercaDocente">Cerca classe o docente </label>
+            </div>
+            <it-button class="v-center-inline" (click)="cerca()">
+                <svg class="icon icon-primary">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+                </svg>
+            </it-button>
+        </div>
+        <div class="table list-group">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Indirizzo email </th>
+                        <th>Nome</th>
+                        <th>Codice fiscale</th>
+                        <th>Classi associate</th>
+                        <th>Stato</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prof of professori">
+                        <td>
+                            {{ prof.referenteAlternanza.email }}
+                        </td>
+                        <td>
+                            {{ prof.referenteAlternanza.surname }} {{ prof.referenteAlternanza.name }}
+                        </td>
+                        <td>
+                            {{ prof.referenteAlternanza.cf }}
+                        </td>
+                        <td>
+                            {{ setClasseAssociate(prof.associazioneClassi) }}
+                        </td>
+                        <td>
+                            <span class="disponibile" *ngIf="prof.attivo != -1 && prof.attivo">Attivo</span>
+                            <span class="scaduto" *ngIf="prof.attivo != -1 && !prof.attivo">Non attivo</span>
+                            <span class="in_attesa" *ngIf="prof.attivo == -1">Selezionato per attivazione</span>
+                        </td>
+                        <td>
+                            <input [disabled]="prof.referenteAlternanza.disabled" type="checkbox"
+                                [checked]="prof.referenteAlternanza.checked" (change)="onFilterChange(prof)">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="!professori?.length" class="font-14 text-center font-weight-bold">
+            <span>Nessun professore trovata</span>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <cm-pagination [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"
+                    #cmPagination></cm-pagination>
+            </div>
+        </div>
+    </div>
+</div>

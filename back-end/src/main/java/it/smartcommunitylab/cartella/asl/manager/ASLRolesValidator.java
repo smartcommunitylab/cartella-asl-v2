@@ -73,7 +73,13 @@ public class ASLRolesValidator {
 	
 	public boolean hasRole(ASLUser user, ASLRole role) {
 		return user.getRoles().stream().filter(x -> role.equals(x.getRole())).findFirst().isPresent();
-	}	
+	}
+	
+	public boolean hasRole(ASLUser user, ASLRole role, String domainId) {
+		return user.getRoles().stream().filter(x -> {
+			return x.getRole().equals(role) && x.getDomainId().equals(domainId);  
+		}).findFirst().isPresent();
+	}
 	
 	public boolean hasOnlyRole(HttpServletRequest request, ASLRole role) throws UnauthorizedException {
 		ASLUser user = aac.getASLUser(request);

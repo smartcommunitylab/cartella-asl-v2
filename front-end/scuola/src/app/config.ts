@@ -1,7 +1,8 @@
 export var config = {
   defaultPosition: { 'latitude': 46.1025748, 'longitude': 10.927261 },
-  aacClientId: "c5389529-fe0e-4f67-bf90-c55d9df65b66",
-  redirectUrl: "https://dev.smartcommunitylab.it/asl-scuola-v2/",
-  scope: "profile.basicprofile.me profile.accountprofile.me",
-  aacUrl: "https://am-dev.smartcommunitylab.it/aac/"
+  aacClientId: "c_37b06a4d-9ca5-47bb-8630-283249916cdd",
+  redirectUrl: "http://localhost:4300/",
+  logout_redirect: 'asl-login/',
+  scope: "profile openid email",
+  aacUrl: "https://aac-adc.platform.smartcommunitylab.it"
 }
