@@ -197,8 +197,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     reg.setEmailDocente(ra.getEmail());
     reg.setCfDocente(ra.getCf());
     reg.setNominativoDocente(ra.getName() + " " + ra.getSurname());
-    //TODO invio mail
-    //mailService.inviaRuoloDocente(reg);
+    mailService.inviaRuoloDocente(reg);
     registrazioneDocenteRepository.save(reg);
     return reg;
   }
