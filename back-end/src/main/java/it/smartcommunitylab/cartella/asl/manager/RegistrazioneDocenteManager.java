@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AssociazioneDocentiClassi;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.ProfessoriClassi;
 import it.smartcommunitylab.cartella.asl.model.ReferenteAlternanza;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneDocente;
@@ -25,6 +26,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.repository.AssociazioneDocentiClassiRepository;
+import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.ProfessoriClassiRepository;
 import it.smartcommunitylab.cartella.asl.repository.ReferenteAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.RegistrazioneDocenteRepository;
@@ -46,6 +48,8 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
   ProfessoriClassiRepository professoriClassiRepository;
   @Autowired
   AssociazioneDocentiClassiRepository associazioneDocentiClassiRepository;
+  @Autowired
+  IstituzioneRepository istituzioneRepository;
 
   public List<RegistrazioneDocente> getRegistrazioneDocente(String istitutoId) throws Exception {
     List<RegistrazioneDocente> list = registrazioneDocenteRepository.findByIstitutoId(istitutoId, Sort.by(Sort.Direction.ASC, "emailDocente"));
@@ -171,6 +175,10 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     if(reg != null) {
       throw new BadRequestException("codice fiscale " + ra.getCf() + " già registrato");
     }
+    Istituzione istituto = istituzioneRepository.findById(istitutoId).orElse(null);
+    if(istituto == null) {
+    	throw new BadRequestException("istituto non trovato");
+    }
     ASLUser user = userManager.getExistingASLUser(ra.getCf());
     if(user != null) {
 			user.setName(ra.getName());
@@ -190,14 +198,15 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     if(userRole == null) {
       userRole = userManager.addASLUserRole(user.getId(), 
           ASLRole.TUTOR_SCOLASTICO, istitutoId);
-    }		
+    }
     reg = new RegistrazioneDocente();
     reg.setIstitutoId(istitutoId);
+    reg.setNomeIstituto(istituto.getName());
     reg.setUserId(user.getId());
     reg.setEmailDocente(ra.getEmail());
     reg.setCfDocente(ra.getCf());
     reg.setNominativoDocente(ra.getName() + " " + ra.getSurname());
-    //mailService.inviaRuoloDocente(reg);
+    mailService.inviaRuoloDocente(reg);
     registrazioneDocenteRepository.save(reg);
     return reg;
   }
