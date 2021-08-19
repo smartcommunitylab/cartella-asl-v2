@@ -111,8 +111,12 @@
                 <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
                 <span class="row"><span class="text-semibold">Tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
+                <span class="row"><span class="text-semibold">Tutor
+                        scolastico Telefono:&nbsp;</span>{{attivita.referenteScuolaTelefono}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
                         esterno:&nbsp;</span>{{attivita.referenteEsterno}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
+                        esterno Telefono:&nbsp;</span>{{attivita.referenteEsternoTelefono}}</span>        
             </div>
             <div class="col-6">
                 <span class="row"><span
@@ -127,8 +131,12 @@
                 <span class="row"><span class="text-semibold">CF Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
                 <span class="row"><span class="text-semibold">CF tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
+                <span class="row"><span class="text-semibold">Tutor
+                        scolastico Email:&nbsp;</span>{{attivita.referenteScuolaEmail}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor
-                        esterno:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                    esterno:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
+                    esterno Email:&nbsp;</span>{{attivita.referenteEsternoEmail}}</span>
                 <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{attivita.ore}}</span>
             </div>
         </div>
