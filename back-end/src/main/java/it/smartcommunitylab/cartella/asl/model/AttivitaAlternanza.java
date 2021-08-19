@@ -60,9 +60,11 @@ public class AttivitaAlternanza {
 	private String referenteScuola;
 	private String referenteScuolaCF;
 	private String referenteScuolaTelefono;
+	private String referenteScuolaEmail;
 	private String referenteEsterno;
 	private String referenteEsternoCF;
 	private String referenteEsternoTelefono;
+	private String referenteEsternoEmail;
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -107,9 +109,11 @@ public class AttivitaAlternanza {
 		aa.setReferenteEsterno(referenteEsterno);
 		aa.setReferenteEsternoCF(referenteEsternoCF);
 		aa.setReferenteEsternoTelefono(referenteEsternoTelefono);
+		aa.setReferenteEsternoEmail(referenteEsternoEmail);
 		aa.setReferenteScuola(referenteScuola);
 		aa.setReferenteScuolaCF(referenteScuolaCF);
 		aa.setReferenteScuolaTelefono(referenteScuolaTelefono);
+		aa.setReferenteScuolaEmail(referenteScuolaEmail);
 		aa.setStato(stato);
 		aa.setTipologia(tipologia);
 		aa.setTitolo(titolo);
@@ -411,6 +415,22 @@ public class AttivitaAlternanza {
 
 	public void setTutorClasse(boolean tutorClasse) {
 		this.tutorClasse = tutorClasse;
+	}
+
+	public String getReferenteScuolaEmail() {
+		return referenteScuolaEmail;
+	}
+
+	public void setReferenteScuolaEmail(String referenteScuolaEmail) {
+		this.referenteScuolaEmail = referenteScuolaEmail;
+	}
+
+	public String getReferenteEsternoEmail() {
+		return referenteEsternoEmail;
+	}
+
+	public void setReferenteEsternoEmail(String referenteEsternoEmail) {
+		this.referenteEsternoEmail = referenteEsternoEmail;
 	}
 
 	
