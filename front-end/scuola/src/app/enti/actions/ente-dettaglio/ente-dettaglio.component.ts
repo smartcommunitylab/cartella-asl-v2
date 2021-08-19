@@ -47,7 +47,7 @@ export class EnteDettaglioComponent implements OnInit {
   atttivitaCompetenze = [];
   tipoInterna: boolean = false;
   menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Attiva accesso” puoi invitare un ente a crearsi un account in EDIT per gestire presenze, offerte e documentazione';
-  
+  tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
   showContent: boolean = false;
 
   breadcrumbItems = [
@@ -197,6 +197,16 @@ export class EnteDettaglioComponent implements OnInit {
       isModificable = false;
     }
     return isModificable;
+  }
+
+  getTipologiaString(tipologiaId) {
+    if (this.tipoAzienda) {
+      let rtn = this.tipoAzienda.find(data => data.id == tipologiaId);
+      if (rtn) return rtn.value;
+      return tipologiaId;
+    } else {
+      return tipologiaId;
+    }
   }
 
 }
