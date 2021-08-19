@@ -287,6 +287,37 @@
                         <label for="luogoSvolgimento" *ngIf="!attivita.luogoSvolgimento">Indirizzo</label>
                     </div>
                 </div>
+                <div class="row v-center form-group">
+                    <div class="col-5">
+                        <input type="text" class="form-control" [(ngModel)]="attivita.referenteScuolaTelefono" id="formatoreTelefono"
+                            (focusout)="trimValue($event, 'trim')">
+                        <label for="formatoreTelefono" *ngIf="attivita.referenteScuolaTelefono" class="active">Tutor scolastico Telefono</label>
+                        <label for="formatoreTelefono" *ngIf="!attivita.referenteScuolaTelefono">Tutor scolastico Telefono</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <input type="text" class="form-control" [(ngModel)]="attivita.referenteScuolaEmail" id="formatoreEmail"
+                            (focusout)="trimValue($event, 'trim')">
+                        <label for="formatoreEmail" *ngIf="attivita.referenteScuolaEmail" class="active">Tutor scolastico Email</label>
+                        <label for="formatoreEmail" *ngIf="!attivita.referenteScuolaEmail">Tutor scolastico Email</label>
+                    </div>      
+                </div>
+                <div class="row v-center form-group">
+                    <div class="col-5">
+                        <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="attivita.referenteEsternoTelefono" id="formatoreEsternoTelefono"
+                            (focusout)="trimValue($event, 'trim')">
+                        <label for="formatoreEsternoTelefono" *ngIf="attivita.referenteEsternoTelefono" class="active">Tutor esterno Telefono</label>
+                        <label for="formatoreEsternoTelefono" *ngIf="!attivita.referenteEsternoTelefono">Tutor esterno Telefono</label>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <input [disabled]="tipoInterna" type="text" class="form-control" [(ngModel)]="attivita.referenteEsternoEmail" id="formatoreEsternoEmail"
+                            (focusout)="trimValue($event, 'trim')">
+                        <label for="formatoreEsternoEmail" *ngIf="attivita.referenteEsternoEmail" class="active">Tutor esterno Email</label>
+                        <label for="formatoreEsternoEmail" *ngIf="!attivita.referenteEsternoEmail">Tutor esterno Email</label>
+                    </div>      
+      
+                </div>
             </div>
         </div>
     </div>
