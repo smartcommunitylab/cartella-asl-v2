@@ -146,11 +146,11 @@ public class EnteController implements AslController {
 		return result;
 	}
 	
-	@GetMapping("/api/azienda/parix")
+	/*@GetMapping("/api/azienda/parix")
 	public @ResponseBody DettaglioImpresa getDettagliAziendaParix(
 			@RequestParam String cf,
 			HttpServletRequest request) throws Exception {
 		return parixService.getDettaglioImpresa(cf);
-	}	
+	}*/	
 
 }
