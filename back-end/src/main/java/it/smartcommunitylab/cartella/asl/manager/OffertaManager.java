@@ -76,7 +76,9 @@ public class OffertaManager extends DataEntityManager {
 	public Page<Offerta> findOfferta(String istitutoId, String text, int tipologia,	Boolean ownerIstituto, String stato, 
 			Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
+		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi, Convenzione c");
+		sb.append(" WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
+		sb.append(" AND c.istitutoId=oi.istitutoId AND c.dataFine>=(:oggi)");
 		/*if(ownerIstituto == null) {
 			sb.append(" (off.istitutoId=(:istitutoId) OR off.istitutoId IS NULL)");
 		} else {
@@ -105,6 +107,7 @@ public class OffertaManager extends DataEntityManager {
 		
 		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
 		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("oggi", LocalDate.now());
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
