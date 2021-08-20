@@ -147,6 +147,22 @@ public class OffertaManager extends DataEntityManager {
 		return Stati.disponibile;
 	}
 	
+	public Offerta getOffertaByIstituto(String istitutoId, Long offertaId) {
+		OffertaIstituto oi = offertaIstitutoRepository.findByOffertaIdAndIstitutoId(offertaId, istitutoId);
+		if(oi != null) {
+			Offerta o = getOfferta(offertaId);
+			if(o != null) {
+				LocalDate today = LocalDate.now();
+				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), o.getEnteId());
+				if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
+					return null;
+				}
+				return o;
+			}
+		}
+		return null;
+	}
+	
 	public Offerta getOfferta(Long id) {
 		if(id != null) {
 			Optional<Offerta> optional = offertaRepository.findById(id);

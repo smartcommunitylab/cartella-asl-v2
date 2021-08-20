@@ -66,7 +66,7 @@ public class OffertaController implements AslController {
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Offerta offerta = offertaManager.getOfferta(id);
+		Offerta offerta = offertaManager.getOffertaByIstituto(istitutoId, id);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getOfferta:%s / %s", id, istitutoId));
 		}
