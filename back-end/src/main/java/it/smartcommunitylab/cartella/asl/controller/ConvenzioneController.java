@@ -53,6 +53,22 @@ public class ConvenzioneController implements AslController {
 		return result;
 	}
 	
+	public @ResponseBody Convenzione deleteConvenzione(
+			@PathVariable Long convenzioneId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.deleteConvenzione(istitutoId, convenzioneId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Convenzione.class, c.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("deleteConvenzione:%s / %s", istitutoId, convenzioneId));
+		}		
+		return c;		
+	}
+	
 	@GetMapping("/api/convenzione/istituto/{istitutoId}")
 	public @ResponseBody List<Convenzione> getConvenzioneByIstituto(
 			@PathVariable String istitutoId,

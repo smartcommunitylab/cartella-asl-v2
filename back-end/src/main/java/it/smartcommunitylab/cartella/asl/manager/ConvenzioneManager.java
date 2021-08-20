@@ -109,4 +109,16 @@ public class ConvenzioneManager extends DataEntityManager {
 			return convenzioneRepository.save(cDb);
 		}	
 	}
+	
+	public Convenzione deleteConvenzione(String istitutoId, Long convenzioneId) throws BadRequestException {
+		Convenzione c = convenzioneRepository.findById(convenzioneId).orElse(null);
+		if(c == null) {
+			throw new BadRequestException("convenzione non trovata");
+		}
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione errata");
+		}
+		convenzioneRepository.delete(c);
+		return c;
+	}
 }
