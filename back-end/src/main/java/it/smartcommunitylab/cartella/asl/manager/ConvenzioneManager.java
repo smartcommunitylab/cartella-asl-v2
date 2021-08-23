@@ -72,6 +72,14 @@ public class ConvenzioneManager extends DataEntityManager {
 		}
 	}
 	
+	public Convenzione getConvenzione(Long convenzioneId) {
+		Convenzione c = convenzioneRepository.findById(convenzioneId).orElse(null);
+		if(c != null) {
+			completaConvenzione(c);
+		}
+		return c;
+	}
+	
 	public Convenzione getUltimaConvenzioneAttiva(String istitutoId, String enteId) {
 		List<Convenzione> convenzioni = getConvenzioni(istitutoId, enteId);
 		for(Convenzione c: convenzioni) {

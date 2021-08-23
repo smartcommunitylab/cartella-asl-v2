@@ -54,7 +54,7 @@ public class ConvenzioneController implements AslController {
 		return result;
 	}
 	
-	@DeleteMapping("api/convenzione/{convenzioneId}")
+	@DeleteMapping("/api/convenzione/{convenzioneId}")
 	public @ResponseBody Convenzione deleteConvenzione(
 			@PathVariable Long convenzioneId,
 			@RequestParam String istitutoId,
@@ -69,6 +69,21 @@ public class ConvenzioneController implements AslController {
 			logger.info(String.format("deleteConvenzione:%s / %s", istitutoId, convenzioneId));
 		}		
 		return c;		
+	}
+	
+	@GetMapping("/api/convenzione/{convenzioneId}")
+	public @ResponseBody Convenzione getConvenzione(
+			@PathVariable Long convenzioneId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzione(convenzioneId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getConvenzione:%s", convenzioneId));
+		}		
+		return c;				
 	}
 	
 	@GetMapping("/api/convenzione/istituto/{istitutoId}")
