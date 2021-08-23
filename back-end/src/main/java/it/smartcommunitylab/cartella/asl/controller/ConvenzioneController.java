@@ -86,17 +86,17 @@ public class ConvenzioneController implements AslController {
 		return c;				
 	}
 	
-	@GetMapping("/api/convenzione/istituto/{istitutoId}")
-	public @ResponseBody List<Convenzione> getConvenzioneByIstituto(
-			@PathVariable String istitutoId,
-			@RequestParam String enteId,
+	@GetMapping("/api/convenzione/ente/{enteId}")
+	public @ResponseBody List<Convenzione> getConvenzioneEnteByIstituto(
+			@PathVariable String enteId,
+			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getConvenzioneByIstituto:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getConvenzioneEnteByIstituto:%s / %s", istitutoId, enteId));
 		}		
 		return convenzioni;
 	}
