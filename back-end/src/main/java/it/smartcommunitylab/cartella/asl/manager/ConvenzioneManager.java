@@ -88,7 +88,7 @@ public class ConvenzioneManager extends DataEntityManager {
 		return c;
 	}
 	
-	public Convenzione getUltimaConvenzioneAttiva(String istitutoId, String enteId) {
+	public Convenzione getUltimaConvenzione(String istitutoId, String enteId) {
 		List<Convenzione> convenzioni = getConvenzioni(istitutoId, enteId);
 		for(Convenzione c: convenzioni) {
 			if(Stato.attiva.equals(c.getStato())) {

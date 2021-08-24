@@ -109,7 +109,7 @@ public class ConvenzioneController implements AslController {
 		usersValidator.validate(request, Lists.newArrayList(
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
+		Convenzione c = convenzioneManager.getUltimaConvenzione(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getUltimaConvenzioneAttivaEnteByIstituto:%s / %s", istitutoId, enteId));
 		}		

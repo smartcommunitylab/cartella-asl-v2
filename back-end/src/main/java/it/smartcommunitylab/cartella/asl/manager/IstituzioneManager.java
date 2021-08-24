@@ -89,7 +89,7 @@ public class IstituzioneManager extends DataEntityManager {
 	public Istituzione getIstituto(String istitutoId, String enteId) {
 		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
 		if(Utils.isNotEmpty(enteId)) {
-			Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
+			Convenzione c = convenzioneManager.getUltimaConvenzione(istitutoId, enteId);
 			if(c != null) {
 				istituzione.setConvenzione(c);
 			}
