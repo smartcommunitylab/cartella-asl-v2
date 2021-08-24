@@ -101,17 +101,17 @@ public class ConvenzioneController implements AslController {
 		return convenzioni;
 	}
 	
-	@GetMapping("/api/convenzione/istituto/{istitutoId}/attiva")
-	public @ResponseBody Convenzione getUltimaConvenzioneAttiva(
-			@PathVariable String istitutoId,
-			@RequestParam String enteId,
+	@GetMapping("/api/convenzione/ente/{enteId}/attiva")
+	public @ResponseBody Convenzione getUltimaConvenzioneAttivaEnteByIstituto(
+			@PathVariable String enteId,
+			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
-				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, enteId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, enteId)));
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getUltimaConvenzioneAttiva:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getUltimaConvenzioneAttivaEnteByIstituto:%s / %s", istitutoId, enteId));
 		}		
 		return c;
 	}
