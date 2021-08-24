@@ -158,6 +158,27 @@ public class FileController {
 				TipoDoc.convenzione, TipoDoc.doc_generico));
 	}
 	
+	@DeleteMapping("/api/remove/document/convenzione/{uuid}/istituto/{istitutoId}")
+	public @ResponseBody boolean removeIstitutoConvenzioneDocument(
+			@PathVariable String istitutoId,
+			@PathVariable String uuid, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}		
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("removeIstitutoConvenzioneDocument:%s / %s", uuid, istitutoId));
+		}
+		return removeDocument(uuid, request, user, null);
+	}
+	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
 	public @ResponseBody boolean removeIstitutoDocument(
 			@PathVariable String istitutoId,
@@ -230,9 +251,6 @@ public class FileController {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		if(logger.isInfoEnabled()) {
-			logger.info(String.format("uploadDocumentoForConvezioneIstituto:%s - %s", uuid, istitutoId));
-		}
 		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
 		if(c == null) {
 			throw new BadRequestException("convenzione non esistente");
@@ -240,6 +258,9 @@ public class FileController {
 		if(!istitutoId.equals(c.getIstitutoId())) {
 			throw new BadRequestException("convenzione non autorizzata");
 		}		
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("uploadDocumentoForConvezioneIstituto:%s - %s", uuid, istitutoId));
+		}
 		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
 		return documento;
 	}
