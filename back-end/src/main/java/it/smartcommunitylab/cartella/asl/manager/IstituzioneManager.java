@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.model.Convenzione;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportIstitutoEnte;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
@@ -31,6 +32,8 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 public class IstituzioneManager extends DataEntityManager {
 	@Autowired
 	private IstituzioneRepository istituzioneRepository;
+	@Autowired
+	ConvenzioneManager convenzioneManager;
 
 	public Page<Istituzione> findIstituti(String text, double[] coordinate, Integer distance, Pageable pageRequest) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -83,8 +86,14 @@ public class IstituzioneManager extends DataEntityManager {
 		return page;
 	}
 	
-	public Istituzione getIstituto(String istitutoId) {
+	public Istituzione getIstituto(String istitutoId, String enteId) {
 		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
+		if(Utils.isNotEmpty(enteId)) {
+			Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
+			if(c != null) {
+				istituzione.setConvenzione(c);
+			}
+		}
 		return istituzione;
 	}
 	
@@ -144,7 +153,7 @@ public class IstituzioneManager extends DataEntityManager {
 		List<ReportIstitutoEnte> list = new ArrayList<>();
 		for (Object[] obj : rows) {
 			String istitutoId = (String) obj[0];
-			Istituzione istituto = getIstituto(istitutoId);
+			Istituzione istituto = getIstituto(istitutoId, null);
 			Long attivita = (Long) obj[1];
 			ReportIstitutoEnte report = new ReportIstitutoEnte();
 			report.setIstituto(istituto);

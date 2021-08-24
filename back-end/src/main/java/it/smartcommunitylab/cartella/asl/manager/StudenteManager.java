@@ -760,7 +760,7 @@ public class StudenteManager extends DataEntityManager {
 			List<AttivitaAlternanza> attivitaList = attivitaAlternanzaManager.findAttivitaByStudenteAndEnte(studenteId, enteId);
 			if(attivitaList.size() > 0) {
 				report.setAttivitaAlternanza(attivitaList.get(0));
-				Istituzione istituto = istituzioneManager.getIstituto(attivitaList.get(0).getIstitutoId());
+				Istituzione istituto = istituzioneManager.getIstituto(attivitaList.get(0).getIstitutoId(), null);
 				report.setIstituto(istituto);
 			}
 			report.setStato(getStatoStudenteByEnte(attivitaList));
@@ -800,7 +800,7 @@ public class StudenteManager extends DataEntityManager {
 		ReportStudenteDettaglioEnte report = new ReportStudenteDettaglioEnte();
 		Studente studente = findStudente(studenteId);
 		report.setStudente(studente);
-		Istituzione istituto = istituzioneManager.getIstituto(studente.getIstitutoId());
+		Istituzione istituto = istituzioneManager.getIstituto(studente.getIstitutoId(), null);
 		if(istituto != null) {
 			report.setIstituto(istituto.getName());
 		}
