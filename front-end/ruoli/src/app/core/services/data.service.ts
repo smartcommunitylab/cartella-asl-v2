@@ -214,7 +214,7 @@ export class DataService {
     params = params.append('text', text);
 
     return this.http.get<any>(
-      this.host + "/istituto/search",
+      this.host + "/dashboard/istituti",
       {
         params: params
       })
