@@ -176,7 +176,7 @@ public class FileController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("removeIstitutoConvenzioneDocument:%s / %s", uuid, istitutoId));
 		}
-		return removeDocument(uuid, request, user, null);
+		return removeDocument(c.getUuidFile(), request, user, null);
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
