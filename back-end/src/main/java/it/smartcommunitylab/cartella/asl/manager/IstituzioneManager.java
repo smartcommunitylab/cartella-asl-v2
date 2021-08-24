@@ -189,4 +189,10 @@ public class IstituzioneManager extends DataEntityManager {
 		}
 		return null;
 	}
+
+	public Page<Istituzione> findIstitutiByOfferta(String enteId, LocalDate dateFrom, LocalDate dateTo, String text,
+			Pageable pageRequest) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

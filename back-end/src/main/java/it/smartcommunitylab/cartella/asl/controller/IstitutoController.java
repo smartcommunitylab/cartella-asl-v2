@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.time.LocalDate;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -174,5 +177,22 @@ public class IstitutoController implements AslController {
 		return istituto;
 	}
 	
+	@GetMapping(value = "/api/istituto/offerta")
+	public @ResponseBody Page<Istituzione> searchIstitutiByOfferta(
+			@RequestParam String enteId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,			
+			@RequestParam(required=false) String text, 
+			Pageable pageRequest,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<Istituzione> result = istituzioneManager.findIstitutiByOfferta(enteId, dateFrom, dateTo, text, pageRequest);
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("searchIstitutiByOfferta: %s / %s / %s / %s", enteId, dateFrom, dateTo, text));
+		}		
+		return result;
+	}
 	
 }
