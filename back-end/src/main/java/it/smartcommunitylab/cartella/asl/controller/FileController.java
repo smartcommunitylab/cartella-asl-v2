@@ -105,6 +105,28 @@ public class FileController {
 		downloadContent(c.getUuidFile(), response, null);
 	}
 	
+	@GetMapping("/api/download/document/convenzione/{uuid}/ente/{enteId}")
+	public void downloadFileConvenzioneEnte(
+			@PathVariable String uuid, 
+			@PathVariable String enteId, 
+			HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}	
+		if(!enteId.equals(c.getEnteId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("downloadFileConvenzioneEnte:%s - %s", uuid, enteId));
+		}
+		downloadContent(c.getUuidFile(), response, null);
+	}
+	
 	@GetMapping("/api/download/document/{uuid}/studente/{studenteId}")
 	public void downloadFileStudente(
 			@PathVariable String uuid, 
