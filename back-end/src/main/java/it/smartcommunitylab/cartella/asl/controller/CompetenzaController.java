@@ -92,9 +92,10 @@ public class CompetenzaController implements AslController {
 			HttpServletRequest request) throws Exception {
 		checkNullId(competenza.getId());
 
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("saveCompetenza(%s", istitutoId + ")"));
@@ -120,9 +121,10 @@ public class CompetenzaController implements AslController {
 	public Competenza updateCompetenza(@PathVariable String istitutoId, @RequestBody Competenza competenza,
 			HttpServletRequest request) throws Exception {
 		checkId(competenza.getId());
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateCompetenza(%s", istitutoId + ")"));
@@ -143,9 +145,10 @@ public class CompetenzaController implements AslController {
 	@DeleteMapping("/api/competenza/{id}")
 	public void deleteCompetenza(@PathVariable long id, HttpServletRequest request) throws Exception {
 		String istitutoId = competenzaManager.findCompetenzaOwnerId(id);
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("deleteCompetenza(%s", id + ")"));
