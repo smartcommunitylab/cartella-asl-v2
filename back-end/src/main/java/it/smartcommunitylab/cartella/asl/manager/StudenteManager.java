@@ -280,16 +280,17 @@ public class StudenteManager extends DataEntityManager {
 	
 	private Page<Studente> findStudentiByTutor(String istitutoId, String corsoId, String annoScolastico, String text,
 			Pageable pageRequest, ASLUser user) {
-		Map<String, Object> parameters = new HashMap<>();
 		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
 		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
 		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
-				
+		
+		//TUTOR CLASSE
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r, EsperienzaSvolta es, AttivitaAlternanza aa");
-		sb.append(" WHERE s.id = r.studentId AND es.studenteId = s.id AND es.registrazioneId=r.id AND es.attivitaAlternanzaId=aa.id");
+		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r");
+		sb.append(" WHERE s.id = r.studentId");
 		sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
-		if(tutorClasse) {
+		sb.append(" AND r.classroom IN (:classiAssociate)");
+		/*if(tutorClasse) {
 			sb.append(" AND aa.istitutoId=(:istitutoId)");
 			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "')");
 			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
@@ -300,7 +301,7 @@ public class StudenteManager extends DataEntityManager {
 			} else {
 				sb.append(" AND aa.istitutoId=(:istitutoId)");
 			}
-		}
+		}*/
 		if (Utils.isNotEmpty(corsoId)) {
 			sb.append(" AND r.courseId = (:courseId) ");
 		}
@@ -310,47 +311,115 @@ public class StudenteManager extends DataEntityManager {
 		sb.append(" ORDER BY s.surname, s.name, r.classroom");
 		String q = sb.toString();
 
-		Query query = em.createQuery(q);
+		Query queryTutorClasse = em.createQuery(q);
 
-		query.setParameter("istitutoId", istitutoId);
-		parameters.put("istitutoId", istitutoId);
-		query.setParameter("annoScolastico", annoScolastico);
-		parameters.put("annoScolastico", annoScolastico);
+		queryTutorClasse.setParameter("istitutoId", istitutoId);
+		queryTutorClasse.setParameter("annoScolastico", annoScolastico);
 		if (Utils.isNotEmpty(corsoId)) {
-			query.setParameter("courseId", corsoId);
-			parameters.put("courseId", corsoId);
+			queryTutorClasse.setParameter("courseId", corsoId);
 		}
 		if (Utils.isNotEmpty(text)) {
 			String like = "%" + text.trim().toUpperCase() + "%";
-			query.setParameter("text", like);
-			parameters.put("text", like);
-		}
-		if(tutorScolatico) {
-			query.setParameter("referenteCf", user.getCf());
-			parameters.put("referenteCf", user.getCf());
+			queryTutorClasse.setParameter("text", like);
 		}
 		if(tutorClasse) {
-			query.setParameter("classiAssociate", classiAssociate);
-			parameters.put("classiAssociate", classiAssociate);
+			queryTutorClasse.setParameter("classiAssociate", classiAssociate);
 		}
 
-		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
-		query.setMaxResults(pageRequest.getPageSize());
 		@SuppressWarnings("unchecked")
-		List<Object[]> result = query.getResultList();
+		List<Object[]> resultTutorClasse = queryTutorClasse.getResultList();
 
-		List<Studente> students = Lists.newArrayList();
-		for (Object[] obj : result) {
+		List<Studente> studentsTutorClasse = Lists.newArrayList();
+		for (Object[] obj : resultTutorClasse) {
 			Studente s = fillStudenteWithRegistration(obj);
-			students.add(s);
+			studentsTutorClasse.add(s);
+		}
+		
+		//TUTOR SCOLASTICO
+		sb = new StringBuffer();
+		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r, EsperienzaSvolta es, AttivitaAlternanza aa");
+		sb.append(" WHERE s.id = r.studentId AND es.studenteId = s.id AND es.registrazioneId=r.id AND es.attivitaAlternanzaId=aa.id");
+		sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
+		sb.append(" AND aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
+		sb.append(" AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "'");
+		if (Utils.isNotEmpty(corsoId)) {
+			sb.append(" AND r.courseId = (:courseId) ");
+		}
+		if (Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text))");
+		}
+		sb.append(" ORDER BY s.surname, s.name, r.classroom");
+		
+		q = sb.toString();
+		Query queryTutorScolastico = em.createQuery(q);
+		
+		queryTutorScolastico.setParameter("istitutoId", istitutoId);
+		queryTutorScolastico.setParameter("annoScolastico", annoScolastico);
+		if (Utils.isNotEmpty(corsoId)) {
+			queryTutorScolastico.setParameter("courseId", corsoId);
+		}
+		if (Utils.isNotEmpty(text)) {
+			String like = "%" + text.trim().toUpperCase() + "%";
+			queryTutorScolastico.setParameter("text", like);
+		}
+		if(tutorScolatico) {
+			queryTutorScolastico.setParameter("referenteCf", user.getCf());
 		}
 
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT s,r","COUNT(DISTINCT s)"), parameters);
-		long total = (Long) cQuery.getSingleResult();
+		@SuppressWarnings("unchecked")
+		List<Object[]> resultTutorScolastico = queryTutorScolastico.getResultList();
 
-		Page<Studente> page = new PageImpl<Studente>(students, pageRequest, total);
+		List<Studente> studentsTutorScolastico = Lists.newArrayList();
+		for (Object[] obj : resultTutorScolastico) {
+			Studente s = fillStudenteWithRegistration(obj);
+			studentsTutorScolastico.add(s);
+		}
+		
+		//MERGE LISTA STUDENTI
+		List<Studente> students = Lists.newArrayList();
+		while (studentsTutorClasse.size() > 0 && studentsTutorScolastico.size() > 0) {
+			if(comparaStudenti(studentsTutorClasse.get(0), studentsTutorScolastico.get(0)) < 0) {
+				if(!contieneStudente(students, studentsTutorClasse.get(0))) {
+					students.add(studentsTutorClasse.get(0));
+				}
+				studentsTutorClasse.remove(0);
+			} else {
+				if(!contieneStudente(students, studentsTutorScolastico.get(0))) {
+					students.add(studentsTutorScolastico.get(0));
+				}
+				studentsTutorScolastico.remove(0);
+			}
+		}
+		for(Studente s : studentsTutorClasse) {
+			if(!contieneStudente(students, s)) {
+				students.add(s);
+			}			
+		}
+		for(Studente s : studentsTutorScolastico) {
+			if(!contieneStudente(students, s)) {
+				students.add(s);
+			}			
+		}
+    
+		int fromIndex = (pageRequest.getPageNumber()) * pageRequest.getPageSize();
+		int toIndex = fromIndex + pageRequest.getPageSize();
+		toIndex = toIndex > students.size() ? students.size() : toIndex;
+		Page<Studente> page = new PageImpl<Studente>(students.subList(fromIndex, toIndex), pageRequest, students.size());
 
 		return page;
+	}
+	
+	private boolean contieneStudente(List<Studente> list, Studente studente) {
+		for(Studente s : list) {
+			if(s.getId().contentEquals(studente.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private int comparaStudenti(Studente s1, Studente s2) {
+		return (s1.getSurname() + " " + s1.getName() + " " + s1.getClassroom()).compareTo(s2.getSurname() + " " + s2.getName() + " " + s2.getClassroom());
 	}
 
 	public List<ReportDettaglioStudente> getReportDettaglioStudente(String istitutoId, String annoScolastico, 
