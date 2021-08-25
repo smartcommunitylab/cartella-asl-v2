@@ -38,7 +38,7 @@ export class StudenteDettaglioComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService) { }
+    public dataService: DataService) { }
 
 
   ngOnInit() {

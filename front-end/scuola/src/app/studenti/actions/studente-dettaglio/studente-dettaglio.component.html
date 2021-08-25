@@ -73,14 +73,14 @@
         </div>
         
         <div class="col-2 sub-div">
-            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO','TUTOR_CLASSE'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
             placement="bottom" ngbTooltip="Esporta le attività dello studente">
                 CSV dati studente
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
                 </svg>
             </label>
-            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO','TUTOR_CLASSE'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
             placement="bottom" ngbTooltip="Esporta le attività della classe">
                 CSV dati classe
                 <svg class="icon icon-white icon-sm">
@@ -96,7 +96,7 @@
 
 <div class="card-body" >
     <span class="title">Piano attivo:</span>
-    <span class="piano" *ngIf="pianoId" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
+    <span class="piano" *ngIf="pianoId && dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
     <span class="nopiano" *ngIf="!pianoId">Attenzione: non ci sono piani associati a questo corso di studio!</span>
 </div>
 

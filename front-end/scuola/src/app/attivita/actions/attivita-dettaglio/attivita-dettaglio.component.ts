@@ -30,7 +30,7 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   attivita: AttivitaAlternanza;
   esperienze;
-  offertaAssociata;
+  // offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   individuale: boolean;
   corsiStudio;
@@ -61,11 +61,11 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
 
-        if (this.attivita.offertaId) {
-          this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
-            this.offertaAssociata = off;
-          })
-        }
+        // if (this.attivita.offertaId) {
+        //   this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
+        //     this.offertaAssociata = off;
+        //   })
+        // }
 
         this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
         

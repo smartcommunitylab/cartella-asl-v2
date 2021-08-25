@@ -73,18 +73,13 @@
         <div>
             <span class="title">Dati Attività</span><br />
             <label *ngIf="attivita.offertaId" class="font-weight-bold in_attesa">
-                <span *ngIf="offertaAssociata">
-                    Offerta associata: {{ offertaAssociata.titolo }},
-                    {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso
-                    {{ setNomeEnte(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} -
-                    {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
-                </span>
-                <span>
+                <span>Offerta associata: {{ attivita.titoloOfferta }}</span>&nbsp;&nbsp;
+                <span *ngIf="dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])">
                     <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA
                         ASSOCIATA</a>
                 </span>
             </label>
-            <br *ngIf="offertaAssociata" />
+            <br *ngIf="attivita.offertaId" />
             <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Modifica i dati di quest’attività" (click)="modifica()">
                 Modifica dati attività&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
