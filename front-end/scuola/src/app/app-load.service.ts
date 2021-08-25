@@ -17,21 +17,25 @@ export class AppLoadService {
           if (!!this.getQueryStringValue('code')) {
             this.authService.completeAuthentication().then(() => {
               if (this.authService.isLoggedIn()) {
-                resolve(this.initialize());
+                this.initialize().then (()=> {
+                  resolve(true);
+                });
               }
             });
           } else {
             this.authService.startAuthentication();
           }
         } else {
-          resolve(this.initialize());
+          this.initialize().then (()=> {
+            resolve(true);
+          });          
         }
       });
     });
   }
 
   initialize() {
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       this.dataService.getProfile().subscribe(profile => {
         if (profile && profile.istituti) {
           var ids = [];
