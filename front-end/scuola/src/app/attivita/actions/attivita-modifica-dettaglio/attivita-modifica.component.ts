@@ -68,6 +68,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
   forceAnnoScolasticoErrorDisplay: boolean = false;
+  forceSelectionMsg: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
@@ -452,6 +453,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           // non existing riferente hack
           if (items.length < 1) {
             this.attivita.referenteScuolaCF = null;
+            this.attivita.referenteScuolaEmail = null;
             this.attivita.referenteScuola = this.riferente;
           }
           return items;
@@ -472,11 +474,16 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
   selectedRiferente($event) {
     this.attivita.referenteScuolaCF = null;
+    this.attivita.referenteScuolaEmail = null;
     if ($event.item.cfDocente) {
+      this.forceSelectionMsg = true;
       this.attivita.referenteScuolaCF = $event.item.cfDocente;
     }
     if ($event.item.nominativoDocente) {
       this.attivita.referenteScuola = $event.item.nominativoDocente;
+    }
+    if ($event.item.emailDocente) {
+      this.attivita.referenteScuolaEmail = $event.item.emailDocente;
     }
   }
 
