@@ -71,6 +71,7 @@
                 <label for="referente" *ngIf="riferente" class="active">Referente scolastico</label>
                 <label for="referente" *ngIf="!riferente">Referente scolastico</label>
                 <div class="invalid-feedback" [class.d-block]="forcereferenteDisplay">Campo necessario.</div>
+                <div class="text-success text-semibold" *ngIf="forceSelectionMsg">Account referente scolastico selezionato</div>
             </div>
         </div>
 

@@ -62,6 +62,7 @@ export class CreaAttivitaModalComponent implements OnInit {
   schoolYears: string[] = [];
   cfDocente: string;
   nomeDocente: string;
+  emailDocente: string;
   riferente;
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   @Input() tipologie?: any;
@@ -73,6 +74,7 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
   forcereferenteDisplay: boolean = false;
+  forceSelectionMsg: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -152,6 +154,7 @@ export class CreaAttivitaModalComponent implements OnInit {
         titolo: this.titolo.trim(),
         referenteScuola: this.nomeDocente.trim(),
         referenteScuolaCF: this.cfDocente?this.cfDocente.trim():null,
+        referenteScuolaEmail : this.emailDocente?this.emailDocente.trim():null,
         referenteEsterno: this.tipoInterna ? null : this.referenteEsterno.trim(),
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
@@ -263,8 +266,10 @@ export class CreaAttivitaModalComponent implements OnInit {
         map(items => {
           // non existing riferente hack
           this.nomeDocente = null;
+          this.forceSelectionMsg = false;
           if (items.length < 1) {
             this.cfDocente = null;
+            this.emailDocente = null;
             this.nomeDocente = this.riferente;
           }
           return items;
@@ -285,11 +290,16 @@ export class CreaAttivitaModalComponent implements OnInit {
 
   selectedRiferente($event) {
     this.cfDocente = null;
+    this.emailDocente = null;
     if ($event.item.cfDocente) {
       this.cfDocente = $event.item.cfDocente;
+      this.forceSelectionMsg = true;
     }
     if ($event.item.nominativoDocente) {
       this.nomeDocente = $event.item.nominativoDocente;
+    }
+    if ($event.item.emailDocente) {
+      this.emailDocente = $event.item.emailDocente;
     }
   }
 
