@@ -32,6 +32,7 @@ export class AttivitaAlternanza {
     groupRigaTip: any;
     studenti: any;
     rendicontazioneCorpo: boolean;
+    referenteScuolaEmail: string;
     constructor() {}
     
 }
