@@ -96,6 +96,7 @@
 
 <div class="card-body" >
     <span class="title">Piano attivo:</span>
+    <span class="piano" *ngIf="pianoId && !dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])">{{titoloPiano}}</span>
     <span class="piano" *ngIf="pianoId && dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
     <span class="nopiano" *ngIf="!pianoId">Attenzione: non ci sono piani associati a questo corso di studio!</span>
 </div>
