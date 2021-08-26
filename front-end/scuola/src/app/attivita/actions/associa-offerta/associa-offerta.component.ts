@@ -49,7 +49,8 @@ export class AssociaOffertaComponent implements OnInit {
   associaOfferta() {
     this.dataService.associaOffertaToAttivita(this.offertaAssociata[0].id, this.rendicontazioneOreCorpo).subscribe((attivita) => {
       this.growler.growl('Offerta associata con successo!', GrowlerMessageType.Success);
-      this.router.navigate(['../../../detail/' + attivita.id +'/modifica/attivita'], { relativeTo: this.route });
+      // this.router.navigate(['../../../detail/' + attivita.id +'/modifica/attivita'], { relativeTo: this.route });
+      this.router.navigateByUrl('/attivita/detail/' + attivita.id); 
     },
       (err: any) => console.log(err));
   }

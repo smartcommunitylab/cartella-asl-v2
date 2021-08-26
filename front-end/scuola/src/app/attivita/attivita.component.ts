@@ -117,7 +117,8 @@ export class AttivitaComponent implements OnInit {
         modalRef.componentInstance.newAttivitaListener.subscribe((attivita) => {
             attivita.rendicontazioneCorpo = modalita;
             this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
-                this.router.navigate(['../detail', response.id], { relativeTo: this.route });
+                // this.router.navigate(['../detail', response.id], { relativeTo: this.route });
+                this.router.navigateByUrl('/attivita/detail/' + response.id); 
             },
                 (err: any) => console.log(err),
                 () => console.log('createAttivitaAlternanza'));
