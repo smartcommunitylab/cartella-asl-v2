@@ -6,6 +6,7 @@ import { Label } from 'ng2-charts';
 import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
+import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 
 @Component({
   selector: 'istituto',
@@ -101,7 +102,8 @@ export class IstitutoComponent implements OnInit {
     public dataService: DataService,
     private route: ActivatedRoute,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private growler: GrowlerService
   ) {}
 
   ngOnInit(): void {
@@ -511,6 +513,7 @@ export class IstitutoComponent implements OnInit {
         ids.push(element.id);
       });
       this.dataService.aggiungiDocentiAccount(ids).subscribe(res => {
+          this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);
           this.ngOnInit();
       });
     });
