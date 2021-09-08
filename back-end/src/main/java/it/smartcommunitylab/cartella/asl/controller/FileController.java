@@ -257,7 +257,11 @@ public class FileController {
 		}
 		if(!istitutoId.equals(c.getIstitutoId())) {
 			throw new BadRequestException("convenzione non autorizzata");
-		}		
+		}
+		List<Documento> list = documentManager.getDocument(c.getUuid());
+		if(!list.isEmpty()) {
+			throw new BadRequestException("documento già caricato");
+		}
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("uploadDocumentoForConvezioneIstituto:%s - %s", uuid, istitutoId));
 		}
