@@ -133,7 +133,7 @@ public class IstituzioneManager extends DataEntityManager {
 		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+			sb.append(" AND (UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text))");
 		}
 		sb.append(" GROUP BY i.id ORDER BY COUNT(aa.id) DESC");
 		String q = sb.toString();
@@ -192,7 +192,29 @@ public class IstituzioneManager extends DataEntityManager {
 
 	public Page<Istituzione> findIstitutiByOfferta(String enteId, LocalDate dateFrom, LocalDate dateTo, String text,
 			Pageable pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i FROM Istituzione i, Convenzione c");
+		sb.append(" WHERE c.istitutoId=i.id AND c.enteId=(:enteId) AND c.dataInizio<=(:dateFrom) AND c.dataFine>=(:dateTo)");
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text))");
+		}
+		sb.append(" ORDER BY i.name");
+		String q = sb.toString();
+		
+		TypedQuery<Istituzione> query = em.createQuery(q, Istituzione.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("dateFrom", dateFrom);
+		query.setParameter("dateTo", dateTo);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Istituzione> list = query.getResultList();
+		
+		String counterQuery = q.replace("SELECT DISTINCT i", "SELECT COUNT(DISTINCT i)");
+		Query cQuery = queryToCount(counterQuery, query);
+		long total = (Long) cQuery.getSingleResult();
+		Page<Istituzione> page = new PageImpl<Istituzione>(list, pageRequest, total);
+		return page;
 	}
 }
