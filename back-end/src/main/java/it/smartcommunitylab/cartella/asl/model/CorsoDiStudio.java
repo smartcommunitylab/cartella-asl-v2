@@ -3,6 +3,7 @@ package it.smartcommunitylab.cartella.asl.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,8 +31,11 @@ public class CorsoDiStudio {
 	private String extId;
 	private String origin;
 
-	// TODO
 	private int oreAlternanza = 200;
+
+	@Transient
+	private Boolean corsoSperimentale;
+
 
 	public String getOffertaId() {
 		return offertaId;
@@ -100,6 +104,14 @@ public class CorsoDiStudio {
 	@Override
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+	}
+
+	public Boolean getCorsoSperimentale() {
+		return corsoSperimentale;
+	}
+
+	public void setCorsoSperimentale(Boolean corsoSperimentale) {
+		this.corsoSperimentale = corsoSperimentale;
 	}
 
 }

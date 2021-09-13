@@ -30,7 +30,7 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   attivita: AttivitaAlternanza;
   esperienze;
-  offertaAssociata;
+  // offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   individuale: boolean;
   corsiStudio;
@@ -61,16 +61,14 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
 
-        if (this.attivita.offertaId) {
-          this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
-            this.offertaAssociata = off;
-          })
-        }
+        // if (this.attivita.offertaId) {
+        //   this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
+        //     this.offertaAssociata = off;
+        //   })
+        // }
 
-        this.dataService.getAttivitaPresenzeGruppoListaGiorni(id, moment(res.attivitaAlternanza.dataInizio).format('YYYY-MM-DD'), moment(res.attivitaAlternanza.dataFine).format('YYYY-MM-DD')).subscribe((studenti) => {
-          studenti.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
-        })
-
+        this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
+        
         this.dataService.downloadAttivitaDocumenti(this.attivita.uuid).subscribe((docs) => {
           this.documenti = docs;
         });
@@ -88,6 +86,17 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.dataService.getRisorsaCompetenze(this.attivita.uuid).subscribe((res) => {
           this.atttivitaCompetenze = res;
         });
+
+        if (this.attivita.rendicontazioneCorpo) {
+          // this.dataService.getAttivitaPresenzeCorpo(id).subscribe((res) => {
+            // this.esperienze = res;
+            this.esperienze.forEach(esp => {
+              if (esp.oreRendicontate < 1) {
+                esp.oreRendicontate = '-';
+              }
+            });
+          // });
+        }
 
       },
         (err: any) => console.log(err),
@@ -141,6 +150,10 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   updateStudentiAssociate() {
     this.router.navigate(['modifica/studenti/'], { relativeTo: this.route });
+  }
+
+  modificaOreStudenti() {
+    this.router.navigate(['modifica/studenti/ore'], { relativeTo: this.route });
   }
 
   updateCompetenzePiano() {
@@ -269,4 +282,12 @@ export class AttivitaDettaglioComponent implements OnInit {
     });
   }
 
+  isRendicontazioneOre(aa) {
+    if (aa.rendicontazioneCorpo) {
+      return 'Rendicontazione a corpo';
+    } else {
+      return 'Rendicontazione ore giornaliera';
+    }
+  }
+  
 }

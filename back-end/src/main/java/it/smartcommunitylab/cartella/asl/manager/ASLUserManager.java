@@ -70,7 +70,9 @@ public class ASLUserManager extends DataEntityManager {
 					aziende.put(azienda.getId(), azienda);
 				}
 			}
-			if (ASLRole.DIRIGENTE_SCOLASTICO.equals(role.getRole()) || ASLRole.FUNZIONE_STRUMENTALE.equals(role.getRole())) {
+			if (ASLRole.DIRIGENTE_SCOLASTICO.equals(role.getRole()) 
+				|| ASLRole.FUNZIONE_STRUMENTALE.equals(role.getRole())
+				|| ASLRole.TUTOR_SCOLASTICO.equals(role.getRole())) {
 				Istituzione istituto = istituzioneRepository.getOne(role.getDomainId());
 				if (istituto != null) {
 					istituti.put(istituto.getId(), istituto);

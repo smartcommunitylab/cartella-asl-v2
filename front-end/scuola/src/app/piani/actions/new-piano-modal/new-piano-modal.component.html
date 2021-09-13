@@ -48,7 +48,7 @@
                 <!-- Corso di studio -->
                 <div class="row v-center form-group">
                     <div class="col-10" [class.has-danger]="corsoStudioInput.invalid && (corsoStudioInput.dirty || corsoStudioInput.touched || forceErrorDisplay)">
-                        <select class="browser-default form-control" [(ngModel)]="corsoStudioId" id="corsoStudio"
+                        <select class="browser-default form-control" (change)="onChange($event.target.value)" [(ngModel)]="corsoStudioId" id="corsoStudio"
                             #corsoStudioInput="ngModel" required>
                             <option selected="selected">Corso di studio</option>
                             <option [value]="corsodistudio.courseId" *ngFor="let corsodistudio of corsiStudio">
@@ -71,7 +71,7 @@
                     <div class="col-2"></div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-4" *ngIf="!quadriennali">
                 <!-- Monte ore 3º anno -->
                 <div class="row v-center form-group">
                     <div class="col-10" [class.has-danger]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay)">
@@ -106,13 +106,49 @@
                     <div class="col-2"></div>
                 </div>
             </div>
+            <div class="col-4" *ngIf="quadriennali">
+                <!-- Monte ore 2º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte2annoInput.invalid && (monte2annoInput.dirty || monte2annoInput.touched || forceErrorDisplay)">
+                        <label for="monte2anno">Monte ore 2º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="monte2anno" id="monte2anno" #monte2annoInput="ngModel" required>
+                        <div class="invalid-feedback" [class.d-block]="monte2annoInput.invalid && (monte2annoInput.dirty || monte2annoInput.touched || forceErrorDisplay)">
+                            Campo necessario.
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <!-- Monte ore 3º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay)">
+                        <label for="monte3anno">Monte ore 3º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="monte3anno" id="monte3anno" #monte3annoInput="ngModel" required>
+                        <div class="invalid-feedback" [class.d-block]="monte3annoInput.invalid && (monte3annoInput.dirty || monte3annoInput.touched || forceErrorDisplay)">
+                            Campo necessario.
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+                <!-- Monte ore 4º anno -->
+                <div class="row v-center form-group">
+                    <div class="col-10" [class.has-danger]="monte4annoInput.invalid && (monte4annoInput.dirty || monte4annoInput.touched || forceErrorDisplay)">
+                        <label for="monte4anno">Monte ore 4º anno</label>
+                        <input type="number" min="0" class="form-control" [(ngModel)]="monte4anno" id="monte4anno" #monte4annoInput="ngModel" required>
+                        <div class="invalid-feedback" [class.d-block]="monte4annoInput.invalid && (monte4annoInput.dirty || monte4annoInput.touched || forceErrorDisplay)">
+                            Campo necessario.
+                        </div>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </div>
             <div class="col-3">
                 <div class="row v-center form-group"></div>
                 <!--  Totale ore: -->
                 <div class="row v-center form-group">
                     <div class="col-10">
                         <label for="totalAnno" class="active">Totale ore:</label>
-                        <input [disabled]=true type="number" id="totalAnno" class="form-control bg-transparent" value="{{monte4anno + monte3anno + monte5anno }}">
+                        <input *ngIf="!quadriennali" [disabled]=true type="number" id="totalAnno" class="form-control bg-transparent" value="{{ monte3anno + monte4anno + monte5anno }}">
+                        <input *ngIf="quadriennali" [disabled]=true type="number" id="totalAnno" class="form-control bg-transparent" value="{{ monte2anno + monte3anno + monte4anno  }}">
                     </div>
                     <div class="col-sm-2"></div>
                 </div>

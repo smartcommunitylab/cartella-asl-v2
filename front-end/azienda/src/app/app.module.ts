@@ -11,7 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { IstitutiSelectorModule } from './shared/istituti-selector/istituti-selector.module';
 import { AppLoadService } from './app-load.service';
-import { AuthenticationService } from './core/services/authentication.service';
+import { AuthService } from './core/auth/auth.service';
 import { AuthGuard } from './core/services/auth.guard';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
@@ -25,7 +25,7 @@ export function init_app(appLoadService: AppLoadService) {
   providers: [
     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
-    AuthenticationService,
+    AuthService,
     AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,30 +1,16 @@
 package it.smartcommunitylab.cartella.asl.security;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthentication;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
-import it.smartcommunitylab.aac.AACException;
-import it.smartcommunitylab.aac.model.AccountProfile;
 import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.ASLUserRepository;
@@ -39,9 +25,9 @@ public class AACConnector {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(AACConnector.class);	
 	
-	@Autowired
-	@Value("${oauth.serverUrl}")	
-	private String aacURL;
+//	@Autowired
+//	@Value("${oauth.serverUrl}")	
+//	private String aacURL;
 	
 	@Autowired
 	private ASLUserRepository userRepository;	
@@ -52,32 +38,40 @@ public class AACConnector {
 	@Autowired
 	private ErrorLabelManager errorLabelManager;	
 	
-	private ObjectMapper mapper = new ObjectMapper();	
+//	private ObjectMapper mapper = new ObjectMapper();	
 	
-	private LoadingCache<String, AccountProfile> accountProfileCache;
+//	private LoadingCache<String, AccountProfile> accountProfileCache;
 	
 	@PostConstruct
 	public void init() throws Exception {
-		CacheLoader<String, AccountProfile> loader = new CacheLoader<String, AccountProfile>() {
-      @Override
-      public AccountProfile load(String key) throws Exception {
-      	return findAccountProfile(key);
-      }
-		};
-		accountProfileCache = CacheBuilder.newBuilder()
-				.maximumSize(500)
-				.expireAfterWrite(60,TimeUnit.MINUTES)
-	      .build(loader);
+//		CacheLoader<String, AccountProfile> loader = new CacheLoader<String, AccountProfile>() {
+//      @Override
+//      public AccountProfile load(String key) throws Exception {
+//      	return findAccountProfile(key);
+//      }
+//		};
+//		accountProfileCache = CacheBuilder.newBuilder()
+//				.maximumSize(500)
+//				.expireAfterWrite(60,TimeUnit.MINUTES)
+//	      .build(loader);
 	}
 
 	public ASLUser getASLUser(HttpServletRequest request) throws UnauthorizedException {
+		
 			//Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			AccountProfile accountProfile = getAccoutProfile(request);
+//			AccountProfile accountProfile = getAccoutProfile(request);
 
 			ASLUser user = null;
 			String result = null;
 			String type = null;
-			if (accountProfile != null) {
+			
+			BearerTokenAuthentication authentication = (BearerTokenAuthentication) SecurityContextHolder.getContext().getAuthentication();
+			OAuth2AuthenticatedPrincipal principal = (OAuth2AuthenticatedPrincipal) authentication.getPrincipal();
+			//TODO check cf
+			result = (String) principal.getAttributes().get("email");
+			type = EMAIL;
+			
+			/*if (accountProfile != null) {
 				if (accountProfile.getAccounts().containsKey("adc")) {
 					result = accountProfile.getAttribute("adc", "pat_attribute_codicefiscale");
 					type = CF;
@@ -95,7 +89,7 @@ public class AACConnector {
 					}
 					result = accountAttributes.get(EMAIL);
 					type = EMAIL;
-				}
+				}*/
 
 				if (result != null) {
 					if (EMAIL.equals(type)) {
@@ -103,16 +97,18 @@ public class AACConnector {
 					} else if (CF.equals(type)) {
 						user = getASLUserByCF(result);
 					}
+				} else {
+					throw new UnauthorizedException(String.format(errorLabelManager.get("api.access.error")));
 				}
 				
 				if (user == null) {
 					logger.warn(String.format("User not found:%s - %s", type, result));
-					throw new UnauthorizedException(String.format(errorLabelManager.get("user.notfound"), accountProfile.getName(), accountProfile.getSurname()));
+					throw new UnauthorizedException(String.format(errorLabelManager.get("user.notfound"), result));
 				}
 
-			} else {
-				throw new UnauthorizedException(String.format(errorLabelManager.get("api.access.error")));
-			}
+//			} else {
+//				throw new UnauthorizedException(String.format(errorLabelManager.get("api.access.error")));
+//			}
 			return user;			
 	}	
 	
@@ -166,49 +162,49 @@ public class AACConnector {
 //		return user;
 //	}
 	
-	private AccountProfile getAccoutProfile(HttpServletRequest request) {
-		AccountProfile result = null;
-		String token = request.getHeader("Authorization");
-		if (token != null && !token.isEmpty()) {
-			token = token.replace("Bearer ", "");
-			try {
-				result = accountProfileCache.get(token);
-			} catch (Exception e) {
-				if (logger.isWarnEnabled()) {
-					logger.warn(String.format("getAccoutProfile[%s]: %s", token, e.getMessage()));
-				}
-			} 
-		}
-		return result;
-	}	
+//	private AccountProfile getAccoutProfile(HttpServletRequest request) {
+//		AccountProfile result = null;
+//		String token = request.getHeader("Authorization");
+//		if (token != null && !token.isEmpty()) {
+//			token = token.replace("Bearer ", "");
+//			try {
+//				result = accountProfileCache.get(token);
+//			} catch (Exception e) {
+//				if (logger.isWarnEnabled()) {
+//					logger.warn(String.format("getAccoutProfile[%s]: %s", token, e.getMessage()));
+//				}
+//			} 
+//		}
+//		return result;
+//	}	
 	
-	private AccountProfile findAccountProfile(String token)  throws SecurityException, AACException {
-		logger.info("findAccountProfile: " + token);
-		try {
-	        final HttpResponse resp;
-	        String url = aacURL + "accountprofile/me";
-	        final HttpGet get = new HttpGet(url);
-	        get.setHeader("Accept", "application/json");
-	        get.setHeader("Authorization", "Bearer " + token);
-	        try {
-	            resp = getHttpClient().execute(get);
-	            final String response = EntityUtils.toString(resp.getEntity());
-	            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-	            	AccountProfile data = mapper.readValue(response, AccountProfile.class);
-	                return data;
-	            }
-	            throw new AACException("Error in accountprofile/me " + resp.getStatusLine());
-	        } catch (final Exception e) {
-	            throw new AACException(e);
-	        }
-		} catch (Exception e) {
-			throw new AACException(e);
-		}
-	}	
+//	private AccountProfile findAccountProfile(String token)  throws SecurityException, AACException {
+//		logger.info("findAccountProfile: " + token);
+//		try {
+//	        final HttpResponse resp;
+//	        String url = aacURL + "accountprofile/me";
+//	        final HttpGet get = new HttpGet(url);
+//	        get.setHeader("Accept", "application/json");
+//	        get.setHeader("Authorization", "Bearer " + token);
+//	        try {
+//	            resp = getHttpClient().execute(get);
+//	            final String response = EntityUtils.toString(resp.getEntity());
+//	            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//	            	AccountProfile data = mapper.readValue(response, AccountProfile.class);
+//	                return data;
+//	            }
+//	            throw new AACException("Error in accountprofile/me " + resp.getStatusLine());
+//	        } catch (final Exception e) {
+//	            throw new AACException(e);
+//	        }
+//		} catch (Exception e) {
+//			throw new AACException(e);
+//		}
+//	}	
 			
-    private HttpClient getHttpClient() {
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        return httpClient;
-    }	
+//    private HttpClient getHttpClient() {
+//        HttpClient httpClient = HttpClientBuilder.create().build();
+//        return httpClient;
+//    }	
 	
 }

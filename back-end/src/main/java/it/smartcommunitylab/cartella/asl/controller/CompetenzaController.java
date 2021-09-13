@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
+import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.CompetenzaManager;
+import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
@@ -38,6 +41,8 @@ public class CompetenzaController implements AslController {
 
 	@Autowired
 	private CompetenzaManager competenzaManager;
+	@Autowired
+	private AttivitaAlternanzaManager attivitaAlternanzaManager;
 	@Autowired
 	private ASLRolesValidator usersValidator;
 	@Autowired
@@ -65,11 +70,16 @@ public class CompetenzaController implements AslController {
 	}
 
 	@GetMapping("/api/competenze/orderBy/istituto/{istitutoId}")
-	public Page<Competenza> getCompetenzeOrderByIstitutoId(@PathVariable String istitutoId,
-			@RequestParam() List<String> ownerIds, @RequestParam(required = false) String filterText, @RequestParam(required = false) String stato,
+	public Page<Competenza> getCompetenzeOrderByIstitutoId(
+			@PathVariable String istitutoId,
+			@RequestParam() List<String> ownerIds, 
+			@RequestParam(required = false) String filterText, 
+			@RequestParam(required = false) String stato,
 			Pageable pageRequest, HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if (logger.isInfoEnabled()) {
 			logger.info(String.format("getCompetenzeOrderByIstitutoId(%s", istitutoId + ")"));
 		}
@@ -82,9 +92,10 @@ public class CompetenzaController implements AslController {
 			HttpServletRequest request) throws Exception {
 		checkNullId(competenza.getId());
 
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("saveCompetenza(%s", istitutoId + ")"));
@@ -110,9 +121,10 @@ public class CompetenzaController implements AslController {
 	public Competenza updateCompetenza(@PathVariable String istitutoId, @RequestBody Competenza competenza,
 			HttpServletRequest request) throws Exception {
 		checkId(competenza.getId());
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateCompetenza(%s", istitutoId + ")"));
@@ -133,9 +145,10 @@ public class CompetenzaController implements AslController {
 	@DeleteMapping("/api/competenza/{id}")
 	public void deleteCompetenza(@PathVariable long id, HttpServletRequest request) throws Exception {
 		String istitutoId = competenzaManager.findCompetenzaOwnerId(id);
-		ASLUser user = usersValidator.validate(request,
-				Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-						new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("deleteCompetenza(%s", id + ")"));
@@ -152,7 +165,10 @@ public class CompetenzaController implements AslController {
 			@PathVariable String uuid, 
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));		
+		usersValidator.validate(request, Lists.newArrayList(
+			new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+			new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+			new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));		
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getRisorsaCompetenzeIstituto(%s", uuid + ")"));
 		}
@@ -185,11 +201,19 @@ public class CompetenzaController implements AslController {
 	}
 	
 	@PutMapping("/api/risorsa/{uuid}/competenze/istituto/{istitutoId}")
-	public Boolean updateCompetenzeToRisorsa(@PathVariable String uuid, @PathVariable String istitutoId, @RequestBody List<Long> ids, HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+	public Boolean updateCompetenzeToRisorsa(
+			@PathVariable String uuid, 
+			@PathVariable String istitutoId, 
+			@RequestBody List<Long> ids, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+			new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+			new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+			new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("updateCompetenzeToRisorsa(%s", uuid + ")"));
 		}
+		checkAccessoAttivita(uuid, user);
 		Boolean result =  competenzaManager.addCompetenzeToPianoAlternanza(uuid, ids);
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), PianoAlternanza.class, uuid, user, new Object(){});
@@ -197,5 +221,12 @@ public class CompetenzaController implements AslController {
 		}
 		return result;
 	}	
+	
+	private void checkAccessoAttivita(String uuid, ASLUser user) throws BadRequestException {
+		AttivitaAlternanza aa = attivitaAlternanzaManager.findByUuid(uuid);
+		if(aa != null) {
+			attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, user);
+		}		
+	}
 
 }

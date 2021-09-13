@@ -14,6 +14,7 @@ import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.export.ExportCsv;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnte;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Repository
@@ -32,7 +33,7 @@ public class ExportDataManager {
 	
 	public ExportCsv getStudenteAttivitaReportCsv(String istitutoId, String studenteId) throws Exception {
 		LocalDate today = LocalDate.now();
-		ReportDettaglioStudente reportDettaglioStudente = studenteManager.getReportDettaglioStudente(istitutoId, studenteId);
+		ReportDettaglioStudente reportDettaglioStudente = studenteManager.getReportDettaglioStudente(istitutoId, studenteId, null);
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		String filename = "Resoconto_Attività_" + reportDettaglioStudente.getStudente().getName() + "_"
 				+ reportDettaglioStudente.getStudente().getSurname() + "_" + reportDettaglioStudente.getStudente().getCf() + "_"
@@ -163,9 +164,11 @@ public class ExportDataManager {
 		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, getErrors);
 		String filename = "esperienze.csv";
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
-		StringBuffer sb = new StringBuffer("esperienzaId;\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"invio\";\"errore\"\n");
+		StringBuffer sb = new StringBuffer("esperienzaId;\"istituto\";\"annoScolastico\";\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\";\"invio\"\n");
 		for(ReportDashboardEsperienza esp : list) {
 			sb.append(esp.getEsperienzaId() + ";");
+			sb.append("\"" + esp.getIstituto() + "\";");
+			sb.append("\"" + esp.getAnnoScolastico() + "\";");
 			sb.append("\"" + esp.getStudenteId() + "\";");
 			sb.append("\"" + esp.getNominativoStudente() + "\";");
 			sb.append("\"" + esp.getCfStudente() + "\";");
@@ -178,13 +181,18 @@ public class ExportDataManager {
 			sb.append(esp.getOreTotali() + ";");
 			sb.append(esp.getOreValidate() + ";");
 			sb.append("\"" + esp.isAllineato() + "\";");
-			if(Utils.isNotEmpty(esp.getInvio())) {
-				sb.append("\"" + cleanString(esp.getInvio()) + "\";");
+			if(Utils.isNotEmpty(esp.getErrore())) {
+				String s = cleanString(esp.getErrore());
+				int i = s.indexOf("{'sistemaOrigine'");
+				if(i > 0) {
+					s = s.substring(0, i);
+				}
+				sb.append("\"" + s + "\";");
 			} else {
 				sb.append("\"\";");
 			}
-			if(Utils.isNotEmpty(esp.getErrore())) {
-				sb.append("\"" + cleanString(esp.getErrore()) + "\"\n");
+			if(Utils.isNotEmpty(esp.getInvio())) {
+				sb.append("\"" + cleanString(esp.getInvio()) + "\"\n");
 			} else {
 				sb.append("\"\"\n");
 			}
@@ -196,6 +204,48 @@ public class ExportDataManager {
 		return exportCsv;
 	}
 	
+	public ExportCsv getEnteStudente(String enteId, String studenteId) {
+		ReportStudenteDettaglioEnte report = studenteManager.getStudenteDettaglioEnte(studenteId, enteId);
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+		LocalDate today = LocalDate.now();
+		String filename = "Resoconto_Attività_" + report.getStudente().getSurname() + "_" + report.getStudente().getName() + "_"
+				+ today.format(ldf) + ".csv";
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"dataNascita\";\"telefono\";\"email\";\"titolo attività\";\"tipo\";\"dataInizio\";\"dataFine\";oreProgrammate;\"tutorScolastico\";\"tutorEnte\"\n");
+		report.getAttivitaList().forEach(aa -> {
+			String cognome = report.getStudente().getSurname();
+			String nome = report.getStudente().getName();
+			String cf = report.getStudente().getCf();
+			String dataNascita = report.getStudente().getBirthdate();
+			String telefono = report.getStudente().getPhone();
+			String email = report.getStudente().getEmail();
+			String titolo = aa.getTitolo();
+			String tipo = getTipologia(aa);
+			String dataInizio = aa.getDataInizio().format(ldf);
+			String dataFine = aa.getDataFine().format(ldf);
+			String oreProgrammate = String.valueOf(aa.getOre());
+			String tutorScolastico = aa.getReferenteScuola();
+			String tutorEnte = aa.getReferenteEsterno();
+			sb.append("\"" + cognome + "\";");
+			sb.append("\"" + nome + "\";");
+			sb.append("\"" + cf + "\";");
+			sb.append("\"" + dataNascita + "\";");
+			sb.append("\"" + telefono + "\";");
+			sb.append("\"" + email + "\";");
+			sb.append("\"" + titolo.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + tipo + "\";");
+			sb.append("\"" + dataInizio + "\";");
+			sb.append("\"" + dataFine + "\";");
+			sb.append(oreProgrammate + ";");
+			sb.append("\"" + tutorScolastico + "\";");
+			sb.append("\"" + tutorEnte + "\"\n");		
+		});
+		ExportCsv exportCsv = new ExportCsv();
+		exportCsv.setFilename(filename);
+		exportCsv.setContentType("text/csv");
+		exportCsv.setContent(sb);
+		return exportCsv;
+	}
+
 	private String getTipologia(AttivitaAlternanza aa) {
 		TipologiaTipologiaAttivita tta = tipologiaAttivitaManager.getTipologiaTipologiaAttivitaByTipologia(aa.getTipologia());
 		if(tta != null) {
@@ -214,8 +264,10 @@ public class ExportDataManager {
 	
 	private String cleanString(String text) {
 		if(Utils.isNotEmpty(text)) {
-			return text.replace("\"", "'").replace('\n', ' ').replace('\r', ' ');
+			return text.replace("\"", "'");
+			//return text.replace("\"", "'").replace('\n', ' ').replace('\r', ' ');
 		}
 		return "";
 	}
+
 }

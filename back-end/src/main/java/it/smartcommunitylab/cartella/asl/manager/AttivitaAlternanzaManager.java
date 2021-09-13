@@ -35,6 +35,8 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistrati
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzeAttvitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
+import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -59,7 +61,13 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	@Autowired
 	IstituzioneManager istituzioneManager;
 	@Autowired
+	RegistrazioneDocenteManager registrazioneDocenteManager;
+	@Autowired
+	ConvenzioneManager convenzioneManager;
+	@Autowired
 	ErrorLabelManager errorLabelManager;
+	@Autowired
+	ASLRolesValidator usersValidator;
 	
 	public AttivitaAlternanza saveAttivitaAlternanza(AttivitaAlternanza aa, String istitutoId) 
 			throws BadRequestException {
@@ -83,7 +91,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			if(!aaDb.getDataInizio().isEqual(aa.getDataInizio()) || 
 					!aaDb.getDataFine().isEqual(aa.getDataFine())) {
 				for(EsperienzaSvolta esperienza : esperienze) {
-					esperienzaSvoltaManager.changeDateRange(esperienza, aa.getDataInizio(), aa.getDataFine());
+					if(aa.getRendicontazioneCorpo()) {
+						setPresenzeCorpo(aa, esperienza);
+					} else {
+						esperienzaSvoltaManager.changeDateRange(esperienza, aa.getDataInizio(), aa.getDataFine());
+					}
 				}
 			}
 			attivitaAlternanzaRepository.updateAttivitaAlternanza(aa);
@@ -129,10 +141,25 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
-			Pageable pageRequest) {
-
+			Pageable pageRequest, ASLUser user) {
+		Map<String, Object> parameters = new HashMap<>();
+		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
+		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
 		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa LEFT JOIN EsperienzaSvolta es");
-		sb.append(" ON es.attivitaAlternanzaId=aa.id WHERE aa.istitutoId=(:istitutoId)");
+		sb.append(" ON es.attivitaAlternanzaId=aa.id");
+		if(tutorClasse) {
+			sb.append(" WHERE aa.istitutoId=(:istitutoId)");
+			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + Stati.archiviata.toString() + "')");
+			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+		} else {
+			if(tutorScolatico) {
+				sb.append(" WHERE aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
+				sb.append(" AND aa.stato!='" + Stati.archiviata.toString() + "'");
+			} else {
+				sb.append(" WHERE aa.istitutoId=(:istitutoId)");
+			}
+		}
 		
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
@@ -146,7 +173,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(stato)) {
 			Stati statoEnum = Stati.valueOf(stato);
 			if(statoEnum == Stati.archiviata) {
-				sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
+				if(tutorScolatico && !tutorClasse) {
+					sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
+				}
 			} else {
 				sb.append(" AND aa.stato='" + Stati.attiva.toString() + "'");
 				setDataParam = true;
@@ -170,15 +199,28 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("istitutoId", istitutoId);
+		parameters.put("istitutoId", istitutoId);
 		if(Utils.isNotEmpty(text)) {
-			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+			String like = "%" + text.trim().toUpperCase() + "%";
+			query.setParameter("text", like);
+			parameters.put("text", like);
 		}
 		if(tipologia > 0) {
 			query.setParameter("tipologia", tipologia);
+			parameters.put("tipologia", tipologia);
 		}
 		if(setDataParam) {
 			LocalDate localDate = LocalDate.now(); 
 			query.setParameter("data", localDate);
+			parameters.put("data", localDate);
+		}
+		if(tutorScolatico) {
+			query.setParameter("referenteCf", user.getCf());
+			parameters.put("referenteCf", user.getCf());
+		}
+		if(tutorClasse) {
+			query.setParameter("classiAssociate", classiAssociate);
+			parameters.put("classiAssociate", classiAssociate);
 		}
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
@@ -186,26 +228,19 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		List<AttivitaAlternanza> aaList = query.getResultList();
 		
 		List<ReportAttivitaAlternanzaRicerca> reportList = new ArrayList<>();
-		Map<Long, ReportAttivitaAlternanzaRicerca> reportMap = new HashMap<>();
-		List<Long> aaIdList = new ArrayList<>();
 		for (AttivitaAlternanza aa : aaList) {
+			List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+			checkAccessoAttivita(aa, esperienze, user);
 			ReportAttivitaAlternanzaRicerca report = new ReportAttivitaAlternanzaRicerca(aa); 
 			report.setStato(getStato(aa).toString());
-			reportMap.put(aa.getId(), report);
 			reportList.add(report);
-			aaIdList.add(aa.getId());
-		}
-		
-		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivitaIds(aaIdList);
-		for(EsperienzaSvolta es : esperienze) {
-			ReportAttivitaAlternanzaRicerca report = reportMap.get(es.getAttivitaAlternanzaId());
-			if(report != null) {
+			for(EsperienzaSvolta es : esperienze) {
 				report.getStudenti().add(es.getNominativoStudente());
 				report.getClassi().add(es.getClasseStudente());
 			}
 		}
 		
-		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), query);
+		Query cQuery = queryToCount(q.replaceAll("DISTINCT aa","COUNT(DISTINCT aa)"), parameters);
 		long total = (Long) cQuery.getSingleResult();
 		
 		Page<ReportAttivitaAlternanzaRicerca> page = new PageImpl<ReportAttivitaAlternanzaRicerca>(reportList, pageRequest, total);
@@ -252,7 +287,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return report;
 	}
 
-	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa) {
+	public ReportAttivitaAlternanzaDettaglio getAttivitaAlternanzaDetails(AttivitaAlternanza aa, ASLUser user) throws BadRequestException {
 		AttivitaAlternanza attivita = aa.clona();
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
@@ -263,11 +298,45 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		if(!checkAccessoAttivita(attivita, esperienze, user)) {
+			throw new BadRequestException("accesso all'attività non consentito");
+		}
 		for (EsperienzaSvolta esperienza : esperienze) {
 			ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienza);
 			report.getEsperienze().add(espReg);
 		}
 		return report;
+	}
+
+	private boolean checkAccessoAttivita(AttivitaAlternanza aa, List<EsperienzaSvolta> esperienze, ASLUser user) {
+		if(user == null) {
+			return true;
+		}
+		/*if(usersValidator.hasRole(user, ASLRole.ADMIN)) {
+			return true;
+		}*/
+		if(usersValidator.hasRole(user, ASLRole.DIRIGENTE_SCOLASTICO, aa.getIstitutoId())) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.FUNZIONE_STRUMENTALE, aa.getIstitutoId())) {
+			return true;
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, aa.getIstitutoId())) {
+			if(user.getCf().equals(aa.getReferenteScuolaCF()) && !aa.getStato().equals(Stati.archiviata)) {
+				aa.setTutorScolastico(true);
+				return true;
+			}
+		}
+		if(usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, aa.getIstitutoId())) {
+			List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(aa.getIstitutoId(), user.getCf());
+			for(EsperienzaSvolta es : esperienze) {
+				if(classiAssociate.contains(es.getClasseStudente())) {
+					aa.setTutorClasse(true);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void setStudentList(AttivitaAlternanza aa, List<ReportEsperienzaRegistration> listaEspReg) 
@@ -418,10 +487,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		EsperienzaSvolta esperienza = esperienze.get(0);
 		
 		int oreValidate = 0;
+		int oreInserite = 0;
 		int giornateValidate = 0;
 		int giornateDaValidare = 0;
 		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienza.getId());
 		for (PresenzaGiornaliera presenza : presenze) {
+			oreInserite += presenza.getOreSvolte();
 			if(presenza.getVerificata()) {
 				oreValidate += presenza.getOreSvolte();
 				giornateValidate++;
@@ -432,6 +503,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		
 		ReportPresenzeAttvitaAlternanza report = new ReportPresenzeAttvitaAlternanza(aa);
 		report.setOreValidate(oreValidate);
+		report.setOreInserite(oreInserite);
 		report.setGiornateValidate(giornateValidate);
 		report.setGiornateDaValidare(giornateDaValidare);
 		return report;
@@ -465,7 +537,9 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeAttivitaIndividuale(AttivitaAlternanza aa, LocalDate dateFrom, 
-			LocalDate dateTo) {
+			LocalDate dateTo, ASLUser user) throws Exception {
+		//check accesso
+		getAttivitaAlternanzaDetails(aa, user);	
 		String q = "SELECT pg FROM EsperienzaSvolta es, PresenzaGiornaliera pg WHERE es.attivitaAlternanzaId=(:attivitaAlternanzaId)"
 				+ " AND pg.esperienzaSvoltaId=es.id AND pg.giornata >= (:dateFrom) AND pg.giornata <= (:dateTo) ORDER BY pg.giornata ASC";
 		
@@ -503,7 +577,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 	
 	public List<ReportPresenzaGiornalieraGruppo> getPresenzeAttivitaGruppo(AttivitaAlternanza aa, LocalDate dateFrom, 
-			LocalDate dateTo) throws Exception {
+			LocalDate dateTo, ASLUser user) throws Exception {
+		//check accesso
+		getAttivitaAlternanzaDetails(aa, user);	
+
 		List<ReportPresenzaGiornalieraGruppo> reportList = new ArrayList<ReportPresenzaGiornalieraGruppo>();
 		
 		String qEsperienze = "SELECT DISTINCT es FROM EsperienzaSvolta es WHERE es.attivitaAlternanzaId=(:attivitaAlternanzaId)"
@@ -562,6 +639,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		Query query = em.createQuery(qEsperienze);
 		query.setParameter("istitutoId", istitutoId);
 		query.setParameter("studenteId", studenteId);
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
@@ -614,6 +692,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
@@ -657,17 +736,20 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 	}
 
-	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId) 
+	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId, Boolean rendicontazioneCorpo) 
 			throws BadRequestException {
 		Offerta offerta = offertaManager.getOfferta(offertaId);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
-		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId);
+		if(Utils.isEmpty(offerta.getEnteId()) || Utils.isEmpty(offerta.getReferenteEsterno())) {
+			throw new BadRequestException("offerta di riferimento con dati incompleti");
+		}
+		AttivitaAlternanza aa = creaAttivitaFromOfferta(offerta, istitutoId, rendicontazioneCorpo);
 		return saveAttivitaAlternanza(aa, istitutoId);
 	}
 
-	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta, String istitutoId) {
+	private AttivitaAlternanza creaAttivitaFromOfferta(Offerta offerta, String istitutoId, Boolean rendicontazioneCorpo) {
 		String titolo = offerta.getTitolo() + " - " + 
 				(attivitaAlternanzaRepository.countByOffertaIdAndIstitutoId(offerta.getId(), istitutoId) + 1);
 		AttivitaAlternanza aa = new AttivitaAlternanza();
@@ -693,6 +775,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		aa.setLuogoSvolgimento(offerta.getLuogoSvolgimento());
 		aa.setLatitude(offerta.getLatitude());
 		aa.setLongitude(offerta.getLongitude());
+		aa.setRendicontazioneCorpo(rendicontazioneCorpo);
 		return aa;
 	}
 
@@ -702,7 +785,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 				+ " ORDER BY aa.dataInizio DESC, aa.titolo ASC";
 		Query query = em.createQuery(qEsperienze);
 		query.setParameter("studenteId", studenteId);
-		
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = query.getResultList();
 		
 		List<ReportEsperienzaStudente> reportList = new ArrayList<>();
@@ -721,9 +804,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 	public Page<ReportAttivitaAlternanzaRicercaEnte> findAttivitaByEnte(String enteId, String text, 
 			String stato, String istitutoId, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa");
-		sb.append(" LEFT JOIN EsperienzaSvolta es ON es.attivitaAlternanzaId=aa.id");
-		sb.append(" LEFT JOIN Istituzione i ON aa.istitutoId=i.id WHERE aa.enteId=(:enteId)");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es, Istituzione i, Convenzione c");
+		sb.append(" WHERE es.attivitaAlternanzaId=aa.id");
+		sb.append(" AND aa.istitutoId=i.id AND aa.enteId=(:enteId)");
+		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		if(Utils.isNotEmpty(istitutoId)) {
 			sb.append(" AND aa.istitutoId=(:istitutoId)");
 		}
@@ -759,6 +845,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(q, AttivitaAlternanza.class);
 		
 		query.setParameter("enteId", enteId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));				
 		if(Utils.isNotEmpty(istitutoId)) {
 			query.setParameter("istitutoId", istitutoId);
 		}
@@ -804,17 +892,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return page;
 	}
 
-	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws BadRequestException {
+	public AttivitaAlternanza updateAttivitaAlternanzaByEnte(AttivitaAlternanza aa, String enteId) throws Exception {
 		AttivitaAlternanza aaDb = getAttivitaAlternanza(aa.getId());
-		if(aaDb == null) {
-			throw new BadRequestException(errorLabelManager.get("attivita.alt.error.notfound"));		
-		}
-		if(!enteId.equals(aaDb.getEnteId())) {
-			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
-		}		
 		if(aaDb.getStato().equals(Stati.archiviata)) {
 			throw new BadRequestException(errorLabelManager.get("attivita.noteditable"));
 		}
+		convenzioneManager.checkAttivitaByEnte(aa, enteId);
 		attivitaAlternanzaRepository.updateAttivitaAlternanzaByEnte(aa);
 		return getAttivitaAlternanza(aa.getId());
 	}
@@ -838,13 +921,18 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	}
 
 	public List<AttivitaAlternanza> findAttivitaByStudenteAndEnte(String studenteId, String enteId) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, EsperienzaSvolta es, Convenzione c");
 		sb.append(" WHERE es.attivitaAlternanzaId=aa.id AND aa.enteId=(:enteId) AND es.studenteId=(:studenteId)");
+		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		sb.append(" ORDER BY aa.dataInizio DESC");
 
 		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("studenteId", studenteId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));
 		List<AttivitaAlternanza> list = query.getResultList();
 		List<AttivitaAlternanza> result = new ArrayList<>();
 		for(AttivitaAlternanza aa : list) {
@@ -907,8 +995,51 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		aa.setTitolo(aaDb.getTitolo());
 		aa.setTitoloOfferta(aaDb.getTitoloOfferta());
 		aa.setUuid(Utils.getUUID());
+		aa.setRendicontazioneCorpo(aaDb.getRendicontazioneCorpo());
 		attivitaAlternanzaRepository.save(aa);
 		return aa;
+	}
+	
+	public List<ReportEsperienzaRegistration> getReportPresenzeCorpo(AttivitaAlternanza aa) {
+		List<ReportEsperienzaRegistration> result = new ArrayList<>();
+		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
+				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
+		for (EsperienzaSvolta esperienza : esperienze) {
+			ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienza);
+			result.add(espReg);
+		}
+		return result;
+	}
+	
+	public List<ReportEsperienzaRegistration> aggiornaReportPresenzeCorpo(AttivitaAlternanza aa, 
+			List<ReportEsperienzaRegistration> presenze) {
+		List<ReportEsperienzaRegistration> result = new ArrayList<>();
+		if(aa.getRendicontazioneCorpo()) {
+			for(ReportEsperienzaRegistration report : presenze) {
+				EsperienzaSvolta esperienzaSvolta = esperienzaSvoltaManager.findById(report.getEsperienzaSvoltaId());
+				if((esperienzaSvolta != null) && (esperienzaSvolta.getAttivitaAlternanzaId().equals(aa.getId()))) {
+					esperienzaSvolta.setOreRendicontate(report.getOreRendicontate());
+					setPresenzeCorpo(aa, esperienzaSvolta);
+					esperienzaSvoltaManager.updateOreRendicontate(report.getEsperienzaSvoltaId(), report.getOreRendicontate());
+					ReportEsperienzaRegistration espReg = new ReportEsperienzaRegistration(esperienzaSvolta);
+					result.add(espReg);					
+				}
+			}			
+		}
+		return result;
+	}
+	
+	private void setPresenzeCorpo(AttivitaAlternanza aa, EsperienzaSvolta es) {
+		presenzaGiornalieraManager.deletePresenzeByEsperienza(es.getId());
+		PresenzaGiornaliera pg = new PresenzaGiornaliera();
+		pg.setEsperienzaSvoltaId(es.getId());
+		pg.setGiornata(aa.getDataInizio());
+		pg.setIstitutoId(aa.getIstitutoId());
+		pg.setOreSvolte(es.getOreRendicontate());
+		pg.setSmartWorking(false);
+		pg.setValidataEnte(false);
+		pg.setVerificata(true);
+		presenzaGiornalieraManager.savePresenza(pg);		
 	}
 	
 }

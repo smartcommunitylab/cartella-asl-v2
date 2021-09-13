@@ -19,6 +19,8 @@ public class ReportAttivitaAlternanzaRicerca {
 	private int tipologia;
 	private String stato;
 	private String nomeEnte;
+	private boolean rendicontazioneCorpo;
+	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;
@@ -30,6 +32,8 @@ public class ReportAttivitaAlternanzaRicerca {
 	private LocalDate dataArchiviazione;
 	private List<String> studenti = new ArrayList<String>();
 	private List<String> classi = new ArrayList<String>();
+	private boolean tutorScolastico;
+	private boolean tutorClasse;	
 	
 	public ReportAttivitaAlternanzaRicerca() {}
 	
@@ -44,6 +48,9 @@ public class ReportAttivitaAlternanzaRicerca {
 		this.setDataInizio(attivita.getDataInizio());
 		this.setDataFine(attivita.getDataFine());
 		this.setDataArchiviazione(attivita.getDataArchiviazione());
+		this.setRendicontazioneCorpo(attivita.getRendicontazioneCorpo());
+		this.setTutorScolastico(attivita.isTutorScolastico());
+		this.setTutorClasse(attivita.isTutorClasse());
 	}
 	
 	public Long getId() {
@@ -129,6 +136,30 @@ public class ReportAttivitaAlternanzaRicerca {
 
 	public void setClassi(List<String> classi) {
 		this.classi = classi;
+	}
+
+	public boolean isRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
+	}
+
+	public boolean isTutorScolastico() {
+		return tutorScolastico;
+	}
+
+	public void setTutorScolastico(boolean tutorScolastico) {
+		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
 	}
 
 

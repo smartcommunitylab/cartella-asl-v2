@@ -41,6 +41,8 @@ public class OffertaManager extends DataEntityManager {
 	@Autowired
 	AziendaManager aziendaManager;
 	@Autowired
+	ConvenzioneManager convenzioneManager;
+	@Autowired
 	ErrorLabelManager errorLabelManager;
 
 	public void rimuoviPostiEsperienze(Long offertaId, int posti) {
@@ -74,7 +76,9 @@ public class OffertaManager extends DataEntityManager {
 	public Page<Offerta> findOfferta(String istitutoId, String text, int tipologia,	Boolean ownerIstituto, String stato, 
 			Pageable pageRequest) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
+		sb.append("SELECT DISTINCT off FROM Offerta off, OffertaIstituto oi, Convenzione c");
+		sb.append(" WHERE off.id=oi.offertaId AND oi.istitutoId=(:istitutoId)");
+		sb.append(" AND c.istitutoId=oi.istitutoId AND c.dataFine>=(:oggi)");
 		/*if(ownerIstituto == null) {
 			sb.append(" (off.istitutoId=(:istitutoId) OR off.istitutoId IS NULL)");
 		} else {
@@ -103,6 +107,7 @@ public class OffertaManager extends DataEntityManager {
 		
 		TypedQuery<Offerta> query = em.createQuery(q, Offerta.class);
 		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("oggi", LocalDate.now());
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
@@ -140,6 +145,22 @@ public class OffertaManager extends DataEntityManager {
 			return Stati.bozza;
 		}
 		return Stati.disponibile;
+	}
+	
+	public Offerta getOffertaByIstituto(String istitutoId, Long offertaId) {
+		OffertaIstituto oi = offertaIstitutoRepository.findByOffertaIdAndIstitutoId(offertaId, istitutoId);
+		if(oi != null) {
+			Offerta o = getOfferta(offertaId);
+			if(o != null) {
+				LocalDate today = LocalDate.now();
+				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), o.getEnteId());
+				if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
+					return null;
+				}
+				return o;
+			}
+		}
+		return null;
 	}
 	
 	public Offerta getOfferta(Long id) {
@@ -254,7 +275,12 @@ public class OffertaManager extends DataEntityManager {
 			throw new BadRequestException(errorLabelManager.get("offerta.used"));
 		}
 		cancellaIstitutiAssociati(id);
+		LocalDate today = LocalDate.now();
 		for(OffertaIstitutoStub o : istituti) {
+			LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), enteId);
+			if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
+				continue;
+			}
 			OffertaIstituto entity = new OffertaIstituto();
 			entity.setOffertaId(id);
 			entity.setIstitutoId(o.getIstitutoId());
@@ -319,6 +345,7 @@ public class OffertaManager extends DataEntityManager {
 		
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
+		@SuppressWarnings("unchecked")
 		List<Object[]> rows = query.getResultList();
 		List<Offerta> list = new ArrayList<>();
 		for (Object[] obj : rows) {

@@ -1,4 +1,4 @@
-<div class="it-header-navbar-wrapper sticky">
+<div *ngIf="!!this.profile" class="it-header-navbar-wrapper sticky">
     <div class="row">
         <div class="col-1">
             <a target="_blank" href="#" class="mr-5">
@@ -21,48 +21,48 @@
                     <div class="menu-wrapper">
                         <ul class="navbar-nav">
                             <!-- ./#/attivita -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('attivita')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/attivita') }" href="./#/attivita/list">
                                     <span>Attività</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>
                             <!-- ./#/studenti -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('studenti')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/studenti/list') }" href="./#/studenti/list">
                                     <span>Studenti</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>
                             <!-- ./#/enti -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('enti')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/enti') }" href="./#/enti/list">
                                     <span>Enti</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>
                             <!-- ./#/offerte/list -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('offerte')" class="nav-item">
                                 <a class="nav-link"  [ngClass]="{ active: isActive('/offerte') }" href="./#/offerte/list">
                                     <span>Offerte</span>
                                     <span class="sr-only">current</span></a>
                             </li>
                             <!-- ./#/piani -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('piani')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/piani/') }" href="./#/piani/list">
                                     <span>Piani</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>
                              <!-- /competenze -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('competenze')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/competenze/list') }" href="./#/competenze/list">
                                     <span>Competenze</span>
                                     <span class="sr-only">current</span>
                                 </a>
                             </li>
                             <!-- ./#/istituto -->
-                            <li class="nav-item">
+                            <li *ngIf="validateRole('istituto')" class="nav-item">
                                 <a class="nav-link" [ngClass]="{ active: isActive('/istituto') }" href="./#/istituto/scheda">
                                     <span>Istituto</span>
                                     <span class="sr-only">current</span>

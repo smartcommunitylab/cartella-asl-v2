@@ -20,16 +20,16 @@ public interface AttivitaAlternanzaRepository extends JpaRepository<AttivitaAlte
 			+ "oraFine=:#{#aa.oraFine}, ore=:#{#aa.ore}, offertaId=:#{#aa.offertaId}, titoloOfferta=:#{#aa.titoloOfferta}, "
 			+ "annoScolastico=:#{#aa.annoScolastico}, enteId=:#{#aa.enteId}, nomeEnte=:#{#aa.nomeEnte}, "
 			+ "referenteScuola=:#{#aa.referenteScuola}, referenteScuolaCF=:#{#aa.referenteScuolaCF}, "
-			+ "referenteScuolaTelefono=:#{#aa.referenteScuolaTelefono}, "
+			+ "referenteScuolaTelefono=:#{#aa.referenteScuolaTelefono}, referenteScuolaEmail=:#{#aa.referenteScuolaEmail}, "
 			+ "referenteEsterno=:#{#aa.referenteEsterno}, referenteEsternoCF=:#{#aa.referenteEsternoCF}, "
-			+ "referenteEsternoTelefono=:#{#aa.referenteEsternoTelefono}, "
+			+ "referenteEsternoTelefono=:#{#aa.referenteEsternoTelefono}, referenteEsternoEmail=:#{#aa.referenteEsternoEmail}, "
 			+ "formatore=:#{#aa.formatore}, formatoreCF=:#{#aa.formatoreCF}, "
 			+ "luogoSvolgimento=:#{#aa.luogoSvolgimento}, latitude=:#{#aa.latitude}, longitude=:#{#aa.longitude} where id = :#{#aa.id}")
 	public void updateAttivitaAlternanza(@Param("aa") AttivitaAlternanza aa);
 
 	@Modifying
 	@Query("update AttivitaAlternanza aa0 set  "
-			+ "referenteEsterno=:#{#aa.referenteEsterno}, "
+			+ "referenteEsterno=:#{#aa.referenteEsterno}, referenteEsternoEmail=:#{#aa.referenteEsternoEmail}, "
 			+ "referenteEsternoCF=:#{#aa.referenteEsternoCF}, referenteEsternoTelefono=:#{#aa.referenteEsternoTelefono}, "
 			+ "luogoSvolgimento=:#{#aa.luogoSvolgimento}, latitude=:#{#aa.latitude}, longitude=:#{#aa.longitude} where id = :#{#aa.id}")
 	public void updateAttivitaAlternanzaByEnte(@Param("aa") AttivitaAlternanza aa);

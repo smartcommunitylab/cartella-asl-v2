@@ -200,14 +200,14 @@ export class StudenteDettaglioComponent implements OnInit {
   }
 
   getEsperienzeStudenteCsv() {
-    // this.dataService.getEsperienzeStudenteCsv(this.studente).subscribe((doc) => {
-    //   const downloadLink = document.createElement("a");
-    //   downloadLink.href = doc.url;
-    //   downloadLink.download = doc.filename;
-    //   document.body.appendChild(downloadLink);
-    //   downloadLink.click();
-    //   document.body.removeChild(downloadLink);  
-    // });
+    this.dataService.getEnteStudenteCsv(this.studente.id).subscribe((doc) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = doc.url;
+      downloadLink.download = doc.filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);  
+    });
   }
 
 }

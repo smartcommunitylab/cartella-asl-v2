@@ -11,7 +11,7 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="attivita.stato!='archiviata'"
+                <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])"
                     class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnDelete mLeft12" placement="bottom"
                     ngbTooltip="Elimina questa attività" (click)="delete()">
                     <span class="row btnText">
@@ -23,7 +23,7 @@
                         </span>
                     </span>
                 </button>
-                <button *ngIf="attivita.stato!='archiviata' && esperienze.length > 0"
+                <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO']) && esperienze.length > 0"
                     class="btn btn-warning btn-xs btn-icon py-1 pr-2 btnArchivia mLeft12" placement="bottom"
                     ngbTooltip="Archivia questa attività" (click)="archivia()">
                     <span class="row btnModificationText">
@@ -35,7 +35,7 @@
                         </span>
                     </span>
                 </button>
-                <button *ngIf="individuale && attivita.stato!='archiviata'" class="btn btn-primary btn-sm btn-icon btnDuplica mLeft12"
+                <button *ngIf="individuale && attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="btn btn-primary btn-sm btn-icon btnDuplica mLeft12"
                     placement="bottom" ngbTooltip="Crea una copia di questo attività" (click)="duplicaAA()">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Duplica</span>
@@ -73,26 +73,27 @@
         <div>
             <span class="title">Dati Attività</span><br />
             <label *ngIf="attivita.offertaId" class="font-weight-bold in_attesa">
-                <span *ngIf="offertaAssociata">
-                    Offerta associata: {{ offertaAssociata.titolo }},
-                    {{ getTipologiaString(offertaAssociata.tipologia).titolo }} presso
-                    {{ setNomeEnte(offertaAssociata) }}, {{ offertaAssociata.dataInizio | date: 'dd/MM/yyyy'}} -
-                    {{ offertaAssociata.dataFine | date: 'dd/MM/yyyy' }} - {{ offertaAssociata.ore }} ore.
-                </span>
-                <span>
+                <span>Offerta associata: {{ attivita.titoloOfferta }}</span>&nbsp;&nbsp;
+                <span *ngIf="dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])">
                     <a class="underline" [routerLink]="['/offerte/detail/', attivita.offertaId]">VEDI OFFERTA
                         ASSOCIATA</a>
                 </span>
             </label>
-            <br *ngIf="offertaAssociata" />
-            <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
+            <br *ngIf="attivita.offertaId" />
+            <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Modifica i dati di quest’attività" (click)="modifica()">
                 Modifica dati attività&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>
         <br>
         <div class="row">
-            <span class="col-12"><span class="text-semibold">Stato:&nbsp;</span><span
-                    class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span> </span>
+            <span class="col-6">
+                <span class="text-semibold">Stato:&nbsp;</span>
+                <span class="{{attivita.stato}}">{{getStatoNome(attivita.stato)}}</span>
+            </span>
+            <span class="">
+                <span class="text-semibold">Modalità rendicontazione:&nbsp;</span>
+                <span>{{ isRendicontazioneOre(attivita) }}</span>
+            </span> 
         </div>
         <div class="p-1 middle-div row">
             <div class="col-6">
@@ -105,11 +106,14 @@
                 <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
                 <span class="row"><span class="text-semibold">Tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
+                <span class="row"><span class="text-semibold">Tutor
+                        scolastico Telefono:&nbsp;</span>{{attivita.referenteScuolaTelefono}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
                         esterno:&nbsp;</span>{{attivita.referenteEsterno}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
+                        esterno Telefono:&nbsp;</span>{{attivita.referenteEsternoTelefono}}</span>        
             </div>
             <div class="col-6">
-                <span class="row"> </span>
                 <span class="row"><span
                         class="text-semibold">Dal:&nbsp;</span>{{attivita.dataInizio | date: 'dd/MM/yyyy'}} &nbsp;<span
                         class="text-semibold">Al:&nbsp;</span>{{attivita.dataFine | date: 'dd/MM/yyyy'}}</span>
@@ -122,24 +126,35 @@
                 <span class="row"><span class="text-semibold">CF Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
                 <span class="row"><span class="text-semibold">CF tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
+                <span class="row"><span class="text-semibold">Tutor
+                        scolastico Email:&nbsp;</span>{{attivita.referenteScuolaEmail}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor
-                        esterno:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                    esterno:&nbsp;</span>{{attivita.referenteEsternoCF}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor
+                    esterno Email:&nbsp;</span>{{attivita.referenteEsternoEmail}}</span>
                 <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{attivita.ore}}</span>
             </div>
         </div>
         <br />
         <div class="title">
             Studenti Associati<br />
-            <button *ngIf="attivita.stato=='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
-                ngbTooltip="Vedi le presenze e i diari dell’attività" (click)="gestionePresenze()">
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato=='archiviata' && !attivita.tutorClasse"
+                class="btn btn-primary v-center-inline" placement="bottom" ngbTooltip="Vedi le presenze e i diari dell’attività"
+                (click)="gestionePresenze()">
                 Vedi presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
-            <button *ngIf="attivita.stato!='archiviata' && !zeroStudent" class="btn btn-primary v-center-inline"
-                placement="bottom" ngbTooltip="Valida le presenze e i diari dell’attività" (click)="gestionePresenze()">
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato!='archiviata' && !zeroStudent && !attivita.tutorClasse"
+                class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Valida le presenze e i diari dell’attività" (click)="gestionePresenze()">
                 Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
-            <button *ngIf="attivita.stato!='archiviata' && zeroStudent" class="btn v-center-inline btnZeroStudent"
-                placement="bottom" ngbTooltip="Associa almeno uno studente all'attività!">
-                Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
-            <button *ngIf="attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="bottom"
+            <button *ngIf="!attivita.rendicontazioneCorpo && attivita.stato!='archiviata' && zeroStudent && !attivita.tutorClasse"
+                class="btn v-center-inline btnZeroStudent" placement="bottom"
+                ngbTooltip="Associa almeno uno studente all'attività!">
+                Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+            <button *ngIf="attivita.rendicontazioneCorpo && !attivita.tutorClasse" class="btn btn-primary v-center-inline" placement="bottom"
+                ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="modificaOreStudenti()">
+                Modifica Ore Studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
+            <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])"
+                class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="updateStudentiAssociate()">
                 Modifica studenti associati&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>
@@ -151,6 +166,7 @@
                             <th>Nome</th>
                             <th>CF</th>
                             <th>Classe</th>
+                            <th *ngIf="attivita.rendicontazioneCorpo">Ore svolte</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -158,6 +174,7 @@
                             <td>{{esp.nominativoStudente}}</td>
                             <td>{{esp.cfStudente}}</td>
                             <td>{{esp.classeStudente}}</td>
+                            <td *ngIf="attivita.rendicontazioneCorpo">{{esp.oreRendicontate}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -168,7 +185,7 @@
             Documenti allegati<br />
             <button (click)="openDocumentUpload()" *ngIf="attivita.stato!='archiviata'"
                 class="btn btn-primary v-center-inline btn-icon" placement="right"
-                ngbTooltip="Allega un nuovo documento all’attività">
+                ngbTooltip="Allega un nuovo documento all’attività (dimensione massima 10MB)">
                 Carica file&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>

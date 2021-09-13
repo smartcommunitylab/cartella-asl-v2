@@ -77,13 +77,20 @@ public class CartellaImportCourseMetaInfo {
 					corsoMetaInfo.setCourse(c.getCourse());
 					if (c.getCodMiur() != null)
 						corsoMetaInfo.setCodMiur(c.getCodMiur());
+					if (c.getYears() != null)
+						corsoMetaInfo.setYears(c.getYears());
 					corsoMetaInfoRepository.save(corsoMetaInfo);
 					// total save count.
 					totalSaved = totalSaved + 1;
+				} else {
+					if ((c.getYears() != null) && (corsoMetaInfo.getYears() == null)) {
+						corsoMetaInfo.setYears(c.getYears());
+						corsoMetaInfoRepository.save(corsoMetaInfo);
+					}
 				}
 			}
 
-			System.err.println(numberOfElements + " cartella meta courses received with total of " + totalSaved
+			logger.info(numberOfElements + " cartella meta courses received with total of " + totalSaved
 					+ " saved inside ASL");
 
 			// call recursively.

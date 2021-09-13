@@ -24,23 +24,6 @@
             version: []
         };
     </script>
-
-    <script>
-        if (location.hash && location.hash.length > 1) {
-            var queryString = location.hash.substring(1);
-            var params = {};
-            var regex = /([^&=]+)=([^&]*)/g, m;
-            while (m = regex.exec(queryString)) {
-                params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-            }
-            if (params['access_token'] && params['expires_in']) {
-                sessionStorage.access_token = params['access_token'];
-                sessionStorage.access_token_expires_in = new Date().getTime() + parseInt(params['expires_in'], 10) * 1000;
-                window.location.hash = '/';
-                window.location.reload();
-            }
-        }
-    </script>
 </head>
 <body>
     <cm-app-component>

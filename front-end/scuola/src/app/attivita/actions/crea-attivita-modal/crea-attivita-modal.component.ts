@@ -5,7 +5,7 @@ import { DatePickerComponent } from 'ng2-date-picker';
 import { DataService } from '../../../core/services/data.service';
 import { Azienda } from '../../../shared/classes/Azienda.class';
 import { Observable, of } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, tap, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, tap, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'crea-attivita-modal',
@@ -60,6 +60,10 @@ export class CreaAttivitaModalComponent implements OnInit {
   tipoInterna: boolean = true;
   schoolYear: string;
   schoolYears: string[] = [];
+  cfDocente: string;
+  nomeDocente: string;
+  emailDocente: string;
+  riferente;
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   @Input() tipologie?: any;
   @Output() newAttivitaListener = new EventEmitter<Object>();
@@ -69,6 +73,8 @@ export class CreaAttivitaModalComponent implements OnInit {
   forceErrorDisplayRE: boolean = false;
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
+  forcereferenteDisplay: boolean = false;
+  forceSelectionMsg: boolean = false;
 
   datePickerConfig = {
     locale: 'it',
@@ -146,7 +152,9 @@ export class CreaAttivitaModalComponent implements OnInit {
     if (this.allValidated()) {
       attivita = {
         titolo: this.titolo.trim(),
-        referenteScuola: this.referenteScuola.trim(),
+        referenteScuola: this.nomeDocente.trim(),
+        referenteScuolaCF: this.cfDocente?this.cfDocente.trim():null,
+        referenteScuolaEmail : this.emailDocente?this.emailDocente.trim():null,
         referenteEsterno: this.tipoInterna ? null : this.referenteEsterno.trim(),
         tipologia: this.tipologia,
         annoScolastico: this.schoolYear,
@@ -172,10 +180,15 @@ export class CreaAttivitaModalComponent implements OnInit {
       } else {
         this.forceErrorDisplayOraFine = false;
       }
-      if (this.azienda) {
+      if (this.azienda && this.azienda.id != undefined) {
         this.forceEnteDisplay = false;
       } else {
         this.forceEnteDisplay = true;
+      }
+      if (this.nomeDocente && this.nomeDocente != '' && this.nomeDocente.trim().length > 0) {
+        this.forcereferenteDisplay = false;
+      } else {
+        this.forcereferenteDisplay = true
       }
     }
   }
@@ -186,7 +199,7 @@ export class CreaAttivitaModalComponent implements OnInit {
     if (this.tipoInterna) {
       return (
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
-        && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
+        && (this.nomeDocente && this.nomeDocente != '' && this.nomeDocente.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
         && (this.tipologia && this.tipologia != 'Tipologia')
@@ -195,11 +208,11 @@ export class CreaAttivitaModalComponent implements OnInit {
     } else {
       return (
         (this.titolo && this.titolo != '' && this.titolo.trim().length > 0)
-        && (this.referenteScuola && this.referenteScuola != '' && this.referenteScuola.trim().length > 0)
+        && (this.nomeDocente && this.nomeDocente != '' && this.nomeDocente.trim().length > 0)
         && (this.referenteEsterno && this.referenteEsterno != '' && this.referenteEsterno.trim().length > 0)
         && (this.ore && this.ore > 0)
         && (this.oraInizio && this.oraFine && this.oraFine >= this.oraInizio)
-        && (this.azienda && this.azienda.id != '')
+        && (this.azienda && this.azienda.id != undefined)
         && (this.tipologia && this.tipologia != 'Tipologia')
         && (this.date.dataInizio && this.date.dataFine && (this.date.dataInizio <= this.date.dataFine) && (this.date.dataFine <= this.date.maxFine))
       );
@@ -241,5 +254,53 @@ export class CreaAttivitaModalComponent implements OnInit {
     )
 
   formatter = (x: { nome: string }) => x.nome;
+
+  searching = false;
+  searchFailed = false;
+  getRiferente = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searching = true),
+      switchMap(term => this.dataService.getRiferente(term).pipe(
+        map(items => {
+          // non existing riferente hack
+          this.nomeDocente = null;
+          this.forceSelectionMsg = false;
+          if (items.length < 1) {
+            this.cfDocente = null;
+            this.emailDocente = null;
+            this.nomeDocente = this.riferente;
+          }
+          return items;
+        }),
+        tap(() => {
+          this.searchFailed = false
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.searchFailed = true;
+          return of([]);
+        })
+      )),
+      tap(() => this.searching = false)
+    )
+
+  formatterReferente = (x: { nominativoDocente: string }) => x.nominativoDocente;
+
+  selectedRiferente($event) {
+    this.cfDocente = null;
+    this.emailDocente = null;
+    if ($event.item.cfDocente) {
+      this.cfDocente = $event.item.cfDocente;
+      this.forceSelectionMsg = true;
+    }
+    if ($event.item.nominativoDocente) {
+      this.nomeDocente = $event.item.nominativoDocente;
+    }
+    if ($event.item.emailDocente) {
+      this.emailDocente = $event.item.emailDocente;
+    }
+  }
 
 }

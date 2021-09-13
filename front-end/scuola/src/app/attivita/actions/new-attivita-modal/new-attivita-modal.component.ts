@@ -18,7 +18,7 @@ export class NewAttivtaModal implements OnInit {
   corsoStudioId: any = 'Corso di studio';
     
   @Input() corsiStudio?: any; //list of corsi studio
-  @Output() newPianoListener = new EventEmitter<Object>();
+  @Output() newAttivitaListener = new EventEmitter<Object>();
   forceErrorDisplay: boolean;
 
   constructor(public activeModal: NgbActiveModal) { }
@@ -30,10 +30,10 @@ export class NewAttivtaModal implements OnInit {
     
     if (option == 1) {
       this.activeModal.dismiss('Crea nuova attività a partire da un’offerta');;
-      this.newPianoListener.emit(1);  
+      this.newAttivitaListener.emit(1);  
     } else {
       this.activeModal.dismiss('Crea nuova attività');
-      this.newPianoListener.emit(2);
+      this.newAttivitaListener.emit(2);
     }
 
   }

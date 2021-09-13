@@ -119,7 +119,8 @@
 
                     <td class="pointer">
                         <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
-                        <span *ngIf="aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')"
+                        <span
+                            *ngIf="!aa.rendicontazioneCorpo && aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')"
                             class="align-middle">
                             <span #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
                                 (mouseenter)="showTipButton($event, aa, tooltipBotton);"
@@ -136,7 +137,8 @@
                             </span>
                         </span>
                         <span *ngIf="aa.stato=='archiviata'" placement="bottom" ngbTooltip="archiviata"
-                            class="align-middle" (click)="openDetail(aa)"></span>
+                            class="align-middle" (click)="openDetail(aa)">
+                        </span>
                     </td>
                 </tr>
             </tbody>

@@ -47,8 +47,7 @@
                 </button>    
             </div>
             <div class="btn-group" role="group">
-                <button class="btn btn-secondary v-center mr-3" (click)="getEsperienzeCsv()"
-                *ngIf="esperienze.length > 0">
+                <button class="btn btn-secondary v-center mr-3" (click)="getEsperienzeCsv()">
                 <i class="material-icons">save_alt</i> CSV
             </button>    
             </div>
@@ -93,7 +92,10 @@
                         ngbTooltip="copia dati di invio nella clipboard" (click)="copyText(esp.invio)">content_copy</i>
                         &nbsp;
                         <i class="material-icons pointer error" ngbTooltip="cancella esperienza"
-                        (click)="deleteEsperienza(esp)">delete_forever</i> 
+                        (click)="deleteEsperienza(esp)">delete_forever</i>
+                        &nbsp;
+                        <i class="material-icons pointer ok" ngbTooltip="attiva attività" 
+                        (click)="activateAttivita(esp)">unarchive</i>  
                     </td>
                 </tr>
             </tbody>

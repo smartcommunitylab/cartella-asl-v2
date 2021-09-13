@@ -1,0 +1,44 @@
+<div class="modal-cartella">
+    <div class="modal-header">
+        <div class="row modal-title">
+            <span>Crea nuova attività</span>
+        </div>
+    </div>
+    <div class="modal-body">
+      <div class="text-center">
+      <span class="card-title primary-color">Seleziona modalità di rendicontazione ore attività</span>
+    </div>
+    <br>
+      <div class="row v-center">
+            <div class="col-2"></div>
+            <div class="col-4">
+              <div class="card-wrapper">
+                <div class="card" (click)="create(1)">
+                  <div class="card-body">
+                    <br>
+                    <h5 class="card-title primary-color">Rendicontazione ore a corpo</h5>
+                    <p class="card-text txtFont">Le ore svolte per questa attività saranno inserite dalla scuola con un solo numero:
+                      il totale delle ore svolte.</p>
+                    <br>
+                    <span class="rectangle">
+                        <span>&nbsp;<span class="archiviata">Ore totali</span>: 56&nbsp;</span>
+                    </span>
+                    </div>                  
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="card-wrapper">
+                <div class="card" (click)="create(2)">
+                  <div class="card-body">
+                    <br>
+                    <h5 class="card-title primary-color">Rendicontazione ore giornaliera</h5>
+                    <p class="card-text txtFont">Le ore saranno inserite in una tabella presenze giornaliera dagli alunni, dall’ente oppure dalla scuola.</p>
+                    <img src="assets/images/table.png" class="table-img">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>

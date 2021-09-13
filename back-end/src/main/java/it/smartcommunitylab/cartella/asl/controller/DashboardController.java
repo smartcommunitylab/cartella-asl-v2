@@ -100,8 +100,8 @@ public class DashboardController {
 	
 	@GetMapping("/api/dashboard/esperienze")
 	public @ResponseBody List<ReportDashboardEsperienza> getReportEsperienze (
-			@RequestParam String istitutoId,
-			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String istitutoId,
+			@RequestParam(required=false) String annoScolastico,
 			@RequestParam(required=false) String text,
 			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request) throws Exception {
@@ -200,7 +200,7 @@ public class DashboardController {
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
-		Page<Azienda> page = aziendaManager.findAziende(text, pageRequest);
+		Page<Azienda> page = aziendaManager.findAziende(text, null, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchEnti:%s", text));
 		}		
@@ -216,7 +216,7 @@ public class DashboardController {
 		if(aa == null) {
 			throw new BadRequestException("entity not found");
 		}
-		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa);
+		ReportAttivitaAlternanzaDettaglio report = attivitaAlternanzaManager.getAttivitaAlternanzaDetails(aa, null);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getAttivitaAlternanza:%s", attivitaId));
 		}

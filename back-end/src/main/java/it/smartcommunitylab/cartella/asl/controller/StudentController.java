@@ -72,10 +72,12 @@ public class StudentController implements AslController {
 			@RequestParam(required = false) String text, 
 			Pageable pageRequest, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		Page<ReportStudenteRicerca> page = studentManager.findStudentiRicercaPaged(istitutoId, annoScolastico, corsoId, 
-				text, pageRequest);
+				text, pageRequest, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getStudentsByIstitute:%s / %s", istitutoId, annoScolastico));
 		}
@@ -87,9 +89,11 @@ public class StudentController implements AslController {
 			@PathVariable String studenteId,
 			@RequestParam String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		ReportDettaglioStudente report = studentManager.getReportDettaglioStudente(istitutoId, studenteId);
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId),
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
+		ReportDettaglioStudente report = studentManager.getReportDettaglioStudente(istitutoId, studenteId, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getReportDettaglioStudente:%s / %s", istitutoId, studenteId));
 		}

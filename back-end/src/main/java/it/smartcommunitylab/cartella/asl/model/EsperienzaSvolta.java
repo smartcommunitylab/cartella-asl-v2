@@ -39,6 +39,7 @@ public class EsperienzaSvolta {
 	@Enumerated(EnumType.STRING)
 	private Stati stato;
 	private String codiceMiur;
+	private int oreRendicontate;
 	
 	public Long getId() {
 		return id;
@@ -131,6 +132,14 @@ public class EsperienzaSvolta {
 
 	public void setCfStudente(String cfStudente) {
 		this.cfStudente = cfStudente;
+	}
+
+	public int getOreRendicontate() {
+		return oreRendicontate;
+	}
+
+	public void setOreRendicontate(int oreRendicontate) {
+		this.oreRendicontate = oreRendicontate;
 	}
 
 }

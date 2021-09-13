@@ -48,6 +48,7 @@ public class PianoAlternanza {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataScadenza;
 	private String note;
+	private int oreSecondoAnno;
 	private int oreTerzoAnno;
 	private int oreQuartoAnno;
 	private int oreQuintoAnno;
@@ -58,7 +59,9 @@ public class PianoAlternanza {
 	@Transient
 	private String periodo;
 	@Transient
-	private PianoAlternanzaBean pianoCorrelato; 
+	private PianoAlternanzaBean pianoCorrelato;
+	@Transient
+	private Boolean corsoSperimentale;
 
 	public static enum Stati {
 		bozza, attivo, in_scadenza, scaduto, in_attesa
@@ -213,6 +216,22 @@ public class PianoAlternanza {
 
 	public void setPianoCorrelato(PianoAlternanzaBean pianoCorrelato) {
 		this.pianoCorrelato = pianoCorrelato;
+	}
+
+	public int getOreSecondoAnno() {
+		return oreSecondoAnno;
+	}
+
+	public void setOreSecondoAnno(int oreSecondoAnno) {
+		this.oreSecondoAnno = oreSecondoAnno;
+	}
+
+	public Boolean getCorsoSperimentale() {
+		return corsoSperimentale;
+	}
+
+	public void setCorsoSperimentale(Boolean corsoSperimentale) {
+		this.corsoSperimentale = corsoSperimentale;
 	}
 
 }

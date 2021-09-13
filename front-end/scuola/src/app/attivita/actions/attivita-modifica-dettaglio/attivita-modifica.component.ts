@@ -41,6 +41,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   tipologie;
   azienda: any;
   place: any;
+  riferente: any;
   date: {
     dataInizio: moment.Moment,
     dataFine: moment.Moment,
@@ -67,6 +68,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceErrorDisplayOraInizio: boolean = false;
   forceErrorDisplayOraFine: boolean = false;
   forceAnnoScolasticoErrorDisplay: boolean = false;
+  forceSelectionMsg: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
@@ -76,6 +78,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   orari = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
   attivitaStato: string = "";
   evn = environment;
+  modalita;
+
   breadcrumbItems = [
     {
       title: "Dettaglio attività",
@@ -129,6 +133,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
           this.place = {};
           this.place.name = this.attivita.luogoSvolgimento;
           this.place.location = [this.attivita.latitude, this.attivita.longitude];
+          this.riferente = {};
+          this.riferente.nominativoDocente = this.attivita.referenteScuola;
           this.esperienze = res.esperienze;
           this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
           this.tipologie.filter(tipo => {
@@ -168,6 +174,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
             referenteScuolaCF: new FormControl(),
             referenteEsternoCF: new FormControl()
           });
+
+          this.isRendicontazioneOre(this.attivita);
 
         }, (err: any) => console.log(err),
           () => console.log('getAttivitaTipologie'));
@@ -270,7 +278,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
 
     if (!this.tipoInterna) {
-      if (this.azienda && this.azienda.id != '') {
+      if (this.azienda && this.azienda.id != undefined) {
         this.attivita.nomeEnte = this.azienda.nome;
         this.attivita.enteId = this.azienda.id;
         this.forceEnteDisplay = false;
@@ -423,5 +431,62 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     var ret = n > 9 ? "" + n: "0" + n;
     return ret;
   }
+
+  isRendicontazioneOre(aa) {
+    if (aa.rendicontazioneCorpo) {
+      this.modalita = 'Rendicontazione a corpo';
+    } else {
+      this.modalita = 'Rendicontazione ore giornaliera';
+    }
+  }
+
+  searchingRIF = false;
+  searchFailedRIF = false;
+  
+  getRiferente = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingRIF = true),
+      switchMap(term => this.dataService.getRiferente(term).pipe(
+        map(items => {
+          // non existing riferente hack
+          if (items.length < 1) {
+            this.attivita.referenteScuolaCF = null;
+            this.attivita.referenteScuolaEmail = null;
+            this.attivita.referenteScuola = this.riferente;
+          }
+          return items;
+        }),
+        tap(() => {
+          this.searchFailedRIF = false
+        }),
+        catchError((error) => {
+          console.log(error);
+          this.searchFailedRIF = true;
+          return of([]);
+        })
+      )),
+      tap(() => this.searching = false)
+    )
+
+  formatterReferente = (x: { nominativoDocente: string }) => x.nominativoDocente;
+
+  selectedRiferente($event) {
+    this.attivita.referenteScuolaCF = null;
+    this.attivita.referenteScuolaEmail = null;
+    if ($event.item.cfDocente) {
+      this.forceSelectionMsg = true;
+      this.attivita.referenteScuolaCF = $event.item.cfDocente;
+    }
+    if ($event.item.nominativoDocente) {
+      this.attivita.referenteScuola = $event.item.nominativoDocente;
+    }
+    if ($event.item.emailDocente) {
+      this.attivita.referenteScuolaEmail = $event.item.emailDocente;
+    }
+  }
+
+  
   
 }

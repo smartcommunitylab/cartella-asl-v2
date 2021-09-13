@@ -3,6 +3,10 @@ import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChartDataSets, ChartOptions, ChartType, Chart } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { UpdateDocenteModalComponent } from './actions/update-docente-modal/update-docente-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
+import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 
 @Component({
   selector: 'istituto',
@@ -26,6 +30,7 @@ export class IstitutoComponent implements OnInit {
   numeroAttivitaInCorso;
   numeroAttivitaInRevisione;
   oreTotali;
+  registeredDocenti;
 
   // PIE chart.
   pieChartOptions: ChartOptions = {
@@ -94,9 +99,11 @@ export class IstitutoComponent implements OnInit {
   public barChartIstitutoOptions: ChartOptions = {};
 
   constructor(
-    private dataService: DataService,
+    public dataService: DataService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
+    private growler: GrowlerService
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +114,13 @@ export class IstitutoComponent implements OnInit {
       this.dataService.getDashboardIstitutoClasse()
         .subscribe((response) => {
           this.classi = response;
+          if (this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])) {
+            this.dataService.getRegistrazioneDocente().subscribe((response) => {
+              this.registeredDocenti = response;
+            },
+            (err: any) => console.log(err),
+            () => console.log('get registrazione docente api'));
+          }          
         },
           (err: any) => console.log(err),
           () => console.log('get dashboard istituto classi api'));
@@ -488,6 +502,40 @@ export class IstitutoComponent implements OnInit {
   selectClasseFilter() {
     // console.log(this.classe);
     this.initClasseDashboard();
+  }
+
+  aggiungiAccount() {
+    const modalRef = this.modalService.open(UpdateDocenteModalComponent, { windowClass: "archiviazioneModalClass" });
+    modalRef.componentInstance.registeredDocente = this.registeredDocenti;
+    modalRef.componentInstance.newUtenteListener.subscribe((registeredDocente) => {
+      var ids = [];
+      registeredDocente.forEach(element => {
+        ids.push(element.id);
+      });
+      this.dataService.aggiungiDocentiAccount(ids).subscribe(res => {
+          this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);
+          this.ngOnInit();
+      });
+    });
+  
+  }
+  
+  modificaStudenti(docente) {
+    this.router.navigate(['../modificaStudenti', docente.id], { relativeTo: this.route });
+  }
+
+  deleteDocente(registeredDocente) {
+    const modalRef = this.modalService.open(RuoloCancellaModal, { windowClass: "cancellaModalClass" });
+    modalRef.componentInstance.registeredDocente = registeredDocente;
+    modalRef.componentInstance.onDelete.subscribe((res) => {
+      if (res == 'DELETED') {
+        this.dataService.deleteRegistrazioneDocente(registeredDocente.id).subscribe((id) => {
+          this.ngOnInit();
+        },
+          (err: any) => console.log(err),
+          () => console.log('delete registrazione docente'));
+      }
+    });
   }
 
 }

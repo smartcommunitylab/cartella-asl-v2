@@ -1,0 +1,115 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row" *ngIf="attivita">
+        <div class="col-6 v-center">
+            <span class="title">{{attivita.titolo}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+        <div class="col-6">
+            <div class="row v-center float-right">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
+                    ngbTooltip="Annulla le modifiche" (click)="cancel()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom" ngbTooltip="Modifica o elimina gli account che possono operare su questo ente"
+                    (click)="save()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
+                        </span>
+                    </span>               
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <div class="card-body modify-card-body">
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+        <div class="list-group" *ngIf="esperienze && esperienze.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CF</th>
+                        <th>Classe</th>
+                        <th>Ore svolte</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let esp of esperienze">
+                        <!-- Nome -->
+                        <td class="pointer">
+                            <span class="align-middle color-blu text-underline">{{ esp.nominativoStudente }}</span>
+                        </td>
+                        <!-- CF -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ esp.cfStudente }}</span>
+                        </td>
+                        <!-- Classe -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ esp.classeStudente }}</span>
+                        </td>
+                        <!-- Ore svolte -->
+                        <td class="pointer">
+                            <!-- <span class="align-middle">{{ esp.oreSvolte }}</span> -->
+                            <input type="text" class="form-control" pattern="[0-9\-]+$" [(ngModel)]="esp.oreRendicontate" id="oreSvolte" name="oreSvolte"
+                            #oreSvolteInput="ngModel" placeholder="Ore svolte" (ngModelChange)="edit(esp)" required>
+                            <!-- <input type="text" class="form-control" pattern="[0-9\-]+$" [ngModel]="esp.oreRendicontate < 1? '-':esp.oreRendicontate" id="oreSvolte" name="oreSvolte"
+                            #oreSvolteInput="ngModel" placeholder="Ore svolte" (ngModelChange)="edit(esp)" required> -->
+                        <div class="invalid-feedback"
+                            [class.d-block]="oreSvolteInput.invalid && (oreSvolteInput.dirty || oreSvolteInput.touched || forceErrorDisplay)">
+                            Campo necessario.
+                        </div>
+                        <div class="invalid-feedback" [class.d-block]="oreSvolteInput.value > attivita.ore">
+                            Impossibile inserire<br>più di {{attivita.ore}} ore, numero<br>programmato di ore per questa attività
+                        </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row" *ngIf="!esperienze?.length">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-lightGrey icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Non ci sono studenti associati a quest'attività!</span>
+            </div>
+        </div>
+    </div>
+</div>

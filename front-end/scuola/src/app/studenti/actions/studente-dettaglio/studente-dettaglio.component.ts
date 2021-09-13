@@ -38,7 +38,7 @@ export class StudenteDettaglioComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService) { }
+    public dataService: DataService) { }
 
 
   ngOnInit() {
@@ -126,16 +126,21 @@ export class StudenteDettaglioComponent implements OnInit {
   }
 
   gestionePresenze(esp) {
-    this.tipologie.filter(tipo => {
-      if (tipo.id == esp.tipologia) {
-        esp.individuale = tipo.individuale;
+    if (!esp.rendicontazioneCorpo) {
+      this.tipologie.filter(tipo => {
+        if (tipo.id == esp.tipologia) {
+          esp.individuale = tipo.individuale;
+        }
+      })
+      if (esp.individuale) {
+        this.router.navigateByUrl('/attivita/detail/' + esp.attivitaAlternanzaId + '/modifica/studenti/presenze/individuale');
+      } else {
+        this.router.navigateByUrl('/attivita/detail/' + esp.attivitaAlternanzaId + '/modifica/studenti/presenze/gruppo');
       }
-    })
-    if (esp.individuale) {
-      this.router.navigateByUrl('/attivita/detail/' + esp.attivitaAlternanzaId + '/modifica/studenti/presenze/individuale');
     } else {
-      this.router.navigateByUrl('/attivita/detail/' + esp.attivitaAlternanzaId + '/modifica/studenti/presenze/gruppo');
+      this.router.navigateByUrl('/attivita/detail/' + esp.attivitaAlternanzaId + '/modifica/studenti/ore');
     }
+    
   }
 
   goAttivitaDetail(esp){

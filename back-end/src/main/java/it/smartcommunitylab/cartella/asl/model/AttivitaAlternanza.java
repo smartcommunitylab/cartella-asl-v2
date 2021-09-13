@@ -2,6 +2,7 @@ package it.smartcommunitylab.cartella.asl.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -59,9 +60,11 @@ public class AttivitaAlternanza {
 	private String referenteScuola;
 	private String referenteScuolaCF;
 	private String referenteScuolaTelefono;
+	private String referenteScuolaEmail;
 	private String referenteEsterno;
 	private String referenteEsternoCF;
 	private String referenteEsternoTelefono;
+	private String referenteEsternoEmail;
 	private String formatore;
 	private String formatoreCF;
 	private String luogoSvolgimento;
@@ -71,9 +74,18 @@ public class AttivitaAlternanza {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataArchiviazione;
 	
+	@Column(columnDefinition = "bit default 0")
+	private Boolean rendicontazioneCorpo = Boolean.FALSE;
+	
 	@Transient
 	private int oreSvolte;
+
+	@Transient
+	private boolean tutorScolastico;
 	
+	@Transient
+	private boolean tutorClasse;
+
 	public AttivitaAlternanza clona() {
 		AttivitaAlternanza aa = new AttivitaAlternanza();
 		aa.setAnnoScolastico(annoScolastico);
@@ -97,14 +109,17 @@ public class AttivitaAlternanza {
 		aa.setReferenteEsterno(referenteEsterno);
 		aa.setReferenteEsternoCF(referenteEsternoCF);
 		aa.setReferenteEsternoTelefono(referenteEsternoTelefono);
+		aa.setReferenteEsternoEmail(referenteEsternoEmail);
 		aa.setReferenteScuola(referenteScuola);
 		aa.setReferenteScuolaCF(referenteScuolaCF);
 		aa.setReferenteScuolaTelefono(referenteScuolaTelefono);
+		aa.setReferenteScuolaEmail(referenteScuolaEmail);
 		aa.setStato(stato);
 		aa.setTipologia(tipologia);
 		aa.setTitolo(titolo);
 		aa.setTitoloOfferta(titoloOfferta);
 		aa.setUuid(uuid);
+		aa.setRendicontazioneCorpo(rendicontazioneCorpo);
 		return aa;
 	}
 
@@ -377,4 +392,46 @@ public class AttivitaAlternanza {
 	public void setOreSvolte(int oreSvolte) {
 		this.oreSvolte = oreSvolte;
 	}
+
+	public Boolean getRendicontazioneCorpo() {
+		return rendicontazioneCorpo;
+	}
+
+	public void setRendicontazioneCorpo(Boolean rendicontazioneCorpo) {
+		this.rendicontazioneCorpo = rendicontazioneCorpo;
+	}
+
+	public boolean isTutorScolastico() {
+		return tutorScolastico;
+	}
+
+	public void setTutorScolastico(boolean tutorScolastico) {
+		this.tutorScolastico = tutorScolastico;
+	}
+
+	public boolean isTutorClasse() {
+		return tutorClasse;
+	}
+
+	public void setTutorClasse(boolean tutorClasse) {
+		this.tutorClasse = tutorClasse;
+	}
+
+	public String getReferenteScuolaEmail() {
+		return referenteScuolaEmail;
+	}
+
+	public void setReferenteScuolaEmail(String referenteScuolaEmail) {
+		this.referenteScuolaEmail = referenteScuolaEmail;
+	}
+
+	public String getReferenteEsternoEmail() {
+		return referenteEsternoEmail;
+	}
+
+	public void setReferenteEsternoEmail(String referenteEsternoEmail) {
+		this.referenteEsternoEmail = referenteEsternoEmail;
+	}
+
+	
 }

@@ -99,7 +99,24 @@ public class CartellaImportInstitutes {
 					Istituzione institute = convertToInstitute(istExt);
 					istituzioneRepository.save(institute);
 					totalSaved = totalSaved + 1;
-				} 
+				} else {
+					if(Utils.isEmpty(stored.getRdpAddress())) {
+						stored.setRdpAddress(istExt.getRdpAddress());
+						istituzioneRepository.save(stored);
+					}
+					if(Utils.isEmpty(stored.getRdpEmail())) {
+						stored.setRdpEmail(istExt.getRdpEmail());
+						istituzioneRepository.save(stored);
+					}
+					if(Utils.isEmpty(stored.getRdpName())) {
+						stored.setRdpName(istExt.getRdpName());
+						istituzioneRepository.save(stored);
+					}
+					if(Utils.isEmpty(stored.getRdpPhoneFax())) {
+						stored.setRdpPhoneFax(istExt.getRdpPhoneFax());
+						istituzioneRepository.save(stored);
+					}
+				}
 			}
 
 			int numberOfElements = Integer.valueOf(pagedResponseMap.get("numberOfElements").toString());
@@ -129,6 +146,11 @@ public class CartellaImportInstitutes {
 		
 		result.setName(istExt.getName());
 		result.setOrigin(istExt.getOrigin());
+		
+		result.setRdpAddress(istExt.getRdpAddress());
+		result.setRdpEmail(istExt.getRdpEmail());
+		result.setRdpName(istExt.getRdpName());
+		result.setRdpPhoneFax(istExt.getRdpPhoneFax());
 		return result;
 	}
 

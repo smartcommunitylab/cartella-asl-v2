@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="col-8">
-            <button class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="openCreate()">
+            <button *ngIf="dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])" class="btn btn-success btn-icon float-right btnCreate m-right mTop10" (click)="openPrimoModalCreateAttivita()">
                 <span class="row btnCreateText">
                     <span class="col-8 m-left18" placement="bottom" ngbTooltip="Crea una nuova attività">Crea
                         attività</span>
@@ -136,9 +136,9 @@
                         </span>
                     </td>
                     <td class="pointer">
-                        <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
-                        <span *ngIf="aa.stato=='revisione' || aa.stato=='in_corso'" class="align-middle">
-                            <span #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
+                        <span *ngIf="aa.stato=='in_attesa' && !aa.tutorClasse" class="align-middle"></span>
+                        <span *ngIf="(aa.stato=='revisione' || aa.stato=='in_corso') && !aa.tutorClasse" class="align-middle">
+                            <span *ngIf="!aa.rendicontazioneCorpo" #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
                                 (mouseenter)="showTipButton($event, aa, tooltipBotton);"
                                 (mouseleave)="hideTipButton($event, aa, tooltipStato);">
                                 <div class='btn btn-primary btn-icon btn-xs' (click)="gestionePresenze(aa)">
@@ -149,6 +149,13 @@
                                 <div *ngIf="aa.fetchingToolTipButton && (aa.toolTipButton == null || aa.toolTipButton=='')"
                                     class="progress-spinner progress-spinner-active size-sm">
                                     <span class="sr-only">Caricamento...</span>
+                                </div>
+                            </span>
+                            <span *ngIf="aa.rendicontazioneCorpo" placement="bottom" ngbTooltip="Attività con rendicontazione a corpo">
+                                <div class='btn btn-primary btn-icon btn-xs' (click)="gestionePresenze(aa)">
+                                    <svg class="icon icon-white icon-sm">
+                                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
+                                    </svg>
                                 </div>
                             </span>
                         </span>
@@ -193,7 +200,7 @@
             <div class="col-xl-12 text-center">
                 <span class="searchError">Questa lista è vuota</span>
             </div>
-            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Puoi creare nuove attività con il pulsante
+            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Se sei autorizzato, puoi creare nuove attività con il pulsante
                 verde in alto a destra.
             </div>
         </div>

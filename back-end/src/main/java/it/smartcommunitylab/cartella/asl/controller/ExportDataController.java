@@ -66,8 +66,8 @@ public class ExportDataController implements AslController {
 	
 	@GetMapping("/api/export/csv/dashboard/esperienze")
 	public void getDashboardReportEsperienze(
-			@RequestParam String istitutoId,
-			@RequestParam String annoScolastico,
+			@RequestParam(required=false) String istitutoId,
+			@RequestParam(required=false) String annoScolastico,
 			@RequestParam(required=false) String text,
 			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request,
@@ -78,6 +78,21 @@ public class ExportDataController implements AslController {
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDashboardReportEsperienze:%s / %s", istitutoId, annoScolastico));
 		}
+	}
+
+	@GetMapping("/api/export/csv/ente/studente")
+	public void getEnteStudenteCsv(
+			@RequestParam String enteId,
+			@RequestParam String studenteId,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+			new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ExportCsv reportCsv = exportDataManager.getEnteStudente(enteId, studenteId);
+		downloadCsv(reportCsv, response);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getEnteStudenteCsv:%s / %s", enteId, studenteId));
+		}	
 	}
 	
 	private void downloadCsv(ExportCsv reportCsv, HttpServletResponse response) throws IOException {

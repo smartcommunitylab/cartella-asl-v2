@@ -34,6 +34,7 @@ public class PianoAlternanzaBean {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataScadenza;
 	private String note;
+	private int oreSecondoAnno;
 	private int oreTerzoAnno;
 	private int oreQuartoAnno;
 	private int oreQuintoAnno;
@@ -56,6 +57,7 @@ public class PianoAlternanzaBean {
 		this.dataDisattivazione = piano.getDataDisattivazione();
 		this.dataScadenza = piano.getDataScadenza();
 		this.note = piano.getNote();
+		this.oreSecondoAnno = piano.getOreSecondoAnno();
 		this.oreTerzoAnno = piano.getOreTerzoAnno();
 		this.oreQuartoAnno = piano.getOreQuartoAnno();
 		this.oreQuintoAnno = piano.getOreQuintoAnno();
@@ -204,5 +206,13 @@ public class PianoAlternanzaBean {
 
 	public void setDataScadenza(LocalDate dataScadenza) {
 		this.dataScadenza = dataScadenza;
+	}
+
+	public int getOreSecondoAnno() {
+		return oreSecondoAnno;
+	}
+
+	public void setOreSecondoAnno(int oreSecondoAnno) {
+		this.oreSecondoAnno = oreSecondoAnno;
 	}
 }

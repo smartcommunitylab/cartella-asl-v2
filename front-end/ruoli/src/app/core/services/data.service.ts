@@ -446,8 +446,12 @@ export class DataService {
 
   getReportEsperienze(istitutoId, annoScolastico, text, getErrors):  Observable<any> {
     let params = new HttpParams();
-    params = params.append('istitutoId', istitutoId);
-    params = params.append('annoScolastico', annoScolastico);
+    if(istitutoId) {
+      params = params.append('istitutoId', istitutoId);
+    }
+    if(annoScolastico) {
+      params = params.append('annoScolastico', annoScolastico);
+    }
     if(text) {
       params = params.append('text', text);
     }
@@ -503,10 +507,13 @@ export class DataService {
   }
 
   getEsperienzeCsv(istitutoId, annoScolastico, text, getErrors): Observable<any> {
-    let url = this.host + '/export/csv/studente';
     let params = new HttpParams();
-    params = params.append('istitutoId', istitutoId);
-    params = params.append('annoScolastico', annoScolastico);
+    if(istitutoId) {
+      params = params.append('istitutoId', istitutoId);
+    }
+    if(annoScolastico) {
+      params = params.append('annoScolastico', annoScolastico);
+    }
     if(text) {
       params = params.append('text', text);
     }

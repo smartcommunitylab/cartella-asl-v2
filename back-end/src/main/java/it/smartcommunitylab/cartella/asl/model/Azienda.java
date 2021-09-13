@@ -60,6 +60,9 @@ public class Azienda {
 	
 	@Transient
 	private RegistrazioneEnte registrazioneEnte;
+	
+	@Transient
+	private Convenzione convenzione;
 
 	public String getId() {
 		return id;
@@ -277,6 +280,14 @@ public class Azienda {
 
 	public void setRegistrazioneEnte(RegistrazioneEnte registrazioneEnte) {
 		this.registrazioneEnte = registrazioneEnte;
+	}
+
+	public Convenzione getConvenzione() {
+		return convenzione;
+	}
+
+	public void setConvenzione(Convenzione convenzione) {
+		this.convenzione = convenzione;
 	}
 
 }

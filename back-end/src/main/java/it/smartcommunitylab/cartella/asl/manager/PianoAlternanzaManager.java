@@ -23,12 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AssociazioneCompetenze;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
+import it.smartcommunitylab.cartella.asl.model.CorsoMetaInfo;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.PianoAlternanzaBean;
 import it.smartcommunitylab.cartella.asl.model.TipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.repository.AssociazioneCompetenzeRepository;
 import it.smartcommunitylab.cartella.asl.repository.CompetenzaRepository;
+import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
 import it.smartcommunitylab.cartella.asl.repository.PianoAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.TipologiaAttivitaRepository;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
@@ -45,7 +47,9 @@ public class PianoAlternanzaManager extends DataEntityManager {
 	@Autowired
 	TipologiaAttivitaRepository tipologiaAttivitaRepository;	
 	@Autowired
-	AssociazioneCompetenzeRepository associazioneCompetenzeRepository;	
+	AssociazioneCompetenzeRepository associazioneCompetenzeRepository;
+	@Autowired
+	CorsoMetaInfoRepository corsoMetaInfoRepository;
 	@Autowired
 	CompetenzaRepository competenzaRepository;	
 	@Autowired
@@ -138,20 +142,20 @@ public class PianoAlternanzaManager extends DataEntityManager {
     	} else {
     		dataDisattivazione = Utils.startAnnoScolasticoDate(today).plusYears(1);
     	}
-    	LocalDate dataTerze = dataDisattivazione;
-    	LocalDate dataQuarte = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(1);
-    	LocalDate dataQuinte = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(2);
-    	if(dataQuinte.isAfter(today)) {
+    	LocalDate dataPrimoAnnoAlt = dataDisattivazione;
+    	LocalDate dataSecondoAnnoAlt = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(1);
+    	LocalDate dataTerzoAnnoAlt = Utils.startAnnoScolasticoDate(dataDisattivazione).plusYears(2);
+    	if(dataTerzoAnnoAlt.isAfter(today)) {
     		if(gestisciClassi[2] == null) {
     			gestisciClassi[2] = pas.getId();
     		}
     	}
-    	if(dataQuarte.isAfter(today)) {
+    	if(dataSecondoAnnoAlt.isAfter(today)) {
     		if(gestisciClassi[1] == null) {
     			gestisciClassi[1] = pas.getId();
     		}
     	}
-    	if(dataTerze.isAfter(today)) {
+    	if(dataPrimoAnnoAlt.isAfter(today)) {
     		if(gestisciClassi[0] == null) {
     			gestisciClassi[0] = pas.getId();
     		}
@@ -169,22 +173,30 @@ public class PianoAlternanzaManager extends DataEntityManager {
     }
     
     String anni = "";
+    // recupera corso meta info
+    pa.setCorsoSperimentale(Boolean.FALSE);
+  	CorsoMetaInfo corsoMetaInfo = corsoMetaInfoRepository.findById(pa.getCorsoDiStudioId()).orElse(null);
+  	if(corsoMetaInfo != null) {
+  		if((corsoMetaInfo.getYears() != null) && (corsoMetaInfo.getYears() < 5)) {
+  			pa.setCorsoSperimentale(Boolean.TRUE);
+  		}
+  	}
     if(pa.getStato().equals(Stati.attivo) || pa.getStato().equals(Stati.in_scadenza)) {
       if((gestisciClassi[0] != null) && gestisciClassi[0].equals(pa.getId())) {
-      	anni = anni + "3"; 
+      	anni = pa.getCorsoSperimentale() ? "2" : "3";
       }
       if((gestisciClassi[1] != null) && gestisciClassi[1].equals(pa.getId())) {
       	if(anni.equals("")) {
-      		anni = anni + "4";
+      		anni = anni + (pa.getCorsoSperimentale() ? "3" : "4");
       	} else {
-      		anni = anni + "-4";
+      		anni = anni + (pa.getCorsoSperimentale() ? "-3" : "-4");
       	}
       }
       if((gestisciClassi[2] != null) && gestisciClassi[2].equals(pa.getId())) {
       	if(anni.equals("")) {
-      		anni = anni + "5";
+      		anni = anni + (pa.getCorsoSperimentale() ? "4" : "5");
       	} else {
-      		anni = anni + "-5";
+      		anni = anni + (pa.getCorsoSperimentale() ? "-4" : "-5");
       	}
       }
     }

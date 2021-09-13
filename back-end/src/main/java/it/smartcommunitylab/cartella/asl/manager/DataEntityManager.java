@@ -16,9 +16,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.model.CorsoDiStudio;
+import it.smartcommunitylab.cartella.asl.model.CorsoMetaInfo;
 import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.CorsoDiStudioRepository;
+import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 
 @Repository
@@ -30,6 +32,8 @@ public class DataEntityManager {
 	
 	@Autowired
 	private CorsoDiStudioRepository corsoDiStudioRepository;
+	@Autowired
+	CorsoMetaInfoRepository corsoMetaInfoRepository;	
 	@Autowired
 	private IstituzioneRepository istituzioneRepository;
 	@Autowired
@@ -60,12 +64,31 @@ public class DataEntityManager {
 		return query2;
 	}
 	
-	public List<CorsoDiStudio> findCorsiDiStudio(String istitutoId, String annoScolastico) {
-		if (annoScolastico == null || annoScolastico.isEmpty()) {
-			return corsoDiStudioRepository.findCorsoDiStudioByIstitutoId(istitutoId);
-		} else {
-			return corsoDiStudioRepository.findCorsoDiStudioByIstitutoIdAndAnnoScolastico(istitutoId, annoScolastico);
+	TypedQuery<Long> queryToCount(String q, Map<String, Object> parameters) {
+		TypedQuery<Long> query = em.createQuery(q, Long.class);
+		for(String key : parameters.keySet()) {
+			query.setParameter(key, parameters.get(key));
 		}
+		return query;
+	}
+	
+	public List<CorsoDiStudio> findCorsiDiStudio(String istitutoId, String annoScolastico) {
+		List<CorsoDiStudio> result = null;
+		if (annoScolastico == null || annoScolastico.isEmpty()) {
+			result = corsoDiStudioRepository.findCorsoDiStudioByIstitutoId(istitutoId);
+		} else {
+			result = corsoDiStudioRepository.findCorsoDiStudioByIstitutoIdAndAnnoScolastico(istitutoId, annoScolastico);
+		}
+		result.forEach(corso -> {
+			corso.setCorsoSperimentale(Boolean.FALSE);
+	  	CorsoMetaInfo corsoMetaInfo = corsoMetaInfoRepository.findById(corso.getCourseId()).orElse(null);
+	  	if(corsoMetaInfo != null) {
+	  		if((corsoMetaInfo.getYears() != null) && (corsoMetaInfo.getYears() < 5)) {
+	  			corso.setCorsoSperimentale(Boolean.TRUE);
+	  		}
+	  	}			
+		});
+		return result;
 	}
 	
 	public String getIstituzioneName(String id) {

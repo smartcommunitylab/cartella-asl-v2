@@ -34,7 +34,7 @@
       <div class="form-group center-formGroup">
         <input type="text" id="cercaStudenti" class="form-control search-input" [(ngModel)]="filtro.text"
           (keyup.enter)="cerca()">
-        <label for="cercaStudenti">Cerca studente o classe</label>
+        <label for="cercaStudenti" class="active">Cerca studente o classe</label>
       </div>
       <it-button class="v-center-inline" (click)="cerca()">
         <svg class="icon icon-primary">
@@ -52,6 +52,7 @@
         <tr>
           <th>Classe</th>
           <th>Studente</th>
+          <th>2º anno</th>
           <th>3º anno</th>
           <th>4º anno</th>
           <th>5º anno</th>
@@ -72,13 +73,34 @@
             </span>
           </td>
           <td class="pointer">
+            <p class="ngbpBar" *ngIf="studente.corsoSperimentale">
+              <ngb-progressbar type="{{setProgressBarType(studente, 2)}}" height="35px"
+                [value]="studente.pianoId ? studente.oreSvolteSeconda.hours : 100"
+                [max]="studente.pianoId ? studente.oreSvolteSeconda.total : 100" class="text-center align-middle"
+                #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
+                (mouseenter)="showTipRiga($event, studente, '2');">
+                <span class="ngbpBar-text-complete"
+                  *ngIf="studente.pianoId && studente.oreSvolteSeconda.hours >= studente.oreSvolteSeconda.total && studente.oreSvolteSeconda.total != 0">
+                  {{studente.oreSvolteSeconda.hours}} / {{studente.oreSvolteSeconda.total}} h
+                </span>
+                <span class="ngbpBar-text-notComplete"
+                  *ngIf="studente.pianoId && (studente.oreSvolteSeconda.hours < studente.oreSvolteSeconda.total ||  studente.oreSvolteSeconda.total == 0)">
+                  {{studente.oreSvolteSeconda.hours}} / {{studente.oreSvolteSeconda.total}} h
+                </span>
+                <span class="ngbpBar-text-notComplete" *ngIf="!studente.pianoId">
+                  {{studente.oreSvolteSeconda.hours}} h
+                </span>
+              </ngb-progressbar>
+            </p>
+            <p class="dash" *ngIf="!studente.corsoSperimentale"><span>-</span></p>            
+          </td>
+          <td class="pointer">
             <p class="ngbpBar">
-              <ngb-progressbar type="{{studente.oreSvolteTerza.pgBType}}" height="35px"
+              <ngb-progressbar type="{{setProgressBarType(studente, 3)}}" height="35px"
                 [value]="studente.pianoId ? studente.oreSvolteTerza.hours : 100"
                 [max]="studente.pianoId ? studente.oreSvolteTerza.total : 100" class="text-center align-middle"
                 #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
                 (mouseenter)="showTipRiga($event, studente, '3');">
-                <!-- {{studente.oreSvolteTerza.hours}} / {{studente.oreSvolteTerza.total}} -->
                 <span class="ngbpBar-text-complete"
                   *ngIf="studente.pianoId && studente.oreSvolteTerza.hours >= studente.oreSvolteTerza.total && studente.oreSvolteTerza.total != 0">
                   {{studente.oreSvolteTerza.hours}} / {{studente.oreSvolteTerza.total}} h
@@ -95,12 +117,11 @@
           </td>
           <td>
             <p class="ngbpBar">
-              <ngb-progressbar type="{{studente.oreSvolteQuarta.pgBType}}" height="35px"
+              <ngb-progressbar type="{{setProgressBarType(studente, 4)}}" height="35px"
                 [value]="studente.pianoId ? studente.oreSvolteQuarta.hours : 100"
                 [max]="studente.pianoId ? studente.oreSvolteQuarta.total : 100" class="text-center align-middle"
                 #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{studente.toolTipRiga}}"
                 (mouseenter)="showTipRiga($event, studente, '4');">
-                <!-- {{studente.oreSvolteQuarta.hours}} / {{studente.oreSvolteQuarta.total}} -->
                 <span class="ngbpBar-text-complete"
                   *ngIf="studente.pianoId && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total && studente.oreSvolteQuarta.total != 0">
                   {{studente.oreSvolteQuarta.hours}} / {{studente.oreSvolteQuarta.total}} h
@@ -116,7 +137,7 @@
             </p>
           </td>
           <td>
-            <p class="ngbpBar">
+            <p class="ngbpBar" *ngIf="!studente.corsoSperimentale">
               <ngb-progressbar type="{{studente.oreSvolteQuinta.pgBType}}" height="35px"
                 [value]="studente.pianoId ? studente.oreSvolteQuinta.hours : 100"
                 [max]="studente.pianoId ? studente.oreSvolteQuinta.total : 100" class="text-center align-middle"
@@ -135,6 +156,7 @@
                 </span>
               </ngb-progressbar>
             </p>
+            <p class="text-center" *ngIf="studente.corsoSperimentale"><span>-</span></p>
           </td>
         </tr>
       </tbody>

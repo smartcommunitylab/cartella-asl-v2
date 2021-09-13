@@ -572,10 +572,6 @@ public class StatisticsManager extends DataEntityManager {
 		if (annoScolastico != null && !annoScolastico.isEmpty()) {
 			query.setParameter("annoScolastico", annoScolastico);
 		}		
-
-
-		List<Object[]> result = query.getResultList();		
-		
 		
 //		Multimap<Istituzione, Opportunita> isatt = HashMultimap.create();
 //		result.stream().forEach(x -> {

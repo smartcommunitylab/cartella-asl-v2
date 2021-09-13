@@ -73,14 +73,14 @@
         </div>
         
         <div class="col-2 sub-div">
-            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeStudenteCsv()"
             placement="bottom" ngbTooltip="Esporta le attività dello studente">
                 CSV dati studente
                 <svg class="icon icon-white icon-sm">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
                 </svg>
             </label>
-            <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
+            <label *ngIf="dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])" class="col-12 btn btn-primary v-center-inline btn-icon btn-csv" (click)="getEsperienzeClasseCsv()"
             placement="bottom" ngbTooltip="Esporta le attività della classe">
                 CSV dati classe
                 <svg class="icon icon-white icon-sm">
@@ -96,7 +96,8 @@
 
 <div class="card-body" >
     <span class="title">Piano attivo:</span>
-    <span class="piano" *ngIf="pianoId" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
+    <span class="piano" *ngIf="pianoId && !dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])">{{titoloPiano}}</span>
+    <span class="piano" *ngIf="pianoId && dataService.validateRoles(['DIRIGENTE_SCOLASTICO', 'FUNZIONE_STRUMENTALE'])" [routerLink]="['/piani/detail/', pianoId]">{{titoloPiano}}</span>
     <span class="nopiano" *ngIf="!pianoId">Attenzione: non ci sono piani associati a questo corso di studio!</span>
 </div>
 
@@ -145,7 +146,7 @@
                             <span (click)="goAttivitaDetail(esp)" class="{{esp.stato}}">{{ getStatoNome(esp.stato) }}</span>
                         </td>
                         <!-- button -->
-                        <td class="pointer">
+                        <td class="pointer" *ngIf="!esp.rendicontazioneCorpo && !esp.tutorClasse">
                             <span *ngIf="esp.stato == 'in_attesa' && esp.stato == 'archiviata'" class="align-middle"></span>
                             <span *ngIf="esp.stato != 'in_attesa' && esp.stato != 'archiviata'" class="align-middle">
                                 <span #tooltip="ngbTooltip" placement="bottom" ngbTooltip="{{esp.toolTipButton}}"
@@ -159,6 +160,18 @@
                                     <div *ngIf="esp.fetchingToolTipButton && (esp.toolTipButton == null || esp.toolTipButton=='')"
                                         class="progress-spinner progress-spinner-active size-sm">
                                         <span class="sr-only">Caricamento...</span>
+                                    </div>
+                                </span>
+                            </span>
+                        </td>
+                        <td class="pointer" *ngIf="esp.rendicontazioneCorpo && !esp.tutorClasse">
+                            <span *ngIf="esp.stato == 'in_attesa' && esp.stato == 'archiviata'" class="align-middle"></span>
+                            <span *ngIf="esp.stato != 'in_attesa' && esp.stato != 'archiviata'" class="align-middle">
+                                <span ngbTooltip="Attività con rendicontazione a corpo">
+                                    <div class='btn btn-primary btn-icon btn-xs' (click)="gestionePresenze(esp)">
+                                        <svg class="icon icon-white icon-sm">
+                                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
+                                        </svg>
                                     </div>
                                 </span>
                             </span>
