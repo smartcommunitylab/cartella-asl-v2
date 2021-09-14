@@ -135,4 +135,42 @@ export class EntiComponent implements OnInit {
         }
     }
 
+    setConvenzioneStato(ente) {
+        let stato = 'Assente';
+        if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+            stato = 'Attiva';
+        } else if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+            stato = 'Non attiva';
+        }
+        return stato;
+    }
+
+    styleOptionConvenzione(ente) {
+        var style = {
+            'color': '#707070', //grey
+        };
+
+        if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+            style['color'] = '#F83E5A'; // red
+        } else if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+            style['color'] = '#00CF86'; // green
+        }
+
+        return style;
+    }
+
+    showTipStatoRigaConvenzione(ente) {
+        if (!ente.toolTipoStatoRiga) {
+            if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+                ente.toolTipoStatoRiga = 'La convenzione non è attiva. L’ente non può gestire i tirocini tramite la sua interfaccia EDIT.  Vai alla pagina profilo ente per aggiungere una convenzione valida.';
+            } else if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+                ente.toolTipoStatoRiga = 'La convenzione è attiva, e l’ente può collaborare tramite EDIT alla gestione dei tirocini.';
+            } else {
+                ente.toolTipoStatoRiga = 'Questo ente non ha nessuna convenzione attiva con questo istituto. Vai al profilo ente per caricare una convenzione valida.';
+            }
+
+        }
+    }
+
+
 }
