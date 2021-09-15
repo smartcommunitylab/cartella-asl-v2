@@ -52,7 +52,7 @@ export class DocenteModificaStudentiComponent implements OnInit {
   ngOnInit() {
     this.activeRoute.params.subscribe(params => {
       this.registrazioneId = params['id'];
-      this.dataService.getRegistrazioneDocenteClassiDaAssociare(1, this.pageSize, this.registrazioneId, this.filterText).subscribe((res) => {
+      this.dataService.getRegistrazioneDocenteClassiDaAssociare(0, this.pageSize, this.registrazioneId, this.filterText).subscribe((res) => {
         this.professoriClassi = res.content;
         this.totalRecords = res.totalElements;
         this.dataService.getRegistrazioneDocenteDetail(this.registrazioneId).subscribe((res) => {
