@@ -1,9 +1,9 @@
 FROM maven:3-jdk-8 AS backend-build
-COPY back-end/pom.xml /tmp
-COPY back-end/src/ /tmp/src/
+COPY pom.xml /tmp
+COPY src/ /tmp/src/
 # COPY docker-props/application.yml /tmp/src/main/resources/
-COPY docker-props/logback.xml /tmp/src/main/resources/logback.xml
-COPY docker-props/persistence.xml /tmp/src/main/resources/META-INF/persistence.xml
+# COPY docker-props/logback.xml /tmp/src/main/resources/logback.xml
+# COPY docker-props/persistence.xml /tmp/src/main/resources/META-INF/persistence.xml
 WORKDIR /tmp
 RUN mvn clean install -Dmaven.test.skip=true
 

@@ -39,7 +39,7 @@ backend-container-build:
   stage: container-build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - DOCKER_BUILDKIT=1 docker build -f backend/Dockerfile -t $CONTAINER_IMAGE_BACKEND back-end/
+    - DOCKER_BUILDKIT=1 docker build -f back-end/Dockerfile -t $CONTAINER_IMAGE_BACKEND back-end/
     - docker push $CONTAINER_IMAGE_BACKEND
   only:
     - demo
