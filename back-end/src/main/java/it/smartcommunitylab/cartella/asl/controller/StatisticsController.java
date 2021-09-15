@@ -25,8 +25,10 @@ import it.smartcommunitylab.cartella.asl.model.statistics.POI;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
+@ApiIgnore
 public class StatisticsController {
 
 	@Autowired

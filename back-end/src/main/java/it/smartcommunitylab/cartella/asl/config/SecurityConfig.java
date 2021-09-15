@@ -42,7 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/registrazione-ente").permitAll().anyRequest().authenticated().and()
+                .authorizeRequests().antMatchers("/registrazione-ente").permitAll()
+                .antMatchers("/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/configuration/**",
+                    "/swagger-ui.html",
+                    "/webjars/**").permitAll()
+                .anyRequest().authenticated().and()
                 .oauth2ResourceServer(oauth2 -> {
                     if (useJwt()) {
                         oauth2.jwt().decoder(jwtDecoder());
