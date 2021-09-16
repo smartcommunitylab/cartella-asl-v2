@@ -49,14 +49,15 @@ public class MailService {
 	
 	private Session setMailerSession() {
 		Properties props = new Properties();
-		props.put("mail.transport.protocol", "smtps");
+		//props.put("mail.transport.protocol", "smtps");
 		props.put("mail.smtp.host", mailHost);    
-		props.put("mail.smtp.socketFactory.port", mailPort);    
+		//props.put("mail.smtp.socketFactory.port", mailPort);    
 		props.put("mail.smtp.port", mailPort);  
 		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.ssl.enable", "true");
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");  
-		props.put("mail.smtp.localhost", "climb.smartcommunitylab.it");
+		props.put("mail.smtp.starttls.enable", "true");
+		//props.put("mail.smtp.ssl.enable", "true");
+		//props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");  
+		//props.put("mail.smtp.localhost", "climb.smartcommunitylab.it");
 		Session session = Session.getInstance(props,    
 		  new javax.mail.Authenticator() {    
 		  	protected PasswordAuthentication getPasswordAuthentication() {    
