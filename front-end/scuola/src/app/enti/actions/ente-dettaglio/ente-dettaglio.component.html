@@ -98,6 +98,9 @@
         </div>
         <br>
     <div *ngIf="this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])">
+        <div class="title">
+            Convenzioni <br />
+        </div>
         <br>
         <div class="list-group" *ngIf="convenzioni && convenzioni.length > 0">
             <table class="table table-hover">
@@ -136,5 +139,11 @@
                 </tbody>
             </table>
         </div>
-
+        <div class="row p-1" *ngIf="!convenzioni?.length">
+            <div class="warning-div col-xl-12">
+                <span>La convenzione con l’ente <span class="text-bold">{{ente.nome}}</span> è <span class="text-bold revisione">ASSENTE</span>. L’ente non può visualizzare i dati degli studenti di questo istituto sul suo profilo EDIT.<br>
+                    Puoi comunque creare e gestire attività presso queste ente tramite il portale scuola e la webapp studenti - ma senza la collaborazione diretta dell’ente tramite il suo profilo EDIT.<br> 
+                    Per permettere all’ente di collaborare con la gestione dell’attività tramite la sua interfaccia EDIT inserisci una convenzione valida utilizzando il tasto "Aggiungi nuova convenzione."</span>
+            </div>
+        </div>
   </div>
