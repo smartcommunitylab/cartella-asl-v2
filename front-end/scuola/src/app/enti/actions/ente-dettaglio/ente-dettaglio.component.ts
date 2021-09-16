@@ -49,6 +49,7 @@ export class EnteDettaglioComponent implements OnInit {
   menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Attiva accesso” puoi invitare un ente a crearsi un account in EDIT per gestire presenze, offerte e documentazione';
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
   showContent: boolean = false;
+  convenzioni = [];
 
   breadcrumbItems = [
     {
@@ -68,20 +69,22 @@ export class EnteDettaglioComponent implements OnInit {
 
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
+        this.dataService.getEnteConvenzione(id).subscribe((res) => {
+          this.convenzioni = res;
+        },
+        (err: any) => console.log(err),
+        () => console.log('getEnteConvenzioni'));
 
         setTimeout(() => { //ensure that map div is rendered
           this.drawMap();
         }, 0);
-        // });
-
       },
         (err: any) => console.log(err),
-        () => console.log('getAttivita'));
+        () => console.log('getEnte'));
     });
 
-
-
   }
+
   openDetailCompetenza(competenza, $event) {
     // if ($event) $event.stopPropagation();
     // const modalRef = this.modalService.open(CompetenzaDetailModalComponent, { size: "lg" });
@@ -209,4 +212,5 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
+  
 }

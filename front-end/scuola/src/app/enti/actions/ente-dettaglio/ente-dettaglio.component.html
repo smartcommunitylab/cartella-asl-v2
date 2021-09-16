@@ -95,5 +95,46 @@
             <div class="col">
               <div id="map" style="height:300px;width:100%;"></div>
             </div>
-          </div>
+        </div>
+        <br>
+    <div *ngIf="this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])">
+        <br>
+        <div class="list-group" *ngIf="convenzioni && convenzioni.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Data inizio validità</th>
+                        <th>Data fine validità</th>
+                        <th>File convenzione</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let conv of convenzioni" (click)="modificaConvenzione(conv, $event)">
+                        <!-- Nome -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.nome }}</span>
+                        </td>
+                        <!-- Data inizio -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.dataInizio | date:'dd/MM/yyyy' }}</span>
+                        </td>
+                        <!-- Data fine -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.dataFine | date:'dd/MM/yyyy' }}</span>
+                        </td>
+                        <!-- File convenzione -->
+                        <td class="pointer" onclick="return false;">
+                            <span class="align-middle" ><a [routerLink]="">{{conv.nomeFile}}</a></span>
+                        </td>
+                        <!-- stato -->
+                        <td class="pointer">
+                            <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ setStatoConvenzione(conv) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
   </div>
