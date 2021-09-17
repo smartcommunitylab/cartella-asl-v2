@@ -212,5 +212,42 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
-  
+
+  setStatoConvenzione(conv) {
+    let label = 'Scaduta';
+    if (conv.stato == 'attiva') {
+      label = 'Valida';
+    }
+    return label;
+  }
+
+  styleOptionConvenzione(conv) {
+    var style = {
+        'color': '#707070', //grey
+    };
+
+    if (conv && conv.stato == 'attiva') {
+        style['color'] = '#00CF86'; // green
+    }
+    return style;
+  }
+
+  modificaConvenzione(conv, e) {
+    var target = e.target;
+    while (target) { // Iterate through elements
+      if (target.tagName === 'TD') { // TD found, stop iteration
+        break;
+      }
+      target = target.parentElement; // Set target as a parent element of the current element
+    }
+    if (target === null) { return; } // Check that we really have a TD
+
+    if (target.cellIndex == 3) {
+      // this.downloadDoc(conv);
+    } else {
+      // this.router.navigate(['modifica/convenzione', conv.id], { relativeTo: this.route });
+    }
+  }
+
+
 }
