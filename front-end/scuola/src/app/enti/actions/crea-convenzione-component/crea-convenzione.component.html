@@ -1,0 +1,76 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row" *ngIf="ente">
+        <div class="col-6 v-center">
+            <span class="modifyTitleStyle m-left">{{ente.nome}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+        <div class="col-6">
+            <div class="row v-center float-right">
+                <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
+                    ngbTooltip="Annulla le modifiche" (click)="cancel()">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Annulla</span>
+                        <span class="col-4 rightItem">
+                            <svg class="icon icon-white icon-sm btnModificationIcon">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"
+                    ngbTooltip="Modifica l'attività">
+                    <span class="row btnModificationText">
+                        <span class="col-8 leftItem">Salva</span>
+                        <span class="col-4 rightItem">
+                            <i class="material-icons btnModificationIcon">save</i>
+                        </span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr class="hr modifyHr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use></svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight" (click)="menuContentShow()"><use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use></svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <div class="card-body modify-card-body" *ngIf="ente">
+        <div class="errorMsg" [hidden]="!forceErrorDisplay">Compila i campi necessari</div>
+        <div class="row m16">
+            <div class="col-12">
+                <div class="row v-center form-group">
+                    <div class="col-sm-5"
+                        [class.has-danger]="NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay)">
+                        <label for="nome" class="active">Nome convenzione</label>
+                        <input type="text" class="form-control" [(ngModel)]="nome" id="nome" name="nome"
+                            #NomeInput="ngModel" placeholder="Nome" required>
+                        <div class="invalid-feedback"
+                            [class.d-block]="forceTitoloErrorDisplay || (NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay))">
+                            Campo necessario.</div>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-sm-5"></div>
+                </div>
+               
+            </div>
+
+        </div>
+    </div>
+    </div>
+    
