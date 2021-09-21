@@ -65,7 +65,7 @@ gemnasium-dependency_scanning:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "demo"'
       when: always
 
-spotbugs-sast::
+spotbugs-sast:
   rules:
     - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "demo"'
       when: always
