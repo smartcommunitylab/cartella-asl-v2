@@ -1,15 +1,15 @@
 package it.smartcommunitylab.cartella.asl.model.ext.infotn;
 
-public class Corso {
+public class CorsoInfoTn {
 	private String extId;
 	private String origin;
 	private String course;
 	private String dateFrom;
 	private String dateTo;
-	private CourseRef corsoRef;
-	private Institute instituteRef;
+	private CorsoInfoTn corsoRef;
+	private IstituzioneInfoTn instituteRef;
 	private String schoolYear;
-	private TeachingUnit teachingUnitRef;
+	private TeachingUnitInfoTn teachingUnitRef;
 
 	public String getExtId() {
 		return extId;
@@ -33,22 +33,6 @@ public class Corso {
 
 	public void setDateTo(String dateTo) {
 		this.dateTo = dateTo;
-	}
-
-	public Institute getInstituteRef() {
-		return instituteRef;
-	}
-
-	public void setInstituteRef(Institute instituteRef) {
-		this.instituteRef = instituteRef;
-	}
-
-	public TeachingUnit getTeachingUnitRef() {
-		return teachingUnitRef;
-	}
-
-	public void setTeachingUnitRef(TeachingUnit teachingUnitRef) {
-		this.teachingUnitRef = teachingUnitRef;
 	}
 
 	public String getOrigin() {
@@ -75,12 +59,29 @@ public class Corso {
 		this.course = course;
 	}
 
-	public CourseRef getCorsoRef() {
+	public CorsoInfoTn getCorsoRef() {
 		return corsoRef;
 	}
 
-	public void setCorsoRef(CourseRef corsoRef) {
+	public void setCorsoRef(CorsoInfoTn corsoRef) {
 		this.corsoRef = corsoRef;
 	}
+
+	public IstituzioneInfoTn getInstituteRef() {
+		return instituteRef;
+	}
+
+	public void setInstituteRef(IstituzioneInfoTn instituteRef) {
+		this.instituteRef = instituteRef;
+	}
+
+	public TeachingUnitInfoTn getTeachingUnitRef() {
+		return teachingUnitRef;
+	}
+
+	public void setTeachingUnitRef(TeachingUnitInfoTn teachingUnitRef) {
+		this.teachingUnitRef = teachingUnitRef;
+	}
+
 
 }

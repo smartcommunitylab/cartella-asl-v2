@@ -1,6 +1,6 @@
 package it.smartcommunitylab.cartella.asl.model.ext.infotn;
 
-public class CorsoMetaInfo {
+public class CorsoMetaInfoInfoTn {
 
 	private String extId;
 	private String origin;
