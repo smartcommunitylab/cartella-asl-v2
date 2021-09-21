@@ -43,6 +43,12 @@
         border-bottom: 10px solid #3DBBD2;
     }
 
+    .middle-table {
+        position: relative;
+        max-width: 50%;        
+        left: 20%;
+    }
+
     .title{
         text-align: left;
         letter-spacing: 0;
@@ -50,6 +56,11 @@
         opacity: 1;
         font-size: larger;
         font-weight: bold;
+    }
+
+    .azienda {
+        position: relative;
+        top: 20px;
     }
 
     .error {

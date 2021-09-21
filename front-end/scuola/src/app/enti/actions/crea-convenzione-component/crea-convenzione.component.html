@@ -12,7 +12,7 @@
         <div class="col-6">
             <div class="row v-center float-right">
                 <button type="button" class="btn btn-danger btn-icon btn-xs btnAnnulla m-top22" placement="bottom"
-                    ngbTooltip="Annulla le modifiche" (click)="cancel()">
+                    ngbTooltip="Annulla la convenzione" (click)="cancel()">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Annulla</span>
                         <span class="col-4 rightItem">
@@ -24,7 +24,7 @@
                 </button>
                 &nbsp;&nbsp;
                 <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"
-                    ngbTooltip="Modifica l'attività">
+                    ngbTooltip="Salva la convenzione" (click)="save(myForm)">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Salva</span>
                         <span class="col-4 rightItem">
@@ -67,10 +67,33 @@
                     <div class="col-2"></div>
                     <div class="col-sm-5"></div>
                 </div>
-               
+                <div class="row v-center form-group">
+                    <div class="col-sm-5">
+                        Data inizio validità:
+                        <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio" [config]="datePickerConfig"
+                            theme="dp-material" id="dataInizio"></dp-date-picker>
+                        <svg (click)="openStart()" class="icon icon-sm">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-calendar"></use>
+                        </svg>
+                        <div class="invalid-feedback" [class.d-block]="!date.dataInizio">Campo necessario.</div>
+                        <div class="invalid-feedback" [class.d-block]="date.dataInizio > date.dataFine">La data inizio
+                            deve essere anteriore alla data fine</div>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-sm-5">
+                        Data fine validità:
+                        <dp-date-picker #calendarEnd [(ngModel)]="date.dataFine" [config]="datePickerConfig"
+                            theme="dp-material" id="dataFine" minDate="date.minFine" maxDate="date.maxFine">
+                        </dp-date-picker>
+                        <svg (click)="openEnd()" class="icon icon-sm">
+                            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-calendar"></use>
+                        </svg>
+                        <div class="invalid-feedback" [class.d-block]="!date.dataFine">Campo necessario.</div>
+                        <div class="invalid-feedback" [class.d-block]="date.dataFine < date.dataInizio">La
+                            data fine deve essere posteriore alla data inizio
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
-    </div>
-    </div>
-    
