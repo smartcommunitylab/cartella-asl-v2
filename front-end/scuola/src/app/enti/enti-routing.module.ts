@@ -10,6 +10,7 @@ import { EnteCancellaModal } from './actions/cancella-ente-modal/ente-cancella-m
 import { AbilitaEntePrimaModal } from './actions/abilita-ente-prima-modal/abilita-ente-prima-modal.component';
 import { AbilitaEnteSecondaModal } from './actions/abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
+import { CreaConvenzioneComponent } from './actions/crea-convenzione-component/crea-convenzione.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       { path: 'list', component: EntiComponent },
       { path: 'detail/:id', component: EnteDettaglioComponent},
       { path: 'detail/:id/modifica/dati', component: EnteDettaglioModificaComponent},
+      { path: 'detail/:id/aggiungi/convenzione', component: CreaConvenzioneComponent},
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -37,7 +39,8 @@ export class EntiRoutingModule {
     EnteCancellaModal,
     AbilitaEntePrimaModal,
     AbilitaEnteSecondaModal,
-    AnnullaInvitoModal
+    AnnullaInvitoModal,
+    CreaConvenzioneComponent,
   ];
 }
 

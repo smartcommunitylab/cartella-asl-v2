@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule }   from '../shared/shared.module';
 import { EntiRoutingModule } from './enti-routing.module';
 import { NgbModule,NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { DesignAngularKitModule } from 'design-angular-kit' 
+import { DesignAngularKitModule } from 'design-angular-kit';
+import { DpDatePickerModule } from 'ng2-date-picker';
 import { EnteCancellaModal } from './actions/cancella-ente-modal/ente-cancella-modal.component';
 import { SubNavbarModule } from '../sub-navbar/sub-navbar.module';
 import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-modal.component';
@@ -17,6 +18,7 @@ import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invit
     SharedModule,
     EntiRoutingModule,
     NgbModule.forRoot(),
+    DpDatePickerModule,
     CommonModule,
     FormsModule,
     DesignAngularKitModule,
@@ -29,7 +31,7 @@ import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invit
     EnteCancellaModal,
     AbilitaEntePrimaModal,
     AbilitaEnteSecondaModal,
-    AnnullaInvitoModal
+    AnnullaInvitoModal,
   ],
 declarations: [EntiRoutingModule.components]
 })
