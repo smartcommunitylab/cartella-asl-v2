@@ -822,9 +822,12 @@ export class DataService {
   }
 
   /** ISTITUTI. **/
-  searchIstitutiAPI(filterText: string, page: any, pageSize: any) {
-    let url = this.host + '/istituto/search';
+  searchIstitutiAPI(dataInizio, dataFine, filterText: string, page: any, pageSize: any) {
+    let url = this.host + '/istituto/offerta';
     let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('dateFrom', dataInizio);
+    params = params.append('dateTo', dataFine);
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
@@ -1074,9 +1077,9 @@ export class DataService {
   }
 
   getistitutoDettaglio(id: any): Observable<any> {
-    let url = this.host + "/istituto/" + id;
+    let url = this.host + "/istituto/" + id + '/ente';
     let params = new HttpParams();
-    // params = params.append('enteId', this.aziendaId);
+    params = params.append('enteId', this.aziendaId);
 
     return this.http.get<any>(
       url,
@@ -1094,6 +1097,22 @@ export class DataService {
       );
   }
 
+  downloadDocumentConvenzioneBlob(doc): Observable<any> {
+    let url = this.host + '/download/document/convenzione/' + doc.uuid + '/ente/' + this.aziendaId;
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data], { type: doc.formatoDocumento });
+        const url = URL.createObjectURL(blob);
+        return url;
+        //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      },
+        catchError(this.handleError)
+      );
+  }
 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
