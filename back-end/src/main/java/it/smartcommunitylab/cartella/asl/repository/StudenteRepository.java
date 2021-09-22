@@ -39,5 +39,7 @@ public interface StudenteRepository extends JpaRepository<Studente, String> {
 
 	@Query("SELECT COUNT(s) FROM Studente s WHERE s.id IN (:ids)")
 	public int getCountOfStudente(String[] ids);
+
+	public Studente findByExtIdAndOrigin(String extId, String origin);
     
 }

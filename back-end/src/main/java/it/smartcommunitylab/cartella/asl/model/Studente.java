@@ -18,6 +18,8 @@ public class Studente implements Comparable<Studente> {
 
 	@Id
 	private String id;
+	private String origin;
+	private String extId;	
 	private String name;
 	private String surname;
 	private String birthdate;
@@ -141,6 +143,22 @@ public class Studente implements Comparable<Studente> {
 
 		public void setEmail(String email) {
 			this.email = email;
+		}
+
+		public String getOrigin() {
+			return origin;
+		}
+
+		public void setOrigin(String origin) {
+			this.origin = origin;
+		}
+
+		public String getExtId() {
+			return extId;
+		}
+
+		public void setExtId(String extId) {
+			this.extId = extId;
 		}
 
 }
