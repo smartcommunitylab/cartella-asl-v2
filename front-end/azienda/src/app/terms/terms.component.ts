@@ -3,7 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from '../core/services/data.service';
-import { config } from '../config';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'terms-component',
@@ -53,7 +53,7 @@ export class TermsComponent {
         sessionStorage.clear();
         var getUrl = window.location;
         var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
-        var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`; 
+        var logoutUrl = `${environment.aacUrl}/logout?target=${baseUrl}/asl-login/`; 
         window.location.href = logoutUrl;
         console.log('App closed');
     };

@@ -4,12 +4,12 @@ import { Observable } from 'rxjs/Rx';
 import { catchError, map } from 'rxjs/operators';
 import { IPagedIstituto } from '../../shared/classes/IPagedIstituto.class';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { serverAPIConfig } from '../serverAPIConfig'
 import { Azienda, IPagedAA } from '../../shared/interfaces';
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
 import * as moment from 'moment';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -22,7 +22,7 @@ export class DataService {
   schoolYear: string = "2019-20";
   listIstituteIds = [];
   istituto: string = "Centro Formazione Professionale Agrario - S. Michele all'Adige'";
-  host: string = serverAPIConfig.host;
+  host: string;
   corsoDiStudioAPIUrl: string = '/corsi';
   esperienzaSvoltaAPIUrl: string = '/esperienzaSvolta';
   attiitaAlternanzaAPIUrl: string = '/attivitaAlternanza'
@@ -42,6 +42,7 @@ export class DataService {
     private growler: GrowlerService,
     private sanitizer: DomSanitizer) {
     DataService.growler = growler;
+    this.host = environment.serverAPIURL;
   }
 
   /** AZIENDA.  **/
