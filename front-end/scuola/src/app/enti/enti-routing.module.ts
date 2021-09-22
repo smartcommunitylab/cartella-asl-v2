@@ -11,6 +11,7 @@ import { AbilitaEntePrimaModal } from './actions/abilita-ente-prima-modal/abilit
 import { AbilitaEnteSecondaModal } from './actions/abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
 import { CreaConvenzioneComponent } from './actions/crea-convenzione-component/crea-convenzione.component';
+import { EnteConvenzioneModificaComponent } from './actions/ente-modifica-convenzione/ente-modifica-convenzione.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'detail/:id', component: EnteDettaglioComponent},
       { path: 'detail/:id/modifica/dati', component: EnteDettaglioModificaComponent},
       { path: 'detail/:id/aggiungi/convenzione', component: CreaConvenzioneComponent},
+      { path: 'detail/:id/modifica/convenzione/:idConv', component: EnteConvenzioneModificaComponent},
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -41,6 +43,7 @@ export class EntiRoutingModule {
     AbilitaEnteSecondaModal,
     AnnullaInvitoModal,
     CreaConvenzioneComponent,
+    EnteConvenzioneModificaComponent,
   ];
 }
 

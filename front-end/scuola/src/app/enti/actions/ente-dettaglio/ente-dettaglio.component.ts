@@ -212,6 +212,9 @@ export class EnteDettaglioComponent implements OnInit {
     }
   }
 
+  aggiungiConvenzione() {
+      this.router.navigate(['aggiungi/convenzione'], { relativeTo: this.route });
+  }
 
   setStatoConvenzione(conv) {
     let label = 'Scaduta';
@@ -243,9 +246,8 @@ export class EnteDettaglioComponent implements OnInit {
     if (target === null) { return; } // Check that we really have a TD
 
     if (target.cellIndex == 3) {
-      // this.downloadDoc(conv);
     } else {
-      // this.router.navigate(['modifica/convenzione', conv.id], { relativeTo: this.route });
+      this.router.navigate(['modifica/convenzione', conv.id], { relativeTo: this.route });
     }
   }
 
