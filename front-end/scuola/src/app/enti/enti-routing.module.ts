@@ -12,6 +12,7 @@ import { AbilitaEnteSecondaModal } from './actions/abilita-ente-secondo-modal/ab
 import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
 import { CreaConvenzioneComponent } from './actions/crea-convenzione-component/crea-convenzione.component';
 import { EnteConvenzioneModificaComponent } from './actions/ente-modifica-convenzione/ente-modifica-convenzione.component';
+import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,7 @@ export class EntiRoutingModule {
     AnnullaInvitoModal,
     CreaConvenzioneComponent,
     EnteConvenzioneModificaComponent,
+    DocumentoCancellaModal
   ];
 }
 

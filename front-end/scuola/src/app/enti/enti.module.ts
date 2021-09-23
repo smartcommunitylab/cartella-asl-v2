@@ -12,6 +12,7 @@ import { CreaEnteModalComponent } from './actions/crea-ente-modal/crea-ente-moda
 import { AbilitaEntePrimaModal } from './actions/abilita-ente-prima-modal/abilita-ente-prima-modal.component';
 import { AbilitaEnteSecondaModal } from './actions/abilita-ente-secondo-modal/abilita-ente-seconda-modal.component';
 import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invito-modal.component';
+import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 
 @NgModule({
   imports:      [ 
@@ -32,6 +33,7 @@ import { AnnullaInvitoModal } from './actions/annulla-invito-modal/annulla-invit
     AbilitaEntePrimaModal,
     AbilitaEnteSecondaModal,
     AnnullaInvitoModal,
+    DocumentoCancellaModal
   ],
 declarations: [EntiRoutingModule.components]
 })
