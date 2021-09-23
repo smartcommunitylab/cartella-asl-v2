@@ -61,14 +61,14 @@ include:
   - template: Security/SAST.gitlab-ci.yml
 
 gemnasium-dependency_scanning:
-  only:
-    - dev
-    - demo
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 spotbugs-sast:
-  only:
-    - dev
-    - demo
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 container_scanning:
   stage: container-scan
@@ -78,9 +78,9 @@ container_scanning:
     GIT_STRATEGY: fetch
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
-  only:
-    - dev
-    - demo
+  rules:
+    - if: '$$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 container_scanning_image2:
   extends: container_scanning
@@ -89,9 +89,9 @@ container_scanning_image2:
     DOCKERFILE_PATH: "front-end/Dockerfile"
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
-  only:
-    - dev
-    - demo
+  rules:
+    - if: '$$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 
 backend-deploy:
