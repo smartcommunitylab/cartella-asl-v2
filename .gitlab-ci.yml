@@ -39,7 +39,7 @@ backend-container-build:
   stage: container-build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - DOCKER_BUILDKIT=1 docker build -f backend/Dockerfile -t $CONTAINER_IMAGE_BACKEND back-end/
+    - DOCKER_BUILDKIT=1 docker build -f back-end/Dockerfile -t $CONTAINER_IMAGE_BACKEND back-end/
     - docker push $CONTAINER_IMAGE_BACKEND
   only:
     - demo
@@ -49,7 +49,7 @@ fronted-container-build:
   stage: container-build
   script:
     - docker login -u $DHUB_USER -p $DHUB_PASS
-    - DOCKER_BUILDKIT=1 docker build -f front-end/Dockerfile -t $CONTAINER_IMAGE_FRONTEND front-end/
+    - DOCKER_BUILDKIT=1 docker build --build-arg ENVIRONMENT=$CI_COMMIT_REF_NAME  -f front-end/Dockerfile -t $CONTAINER_IMAGE_FRONTEND front-end/
     - docker push $CONTAINER_IMAGE_FRONTEND
   only:
     - demo
@@ -60,6 +60,15 @@ include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
 
+gemnasium-dependency_scanning:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
+      when: always
+
+spotbugs-sast:
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 container_scanning:
   stage: container-scan
@@ -69,6 +78,9 @@ container_scanning:
     GIT_STRATEGY: fetch
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
+  rules:
+    - if: '$$CI_COMMIT_REF_NAME == "demo"'
+      when: always
 
 container_scanning_image2:
   extends: container_scanning
@@ -77,6 +89,10 @@ container_scanning_image2:
     DOCKERFILE_PATH: "front-end/Dockerfile"
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
+  rules:
+    - if: '$$CI_COMMIT_REF_NAME == "demo"'
+      when: always
+
 
 backend-deploy:
   stage: deploy
@@ -85,8 +101,8 @@ backend-deploy:
     name: develop
   script:
     - echo "deploy backend"
-    - kubectl -n default set image deployments/cartella-backend-$CI_COMMIT_REF_NAME cartella-backend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_BACKEND --record=true
-    - kubectl -n default rollout status deployment cartella-backend-$CI_COMMIT_REF_NAME
+    - kubectl -n cartella set image deployments/cartella-backend-$CI_COMMIT_REF_NAME cartella-backend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_BACKEND --record=true
+    - kubectl -n cartella rollout status deployment cartella-backend-$CI_COMMIT_REF_NAME
   only:
     - dev
     - demo
@@ -98,8 +114,8 @@ frontend-deploy:
     name: develop
   script:
     - echo "deploy frontend"
-    - kubectl -n default set image deployments/cartella-frontend-$CI_COMMIT_REF_NAME cartella-frontend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_FRONTEND --record=true
-    - kubectl -n default rollout status deployment cartella-frontend-$CI_COMMIT_REF_NAME
+    - kubectl -n cartella set image deployments/cartella-frontend-$CI_COMMIT_REF_NAME cartella-frontend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_FRONTEND --record=true
+    - kubectl -n cartella rollout status deployment cartella-frontend-$CI_COMMIT_REF_NAME
   only:
     - dev
     - demo
