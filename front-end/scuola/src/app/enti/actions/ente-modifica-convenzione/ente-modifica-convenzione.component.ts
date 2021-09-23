@@ -137,4 +137,47 @@ export class EnteConvenzioneModificaComponent implements OnInit {
     }
   }
 
+  saveFileObj = { type: null, file: null };
+  documenti = [];
+
+  uploadDocument(fileInput) {
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      this.saveFileObj.file = fileInput.target.files[0];
+      this.saveFileObj.type = 'convenzione';
+
+      this.dataService.uploadDocumentToRisorsa(this.saveFileObj, this.convenzione.uuid + '').subscribe((doc) => {
+        this.dataService.getConvenzioneDettaglio(this.convId).subscribe((res) => {
+          this.convenzione = res;
+          this.date.dataInizio = moment(this.convenzione.dataInizio).startOf('day');
+          this.date.dataFine = moment(this.convenzione.dataFine).startOf('day');
+        })
+      });
+    }
+  }
+
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
+  deleteConvenzioneDocument(conv) {
+      const modalRef = this.modalService.open(DocumentoCancellaModal);
+      modalRef.componentInstance.documento = conv;
+      modalRef.result.then((result) => {
+        if (result == 'deleted') {
+          this.dataService.getConvenzioneDettaglio(this.convId).subscribe((res) => {
+            this.convenzione = res;
+            this.date.dataInizio = moment(this.convenzione.dataInizio).startOf('day');
+            this.date.dataFine = moment(this.convenzione.dataFine).startOf('day');
+          })        }
+      });
+  }
+
+
 }

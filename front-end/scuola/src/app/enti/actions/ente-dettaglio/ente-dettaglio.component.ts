@@ -246,10 +246,21 @@ export class EnteDettaglioComponent implements OnInit {
     if (target === null) { return; } // Check that we really have a TD
 
     if (target.cellIndex == 3) {
+      this.downloadDoc(conv);
     } else {
       this.router.navigate(['modifica/convenzione', conv.id], { relativeTo: this.route });
     }
   }
 
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
 
 }
