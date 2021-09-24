@@ -134,8 +134,8 @@ public class ConvenzioneManager extends DataEntityManager {
 		if(!istitutoId.equals(c.getIstitutoId())) {
 			throw new BadRequestException("convenzione errata");
 		}
-		Documento doc = documentoRepository.findDocumentoByUuid(c.getUuidFile());
-		if(doc != null) {
+		List<Documento> docs = documentoRepository.findDocumentoByRisorsaId(c.getUuid());
+		for(Documento doc : docs) {
 			documentoRepository.delete(doc);
 		}
 		convenzioneRepository.delete(c);
