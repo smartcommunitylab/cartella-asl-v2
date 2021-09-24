@@ -153,7 +153,7 @@ public class OffertaManager extends DataEntityManager {
 			Offerta o = getOfferta(offertaId);
 			if(o != null) {
 				LocalDate today = LocalDate.now();
-				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), o.getEnteId());
+				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(istitutoId, o.getEnteId());
 				if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
 					return null;
 				}
