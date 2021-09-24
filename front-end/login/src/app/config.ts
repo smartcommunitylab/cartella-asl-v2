@@ -1,5 +1,5 @@
 export var config = {
-  prefixScuola: 'asl-scuola',
-  prefixStudente: 'asl-studente',
-  prefixEnte: 'asl-azienda'
+  prefixScuola: 'asl-scuola-v2',
+  prefixStudente: 'edit-studente',
+  prefixEnte: 'asl-azienda-v2'
   }
