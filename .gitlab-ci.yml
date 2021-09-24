@@ -62,12 +62,12 @@ include:
 
 gemnasium-dependency_scanning:
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "demo"'
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
       when: always
 
 spotbugs-sast:
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "demo"'
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
       when: always
 
 container_scanning:
@@ -79,7 +79,7 @@ container_scanning:
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "demo"'
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
       when: always
 
 container_scanning_image2:
@@ -89,6 +89,10 @@ container_scanning_image2:
     DOCKERFILE_PATH: "front-end/Dockerfile"
     DOCKER_USER: ""
     DOCKER_PASSWORD: ""
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "demo"'
+      when: always
+
 
 backend-deploy:
   stage: deploy
