@@ -137,6 +137,27 @@ export class EnteConvenzioneModificaComponent implements OnInit {
     }
   }
 
+  delete() {
+    if (this.convenzione.stato == 'attiva') {
+      const modalRef = this.modalService.open(ConvenzioneCancellaModal, { windowClass: "abilitaEnteModalClass" });
+      modalRef.componentInstance.ente = this.ente;
+      modalRef.componentInstance.convenzione = this.convenzione;
+      modalRef.componentInstance.onDelete.subscribe((res) => {
+        if (res == 'deleted') {
+          this.deleteConvenzione();
+        }        
+      });
+    } else {
+      this.deleteConvenzione();
+    }
+  }
+
+  deleteConvenzione() {
+    this.dataService.annullaConvenzione(this.convenzione.id).subscribe((res) => {
+      this.router.navigate(['../../../'], { relativeTo: this.route });
+    })
+  }
+
   saveFileObj = { type: null, file: null };
   documenti = [];
 
@@ -145,7 +166,7 @@ export class EnteConvenzioneModificaComponent implements OnInit {
       this.saveFileObj.file = fileInput.target.files[0];
       this.saveFileObj.type = 'convenzione';
 
-      this.dataService.uploadDocumentToRisorsa(this.saveFileObj, this.convenzione.uuid + '').subscribe((doc) => {
+      this.dataService.uploadDocumentConvenzione(this.saveFileObj, this.convenzione.uuid + '').subscribe((doc) => {
         this.dataService.getConvenzioneDettaglio(this.convId).subscribe((res) => {
           this.convenzione = res;
           this.date.dataInizio = moment(this.convenzione.dataInizio).startOf('day');
