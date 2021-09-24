@@ -1,12 +1,12 @@
-import { AuthenticationService } from "../services/authentication.service";
 import {CanActivate, CanActivateChild, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { Injectable } from "@angular/core";
+import { AuthService } from "../auth/auth.service";
 
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
 
-  constructor(private login: AuthenticationService, private router: Router) {}
+  constructor(private login: AuthService, private router: Router) {}
 
   /**
    * Can navigate to internal pages only if the user is authenticated
@@ -15,10 +15,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     console.log('AuthGuard#canActivate called');
-    return this.login.checkLoginStatus().then(valid => {
+    return this.login.checkLoggedIn().then(valid => {
       if (!valid) {
         console.log('come here for not valid');
-        this.login.redirectAuth();
+        this.login.startAuthentication();
       }
       return valid;
     });

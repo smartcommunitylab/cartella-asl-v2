@@ -6,12 +6,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 import { EventBusService, EmitEvent, Events } from '../services/event-bus.service';
-import { config } from '../../config';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class OverlayRequestResponseInterceptor implements HttpInterceptor {
 
-  constructor(private eventBus: EventBusService, private modalService: NgbModal) { }
+  constructor(private eventBus: EventBusService, private modalService: NgbModal, private authService: AuthService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // const randomTime = this.getRandomIntInclusive(0, 1500);
@@ -45,7 +45,7 @@ export class OverlayRequestResponseInterceptor implements HttpInterceptor {
             }
             modalRef.result.then((result) => {
               if (result == 'LOGIN') {
-                this.logout(err.error.ex);
+                this.authService.logout();
               }
             });
           }
@@ -58,15 +58,6 @@ export class OverlayRequestResponseInterceptor implements HttpInterceptor {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
-  }
-
-  logout(errMsg) {
-    sessionStorage.clear();
-    var getUrl = window.location;
-    var baseUrl = getUrl.protocol + "//" + getUrl.host;
-    var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/#/home?errMsg=' + ${errMsg}`;        
-    // var logoutUrl = baseUrl + '/logout?target=' + baseUrl + '/asl-login/#/home?errMsg=' + errMsg;
-    window.location.href = logoutUrl;
-  }
+  } 
 
 }

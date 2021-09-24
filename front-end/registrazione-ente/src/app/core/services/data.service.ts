@@ -3,9 +3,9 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular
 import { Observable } from 'rxjs/Rx';
 import { catchError, map } from 'rxjs/operators';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { serverAPIConfig } from '../serverAPIConfig'
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../auth/auth.service';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -14,7 +14,7 @@ const httpOptions = {
 @Injectable()
 export class DataService {
 
-  host: string = serverAPIConfig.host;
+  host: string;
   static growler;
   timeout: number = 120000;
   aziendaId: string = '';
@@ -28,6 +28,7 @@ export class DataService {
     private sanitizer: DomSanitizer,
     private authService: AuthService) {
     DataService.growler = growler;
+    this.host = environment.serverAPIURL;
   }
 
   setAziendaId(id) {

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Output, EventEmitt
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
-import { AuthenticationService } from '../services/authentication.service';
+import { AuthService } from '../../core/auth/auth.service';
 import { environment } from '../../../environments/environment';
 
 @Component({
@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   
     @Output() isStickyListener = new EventEmitter<boolean>();
 
-    constructor(private router: Router, public dataService: DataService, private authService: AuthenticationService, private _eref: ElementRef) { }
+    constructor(private router: Router, public dataService: DataService, private authService: AuthService, private _eref: ElementRef) { }
 
     ngOnInit() {}
     
