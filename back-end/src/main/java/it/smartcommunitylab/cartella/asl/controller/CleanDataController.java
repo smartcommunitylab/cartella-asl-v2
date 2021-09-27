@@ -28,7 +28,7 @@ public class CleanDataController implements AslController {
 	public @ResponseBody String cancellaIstitutoNonAttivi(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		logger.info("start cancellaIstitutoNonAttivi");
-		cleanDataManager.cancellaIstitutoNonAttivi();
+		//cleanDataManager.cancellaIstitutoNonAttivi();
 		logger.info("stop cancellaIstitutoNonAttivi");
 		return "OK";
 	}
@@ -37,7 +37,7 @@ public class CleanDataController implements AslController {
 	public @ResponseBody String cancellaTeachingUnitNonAttivi(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		logger.info("start cancellaTeachingUnitNonAttivi");
-		cleanDataManager.cancellaTeachingUnitNonAttivi();
+		//cleanDataManager.cancellaTeachingUnitNonAttivi();
 		logger.info("stop cancellaTeachingUnitNonAttivi");
 		return "OK";
 	}
@@ -46,7 +46,7 @@ public class CleanDataController implements AslController {
 	public @ResponseBody String cancellaCorsoDiStudioNonAttivi(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		logger.info("start cancellaCorsoDiStudioNonAttivi");
-		cleanDataManager.cancellaCorsoDiStudioNonAttivi();
+		//cleanDataManager.cancellaCorsoDiStudioNonAttivi();
 		logger.info("stop cancellaCorsoDiStudioNonAttivi");
 		return "OK";
 	}
@@ -55,7 +55,7 @@ public class CleanDataController implements AslController {
 	public @ResponseBody String cancellaRegistrazioneNonAttivi(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		logger.info("start cancellaRegistrazioneNonAttivi");
-		cleanDataManager.cancellaRegistrazioneNonAttivi();
+		//cleanDataManager.cancellaRegistrazioneNonAttivi();
 		logger.info("stop cancellaRegistrazioneNonAttivi");
 		return "OK";
 	}
@@ -64,7 +64,7 @@ public class CleanDataController implements AslController {
 	public @ResponseBody String cancellaStudenteNonAttivo(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
 		logger.info("start cancellaStudenteNonAttivo");
-		cleanDataManager.cancellaStudenteNonAttivo();
+		//cleanDataManager.cancellaStudenteNonAttivo();
 		logger.info("stop cancellaStudenteNonAttivo");
 		return "OK";
 	}
