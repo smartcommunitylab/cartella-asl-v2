@@ -51,7 +51,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 	}
 	
-	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String email) throws Exception {
+	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String cf, String email) throws Exception {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
@@ -75,6 +75,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setToken(Utils.getUUID());
 		reg.setDataInvito(LocalDate.now());
 		reg.setEmail(email);
+		reg.setCf(cf);
 		reg.setRole(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		reg.setStato(Stato.inviato);
 		if(istituto.isPresent()) {
@@ -116,9 +117,10 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				registrazioneEnteRepository.delete(registrazioneEnte);
 				throw new BadRequestException("richiesta registrazione scaduta");
 			}
-			ASLUser user = userManager.getExistingASLUser(registrazioneEnte.getEmail());
+			ASLUser user = userManager.getASLUserByCf(registrazioneEnte.getCf());
 			if(user == null) {
 				user = new ASLUser();
+				user.setCf(registrazioneEnte.getCf());
 				user.setEmail(registrazioneEnte.getEmail());
 				user = userManager.createASLUser(user);
 			}
@@ -148,9 +150,9 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ownerRole == null) {
 			throw new BadRequestException("gestore non autorizzato");
 		}
-		ASLUser user = userManager.getExistingASLUser(email);
+		ASLUser user = userManager.getASLUserByCf(cf);
 		if(user != null) {
-			user.setCf(cf);
+			user.setEmail(email);
 			user.setName(nome);
 			user.setSurname(cognome);
 			userManager.updateASLUser(user);
@@ -176,6 +178,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setDataInvito(LocalDate.now());
 		reg.setDataAccettazione(LocalDate.now());
 		reg.setEmail(email);
+		reg.setCf(cf);
 		reg.setNominativoInvito(owner.getName() + " " + owner.getSurname());
 		reg.setNominativoReferente(nome + " " + cognome);
 		reg.setToken(Utils.getUUID());
@@ -247,14 +250,13 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 	}
 	
 	public ASLUser aggiornaDatiUtenteAzienda(String enteId, String nome, 
-			String cognome, String cf, Long userId) throws Exception {
+			String cognome, Long userId) throws Exception {
 		ASLUser user = userManager.getASLUserById(userId);
 		if(user == null) {
 			throw new BadRequestException("gestore non trovato");
 		}		
 		user.setName(nome);
 		user.setSurname(cognome);
-		user.setCf(cf);
 		userManager.updateASLUser(user);
 		return user;
 	}

@@ -51,6 +51,8 @@ public class RegistrazioneEnte {
 	
 	private String email;
 	
+	private String cf;
+	
 	private String nominativoInvito;
 	
 	private String nominativoReferente;
@@ -185,6 +187,14 @@ public class RegistrazioneEnte {
 
 	public void setNominativoReferente(String nominativoReferente) {
 		this.nominativoReferente = nominativoReferente;
+	}
+
+	public String getCf() {
+		return cf;
+	}
+
+	public void setCf(String cf) {
+		this.cf = cf;
 	}
 
 }
