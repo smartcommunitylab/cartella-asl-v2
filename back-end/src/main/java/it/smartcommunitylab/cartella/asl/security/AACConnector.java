@@ -16,6 +16,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.ASLUserRepository;
 import it.smartcommunitylab.cartella.asl.repository.ASLUserRoleRepository;
 import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
+import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Component
 public class AACConnector {
@@ -67,9 +68,13 @@ public class AACConnector {
 			
 			BearerTokenAuthentication authentication = (BearerTokenAuthentication) SecurityContextHolder.getContext().getAuthentication();
 			OAuth2AuthenticatedPrincipal principal = (OAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-			//TODO check cf
-			result = (String) principal.getAttributes().get("email");
-			type = EMAIL;
+			result = (String) principal.getAttributes().get("CodiceFiscale");
+			if(Utils.isNotEmpty(result)) {
+				type = CF;
+			} else {
+				result = (String) principal.getAttributes().get("email");
+				type = EMAIL;
+			}
 			
 			/*if (accountProfile != null) {
 				if (accountProfile.getAccounts().containsKey("adc")) {
