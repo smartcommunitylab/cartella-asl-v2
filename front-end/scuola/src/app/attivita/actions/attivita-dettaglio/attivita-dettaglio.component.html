@@ -266,6 +266,16 @@
                 </tbody>
             </table>
         </div>
+        <div class="row p-1" *ngIf="!convenzioni?.length && ente">
+            <div class="warning-div col-xl-12">
+                <span>La convenzione con l’ente <a class="text-bold" [routerLink]="['/enti/detail/', ente.id]">{{ente.nome}}</a> è <span
+                    class="text-bold revisione">ASSENTE</span>. L’ente non può visualizzare i dati degli studenti di
+                    questo istituto sul suo profilo EDIT.<br>
+                    Puoi comunque creare e gestire attività presso queste ente, sia tramite il portale scuola che la webapp studenti - ma senza la collaborazione diretta dell’ente tramite il suo profilo EDIT.<br> 
+                    Per permettere all’ente di collaborare con la gestione dell’attività tramite la sua interfaccia EDIT inserisci una convenzione valida nella pagina profilo dell’ente.
+                </span>
+            </div>
+        </div>
     </div>
     <br>
     <div class="title">

@@ -10,6 +10,7 @@ import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growle
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
+import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 declare var moment: any;
 moment['locale']('it');
 registerLocaleData(localeIT);
@@ -24,13 +25,13 @@ export class AttivitaDettaglioComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private dataService: DataService,
+    public dataService: DataService,
     private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   attivita: AttivitaAlternanza;
   esperienze;
-  offertaAssociata;
+  // offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   individuale: boolean;
   corsiStudio;
@@ -43,6 +44,9 @@ export class AttivitaDettaglioComponent implements OnInit {
   stati = [{ "name": "In attesa", "value": "in_attesa" }, { "name": "In corso", "value": "in_corso" }, { "name": "Revisionare", "value": "revisione" }, { "name": "Archiviata", "value": "archiviata" }];
   tipiDoc = [{ "name": "Piano formativo", "value": "piano_formativo" }, { "name": "Convenzione", "value": "convenzione" }, { "name": "Valutazione studente", "value": "valutazione_studente" }, { "name": "Valutazione esperienza", "value": "valutazione_esperienza" }, { "name": "Altro", "value": "doc_generico" }, { "name": "Pregresso", "Altro": "pregresso" }];
   zeroStudent: boolean;
+  ente;
+  convenzioni = [];
+
   breadcrumbItems = [
     {
       title: "Lista attività",
@@ -61,11 +65,11 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
 
-        if (this.attivita.offertaId) {
-          this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
-            this.offertaAssociata = off;
-          })
-        }
+        // if (this.attivita.offertaId) {
+        //   this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
+        //     this.offertaAssociata = off;
+        //   })
+        // }
 
         this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
         
@@ -88,16 +92,36 @@ export class AttivitaDettaglioComponent implements OnInit {
         });
 
         if (this.attivita.rendicontazioneCorpo) {
-          // this.dataService.getAttivitaPresenzeCorpo(id).subscribe((res) => {
-            // this.esperienze = res;
             this.esperienze.forEach(esp => {
               if (esp.oreRendicontate < 1) {
                 esp.oreRendicontate = '-';
               }
             });
-          // });
         }
 
+        if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
+          this.dataService.getAzienda(this.attivita.enteId).subscribe((res) => {
+            this.ente = res;
+            this.dataService.getAttivaConvenzione(this.attivita.enteId).subscribe((convAttiva) => {
+              if (convAttiva) {
+                if (moment(convAttiva.dataFine) < moment(this.attivita.dataFine)) {
+                  const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
+                  modalRef.componentInstance.attivita = this.attivita;
+                  modalRef.componentInstance.convAttiva = convAttiva;
+                }
+              }
+              this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
+                this.convenzioni = res;
+              },
+                (err: any) => console.log(err),
+                () => console.log('getEnteConvenzioni'));
+            },
+              (err: any) => console.log(err),
+              () => console.log('getAttivaConvenzione'));
+          },
+            (err: any) => console.log(err),
+            () => console.log('getEnte'));
+        }
       },
         (err: any) => console.log(err),
         () => console.log('getAttivita'));
@@ -110,6 +134,10 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   modifica() {
     this.router.navigate(['modifica/attivita/'], { relativeTo: this.route });
+  }
+
+  navigateEnteDettaglio() {
+    this.router.navigateByUrl('/enti/detail/' + this.ente.id); 
   }
 
   getCorsoDiStudioString(corsoStudioId) {
@@ -288,6 +316,46 @@ export class AttivitaDettaglioComponent implements OnInit {
     } else {
       return 'Rendicontazione ore giornaliera';
     }
+  }
+  
+  setStatoConvenzione(convenzione) {
+    let stato = 'Assente';
+    if (convenzione.stato == 'attiva') {
+        stato = 'Attiva';
+    } else if (convenzione.stato == 'non_attiva') {
+        stato = 'Non attiva';
+    }
+    return stato;
+}
+
+styleOptionConvenzione(convenzione) {
+    var style = {
+        'color': '#707070', //grey
+    };
+
+    if (convenzione.stato == 'non_attiva') {
+        style['color'] = '#F83E5A'; // red
+    } else if (convenzione.stato == 'attiva') {
+        style['color'] = '#00CF86'; // green
+    }
+
+    return style;
+}
+
+
+  downloadConvenzioneDoc(doc) {
+    this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
+  routeEntity(conv) {
+    this.router.navigateByUrl('/enti/detail/' + conv.enteId); 
   }
   
 }
