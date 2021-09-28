@@ -68,7 +68,7 @@ public class AACConnector {
 			
 			BearerTokenAuthentication authentication = (BearerTokenAuthentication) SecurityContextHolder.getContext().getAuthentication();
 			OAuth2AuthenticatedPrincipal principal = (OAuth2AuthenticatedPrincipal) authentication.getPrincipal();
-			result = (String) principal.getAttributes().get("CodiceFiscale");
+			result = (String) principal.getAttributes().get("preferred_username");
 			if(Utils.isNotEmpty(result)) {
 				type = CF;
 			} else {
