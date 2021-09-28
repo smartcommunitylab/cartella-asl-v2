@@ -13,5 +13,5 @@ export const environment = {
   redirectUrl: "http://localhost:4200/",
   logout_redirect: 'asl-login/',
   scope: "profile openid email",
-  aacUrl: "https://aac-adc.platform.smartcommunitylab.it"
+  aacUrl: "https://aac.platform.smartcommunitylab.it"
 };

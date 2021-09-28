@@ -13,6 +13,6 @@ export const environment = {
     redirectUrl: "https://dev.smartcommunitylab.it/asl-registrazione-ente-v2/",
     logout_redirect: 'asl-login/',
     scope: "profile openid email",
-    aacUrl: "https://aac-adc.platform.smartcommunitylab.it"
+    aacUrl: "https://aac.platform.smartcommunitylab.it"
 };
   
