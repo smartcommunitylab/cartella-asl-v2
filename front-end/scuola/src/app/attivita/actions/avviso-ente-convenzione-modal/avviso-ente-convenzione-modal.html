@@ -29,10 +29,17 @@
                 <p class="revisione"><span class="text-semibold">Data fine:&nbsp;</span>{{ attivita.dataFine }}</p> 
         </div>
         <div class="col-1 vl"></div>
-     
+        <div>
+                <p><span class="text-semibold">Nome convenzione:&nbsp;</span>{{ convAttiva.nome }}</p>
+                <p><span class="text-semibold">Nome ente:&nbsp;</span>{{ convAttiva.nomeEnte }}</p>
+                <p><span class="text-semibold">Data inizio validità:&nbsp;</span>{{ convAttiva.dataInizio }}</p>
+                <p class="revisione"><span class="text-semibold">Data fine validità:&nbsp;</span>{{ convAttiva.dataFine }}</p>
+        </div>
     </div>
     <br>
-   
+    <div class="text-center text-bold"><p>Se vuoi che l’ente {{ convAttiva.nomeEnte }} collabori inserendo presenze e/o
+        valutazioni, ricordati di inserire una nuova convenzione.
+        Lo puoi fare nella sezione “Convenzioni” del profilo ente (cercalo nella tab "Enti"). ?</p></div>
 </div>
 <br />
 <div class="text-center">
