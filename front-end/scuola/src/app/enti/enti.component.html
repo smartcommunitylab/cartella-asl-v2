@@ -72,11 +72,14 @@
                     <td class="align-middle pointer">{{ente.partita_iva}}</td>
                     <td class="align-middle pointer">{{ente.nome}}</td>
                     <td class="align-middle pointer">{{ente.address}}</td>
-                    <td class="align-middle pointer" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
-                        (mouseenter)="showTipStatoRiga(ente);" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}
+                    <td>
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
+                            (mouseenter)="showTipStatoRiga(ente);" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}</span>
                     </td>
-                    <td class="align-middle pointer" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
-                        (mouseenter)="showTipStatoRigaConvenzione(ente);" [ngStyle]="styleOptionConvenzione(ente)">{{ setConvenzioneStato(ente) }}
+                    <td>
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{ente.toolTipoConvRiga}}"
+                            (mouseenter)="showTipStatoRigaConvenzione(ente);" [ngStyle]="styleOptionConvenzione(ente)">{{
+                            setConvenzioneStato(ente) }}</span>
                     </td>
                 </tr>
             </tbody>
