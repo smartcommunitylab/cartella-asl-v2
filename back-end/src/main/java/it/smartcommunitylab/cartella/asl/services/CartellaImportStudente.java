@@ -88,8 +88,7 @@ public class CartellaImportStudente {
 			int numberOfElements = Integer.valueOf(pagedResponseMap.get("numberOfElements").toString());
 			totalRead = totalRead + numberOfElements;
 
-			System.err.println(
-					numberOfElements + " cartella students received with total of " + totalSaved + " saved inside ASL");
+			logger.info(numberOfElements + " cartella students received with total of " + totalSaved + " saved inside ASL");
 
 			// call recursively.
 			if (numberOfElements == size) {
