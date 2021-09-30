@@ -56,7 +56,7 @@
     </div>
     <br>
     <div *ngIf="attachedIstituti">
-        <cm-istituti-selector [attachedIstituti]="attachedIstituti"
+        <cm-istituti-selector [attachedIstituti]="attachedIstituti" [offertaDataInizio] = "offerta.dataInizio" [offertaDataFine] = "offerta.dataFine"
             (onNewIstitutiAddedListener)="addNewIstituti($event)"></cm-istituti-selector>
     </div>
 </div>
