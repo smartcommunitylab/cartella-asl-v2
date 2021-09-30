@@ -7,6 +7,6 @@ export const environment = {
   aacClientId: "7175611b-cb56-4d76-b516-ee2df4461711",
   redirectUrl: "https://cartella.provincia.tn.it/asl-azienda/",
   logout_redirect: 'asl-login/',
-  scope: "profile openid email",
+  scope: "profile openid email profile.accountprofile.me profile.adc.me",
   aacUrl: "https://aac.platform.smartcommunitylab.it"
 };
