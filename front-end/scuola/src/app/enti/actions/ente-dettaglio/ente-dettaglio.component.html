@@ -11,7 +11,7 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button *ngIf="!ente.registrazioneEnte" class="btn btn-success btn-icon btnCreate m-right" placement="bottom"  ngbTooltip="Attiva l’accesso ad EDIT" (click)="abilitaEnte()">
+                <button disabled *ngIf="!ente.registrazioneEnte" class="btn btn-success btn-icon btnCreate m-right" placement="bottom"  ngbTooltip="Attiva l’accesso ad EDIT" (click)="abilitaEnte()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Attiva accesso</span>
                         <span class="col-2">
@@ -21,7 +21,7 @@
                         </span>
                     </span>
                 </button>
-                <button *ngIf="ente.registrazioneEnte && ente.registrazioneEnte.stato=='inviato'" class="btn btn-warning btn-icon btnClose m-right" placement="bottom"  ngbTooltip="Annulla l’accesso ad EDIT" (click)="annullaInvitoEnte()">
+                <button disabled *ngIf="ente.registrazioneEnte && ente.registrazioneEnte.stato=='inviato'" class="btn btn-warning btn-icon btnClose m-right" placement="bottom"  ngbTooltip="Annulla l’accesso ad EDIT" (click)="annullaInvitoEnte()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Annulla invito</span>
                         <span class="col-2">
