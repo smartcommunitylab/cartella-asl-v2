@@ -17,6 +17,7 @@ import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-att
 import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal.component';
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     DocumentUploadModalComponent,
     DocumentoCancellaModal,
     AttivitaCancellaModal,
-    ArchiaviazioneAttivitaModal
+    ArchiaviazioneAttivitaModal,
+    AvvisoEnteConvenzioneModal
   ],
 declarations: [AttivitaRoutingModule.components]
 })

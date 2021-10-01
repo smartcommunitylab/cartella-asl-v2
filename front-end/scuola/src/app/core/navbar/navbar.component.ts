@@ -5,8 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from '../../core/auth/auth.service';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
-import { config } from '../../config';
-
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'cm-navbar',
@@ -64,7 +63,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             if (this.istitutes[0].coordinate && this.istitutes[0].coordinate.latitude && this.istitutes[0].coordinate.longitude) {
                                 this.dataService.setIstitutoPosition(this.istitutes[0].coordinate);
                             } else {
-                                this.dataService.setIstitutoPosition(config.defaultPosition);
+                                this.dataService.setIstitutoPosition(environment.defaultPosition);
                             }                            
                             this.actualIstituto = this.istitutes[0];
                             this.dataService.setListId(this.istitutes);
@@ -92,7 +91,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (istituto.coordinate && istituto.coordinate.latitude && istituto.coordinate.longitude) {
             this.dataService.setIstitutoPosition(istituto.coordinate);
         } else {
-            this.dataService.setIstitutoPosition(config.defaultPosition);
+            this.dataService.setIstitutoPosition(environment.defaultPosition);
         }
         this.dataService.setRoles(this.profile.roles);
         // navigate to 'attivita'

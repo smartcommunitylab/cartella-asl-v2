@@ -12,5 +12,7 @@ import it.smartcommunitylab.cartella.asl.model.Convenzione;
 public interface ConvenzioneRepository extends JpaRepository<Convenzione, Long> {
 
 	public List<Convenzione> findByIstitutoIdAndEnteId(String istitutoId, String enteId, Sort sort);
+	
+	public Convenzione findByUuid(String uuid);
 
 }

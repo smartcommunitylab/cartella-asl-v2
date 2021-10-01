@@ -56,7 +56,6 @@ public class RegistrazioneEnteController implements AslController {
 			@RequestParam String enteId, 
 			@RequestParam String nome, 
 			@RequestParam String cognome, 
-			@RequestParam String cf, 
 			@RequestParam Long userId,
 			HttpServletRequest request) throws Exception {
 		ASLUser caller = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId),
@@ -64,7 +63,7 @@ public class RegistrazioneEnteController implements AslController {
 		if(!caller.getId().equals(userId)) {
 			throw new BadRequestException("id utente non corrispondente");
 		}
-		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, cf, userId);
+		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, userId);
 		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, caller, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -100,12 +99,13 @@ public class RegistrazioneEnteController implements AslController {
 	@PostMapping("/api/registrazione-ente/richiesta")
 	public @ResponseBody RegistrazioneEnte creaRichiestaRegistrazione(
 			@RequestParam String istitutoId, 
-			@RequestParam String enteId, 
+			@RequestParam String enteId,
+			@RequestParam String cf,
 			@RequestParam String email,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, email);
+		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, cf, email);
 		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneEnte.class, registrazioneEnte.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {

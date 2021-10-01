@@ -218,7 +218,7 @@ public class AziendaManager extends DataEntityManager {
 	}
 	
 	private void addConvenzione(Azienda a, String istitutoId) {
-		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, a.getId());
+		Convenzione c = convenzioneManager.getUltimaConvenzione(istitutoId, a.getId());
 		if(c != null) {
 			a.setConvenzione(c);
 		}

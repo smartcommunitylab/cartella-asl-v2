@@ -292,7 +292,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
 		report.setAttivitaAlternanza(attivita);
-		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId(), null);
 		if(istituto != null) {
 			report.setNomeIstituto(istituto.getName());
 		}
@@ -868,7 +868,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		for (AttivitaAlternanza aa : aaList) {
 			ReportAttivitaAlternanzaRicercaEnte report = new ReportAttivitaAlternanzaRicercaEnte(aa); 
 			report.setStato(getStato(aa).toString());
-			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId(), null);
 			if(istituto != null) {
 				report.setNomeIstituto(istituto.getName());
 			}

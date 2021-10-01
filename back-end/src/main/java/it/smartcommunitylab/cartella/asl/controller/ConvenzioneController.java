@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,32 +54,64 @@ public class ConvenzioneController implements AslController {
 		return result;
 	}
 	
-	@GetMapping("/api/convenzione/istituto/{istitutoId}")
-	public @ResponseBody List<Convenzione> getConvenzioneByIstituto(
-			@PathVariable String istitutoId,
-			@RequestParam String enteId,
+	@DeleteMapping("/api/convenzione/{convenzioneId}")
+	public @ResponseBody Convenzione deleteConvenzione(
+			@PathVariable Long convenzioneId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.deleteConvenzione(istitutoId, convenzioneId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), Convenzione.class, c.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("deleteConvenzione:%s / %s", istitutoId, convenzioneId));
+		}		
+		return c;		
+	}
+	
+	@GetMapping("/api/convenzione/{convenzioneId}")
+	public @ResponseBody Convenzione getConvenzione(
+			@PathVariable Long convenzioneId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzione(convenzioneId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getConvenzione:%s", convenzioneId));
+		}		
+		return c;				
+	}
+	
+	@GetMapping("/api/convenzione/ente/{enteId}")
+	public @ResponseBody List<Convenzione> getConvenzioneEnteByIstituto(
+			@PathVariable String enteId,
+			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getConvenzioneByIstituto:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getConvenzioneEnteByIstituto:%s / %s", istitutoId, enteId));
 		}		
 		return convenzioni;
 	}
 	
-	@GetMapping("/api/convenzione/istituto/{istitutoId}/attiva")
-	public @ResponseBody Convenzione getUltimaConvenzioneAttiva(
-			@PathVariable String istitutoId,
-			@RequestParam String enteId,
+	@GetMapping("/api/convenzione/ente/{enteId}/attiva")
+	public @ResponseBody Convenzione getUltimaConvenzioneAttivaEnteByIstituto(
+			@PathVariable String enteId,
+			@RequestParam String istitutoId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
-				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, enteId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, enteId)));
-		Convenzione c = convenzioneManager.getUltimaConvenzioneAttiva(istitutoId, enteId);
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getUltimaConvenzione(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
-			logger.info(String.format("getUltimaConvenzioneAttiva:%s / %s", istitutoId, enteId));
+			logger.info(String.format("getUltimaConvenzioneAttivaEnteByIstituto:%s / %s", istitutoId, enteId));
 		}		
 		return c;
 	}

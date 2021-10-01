@@ -23,10 +23,12 @@ import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.AziendaManager;
 import it.smartcommunitylab.cartella.asl.manager.DashboardManager;
+import it.smartcommunitylab.cartella.asl.manager.IstituzioneManager;
 import it.smartcommunitylab.cartella.asl.manager.RegistrazioneEnteManager;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
@@ -55,6 +57,8 @@ public class DashboardController {
 	private AziendaManager aziendaManager;
 	@Autowired
 	private AttivitaAlternanzaManager attivitaAlternanzaManager;
+	@Autowired
+	private IstituzioneManager istituzioneManager;
 
 	@GetMapping("/api/dashboard/sistema")
 	public @ResponseBody ReportDashboardUsoSistema getReportUtilizzoSistema (
@@ -203,6 +207,19 @@ public class DashboardController {
 		Page<Azienda> page = aziendaManager.findAziende(text, null, pageRequest);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchEnti:%s", text));
+		}		
+		return page;
+	}
+	
+	@GetMapping("/api/dashboard/istituti")
+	public @ResponseBody Page<Istituzione> searchIstituti(
+			@RequestParam String text,
+			Pageable pageRequest,
+			HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		Page<Istituzione> page = istituzioneManager.findIstituti(text, pageRequest);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("searchIstituti:%s", text));
 		}		
 		return page;
 	}

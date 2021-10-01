@@ -31,8 +31,10 @@ import it.smartcommunitylab.cartella.asl.exception.UnauthorizedException;
 import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AttivitaAlternanzaManager;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
+import it.smartcommunitylab.cartella.asl.manager.ConvenzioneManager;
 import it.smartcommunitylab.cartella.asl.manager.EsperienzaSvoltaManager;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.Convenzione;
 import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.Documento.TipoDoc;
@@ -58,6 +60,8 @@ public class FileController {
 	private EsperienzaSvoltaManager esperienzaSvoltaManager;
 	@Autowired
 	private AttivitaAlternanzaManager attivitaAlternanzaManager;
+	@Autowired
+	private ConvenzioneManager convenzioneManager;
 	
 	private static Log logger = LogFactory.getLog(FileController.class);
 
@@ -78,7 +82,51 @@ public class FileController {
 		checkAccessoAttivita(uuid, istitutoId, true, user);
 		downloadContent(uuid, response, null);
 	}
-
+	
+	@GetMapping("/api/download/document/convenzione/{uuid}/istituto/{istitutoId}")
+	public void downloadFileConvenzioneIstituto(
+			@PathVariable String uuid, 
+			@PathVariable String istitutoId, 
+			HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}	
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("downloadFileConvenzioneIstituto:%s - %s", uuid, istitutoId));
+		}
+		downloadContent(c.getUuidFile(), response, null);
+	}
+	
+	@GetMapping("/api/download/document/convenzione/{uuid}/ente/{enteId}")
+	public void downloadFileConvenzioneEnte(
+			@PathVariable String uuid, 
+			@PathVariable String enteId, 
+			HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}	
+		if(!enteId.equals(c.getEnteId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("downloadFileConvenzioneEnte:%s - %s", uuid, enteId));
+		}
+		downloadContent(c.getUuidFile(), response, null);
+	}
+	
 	@GetMapping("/api/download/document/{uuid}/studente/{studenteId}")
 	public void downloadFileStudente(
 			@PathVariable String uuid, 
@@ -108,6 +156,27 @@ public class FileController {
 		checkAttivitaEnte(uuid, enteId, true);
 		downloadContent(uuid, response, Lists.newArrayList(TipoDoc.valutazione_studente, TipoDoc.piano_formativo,
 				TipoDoc.convenzione, TipoDoc.doc_generico));
+	}
+	
+	@DeleteMapping("/api/remove/document/convenzione/{uuid}/istituto/{istitutoId}")
+	public @ResponseBody boolean removeIstitutoConvenzioneDocument(
+			@PathVariable String istitutoId,
+			@PathVariable String uuid, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}		
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("removeIstitutoConvenzioneDocument:%s / %s", uuid, istitutoId));
+		}
+		return removeDocument(c.getUuidFile(), request, user, null);
 	}
 	
 	@DeleteMapping("/api/remove/document/{uuid}/istituto/{istitutoId}")
@@ -168,6 +237,34 @@ public class FileController {
 			logger.info(String.format("uploadDocumentoForRisorsaIstituto:%s - %s", uuid, istitutoId));
 		}
 		checkAccessoAttivita(uuid, istitutoId, false, user);
+		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
+		return documento;
+	}
+	
+	@PostMapping("/api/upload/document/convenzione/{uuid}/istituto/{istitutoId}")
+	public @ResponseBody Documento uploadDocumentoForConvezioneIstituto(
+			@PathVariable String uuid, 
+			@PathVariable String istitutoId, 
+			@RequestParam("tipo") TipoDoc tipo,
+			@RequestParam("data") MultipartFile data, 
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		Convenzione c = convenzioneManager.getConvenzioneByUuid(uuid);
+		if(c == null) {
+			throw new BadRequestException("convenzione non esistente");
+		}
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione non autorizzata");
+		}
+		List<Documento> list = documentManager.getDocument(c.getUuid());
+		if(!list.isEmpty()) {
+			throw new BadRequestException("documento già caricato");
+		}
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("uploadDocumentoForConvezioneIstituto:%s - %s", uuid, istitutoId));
+		}
 		Documento documento = uploadContent(uuid, tipo, data, request, user, null);
 		return documento;
 	}

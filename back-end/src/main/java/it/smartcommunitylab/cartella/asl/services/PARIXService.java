@@ -13,7 +13,6 @@ import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
-import javax.annotation.PostConstruct;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -26,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
@@ -38,7 +36,7 @@ import org.xml.sax.InputSource;
 import it.smartcommunitylab.cartella.asl.services.parix.DettaglioImpresa;
 import it.smartcommunitylab.cartella.asl.services.parix.IscrizioneRea;
 
-@Component
+//@Component
 public class PARIXService {
 
 	private static final transient Logger logger = LoggerFactory.getLogger(PARIXService.class);
@@ -62,7 +60,7 @@ public class PARIXService {
 	
 	private DocumentBuilder db;
 	
-	@PostConstruct
+	//@PostConstruct
 	public void init() throws Exception {
 		KeyStore ksClient = KeyStore.getInstance("PKCS12");
 		ksClient.load(new FileInputStream(ResourceUtils.getFile(keystore)), keystorePassword.toCharArray());

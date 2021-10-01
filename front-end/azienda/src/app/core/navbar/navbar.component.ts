@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef, ViewChild, Output, EventEmitt
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DataService } from '../services/data.service';
-import { config } from '../../config';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
@@ -46,7 +46,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
                             if (this.aziende[0].coordinate && this.aziende[0].coordinate.latitude && this.aziende[0].coordinate.longitude) {
                                 this.dataService.setAziendaPosition(this.aziende[0].coordinate);
                             } else {
-                                this.dataService.setAziendaPosition(config.defaultPosition);
+                                this.dataService.setAziendaPosition(environment.defaultPosition);
                             }
                             this.actualAzienda = this.aziende[0];
                             this.dataService.setListId(this.aziende);
@@ -68,7 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         if (azienda.coordinate && azienda.coordinate.latitude && azienda.coordinate.longitude) {
             this.dataService.setAziendaPosition(azienda.coordinate);
         } else {
-            this.dataService.setAziendaPosition(config.defaultPosition);
+            this.dataService.setAziendaPosition(environment.defaultPosition);
         }
         this.router.navigate(['/attivita']);
 

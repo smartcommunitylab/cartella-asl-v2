@@ -49,6 +49,7 @@ export class EnteDettaglioComponent implements OnInit {
   menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Attiva accesso” puoi invitare un ente a crearsi un account in EDIT per gestire presenze, offerte e documentazione';
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
   showContent: boolean = false;
+  convenzioni = [];
 
   breadcrumbItems = [
     {
@@ -68,20 +69,22 @@ export class EnteDettaglioComponent implements OnInit {
 
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
+        this.dataService.getEnteConvenzione(id).subscribe((res) => {
+          this.convenzioni = res;
+        },
+        (err: any) => console.log(err),
+        () => console.log('getEnteConvenzioni'));
 
         setTimeout(() => { //ensure that map div is rendered
           this.drawMap();
         }, 0);
-        // });
-
       },
         (err: any) => console.log(err),
-        () => console.log('getAttivita'));
+        () => console.log('getEnte'));
     });
 
-
-
   }
+
   openDetailCompetenza(competenza, $event) {
     // if ($event) $event.stopPropagation();
     // const modalRef = this.modalService.open(CompetenzaDetailModalComponent, { size: "lg" });
@@ -207,6 +210,57 @@ export class EnteDettaglioComponent implements OnInit {
     } else {
       return tipologiaId;
     }
+  }
+
+  aggiungiConvenzione() {
+      this.router.navigate(['aggiungi/convenzione'], { relativeTo: this.route });
+  }
+
+  setStatoConvenzione(conv) {
+    let label = 'Scaduta';
+    if (conv.stato == 'attiva') {
+      label = 'Valida';
+    }
+    return label;
+  }
+
+  styleOptionConvenzione(conv) {
+    var style = {
+        'color': '#707070', //grey
+    };
+
+    if (conv && conv.stato == 'attiva') {
+        style['color'] = '#00CF86'; // green
+    }
+    return style;
+  }
+
+  modificaConvenzione(conv, e) {
+    var target = e.target;
+    while (target) { // Iterate through elements
+      if (target.tagName === 'TD') { // TD found, stop iteration
+        break;
+      }
+      target = target.parentElement; // Set target as a parent element of the current element
+    }
+    if (target === null) { return; } // Check that we really have a TD
+
+    if (target.cellIndex == 3) {
+      this.downloadDoc(conv);
+    } else {
+      this.router.navigate(['modifica/convenzione', conv.id], { relativeTo: this.route });
+    }
+  }
+
+  downloadDoc(doc) {
+    this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
   }
 
 }

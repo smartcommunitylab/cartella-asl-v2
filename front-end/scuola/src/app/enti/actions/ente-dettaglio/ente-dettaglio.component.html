@@ -11,7 +11,7 @@
         </div>
         <div class="col-6">
             <span class="float-right m-right">
-                <button disabled *ngIf="!ente.registrazioneEnte" class="btn btn-success btn-icon btnCreate m-right" placement="bottom"  ngbTooltip="Attiva l’accesso ad EDIT" (click)="abilitaEnte()">
+                <button *ngIf="!ente.registrazioneEnte" class="btn btn-success btn-icon btnCreate m-right" placement="bottom"  ngbTooltip="Attiva l’accesso ad EDIT" (click)="abilitaEnte()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Attiva accesso</span>
                         <span class="col-2">
@@ -21,7 +21,7 @@
                         </span>
                     </span>
                 </button>
-                <button disabled *ngIf="ente.registrazioneEnte && ente.registrazioneEnte.stato=='inviato'" class="btn btn-warning btn-icon btnClose m-right" placement="bottom"  ngbTooltip="Annulla l’accesso ad EDIT" (click)="annullaInvitoEnte()">
+                <button *ngIf="ente.registrazioneEnte && ente.registrazioneEnte.stato=='inviato'" class="btn btn-warning btn-icon btnClose m-right" placement="bottom"  ngbTooltip="Annulla l’accesso ad EDIT" (click)="annullaInvitoEnte()">
                     <span class="row btnText">
                         <span class="col-10 v-center">Annulla invito</span>
                         <span class="col-2">
@@ -93,7 +93,63 @@
         <br>
         <div class="p-1 middle-div row" *ngIf="hasCoordinate()">
             <div class="col">
-              <div id="map" style="height:300px;width:100%;"></div>
+              <div id="map" style="height:300px;width:100%;z-index:0"></div>
             </div>
-          </div>
+        </div>
+        <br>
+    <div *ngIf="this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])">
+        <div class="title">
+            Convenzioni <br />
+            <button class="btn btn-primary v-center-inline" (click)="aggiungiConvenzione()" placement="right" ngbTooltip="Aggiungi una nuova convenzione stipulata tra {{ente.nome}} e {{dataService.istituto}} per permettere all’ente di gestire i tirocini tramite EDIT">
+                Aggiungi nuova convenzione&nbsp;&nbsp;&nbsp;
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
+                </svg>
+            </button>
+        </div>
+        <br>
+        <div class="list-group" *ngIf="convenzioni && convenzioni.length > 0">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Data inizio validità</th>
+                        <th>Data fine validità</th>
+                        <th>File convenzione</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let conv of convenzioni" (click)="modificaConvenzione(conv, $event)">
+                        <!-- Nome -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.nome }}</span>
+                        </td>
+                        <!-- Data inizio -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.dataInizio | date:'dd/MM/yyyy' }}</span>
+                        </td>
+                        <!-- Data fine -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ conv.dataFine | date:'dd/MM/yyyy' }}</span>
+                        </td>
+                        <!-- File convenzione -->
+                        <td class="pointer" onclick="return false;">
+                            <span class="align-middle" ><a [routerLink]="">{{conv.nomeFile}}</a></span>
+                        </td>
+                        <!-- stato -->
+                        <td class="pointer">
+                            <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ setStatoConvenzione(conv) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row p-1" *ngIf="!convenzioni?.length">
+            <div class="warning-div col-xl-12">
+                <span>La convenzione con l’ente <span class="text-bold">{{ente.nome}}</span> è <span class="text-bold revisione">ASSENTE</span>. L’ente non può visualizzare i dati degli studenti di questo istituto sul suo profilo EDIT.<br>
+                    Puoi comunque creare e gestire attività presso queste ente tramite il portale scuola e la webapp studenti - ma senza la collaborazione diretta dell’ente tramite il suo profilo EDIT.<br> 
+                    Per permettere all’ente di collaborare con la gestione dell’attività tramite la sua interfaccia EDIT inserisci una convenzione valida utilizzando il tasto "Aggiungi nuova convenzione."</span>
+            </div>
+        </div>
   </div>

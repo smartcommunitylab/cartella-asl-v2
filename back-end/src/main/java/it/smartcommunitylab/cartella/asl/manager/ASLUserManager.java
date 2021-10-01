@@ -122,6 +122,11 @@ public class ASLUserManager extends DataEntityManager {
 		return old;
 	}
 	
+	public ASLUser getASLUserByCf(String cf) {
+		ASLUser old = userRepository.findByCf(cf);
+		return old;		
+	}
+	
 	public ASLUser getASLUser(long id) {
 		ASLUser user = userRepository.getOne(id);
 		if (user != null) {

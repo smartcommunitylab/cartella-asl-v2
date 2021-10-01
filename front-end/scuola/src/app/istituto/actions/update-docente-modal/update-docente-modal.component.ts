@@ -97,9 +97,14 @@ export class UpdateDocenteModalComponent implements OnInit {
   }
 
   onFilterChange(prof) {
-    prof.attivo = -1;
     prof.referenteAlternanza.checked = !prof.referenteAlternanza.checked;
 
+    if (prof.referenteAlternanza.checked) {
+      prof.attivo = -1;
+    } else {
+      prof.attivo = false;
+    }
+    
     var index = this.tobeSaved.findIndex(x => x.id == prof.referenteAlternanza.id)
     if (index > -1) {
       //found.
