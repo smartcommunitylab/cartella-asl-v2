@@ -36,7 +36,7 @@
     "bootstrap-italia": "^0.9.6",
     "browserslist": "^4.14.7",
     "bs-stepper": "^1.7.0",
-    "caniuse-lite": "^1.0.30001159",
+    "caniuse-lite": "^1.0.30001236",
     "oidc-client": "^1.11.5",
     "codelyzer": "4.5.0",
     "core-js": "^2.5.5",
