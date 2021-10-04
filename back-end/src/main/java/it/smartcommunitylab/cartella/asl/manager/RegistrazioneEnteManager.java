@@ -121,7 +121,6 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			if(user == null) {
 				user = new ASLUser();
 				user.setCf(registrazioneEnte.getCf());
-				user.setEmail(registrazioneEnte.getEmail());
 				user = userManager.createASLUser(user);
 			}
 			registrazioneEnte.setUserId(user.getId());
