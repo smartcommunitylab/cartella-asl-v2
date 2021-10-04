@@ -347,7 +347,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 		if(aa.getOffertaId() != null) {
-			Offerta offerta = offertaManager.getOfferta(aa.getOffertaId());
+			Offerta offerta = offertaManager.getOfferta(aa.getOffertaId(), true);
 			if(offerta != null) {
 				int toDelete = 0;
 				int toKeep = 0;
@@ -738,7 +738,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId, Boolean rendicontazioneCorpo) 
 			throws BadRequestException {
-		Offerta offerta = offertaManager.getOfferta(offertaId);
+		Offerta offerta = offertaManager.getOfferta(offertaId, true);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
