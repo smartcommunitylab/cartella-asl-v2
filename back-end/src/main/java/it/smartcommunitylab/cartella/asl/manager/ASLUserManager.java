@@ -156,8 +156,12 @@ public class ASLUserManager extends DataEntityManager {
 	}
 	
 	public void updateASLUser(ASLUser user) {
-		user.setCf(user.getCf().trim().toUpperCase());
-		user.setEmail(user.getEmail().trim().toLowerCase());
+		if(Utils.isNotEmpty(user.getCf())) {
+			user.setCf(user.getCf().trim().toUpperCase());
+		}
+		if(Utils.isNotEmpty(user.getEmail())) {
+			user.setEmail(user.getEmail().trim().toLowerCase());
+		}
 		userRepository.update(user);
 	}
 	
