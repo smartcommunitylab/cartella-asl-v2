@@ -239,6 +239,48 @@ public class DevController {
 		apiUpdateManager.importAllInfoTN();
 	}
 
+	@GetMapping("/admin/dumpInfoTN/aziende")
+	public void dumpInfoTNAziende(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNAziende();
+	}
+	
+	@GetMapping("/admin/dumpInfoTN/istituti")
+	public void dumpInfoTNIstituti(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNIstituti();
+	}
+	
+	@GetMapping("/admin/dumpInfoTN/unita")
+	public void dumpInfoTNUnita(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNUnita();
+	}
+	
+	@GetMapping("/admin/dumpInfoTN/corsi-meta-info")
+	public void dumpInfoTNCorsiMetaInfo(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNCorsiMetaInfo();
+	}
+	
+	@GetMapping("/admin/dumpInfoTN/corsi")
+	public void dumpInfoTNCorsi(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNCorsi();
+	}
+	
+	@GetMapping("/admin/dumpInfoTN/studenti")
+	public void dumpInfoTNStudenti(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNStudenti();
+	}
+
+	@GetMapping("/admin/dumpInfoTN/registrazioni")
+	public void dumpInfoTNRegistrazioni(HttpServletRequest request) throws Exception {
+		usersValidator.checkRole(request, ASLRole.ADMIN);
+		apiUpdateManager.importInfoTNRegistrazioni();
+	}
+	
 	@GetMapping("/admin/dumpInfoTN/professori")
 	public void dumpInfoTNProfessori(HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
@@ -251,21 +293,6 @@ public class DevController {
 		apiUpdateManager.importInfoTNProfessoriClassi();
 	}
 
-	@GetMapping("/admin/scheduleImport")
-	public void adminSchedule(HttpServletRequest request) throws Exception {
-		usersValidator.checkRole(request, ASLRole.ADMIN);
-		if (logger.isInfoEnabled()) {
-			logger.info("start InfoTnScheduledTask");
-		}
-		apiUpdateManager.importCartellaIstituti();
-		apiUpdateManager.importCartellaTeachingUnit();
-		apiUpdateManager.importCartellaAziende();
-		apiUpdateManager.importCartellaCourseMetaInfo();
-		apiUpdateManager.importCartellaCourses();
-		apiUpdateManager.importCartellaStudenti();
-		apiUpdateManager.importCartellaRegistration();
-	}
-
 	/**
 	 * SCHEDULED ROUTINE
 	 * 
@@ -276,9 +303,11 @@ public class DevController {
 		if (logger.isInfoEnabled()) {
 			logger.info("start schedule import from Cartella");
 		}
-		apiUpdateManager.importCartellaAziende();
-		apiUpdateManager.importCartellaStudenti();
-		apiUpdateManager.importCartellaRegistration();
+		apiUpdateManager.importInfoTNAziende();
+		apiUpdateManager.importInfoTNStudenti();
+		apiUpdateManager.importInfoTNRegistrazioni();
+		apiUpdateManager.importInfoTNProfessoriClassi();
+		apiUpdateManager.importInfoTNProfessori();		
 	}
 
 	/**
