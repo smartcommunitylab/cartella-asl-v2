@@ -2,6 +2,9 @@ package it.smartcommunitylab.cartella.asl.services;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,15 @@ public class InfoTnImportAziende {
 	private HttpsUtils httpsUtils;	
 	@Autowired
 	private AziendaRepository aziendaRepository;
+	
+	@PostConstruct()
+	public void init() {
+		if (Utils.isNotEmpty(user) && Utils.isNotEmpty(pass)) {
+			String authString = user + ":" + pass;
+			byte[] authEncBytes = Base64.encodeBase64(authString.getBytes());
+			auth = "Basic " + new String(authEncBytes);
+		}	
+	}
 
 	public void updateAzienda(MetaInfo metaInfo) throws Exception {
 		logger.info("start importAziendaFromRESTAPI");
