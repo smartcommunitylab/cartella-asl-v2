@@ -190,7 +190,7 @@
                             (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
                         <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Referente
                             scolastico</label>
-                        <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Referente scolastico</label>
+                        <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Tutor scolastico</label>
                         <div class="invalid-feedback"
                             [class.d-block]="!referenteScuolaInput.value || forceReferenteScuolaErrorDisplay">
                             Campo necessario.
@@ -216,7 +216,7 @@
                         <input type="text" class="form-control" [(ngModel)]="offerta.referenteScuolaCF"
                             id="referenteScuolaCF" (focusout)="trimValue($event, 'trim')">
                         <label for="referenteScuolaCF" *ngIf="offerta.referenteScuolaCF" class="active">Codice fiscale
-                            referente scolastico</label>
+                            tutor scolastico</label>
                         <label for="referenteScuolaCF" *ngIf="!offerta.referenteScuolaCF">Codice fiscale referente
                             scolastico</label>
                     </div>
@@ -236,9 +236,9 @@
                         <input type="text" class="form-control" [(ngModel)]="offerta.referenteScuolaTelefono"
                             id="referenteScuolaTelefono" (focusout)="trimValue($event, 'trim')">
                         <label for="referenteScuolaTelefono" *ngIf="offerta.referenteScuolaTelefono" class="active">
-                            Telefono referente scolastico</label>
+                            Telefono tutor scolastico</label>
                         <label for="referenteScuolaTelefono" *ngIf="!offerta.referenteScuolaTelefono">
-                            Telefono referente scolastico</label>
+                            Telefono tutor scolastico</label>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">

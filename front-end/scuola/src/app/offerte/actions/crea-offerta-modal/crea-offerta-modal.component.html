@@ -51,7 +51,7 @@
             <div class="col-sm-4"
                 [class.has-danger]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
                 <input type="text" class="form-control" [(ngModel)]="referenteScuola" id="referenteScuola"
-                    #referenteScuolaInput="ngModel" placeholder="Referente scolastico"
+                    #referenteScuolaInput="ngModel" placeholder="Tutor scolastico"
                     (keyup)="trimValue($event, 'scolastico')" required>
                 <div class="invalid-feedback"
                     [class.d-block]="forceErrorDisplayRS || referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched || forceErrorDisplay)">
