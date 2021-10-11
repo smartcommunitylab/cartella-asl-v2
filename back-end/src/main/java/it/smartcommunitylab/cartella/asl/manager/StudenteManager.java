@@ -280,8 +280,8 @@ public class StudenteManager extends DataEntityManager {
 	
 	private Page<Studente> findStudentiByTutor(String istitutoId, String corsoId, String annoScolastico, String text,
 			Pageable pageRequest, ASLUser user) {
-		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
-		boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
+		//boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
+		//boolean tutorClasse = usersValidator.hasRole(user, ASLRole.TUTOR_CLASSE, istitutoId);
 		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
 		
 		//TUTOR CLASSE
@@ -315,15 +315,13 @@ public class StudenteManager extends DataEntityManager {
 
 		queryTutorClasse.setParameter("istitutoId", istitutoId);
 		queryTutorClasse.setParameter("annoScolastico", annoScolastico);
+		queryTutorClasse.setParameter("classiAssociate", classiAssociate);
 		if (Utils.isNotEmpty(corsoId)) {
 			queryTutorClasse.setParameter("courseId", corsoId);
 		}
 		if (Utils.isNotEmpty(text)) {
 			String like = "%" + text.trim().toUpperCase() + "%";
 			queryTutorClasse.setParameter("text", like);
-		}
-		if(tutorClasse) {
-			queryTutorClasse.setParameter("classiAssociate", classiAssociate);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -355,15 +353,13 @@ public class StudenteManager extends DataEntityManager {
 		
 		queryTutorScolastico.setParameter("istitutoId", istitutoId);
 		queryTutorScolastico.setParameter("annoScolastico", annoScolastico);
+		queryTutorScolastico.setParameter("referenteCf", user.getCf());
 		if (Utils.isNotEmpty(corsoId)) {
 			queryTutorScolastico.setParameter("courseId", corsoId);
 		}
 		if (Utils.isNotEmpty(text)) {
 			String like = "%" + text.trim().toUpperCase() + "%";
 			queryTutorScolastico.setParameter("text", like);
-		}
-		if(tutorScolatico) {
-			queryTutorScolastico.setParameter("referenteCf", user.getCf());
 		}
 
 		@SuppressWarnings("unchecked")
