@@ -51,7 +51,8 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 	}
 	
-	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String cf, String email) throws Exception {
+	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String cf, String email,
+			String nome, String cognome) throws Exception {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
@@ -72,10 +73,11 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setIstitutoId(istitutoId);
 		reg.setOwnerId(Long.valueOf(-1));
 		reg.setNominativoInvito("Sistema");
+		reg.setNominativoReferente(nome + " " + cognome);
 		reg.setToken(Utils.getUUID());
 		reg.setDataInvito(LocalDate.now());
-		reg.setEmail(email);
-		reg.setCf(cf);
+		reg.setEmail(email.toLowerCase().trim());
+		reg.setCf(cf.toUpperCase().trim());
 		reg.setRole(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		reg.setStato(Stato.inviato);
 		if(istituto.isPresent()) {
@@ -119,8 +121,16 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			}
 			ASLUser user = userManager.getASLUserByCf(registrazioneEnte.getCf());
 			if(user == null) {
-				user = new ASLUser();
+				user = new ASLUser();				
 				user.setCf(registrazioneEnte.getCf());
+				user.setEmail(registrazioneEnte.getEmail());
+				String[] split = registrazioneEnte.getNominativoReferente().split(" ");
+				if(split.length > 0) {
+					user.setName(split[0]);
+				}
+				if(split.length > 1) {
+					user.setSurname(split[1]);
+				}
 				user = userManager.createASLUser(user);
 			}
 			registrazioneEnte.setUserId(user.getId());
@@ -157,6 +167,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		} else {
 			user = new ASLUser();
 			user.setCf(cf);
+			user.setEmail(email);
 			user.setName(nome);
 			user.setSurname(cognome);
 			userManager.createASLUser(user);

@@ -102,10 +102,12 @@ public class RegistrazioneEnteController implements AslController {
 			@RequestParam String enteId,
 			@RequestParam String cf,
 			@RequestParam String email,
+			@RequestParam String nome,
+			@RequestParam String cognome,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, cf, email);
+		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, cf, email, nome, cognome);
 		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneEnte.class, registrazioneEnte.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
