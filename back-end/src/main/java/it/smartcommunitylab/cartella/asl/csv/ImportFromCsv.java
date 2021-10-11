@@ -78,7 +78,7 @@ public class ImportFromCsv {
 						logger.warn("importStudente: aslUser created - " + cf);
 					} else {
 						logger.warn("importStudente: aslUser already present - " + cf);
-						result.getAlreadyPresent().add(cf);
+						result.getAlreadyPresent().add(cf + " / " + aslUser.getEmail());
 					}
 				} catch (Exception e) {
 					logger.warn("importStudente:" + e.getMessage());
