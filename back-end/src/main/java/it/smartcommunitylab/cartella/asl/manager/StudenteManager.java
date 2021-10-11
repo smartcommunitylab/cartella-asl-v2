@@ -285,56 +285,58 @@ public class StudenteManager extends DataEntityManager {
 		List<String> classiAssociate = registrazioneDocenteManager.getClassiAssociateRegistrazioneDocente(istitutoId, user.getCf());
 		
 		//TUTOR CLASSE
-		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r");
-		sb.append(" WHERE s.id = r.studentId");
-		sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
-		sb.append(" AND r.classroom IN (:classiAssociate)");
-		/*if(tutorClasse) {
-			sb.append(" AND aa.istitutoId=(:istitutoId)");
-			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "')");
-			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
-		} else {
-			if(tutorScolatico) {
-				sb.append(" AND aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
-				sb.append(" AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "'");
-			} else {
-				sb.append(" AND aa.istitutoId=(:istitutoId)");
-			}
-		}*/
-		if (Utils.isNotEmpty(corsoId)) {
-			sb.append(" AND r.courseId = (:courseId) ");
-		}
-		if (Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text))");
-		}
-		sb.append(" ORDER BY s.surname, s.name, r.classroom");
-		String q = sb.toString();
-
-		Query queryTutorClasse = em.createQuery(q);
-
-		queryTutorClasse.setParameter("istitutoId", istitutoId);
-		queryTutorClasse.setParameter("annoScolastico", annoScolastico);
-		queryTutorClasse.setParameter("classiAssociate", classiAssociate);
-		if (Utils.isNotEmpty(corsoId)) {
-			queryTutorClasse.setParameter("courseId", corsoId);
-		}
-		if (Utils.isNotEmpty(text)) {
-			String like = "%" + text.trim().toUpperCase() + "%";
-			queryTutorClasse.setParameter("text", like);
-		}
-
-		@SuppressWarnings("unchecked")
-		List<Object[]> resultTutorClasse = queryTutorClasse.getResultList();
-
 		List<Studente> studentsTutorClasse = Lists.newArrayList();
-		for (Object[] obj : resultTutorClasse) {
-			Studente s = fillStudenteWithRegistration(obj);
-			studentsTutorClasse.add(s);
+		if(!classiAssociate.isEmpty()) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r");
+			sb.append(" WHERE s.id = r.studentId");
+			sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
+			sb.append(" AND r.classroom IN (:classiAssociate)");
+			/*if(tutorClasse) {
+				sb.append(" AND aa.istitutoId=(:istitutoId)");
+				sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "')");
+				sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+			} else {
+				if(tutorScolatico) {
+					sb.append(" AND aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
+					sb.append(" AND aa.stato!='" + AttivitaAlternanza.Stati.archiviata.toString() + "'");
+				} else {
+					sb.append(" AND aa.istitutoId=(:istitutoId)");
+				}
+			}*/
+			if (Utils.isNotEmpty(corsoId)) {
+				sb.append(" AND r.courseId = (:courseId) ");
+			}
+			if (Utils.isNotEmpty(text)) {
+				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text))");
+			}
+			sb.append(" ORDER BY s.surname, s.name, r.classroom");
+			String q = sb.toString();
+
+			Query queryTutorClasse = em.createQuery(q);
+
+			queryTutorClasse.setParameter("istitutoId", istitutoId);
+			queryTutorClasse.setParameter("annoScolastico", annoScolastico);
+			queryTutorClasse.setParameter("classiAssociate", classiAssociate);
+			if (Utils.isNotEmpty(corsoId)) {
+				queryTutorClasse.setParameter("courseId", corsoId);
+			}
+			if (Utils.isNotEmpty(text)) {
+				String like = "%" + text.trim().toUpperCase() + "%";
+				queryTutorClasse.setParameter("text", like);
+			}
+
+			@SuppressWarnings("unchecked")
+			List<Object[]> resultTutorClasse = queryTutorClasse.getResultList();
+
+			for (Object[] obj : resultTutorClasse) {
+				Studente s = fillStudenteWithRegistration(obj);
+				studentsTutorClasse.add(s);
+			}			
 		}
-		
+
 		//TUTOR SCOLASTICO
-		sb = new StringBuffer();
+		StringBuffer sb = new StringBuffer();
 		sb.append("SELECT DISTINCT s,r FROM Studente s, Registration r, EsperienzaSvolta es, AttivitaAlternanza aa");
 		sb.append(" WHERE s.id = r.studentId AND es.studenteId = s.id AND es.registrazioneId=r.id AND es.attivitaAlternanzaId=aa.id");
 		sb.append(" AND r.instituteId = (:istitutoId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.studentId = s.id AND rm.schoolYear = (:annoScolastico) AND rm.instituteId = (:istitutoId))");
@@ -348,7 +350,7 @@ public class StudenteManager extends DataEntityManager {
 		}
 		sb.append(" ORDER BY s.surname, s.name, r.classroom");
 		
-		q = sb.toString();
+		String q = sb.toString();
 		Query queryTutorScolastico = em.createQuery(q);
 		
 		queryTutorScolastico.setParameter("istitutoId", istitutoId);
