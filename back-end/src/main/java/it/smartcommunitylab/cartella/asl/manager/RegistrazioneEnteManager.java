@@ -284,4 +284,23 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 		return null;
 	}
+	
+	public RegistrazioneEnteReport getRichiestaRegistrazioneByIstituto(String enteId) {
+		RegistrazioneEnte reg = getRichiestaRegistrazione(enteId);
+		if(reg != null) {
+			if(Stato.confermato.equals(reg.getStato())) {
+				ASLUser user = userManager.getASLUserById(reg.getUserId());
+				RegistrazioneEnteReport report = new RegistrazioneEnteReport(reg, user);
+				return report;
+			}
+			LocalDate today = LocalDate.now();
+			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
+				ASLUser user = userManager.getASLUserById(reg.getUserId());
+				RegistrazioneEnteReport report = new RegistrazioneEnteReport(reg, user);
+				return report;
+			}
+		}
+		return null;
+	}
+
 }
