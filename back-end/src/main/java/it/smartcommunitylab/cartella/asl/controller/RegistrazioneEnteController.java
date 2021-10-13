@@ -167,6 +167,20 @@ public class RegistrazioneEnteController implements AslController {
 		}		
 		return registrazioneEnte;		
 	}
+	
+	@GetMapping("/api/registrazione-ente/richiesta")
+	public @ResponseBody RegistrazioneEnte getRichiestaRegistrazione(
+			@RequestParam String istitutoId,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		RegistrazioneEnte reg = registrazioneEnteManager.getRichiestaRegistrazione(enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getRichiestaRegistrazione:%s - %s", enteId, istitutoId));
+		}		
+		return reg;
+	}
 		
 
 }
