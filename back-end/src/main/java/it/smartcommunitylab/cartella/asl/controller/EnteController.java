@@ -61,7 +61,10 @@ public class EnteController implements AslController {
 	public @ResponseBody Azienda getAzienda(
 			@PathVariable String id,
 			HttpServletRequest request) throws Exception {
-		usersValidator.checkRoles(request,  Sets.newHashSet(ASLRole.DIRIGENTE_SCOLASTICO, ASLRole.FUNZIONE_STRUMENTALE));
+		usersValidator.checkRoles(request,  Sets.newHashSet(
+				ASLRole.DIRIGENTE_SCOLASTICO, 
+				ASLRole.FUNZIONE_STRUMENTALE,
+				ASLRole.TUTOR_SCOLASTICO));
 		Azienda azienda = aziendaManager.getAzienda(id);
 		if(azienda == null) {
 			throw new BadRequestException("entity not found");
