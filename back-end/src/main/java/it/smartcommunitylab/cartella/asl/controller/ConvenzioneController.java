@@ -93,7 +93,8 @@ public class ConvenzioneController implements AslController {
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
-				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		List<Convenzione> convenzioni = convenzioneManager.getConvenzioni(istitutoId, enteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getConvenzioneEnteByIstituto:%s / %s", istitutoId, enteId));
