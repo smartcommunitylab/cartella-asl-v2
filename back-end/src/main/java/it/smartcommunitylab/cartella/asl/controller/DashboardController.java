@@ -31,7 +31,6 @@ import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
-import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
 import it.smartcommunitylab.cartella.asl.model.report.ReportAttivitaAlternanzaDettaglio;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardAttivita;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardDettaglioAttivita;
@@ -173,11 +172,11 @@ public class DashboardController {
 	}
 	
 	@GetMapping("/api/dashboard/registrazione-ente")
-	public @ResponseBody List<RegistrazioneEnteReport> getRuoliByEnte(
+	public @ResponseBody List<RegistrazioneEnte> getRuoliByEnte(
 			@RequestParam String enteId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
-		List<RegistrazioneEnteReport> list = registrazioneEnteManager.getRuoliByEnte(enteId);
+		List<RegistrazioneEnte> list = registrazioneEnteManager.getRuoliByEnte(enteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getRuoliByEnte:%s - %s", enteId, list.size()));
 		}		

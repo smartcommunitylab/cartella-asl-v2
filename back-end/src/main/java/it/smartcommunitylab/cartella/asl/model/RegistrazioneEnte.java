@@ -26,7 +26,7 @@ import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 public class RegistrazioneEnte {
 	
 	public static enum Stato {
-		inviato, confermato
+		inattivo, inviato, confermato
 	};
 
 	@Id
@@ -55,7 +55,11 @@ public class RegistrazioneEnte {
 	
 	private String nominativoInvito;
 	
-	private String nominativoReferente;
+	private String nomeReferente;
+	
+	private String cognomeReferente;
+	
+	private String telefonoReferente;
 	
 	private String nomeIstituto;
 	
@@ -181,20 +185,36 @@ public class RegistrazioneEnte {
 		this.nomeEnte = nomeEnte;
 	}
 
-	public String getNominativoReferente() {
-		return nominativoReferente;
-	}
-
-	public void setNominativoReferente(String nominativoReferente) {
-		this.nominativoReferente = nominativoReferente;
-	}
-
 	public String getCf() {
 		return cf;
 	}
 
 	public void setCf(String cf) {
 		this.cf = cf;
+	}
+
+	public String getNomeReferente() {
+		return nomeReferente;
+	}
+
+	public void setNomeReferente(String nomeReferente) {
+		this.nomeReferente = nomeReferente;
+	}
+
+	public String getCognomeReferente() {
+		return cognomeReferente;
+	}
+
+	public void setCognomeReferente(String cognomeReferente) {
+		this.cognomeReferente = cognomeReferente;
+	}
+
+	public String getTelefonoReferente() {
+		return telefonoReferente;
+	}
+
+	public void setTelefonoReferente(String telefonoReferente) {
+		this.telefonoReferente = telefonoReferente;
 	}
 
 }
