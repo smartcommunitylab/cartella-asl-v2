@@ -18,7 +18,7 @@
                 </button>
                 &nbsp;&nbsp;
                 <button class="btn btn-success btn-icon btn-xs btnSave m-top22" placement="bottom"
-                    ngbTooltip="Salva le modifiche alla convenzione" (click)="save(myForm)">
+                    ngbTooltip="Salva le modifiche" (click)="save(myForm)">
                     <span class="row btnModificationText">
                         <span class="col-8 leftItem">Salva</span>
                         <span class="col-4 rightItem">
@@ -43,21 +43,21 @@
                 <div class="row v-center form-group">
                     <div class="col-sm-5"
                         [class.has-danger]="NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay)">
-                        <label for="nome" *ngIf="name" class="active">Nome</label>
-                        <input type="text" class="form-control" [(ngModel)]="name" id="nome" name="nome"
-                            #NomeInput="ngModel" placeholder="Nome" required>
+                        <label for="nome" *ngIf="nome" class="active">Nome</label>
+                        <input type="text" class="form-control" [(ngModel)]="nome" id="nome" name="nome"
+                            #NomeInput="ngModel" placeholder="Nome" (keyup)="trimValue($event, 'nome')" (focusout)="trimValue($event, 'trim')" required>
                         <div class="invalid-feedback"
-                            [class.d-block]="forceTitoloErrorDisplay || (NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay))">
+                            [class.d-block]="forceNameErrorDisplay || (NomeInput.invalid && (NomeInput.dirty || NomeInput.touched || forceErrorDisplay))">
                             Campo necessario.</div>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-sm-5"
                         [class.has-danger]="CognomeInput.invalid && (CognomeInput.dirty || CognomeInput.touched || forceErrorDisplay)">
-                        <label for="cognome" *ngIf="surname" class="active">Cognome</label>
-                        <input type="text" class="form-control" [(ngModel)]="surname" id="cognome" name="cognome"
-                            #CognomeInput="ngModel" placeholder="Cognome" required>
+                        <label for="cognome" *ngIf="cognome" class="active">Cognome</label>
+                        <input type="text" class="form-control" [(ngModel)]="cognome" id="cognome" name="cognome"
+                            #CognomeInput="ngModel" placeholder="Cognome"  (keyup)="trimValue($event, 'cognome')" (focusout)="trimValue($event, 'trim')" required>
                         <div class="invalid-feedback"
-                            [class.d-block]="forceTitoloErrorDisplay || (CognomeInput.invalid && (CognomeInput.dirty || CognomeInput.touched || forceErrorDisplay))">
+                            [class.d-block]="forceCognomeErrorDisplay || (CognomeInput.invalid && (CognomeInput.dirty || CognomeInput.touched || forceErrorDisplay))">
                             Campo necessario.</div>
                     </div>
                 </div>
@@ -66,9 +66,9 @@
                         [class.has-danger]="CFInput.invalid && (CFInput.dirty || CFInput.touched || forceErrorDisplay)">
                         <label for="cf" *ngIf="cf" class="active">CF</label>
                         <input type="text" class="form-control" [(ngModel)]="cf" id="cf" name="cf" #CFInput="ngModel"
-                            placeholder="CF" minlength="16" maxlength="16" required>
+                            placeholder="CF" minlength="16" maxlength="16" (keyup)="trimValue($event, 'cf')" (focusout)="trimValue($event, 'trim')" required>
                         <div class="invalid-feedback"
-                            [class.d-block]="forceErrorDisplayMail || (CFInput.invalid && (CFInput.dirty || CFInput.touched || forceErrorDisplay))">
+                            [class.d-block]="forceCFErrorDisplay || (CFInput.invalid && (CFInput.dirty || CFInput.touched || forceErrorDisplay))">
                             Campo necessario.
                         </div>
                     </div>
@@ -77,9 +77,9 @@
                         [class.has-danger]="EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay)">
                         <label for="email" *ngIf="email" class="active">Email</label>
                         <input type="text" class="form-control" [(ngModel)]="email" id="email" name="email"
-                            #EmailInput="ngModel" placeholder="Email" pattern="^[^ ]+@[^ ]+\.[a-z]{2,6}$" required>
+                            #EmailInput="ngModel" placeholder="Email" pattern="^[^ ]+@[^ ]+\.[a-z]{2,6}$" (keyup)="trimValue($event, 'email')" (focusout)="trimValue($event, 'trim')" required>
                         <div class="invalid-feedback"
-                            [class.d-block]="forceErrorDisplayMail || (EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay))">
+                            [class.d-block]="(EmailInput.invalid && (EmailInput.dirty || EmailInput.touched || forceErrorDisplay))">
                             Campo necessario.
                         </div>
                     </div>

@@ -16,12 +16,16 @@ export class EnteResponsabileModificaComponent implements OnInit {
 
   ente;
   enteResponsabile;
-  name: string = '';
-  surname: string = '';
+  nome: string = '';
+  cognome: string = '';
   cf: string = '';
   email: string = '';
   telefono: string = '';
   forceErrorDisplay: boolean = false;
+  forceNameErrorDisplay: boolean = false;
+  forceCognomeErrorDisplay: boolean = false;
+  forceCFErrorDisplay: boolean = false;
+  forceEmailErrorDisplay: boolean = false;
   
   breadcrumbItems = [
     {
@@ -42,9 +46,9 @@ export class EnteResponsabileModificaComponent implements OnInit {
         this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
           this.enteResponsabile = res;
           if (this.enteResponsabile) {
-            this.breadcrumbItems[1].title = "Modifica responsabile";
-            this.name = this.enteResponsabile.nomeReferente;
-            this.surname = this.enteResponsabile.cognomeReferente;
+            this.breadcrumbItems[1].title = "Modifica responsabile"
+            this.nome = this.enteResponsabile.nomeReferente;
+            this.cognome = this.enteResponsabile.cognomeReferente;
             this.cf = this.enteResponsabile.cf;
             this.email = this.enteResponsabile.email;
             this.telefono = this.enteResponsabile.telefonoReferente;
@@ -64,16 +68,34 @@ export class EnteResponsabileModificaComponent implements OnInit {
   }
 
   save() {
+
     if (this.allValidated()) {
+      this.dataService.creaRichiestaRegistrazione(this.ente, this.cf, this.email, this.nome, this.cognome, this.telefono).subscribe((res) => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      },
+        (err: any) => console.log(err),
+        () => console.log('modifica enteResponsabile'));
+
     }
   }
 
   allValidated() {
-    return ((this.name && this.name != '' && this.name.trim().length > 0)
-      && (this.surname && this.surname != '' && this.surname.trim().length > 0)
+    return ((this.nome && this.nome != '' && this.nome.trim().length > 0)
+      && (this.cognome && this.cognome != '' && this.cognome.trim().length > 0)
       && (this.cf && this.cf != '' && this.cf.trim().length > 0)
       && (this.email && this.email != '' && this.email.trim().length > 0)
     );
   }
+
+  trimValue(event, type) {
+    if (type == 'nome') {
+      (event.target.value.trim().length == 0) ? this.forceNameErrorDisplay = true : this.forceNameErrorDisplay = false;
+    } else if (type == 'cognome') {
+      (event.target.value.trim().length == 0) ? this.forceCognomeErrorDisplay = true : this.forceCognomeErrorDisplay = false;
+    } else if (type == 'trim') {
+      event.target.value = event.target.value.trim();
+    }
+  }
+
 
 }

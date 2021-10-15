@@ -14,6 +14,7 @@ import { CreaConvenzioneComponent } from './actions/crea-convenzione-component/c
 import { EnteConvenzioneModificaComponent } from './actions/ente-modifica-convenzione/ente-modifica-convenzione.component';
 import { DocumentoCancellaModal } from './actions/documento-cancella-modal/documento-cancella-modal.component';
 import { ConvenzioneCancellaModal } from './actions/cancella-convenzione-modal/conv-cancella-modal.component';
+import { EnteResponsabileModificaComponent } from './actions/ente-modifica-responsabile/ente-modifica-responsabile.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'detail/:id/modifica/dati', component: EnteDettaglioModificaComponent},
       { path: 'detail/:id/aggiungi/convenzione', component: CreaConvenzioneComponent},
       { path: 'detail/:id/modifica/convenzione/:idConv', component: EnteConvenzioneModificaComponent},
+      { path: 'detail/:id/modifica/responsabile', component: EnteResponsabileModificaComponent},
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -47,7 +49,8 @@ export class EntiRoutingModule {
     CreaConvenzioneComponent,
     EnteConvenzioneModificaComponent,
     ConvenzioneCancellaModal,
-    DocumentoCancellaModal
+    DocumentoCancellaModal,
+    EnteResponsabileModificaComponent
   ];
 }
 
