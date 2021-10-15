@@ -1342,12 +1342,60 @@ export class DataService {
       );
   }
 
-  creaRichiestaRegistrazione(az): Observable<any> {
+  getEnteResponsabile(az) {
     let url = this.host + "/registrazione-ente/richiesta";
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('enteId', az.id);
-    params = params.append('email', az.email);
+  
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params    
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  creaRichiestaRegistrazione(az, cf, email, nome, cognome, telefono): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('enteId', az.id);
+    params = params.append('cf', cf);
+    params = params.append('email',email);
+    params = params.append('nome', nome);
+    params = params.append('cognome', cognome);
+    params = params.append('telefono', telefono);
+    return this.http.post<any>(
+      url,
+      null,
+      { 
+        params: params,
+        observe: 'response',
+       })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body as any);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+
+  attivaRichiestaRegistrazione(regId): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta/attiva";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('registrazioneId', regId);
     return this.http.post<any>(
       url,
       null,

@@ -173,9 +173,9 @@ export class EnteDettaglioComponent implements OnInit {
         modalRef.componentInstance.ente = this.ente;
         modalRef.componentInstance.onAbilita.subscribe((res) => {
           //api call.
-          this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
-            this.router.navigate(['../../'], { relativeTo: this.route });
-          })
+          // this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
+          //   this.router.navigate(['../../'], { relativeTo: this.route });
+          // })
         });
       })
     }
