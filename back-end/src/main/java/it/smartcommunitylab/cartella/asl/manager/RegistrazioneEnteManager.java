@@ -54,15 +54,14 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
-			if(Stato.confermato.equals(reg.getStato())) {
+			if(Stato.confermato.equals(reg.getStato()) || Stato.inattivo.equals(reg.getStato())) {
 				throw new BadRequestException("richiesta registrazione per questo ente già presente");
 			}
 			LocalDate today = LocalDate.now();
 			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
-				registrazioneEnteRepository.delete(reg);
 				throw new BadRequestException("richiesta registrazione per questo ente già presente");
 			}
-			registrazioneEnteRepository.delete(reg);
+			registrazioneEnteRepository.delete(reg);				
 		}
 		Optional<Istituzione> istituto = istituzioneRepository.findById(istitutoId);
 		Optional<Azienda> ente = aziendaRepository.findById(enteId);
@@ -293,7 +292,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
-			if(Stato.confermato.equals(reg.getStato())) {
+			if(Stato.confermato.equals(reg.getStato()) || Stato.inattivo.equals(reg.getStato())) {
 				return reg;
 			}
 			LocalDate today = LocalDate.now();
@@ -304,15 +303,4 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		return null;
 	}
 	
-	public RegistrazioneEnte getRichiestaRegistrazioneByIstituto(String enteId) {
-		RegistrazioneEnte reg = getRichiestaRegistrazione(enteId);
-		if(reg != null) {
-			LocalDate today = LocalDate.now();
-			if(Stato.confermato.equals(reg.getStato()) || (today.isBefore(reg.getDataInvito().plusDays(maxGiorni)))) {
-				return reg;
-			}
-		}
-		return null;
-	}
-
 }
