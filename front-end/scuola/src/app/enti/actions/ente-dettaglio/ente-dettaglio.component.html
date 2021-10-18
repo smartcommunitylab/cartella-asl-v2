@@ -91,6 +91,32 @@
             </div>    
         </div>
         <br>
+        <div class="card-body m-16" *ngIf="ente">
+            <div class="title">
+                <span #tooltipStato="ngbTooltip"
+                 placement="right" ngbTooltip="{{toolTipoStatoResponsabile}}"
+                 (mouseenter)="showTipStatoRiga($event, toolTipoStatoResponsabile);"
+                 class="align-middle">Responsabile ente</span>
+                <br/>
+                <button *ngIf="isModificable(ente)" class="btn btn-primary v-center-inline" placement="right" 
+                ngbTooltip="Attenzione: la persona indicata in questa sezione, dopo l’attivazione, diventerà responsabile della gestione del profilo EDIT di questo ente."
+                (click)="modificaResponsabile()">
+                {{buttonLabelResponsabile()}} responsabile ente&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
+            </div>
+            <br>
+            <div class="p-1 middle-div row" *ngIf="enteResponsabile">
+                <div class="col-6">
+                    <span class="row"><span class="text-semibold">Nome:&nbsp;</span>{{enteResponsabile.nomeReferente}}</span>
+                    <span class="row"><span class="text-semibold">Codice fiscale:&nbsp;</span>{{enteResponsabile.cf}}</span>
+                    <span class="row"><span class="text-semibold">Telefono:&nbsp;</span>{{enteResponsabile.telefonoReferente}}</span>
+                </div>
+                <div class="col-6">
+                    <span class="row"><span class="text-semibold">Cognome:&nbsp;</span>{{enteResponsabile.cognomeReferente}}</span>
+                    <span class="row"><span class="text-semibold">Email:&nbsp;</span>{{ enteResponsabile.email }}</span>
+                </div>    
+            </div>
+        </div>
+        <br>
         <div class="p-1 middle-div row" *ngIf="hasCoordinate()">
             <div class="col">
               <div id="map" style="height:300px;width:100%;z-index:0"></div>

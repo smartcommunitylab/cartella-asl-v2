@@ -50,6 +50,7 @@ export class EnteDettaglioComponent implements OnInit {
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
   showContent: boolean = false;
   convenzioni = [];
+  enteResponsabile;
 
   breadcrumbItems = [
     {
@@ -69,11 +70,16 @@ export class EnteDettaglioComponent implements OnInit {
 
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
-        this.dataService.getEnteConvenzione(id).subscribe((res) => {
-          this.convenzioni = res;
+        this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
+          this.enteResponsabile = res;
+          this.dataService.getEnteConvenzione(id).subscribe((res) => {
+            this.convenzioni = res;
+          },
+            (err: any) => console.log(err),
+            () => console.log('getEnteConvenzioni'));
         },
-        (err: any) => console.log(err),
-        () => console.log('getEnteConvenzioni'));
+          (err: any) => console.log(err),
+          () => console.log('getEnteRegistrazione'))
 
         setTimeout(() => { //ensure that map div is rendered
           this.drawMap();
@@ -261,6 +267,18 @@ export class EnteDettaglioComponent implements OnInit {
       downloadLink.click();
       document.body.removeChild(downloadLink);
     });
+  }
+
+  modificaResponsabile() {
+    this.router.navigate(['modifica/responsabile/'], { relativeTo: this.route });
+  }
+
+  buttonLabelResponsabile() {
+    if (this.enteResponsabile) {
+      return 'Modifica';
+    } else {
+      return 'Aggiungi'
+    }
   }
 
 }
