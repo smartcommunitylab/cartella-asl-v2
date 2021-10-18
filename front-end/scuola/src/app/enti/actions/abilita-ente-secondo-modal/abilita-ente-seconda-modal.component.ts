@@ -10,9 +10,13 @@ export class AbilitaEnteSecondaModal {
   closeResult: string;
 
   @Input() ente;
+  @Input() enteResponsabile;
   @Output() onAbilita = new EventEmitter<string>();
 
-  constructor(public activeModal: NgbActiveModal) { }
+  constructor(public activeModal: NgbActiveModal) {
+    console.log();
+  }
+
   invia() {
     this.activeModal.close();
     this.onAbilita.emit('ABILITA');
