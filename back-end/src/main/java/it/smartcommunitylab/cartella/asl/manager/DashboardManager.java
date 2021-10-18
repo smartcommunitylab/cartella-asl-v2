@@ -216,7 +216,7 @@ public class DashboardManager extends DataEntityManager {
 		}
 		if(Utils.isNotEmpty(text)) {
 			q += firstParam ? " WHERE" : " AND"; 
-			q += " (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text))";
+			q += " (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text) OR UPPER(aa.titolo) LIKE (:text))";
 			firstParam = false;
 		}
 		if(getErrors) {
