@@ -169,7 +169,7 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
       throw new BadRequestException("referente non trovato");
     }
     if(Utils.isEmpty(ra.getEmail())) {
-      throw new BadRequestException("codice fiscale " + ra.getCf() + " email non presente");
+      throw new BadRequestException("email non presente per " + ra.getCf());
     }
     RegistrazioneDocente reg = registrazioneDocenteRepository.findOneByCfDocente(ra.getCf());
     if(reg != null) {
@@ -179,11 +179,21 @@ public class RegistrazioneDocenteManager extends DataEntityManager {
     if(istituto == null) {
     	throw new BadRequestException("istituto non trovato");
     }
-    ASLUser user = userManager.getExistingASLUser(ra.getCf());
+    ASLUser user = userManager.getASLUserByCf(ra.getCf());
+    if(user == null) {
+    	user = userManager.getExistingASLUser(ra.getEmail());
+    }
     if(user != null) {
+      //check dirigente o funzione strumentale
+    	ASLUserRole dirigente = userManager.findASLUserRole(user.getId(),
+          ASLRole.DIRIGENTE_SCOLASTICO, istitutoId);
+    	ASLUserRole funzione = userManager.findASLUserRole(user.getId(),
+          ASLRole.FUNZIONE_STRUMENTALE, istitutoId);
+    	if((dirigente != null) || (funzione != null)) {
+    		throw new BadRequestException("codice fiscale " + ra.getCf() + " già presente con ruolo di gestione alternanza");
+    	}
 			user.setName(ra.getName());
 			user.setSurname(ra.getSurname());
-      user.setEmail(ra.getEmail());
 			userManager.updateASLUser(user);
 		} else {
 			user = new ASLUser();
