@@ -209,6 +209,24 @@ export class EnteDettaglioComponent implements OnInit {
     return isModificable;
   }
 
+  disableAttivaAccesso() {
+    var disabled = false;
+    if (!this.enteResponsabile) {
+      disabled = true;
+    } else if (this.enteResponsabile.stato == 'confermato') {
+      disabled = true;
+    }
+    return disabled;
+  }
+
+  showAttivaAccesso() {
+    var show = true;
+    if (this.enteResponsabile && (this.enteResponsabile.stato == 'confermato' || this.enteResponsabile.stato == 'inviato')) {
+      show = false;
+    }
+    return show;
+  }
+
   getTipologiaString(tipologiaId) {
     if (this.tipoAzienda) {
       let rtn = this.tipoAzienda.find(data => data.id == tipologiaId);
