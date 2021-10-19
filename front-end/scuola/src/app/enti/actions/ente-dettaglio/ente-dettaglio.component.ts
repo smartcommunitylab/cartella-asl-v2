@@ -118,9 +118,9 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   menuContentShow() {
-    if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+    if (this.enteResponsabile && this.enteResponsabile.stato == 'inviato') {
       this.menuContent = 'In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente è già stato invitato ad attivare un profilo. Attendi una risposta o, se pensi che ci sia stato un errore, annulla l’invito.'
-    } else if (this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+    } else if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
       this.menuContent = "In questa pagina trovi tutte le informazioni su un singolo ente. Questo ente ha un profilo attivo, quindi per modificare il suo profilo devi rivolgerti al responsabile dell’ente.";
     }
     this.showContent = !this.showContent;
@@ -145,9 +145,9 @@ export class EnteDettaglioComponent implements OnInit {
   
   setStatus(ente) {
     let stato = 'Disponibile all’attivazione';
-    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+    if (this.enteResponsabile && this.enteResponsabile.stato == 'inviato') {
       stato = 'In attivazione';
-    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+    } else if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
       stato = 'Con account';
     }
     return stato;
@@ -191,6 +191,7 @@ export class EnteDettaglioComponent implements OnInit {
   annullaInvitoEnte() {
     const modalRef = this.modalService.open(AnnullaInvitoModal, { windowClass: "abilitaEnteModalClass" });
     modalRef.componentInstance.ente = this.ente;
+    modalRef.componentInstance.enteResponsabile = this.enteResponsabile;
     modalRef.componentInstance.onAnnulla.subscribe((res) => {
       this.dataService.annullaRichiestaRegistrazione(this.ente).subscribe((res) => {
         this.router.navigate(['../../'], { relativeTo: this.route });
@@ -200,9 +201,9 @@ export class EnteDettaglioComponent implements OnInit {
   
   isModificable(ente) {
     var isModificable = true;
-    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+    if (this.enteResponsabile && this.enteResponsabile.stato == 'inviato') {
       isModificable = false;
-    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+    } else if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
       isModificable = false;
     }
     return isModificable;
