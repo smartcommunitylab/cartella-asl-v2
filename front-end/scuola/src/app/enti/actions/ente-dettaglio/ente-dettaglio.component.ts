@@ -51,6 +51,8 @@ export class EnteDettaglioComponent implements OnInit {
   showContent: boolean = false;
   convenzioni = [];
   enteResponsabile;
+  toolTipoStatoResponsabile;
+  toolTipAttivaAccesso;
 
   breadcrumbItems = [
     {
@@ -70,6 +72,7 @@ export class EnteDettaglioComponent implements OnInit {
 
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
+        
         this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
           this.enteResponsabile = res;
           this.dataService.getEnteConvenzione(id).subscribe((res) => {
@@ -105,7 +108,7 @@ export class EnteDettaglioComponent implements OnInit {
     this.router.navigate(['modifica/dati/'], { relativeTo: this.route });
   }
 
-   delete() {
+  delete() {
      const modalRef = this.modalService.open(EnteCancellaModal, { windowClass: "cancellaModalClass" });
      modalRef.componentInstance.ente = this.ente;
      modalRef.componentInstance.onDelete.subscribe((res) => {
@@ -159,9 +162,9 @@ export class EnteDettaglioComponent implements OnInit {
       'font-weight': 'bold'
     };
 
-    if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'inviato') {
+    if (this.enteResponsabile && this.enteResponsabile.stato == 'inviato') {
       style['color'] = '#7FB2E5'; // grey
-    } else if (ente.registrazioneEnte && ente.registrazioneEnte.stato == 'confermato') {
+    } else if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
       style['color'] = '#00CF86'; // green
     }
 
@@ -169,23 +172,27 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   abilitaEnte() {
-    if (!this.ente.email) {
-      this.growler.growl('<b>Errore: nessun indirizzo email associato all\'ente.</b><br/>Inserire l\'indirizzo e riprovare. Si consiglia di contattare direttamente l\'ente per ottenere un indirizzo aggiornato e attivo.', GrowlerMessageType.Danger);
-    } else {
-      const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
-      modalRef.componentInstance.ente = this.ente;
-      modalRef.componentInstance.onAbilita.subscribe((res) => {
-        const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
-        modalRef.componentInstance.ente = this.ente;
-        modalRef.componentInstance.onAbilita.subscribe((res) => {
-          //api call.
-          // this.dataService.creaRichiestaRegistrazione(this.ente).subscribe((res) => {
-          //   this.router.navigate(['../../'], { relativeTo: this.route });
-          // })
-        });
-      })
-    }
 
+    if (!this.disableAttivaAccesso()) {
+
+      if (!this.ente.email) {
+        this.growler.growl('<b>Errore: nessun indirizzo email associato all\'ente.</b><br/>Inserire l\'indirizzo e riprovare. Si consiglia di contattare direttamente l\'ente per ottenere un indirizzo aggiornato e attivo.', GrowlerMessageType.Danger);
+      } else {
+        const modalRef = this.modalService.open(AbilitaEntePrimaModal, { windowClass: "abilitaEnteModalClass" });
+        modalRef.componentInstance.ente = this.ente;
+        modalRef.componentInstance.enteResponsabile = this.enteResponsabile;
+        modalRef.componentInstance.onAbilita.subscribe((res) => {
+          const modalRef = this.modalService.open(AbilitaEnteSecondaModal, { windowClass: "abilitaEnteModalClass" });
+          modalRef.componentInstance.ente = this.ente;
+          modalRef.componentInstance.enteResponsabile = this.enteResponsabile;
+          modalRef.componentInstance.onAbilita.subscribe((res) => {
+            this.dataService.attivaRichiestaRegistrazione(this.enteResponsabile.id).subscribe((res) => {
+              this.router.navigate(['../../'], { relativeTo: this.route });             
+            })
+          });
+        })
+      }
+    }
   }
 
   annullaInvitoEnte() {
@@ -260,6 +267,34 @@ export class EnteDettaglioComponent implements OnInit {
     return style;
   }
 
+  styleAttivaAccesso() {
+    var style = {};
+    if (this.disableAttivaAccesso()) {
+      style = {
+        'width': '216px',
+        'height': '40px',
+        'background-color': '#93f5d3',
+        'font-family': 'Titillium Web',
+        'font-size': '18px',
+        'font-weight': '600',
+        'color': '#FFFFFF',
+        'position': 'relative',
+      }
+    } else {
+      style = {
+        'width': '216px',
+        'height': '40px',
+        'background-color': '#00CF86',
+        'font-family': 'Titillium Web',
+        'font-size': '18px',
+        'font-weight': '600',
+        'color': '#FFFFFF',
+        'position': 'relative',
+      }
+    }
+    return style;
+  }
+
   modificaConvenzione(conv, e) {
     var target = e.target;
     while (target) { // Iterate through elements
@@ -297,6 +332,22 @@ export class EnteDettaglioComponent implements OnInit {
       return 'Modifica';
     } else {
       return 'Aggiungi'
+    }
+  }
+
+  showTipStatoRiga(ev) {
+    if (this.enteResponsabile) {
+      this.toolTipoStatoResponsabile = 'La persona indicata qui è la responsabile della gestione del profilo EDIT dell’ente di riferimento';
+    } else {
+      this.toolTipoStatoResponsabile = '';
+    }
+  }
+
+  showTipAttivaAcceso(ev) {
+    if (!this.enteResponsabile) {
+      this.toolTipAttivaAccesso = 'Compila tutti i dati necessari nella sezione “Responsabile ente” per invitare questo ente a creare uno suo profilo EDIT per la gestione dei tirocini.';
+    } else {
+      this.toolTipAttivaAccesso = 'Invita questo ente a creare un suo profilo EDIT per la gestione dei tirocini';
     }
   }
 
