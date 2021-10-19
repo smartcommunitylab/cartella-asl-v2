@@ -123,7 +123,7 @@
             </div>
         </div>
         <br>
-    <div *ngIf="this.dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])">
+    <div>
         <div class="title">
             Convenzioni <br />
             <button class="btn btn-primary v-center-inline" (click)="aggiungiConvenzione()" placement="right" ngbTooltip="Aggiungi una nuova convenzione stipulata tra {{ente.nome}} e {{dataService.istituto}} per permettere all’ente di gestire i tirocini tramite EDIT">

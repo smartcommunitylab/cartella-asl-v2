@@ -63,4 +63,12 @@
         border: 3px solid #FF9700;
         box-sizing: border-box;
     }
+
+    .top {
+        z-index: -1;
+    }
+
+    .btn:disabled {
+        pointer-events: all!important;
+    }
 }
