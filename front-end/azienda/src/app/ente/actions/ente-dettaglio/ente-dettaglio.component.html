@@ -65,7 +65,7 @@
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-pencil"></use>
                 </svg>
             </button>&nbsp; -->
-            <button disabled class="btn btn-primary v-center-inline" placement="bottom" ngbTooltip="Aggiungi un account con i permessi per operare su questo ente"
+            <button class="btn btn-primary v-center-inline" placement="bottom" ngbTooltip="Aggiungi un account con i permessi per operare su questo ente"
                 (click)="aggiungiAccount()">
                 Aggiungi account&nbsp;&nbsp;&nbsp;
                 <svg class="icon icon-white icon-sm btnModificationIcon">
@@ -78,6 +78,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Codice fiscale</th>
                         <th>Indirizzo email</th>
                         <th>Nome</th>
                         <th>Ruolo</th>
@@ -88,13 +89,17 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ruolo of ruoli">
+                        <!-- cf -->
+                        <td class="pointer">
+                            <span class="align-middle">{{ ruolo.cf }}</span>
+                        </td>
                         <!-- Indirizzo email -->
                         <td class="pointer">
-                            <span class="align-middle color-blu text-underline">{{ ruolo.email }}</span>
+                            <span class="align-middle">{{ ruolo.email }}</span>
                         </td>
                         <!-- Nome -->
                         <td class="pointer">
-                            <span class="align-middle">{{ ruolo.name }} {{ ruolo.surname }}</span>
+                            <span class="align-middle">{{ ruolo.nomeReferente }} {{ ruolo.cognomeReferente }}</span>
                         </td>
                         <!-- Ruolo -->
                         <td class="pointer">
@@ -110,7 +115,7 @@
                         </td>
                         <!-- delete -->
                         <td class="pointer">
-                            <div class='btn btn-primary btn-icon btn-xs float-right'>
+                            <div class='btn btn-primary btn-icon btn-xs float-right' *ngIf="checkDeleteRole(ruolo)">
                                 <svg class="icon icon-white icon-sm" (click)="deleteRuolo(ruolo)">
                                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
                                 </svg>

@@ -171,7 +171,15 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 			throw new BadRequestException("gestore non autorizzato");
 		}
 		ASLUser user = userManager.getASLUserByCf(cf);
+		if(user == null) {
+			user = userManager.getExistingASLUser(email);
+		}
 		if(user != null) {
+			ASLUserRole userRoleLegale = userManager.findASLUserRole(user.getId(), 
+					ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
+			if(userRoleLegale != null) {
+				throw new BadRequestException("ruolo non compatibile");
+			}
 			user.setName(nome);
 			user.setSurname(cognome);
 			userManager.updateASLUser(user);

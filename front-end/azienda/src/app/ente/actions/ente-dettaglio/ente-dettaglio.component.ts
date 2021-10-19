@@ -127,10 +127,20 @@ export class EnteDettaglioComponent implements OnInit {
     });
   }
 
+  checkDeleteRole(ruolo) {
+    if (ruolo.userId == this.dataService.ownerId) {
+      return false;
+    }
+    if (ruolo.role == "LEGALE_RAPPRESENTANTE_AZIENDA") {
+      return false;
+    }
+    return true;
+  }
+
   initializeRole(roles) {
     this.ruoli = roles.filter(role => {
       if (role.userId == this.dataService.ownerId) {
-        return false;
+        return true;
       }
       return true;
     });
