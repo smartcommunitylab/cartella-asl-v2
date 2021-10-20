@@ -187,6 +187,7 @@ export class DataService {
     params = params.append('nome', data.name);
     params = params.append('cognome', data.surname);
     params = params.append('cf', data.cf);
+    params = params.append('email', data.email);
     params = params.append('userId', data.ownerId);
 
     return this.http.post<any>(
