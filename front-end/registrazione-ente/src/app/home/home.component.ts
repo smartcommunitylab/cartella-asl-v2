@@ -17,8 +17,10 @@ export class HomeComponent implements OnInit {
     nomeIstituto;
     nomeEnte;
     email;
+    cf;
     role;
-    nominativoReferente;
+    nomeReferente;
+    cognomeReferente;
 
     constructor(
         private dataService: DataService,
@@ -36,7 +38,9 @@ export class HomeComponent implements OnInit {
                 this.nomeIstituto = res.nomeIstituto;
                 this.nomeEnte = res.nomeEnte;
                 this.email = res.email;
-                this.nominativoReferente = res.nominativoReferente;
+                this.nomeReferente = res.nomeReferente;
+                this.cognomeReferente = res.cognomeReferente;
+                this.cf = res.cf;
                 this.role = res.role;
                 sessionStorage.aziendaId = res.aziendaId;
                 if (this.role == 'LEGALE_RAPPRESENTANTE_AZIENDA' && res.stato == 'inviato') { // CASE 1. MANDATA DA SCUOLA A PADRONE DI AZIENDA

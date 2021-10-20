@@ -33,32 +33,33 @@
         <p class="color-blu text-semibold">Il tuo ente è stato invitato ad accedere al sistema <span class="text-capitalize">{{ nomeIstituto }}</span>.</p>
         <br />
         <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite
-            l’indirizzo mail indicato dalla scuola.</p>
+            il sistema di identità digitale (SPID) della persona riportata qui sotto.</p>
         <br />
         <div class="card-wrapper">
             <div class="card-inner">
-                <div class="card-body">
-                    <div class="row font-28 text-vcenter">
-                        <span class="text-bold col-6 color-blu text-capitalize">
-                            {{ nomeEnte }}
-                        </span>
-                        <span class="text-bold col-6 color-blu">
-                            {{ email }}
-                        </span>
-                    </div>
+                <div class="row font-28 text-vcenter">
+                    <span class="text-bold col-4 color-blu text-capitalize">
+                        {{ nomeReferente }}&nbsp;{{ cognomeReferente }}
+                    </span>
+                    <span class="text-bold col-4 color-blu">
+                        cf:&nbsp;{{ cf }}
+                    </span>
+                    <span class="text-bold col-4 color-blu">
+                        {{ email }}
+                    </span>
                 </div>
             </div>
         </div>
         <br />
         <br />
-        <p class="text-semibold color-black">Se l’ente e l’indirizzo mail corrispondono, procedi con la registrazione</p>
+        <p class="text-semibold color-black">Se il nome ed il CF sono corretti, procedi con l’autenticazione</p>
     </div>
     <br />
     <br />
     <div class="row color-grey">
         <div class="col-4"></div>
         <div class="col-4 text-center">
-            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Accedi</p>
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Vai all’autenticazione</p>
             <br />
             <!-- <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione è un account Google, usa l’autenticazione Google</p> -->
         </div>
@@ -92,16 +93,19 @@
         <br />
         <p class="color-black text-semibold">Dopo l’autenticazione, potrai accedere al profilo EDIT di <span class="text-capitalize">{{ nomeEnte }}</span> come Delegato</p>
         <br />
-        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite la persona di riferimento e la mail indicata</p>
+        <p class="color-grey text-semibold">La registrazione dovrà avvenire <span class="text-bold">esclusivamente</span> tramite il sistema di identità digitale (SPID) della persona riportata qui sotto</p>
         <br />
         <div class="card-wrapper">
             <div class="card-inner">
                 <div class="card-body">
                     <div class="row font-28 text-vcenter">
-                        <span class="text-bold col-6 color-blu text-capitalize">
-                            {{ nominativoReferente }}
+                        <span class="text-bold col-4 color-blu text-capitalize">
+                            {{ nomeReferente }}&nbsp;{{ cognomeReferente }}
                         </span>
-                        <span class="text-bold col-6 color-blu">
+                        <span class="text-bold col-4 color-blu">
+                            cf:&nbsp;{{ cf }}
+                        </span>
+                        <span class="text-bold col-4 color-blu">
                             {{ email }}
                         </span>
                     </div>
@@ -117,7 +121,7 @@
     <div class="row color-grey">
         <div class="col-4"></div>
         <div class="col-4 text-center">
-            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Accedi</p>
+            <p class="text-bold font-35 color-blu text-underline" (click)="login()">Vai all’autenticazione</p>
             <br />
         </div>
         <div class="col-4"></div>        
