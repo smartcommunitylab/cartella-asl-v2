@@ -9,10 +9,10 @@ export const environment = {
     modificationFlag : false,
     serverAPIURL: 'https://cartella-asl-demo.platform.smartcommunitylab.it/cartella-asl/api',
     defaultPosition: { 'latitude': 46.1025748, 'longitude': 10.927261 },
-    aacClientId: "c_37b06a4d-9ca5-47bb-8630-283249916cdd",
+    aacClientId: "c_388f59df-ab5e-4676-ba1a-eb702ada136a",
     redirectUrl: "https://cartella-asl-demo.platform.smartcommunitylab.it/asl-azienda-v2/",
     logout_redirect: 'asl-login/',
-    scope: "profile openid email profile.accountprofile.me profile.adc.me",
+    scope: "profile openid email profile.accountprofile.me profile.adc.me edit.all",
     aacUrl: "https://aac.platform.smartcommunitylab.it"
   };
   
