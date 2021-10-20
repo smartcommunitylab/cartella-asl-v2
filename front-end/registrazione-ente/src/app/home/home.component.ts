@@ -56,18 +56,6 @@ export class HomeComponent implements OnInit {
     }
 
     login() {
-        // alert('login');
-        // this.authService.checkLoginStatus().then(valid => {
-        //     if (!valid) {
-        //         console.log('come here for not valid');
-        //         this.authService.redirectAuth();
-        //     } else {
-        //         // logged in.
-        //         this.router.navigateByUrl('/registrazione')
-        //     }
-
-        // });
-
         this.authService.init().then(() => {
             let isAuthenticated = this.authService.isLoggedIn();
             if (!isAuthenticated) {

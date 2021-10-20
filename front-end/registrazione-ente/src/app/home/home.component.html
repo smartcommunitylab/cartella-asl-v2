@@ -12,7 +12,7 @@
         <div class="col-8"></div>
     </div>
 </div>
-<!-- LEGALE_RAPPRESENTANTE_AZIENDA HOMEPAGE-->
+<!-- INVITO DA ISTITUTO HOMEPAGE-->
 <div class="mb-3 list-container md-margin" *ngIf="!linkExpired && role=='LEGALE_RAPPRESENTANTE_AZIENDA'">
     <div class="text-center">
         <span class="title color-black font-35">Benvenuto nel sistema Esperienze Didattiche Insieme al Territorio - EDIT</span>
@@ -61,17 +61,11 @@
         <div class="col-4 text-center">
             <p class="text-bold font-35 color-blu text-underline" (click)="login()">Vai all’autenticazione</p>
             <br />
-            <!-- <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione è un account Google, usa l’autenticazione Google</p> -->
         </div>
         <div class="col-4"></div>
-        <!-- <div class="col-6 text-center">
-            <p class="text-bold font-35 color-blu text-underline" (click)="login()">AAC</p>
-            <br />
-            <p class="font-25 text-italic text-left">Se l’indirizzo selezionato per l’attivazione non è un account Google, registrati su AAC, il servizio di autenticazione dell’unità Smart Cities & Communities della Fondazione Bruno Kessler</p>
-        </div> -->
     </div>
 </div>
-<!-- RIFERENTE_AZIENDA HOMEPAGE-->
+<!-- INVITO DA ENTE HOMEPAGE-->
 <div class="mb-3 list-container md-margin" *ngIf="!linkExpired && role!='LEGALE_RAPPRESENTANTE_AZIENDA'">
     <div class="text-center">
         <span class="title color-black font-35">Benvenuto nel sistema Esperienze Didattiche Insieme al Territorio - EDIT</span>
