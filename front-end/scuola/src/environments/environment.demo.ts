@@ -12,7 +12,7 @@ export const environment = {
     aacClientId: "c_37b06a4d-9ca5-47bb-8630-283249916cdd",
     redirectUrl: "https://cartella-asl-demo.platform.smartcommunitylab.it/asl-scuola-v2/",
     logout_redirect: 'asl-login/',
-    scope: "profile openid email profile.accountprofile.me profile.adc.me",
+    scope: "profile openid email profile.accountprofile.me profile.adc.me edit.all",
     aacUrl: "https://aac.platform.smartcommunitylab.it"
   };
   
