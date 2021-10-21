@@ -40,9 +40,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
-import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
 import it.smartcommunitylab.cartella.asl.security.AACConnector;
-import it.smartcommunitylab.cartella.asl.util.ErrorLabelManager;
 
 
 @RestController
@@ -60,8 +58,6 @@ public class ASLUserController implements AslController {
 	private ASLRolesValidator usersValidator;		
 	@Autowired
 	private AACConnector aac;	
-	@Autowired
-	private ErrorLabelManager errorLabelManager;	
 	@Autowired
 	private AuditManager auditManager;
 	@Autowired
@@ -88,31 +84,12 @@ public class ASLUserController implements AslController {
 			@RequestBody ASLUser user, 
 			HttpServletRequest request)
 			throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}
-		usersValidator.checkDeclaredUserRole(admin, userRole);
-		
-		checkNullId(user.getId());
-
-		for (ASLUserRole aslUserRole : user.getRoles()) {
-			ASLRole role = aslUserRole.getRole();
-			if (!ASLRole.ADMIN.equals(userRole)) {
-				usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);
-				if (!userDomainId.equals(aslUserRole.getDomainId())) {
-					throw new UnauthorizedException(errorLabelManager.get("wrong.domainId"));
-				}
-			}
-		}
-
+		ASLUser admin = usersValidator.checkRole(request, ASLRole.ADMIN);
 		ASLUser result = aslManager.createASLUser(user);
-
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, result.getId(), admin, new Object(){});
 			auditManager.save(audit);
 		}
-
 		return result;
 	}
 	
@@ -124,14 +101,7 @@ public class ASLUserController implements AslController {
 			@RequestParam(required=false) String text, 
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}		
-		usersValidator.checkDeclaredUserRole(admin, userRole);
-		if (!ASLRole.ADMIN.equals(userRole)) {
-			usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);			
-		}
+		usersValidator.checkRole(request, ASLRole.ADMIN);
 		return aslManager.findASLUsers(role, text, userRole, userDomainId, pageRequest);
 	}
 	
@@ -147,33 +117,14 @@ public class ASLUserController implements AslController {
 			@RequestParam(required=false) String userDomainId, 
 			@RequestBody ASLUser user, 
 			HttpServletRequest request) throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}
-		usersValidator.checkDeclaredUserRole(admin, userRole);		
-		
-		checkId(user.getId());
-		
+		ASLUser admin = usersValidator.checkRole(request, ASLRole.ADMIN);		
 		ASLUser oldUser = aslManager.getASLUser(user.getId());
-		if (oldUser != null) {
-			for (ASLUserRole aslUserRole : oldUser.getRoles()) {
-				ASLRole role = aslUserRole.getRole();
-				if (user.getRoles() != null) {
-					if (!ASLRole.ADMIN.equals(userRole)) {
-						usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);
-						if (!userDomainId.equals(aslUserRole.getDomainId())) {
-							throw new UnauthorizedException(errorLabelManager.get("wrong.domainId"));
-						}
-					}
-				}
-			}
-
-			aslManager.updateASLUser(user);
-
-			AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, user.getId(), admin, new Object() {});
-			auditManager.save(audit);
+		if(oldUser == null) {
+			throw new UnauthorizedException("utente non trovato");
 		}
+		aslManager.updateASLUser(user);
+		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, user.getId(), admin, new Object() {});
+		auditManager.save(audit);
 	}	
 	
 	@DeleteMapping(value = "/api/user/{id}")
@@ -183,30 +134,14 @@ public class ASLUserController implements AslController {
 			@RequestParam(required = false) String userDomainId, 
 			HttpServletRequest request)
 			throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}
-		usersValidator.checkDeclaredUserRole(admin, userRole);
-
+		ASLUser admin = usersValidator.checkRole(request, ASLRole.ADMIN);
 		ASLUser oldUser = aslManager.getASLUser(id);
-		if (oldUser != null) {
-			for (ASLUserRole aslUserRole : oldUser.getRoles()) {
-				ASLRole role = aslUserRole.getRole();
-
-				if (!ASLRole.ADMIN.equals(userRole)) {
-					usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);
-					if (!userDomainId.equals(aslUserRole.getDomainId())) {
-						throw new UnauthorizedException(errorLabelManager.get("wrong.domainId"));
-					}
-				}
-			}
-
-			aslManager.deleteASLUser(id);
-
-			AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, id, admin, new Object() {});
-			auditManager.save(audit);
+		if(oldUser == null) {
+			throw new UnauthorizedException("utente non trovato");
 		}
+		aslManager.deleteASLUser(id);
+		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, id, admin, new Object() {});
+		auditManager.save(audit);
 	}	
 	
 	@PostMapping(value = "/api/user/{id}/role")
@@ -217,21 +152,12 @@ public class ASLUserController implements AslController {
 			@RequestParam(required = true) ASLRole role,
 			@RequestParam(required = true) String newId, 
 			HttpServletRequest request) throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}		
-		
-		if (!ASLRole.ADMIN.equals(userRole)) {
-			usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);			
-		}		
-		
+		ASLUser admin = usersValidator.checkRole(request, ASLRole.ADMIN);
 		ASLUser result = aslManager.updateASLUserRoles(id, role, newId);
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, result.getId(), admin, new Object(){});
 			auditManager.save(audit);
 		}
-		
 		return result;
 	}	
 	
@@ -243,22 +169,12 @@ public class ASLUserController implements AslController {
 			@RequestParam(required = true) ASLRole role, 
 			@RequestParam(required = false) String oldId, 
 			HttpServletRequest request) throws Exception {
-		ASLUser admin = usersValidator.getUser(request);
-		if (userRole == null && usersValidator.hasRole(admin, ASLRole.ADMIN)) {
-			userRole = ASLRole.ADMIN;
-		}		
-		
-		if (!ASLRole.ADMIN.equals(userRole)) {
-			usersValidator.checkUserRolesCompatibility(userRole, userDomainId, role);			
-		}			
-		
+		ASLUser admin = usersValidator.checkRole(request, ASLRole.ADMIN);
 		ASLUser result = aslManager.deleteASLUserRoles(id, role, oldId);
-		
 		if (result != null) {
 			AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, result.getId(), admin, new Object(){});
 			auditManager.save(audit);
 		}
-		
 		return result;		
 	}	
 	
