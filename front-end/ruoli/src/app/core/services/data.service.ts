@@ -47,6 +47,8 @@ export class DataService {
         params = params.append('role', filters.role);
       if (filters.text)
         params = params.append('text', filters.text);
+      if (filters.userDomainId)
+        params = params.append('userDomainId', filters.userDomainId);
     }
 
     return this.http.get<any>(
