@@ -188,7 +188,7 @@
                         <input type="text" class="form-control" [(ngModel)]="offerta.referenteScuola"
                             id="referenteScuola" #referenteScuolaInput="ngModel"
                             (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
-                        <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Referente
+                        <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Tutor
                             scolastico</label>
                         <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Tutor scolastico</label>
                         <div class="invalid-feedback"
