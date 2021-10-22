@@ -90,7 +90,7 @@ public class CompetenzaManager extends DataEntityManager {
 		return competenzaRepository.findAll();
 	}
 
-	public Page<Competenza> getCompetenzeOrderByIstituto(String istitutoId, List<String> ownerIds, String filterText, String stato, Pageable pageRequest) {
+	public Page<Competenza> getCompetenzeOrderByIstituto(List<String> ownerIds, String filterText, String stato, Pageable pageRequest) {
 
 		StringBuilder sb = new StringBuilder(COMPETENZE_ORDER_BY_ISTITUTO);
 
@@ -132,14 +132,7 @@ public class CompetenzaManager extends DataEntityManager {
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
 		List<Competenza> result = query.getResultList();
-		for (Competenza c: result) {
-			if (!c.getOwnerName().equalsIgnoreCase("istituto")) {
-				c.setAttiva(true);
-			}
-		}
-
 		Page<Competenza> page = new PageImpl<Competenza>(result, pageRequest, t);
-
 		return page;
 
 	}
@@ -149,7 +142,6 @@ public class CompetenzaManager extends DataEntityManager {
 	}
 
 	public void updateCompetenza(Competenza c) {
-
 		Competenza old = competenzaRepository.getOne(c.getId());
 		if (old == null) {
 			competenzaRepository.save(c);
@@ -163,21 +155,19 @@ public class CompetenzaManager extends DataEntityManager {
 		}
 	}
 
-	public void deleteCompetenza(long id) {
+	public void deleteCompetenza(long id) throws Exception {
+		Competenza competenza = competenzaRepository.findById(id).orElse(null);
 		ReportCompetenzaDettaglio report = getCompetenzaReport(id);
-	
 		if (report.getNumeroAttivitaAltAssociate() > 0 || report.getNumeroOfferteAssociate() > 0
 				|| report.getNumeroPianoAltAssociate() > 0 || report.getNumeroStudentiAssociate() > 0) {
-			Competenza competenza = report.getCompetenza();
-			competenza.setAttiva(false);
-			competenzaRepository.save(competenza);
+			competenza.setAttiva(Boolean.FALSE);
+			competenzaRepository.save(competenza);				
 		} else {
 			competenzaRepository.deleteById(id);
 		}
-
 	}
 	
-	public void deleteAssociatedCompetenzeByRisorsaId(String risorsaId) {
+	public void deleteAssociatedCompetenzeByRisorsaId(String risorsaId) throws Exception {
 		for (AssociazioneCompetenze ac : associazioneCompetenzeRepository.findByRisorsaId(risorsaId)) {
 			deleteCompetenza(ac.getCompetenzaId());
 		}
