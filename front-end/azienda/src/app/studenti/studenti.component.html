@@ -50,37 +50,37 @@
     <table class="table table-hover">
       <thead>
         <tr>
-          <th>Studente</th>
-          <th>Classe</th>
-          <th>Istituto</th>
-          <th>Ultima attività</th>
-          <th>Stato</th>
+          <th class="col-4">Studente</th>
+          <th class="col-1">Classe</th>
+          <th class="col-4">Istituto</th>
+          <th class="col-2">Ultima attività</th>
+          <th class="col-1">Stato</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let studente of studenti" (click)="openDetail(studente)">
-          <td class="pointer">
+          <td class="pointer col-4">
             <span>
               {{studente.studente.surname}} {{studente.studente.name}}
             </span>
           </td>
-          <td class="pointer">
+          <td class="pointer col-1">
             <span>
               {{studente.studente.classroom}}
             </span>
           </td>
-          <td class="pointer">
+          <td class="pointer col-4">
             <span #tooltipEnte="ngbTooltip" placement="bottom" ngbTooltip="{{studente.istituto.name}}"
-              class="align-middle">{{ setIstitutoName(studente) }}</span>
+              class="align-middle">{{ studente.istituto.name }}</span>
           </td>
-          <td class="pointer">
+          <td class="pointer col-2">
             <span #tooltip="ngbTooltip" placement="right" ngbTooltip="{{studente.toolTipRiga}}"
               (mouseenter)="showTipRiga($event, studente);">
               {{ studente.attivitaAlternanza.dataInizio | date: 'dd/MM/yy'}} -
               {{ studente.attivitaAlternanza.dataFine | date: 'dd/MM/yy'}}
             </span>
           </td>
-          <td class="pointer">
+          <td class="pointer col-1">
             <span class="{{studente.stato}}">
               {{ getStatoNome(studente.stato) }}
             </span>
