@@ -13,6 +13,7 @@ export const environment = {
     redirectUrl: "https://cartella-asl-demo.platform.smartcommunitylab.it/asl-registrazione-ente-v2/",
     logout_redirect: 'asl-login/',
     scope: "profile openid email profile.accountprofile.me profile.adc.me edit.all",
-    aacUrl: "https://aac.platform.smartcommunitylab.it"
+    aacUrl: "https://aac.platform.smartcommunitylab.it",
+    enteUrl: "https://cartella-asl-demo.platform.smartcommunitylab.it/asl-azienda-v2/"
   };
   

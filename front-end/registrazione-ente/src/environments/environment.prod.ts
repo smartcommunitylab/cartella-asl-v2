@@ -8,5 +8,6 @@ export const environment = {
   redirectUrl: "https://cartella.provincia.tn.it/asl-registrazione-ente/",
   logout_redirect: 'asl-login/',
   scope: "profile openid email profile.accountprofile.me profile.adc.me edit.all",
-  aacUrl: "https://aac.platform.smartcommunitylab.it"
+  aacUrl: "https://aac.platform.smartcommunitylab.it",
+  enteUrl: "https://cartella.provincia.tn.it/asl-azienda/"
 };
