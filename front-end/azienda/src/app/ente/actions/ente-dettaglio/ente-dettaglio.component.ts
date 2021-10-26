@@ -47,7 +47,7 @@ export class EnteDettaglioComponent implements OnInit {
   codiceAteco: string = '';
   descAteco: string = '';
   ruoli;
-  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza.";
+  menuContent = "In questa pagina trovi tutte le informazioni relative al profilo EDIT di questo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza";
   showContent: boolean = false;
   attachedAteco = [];
 
