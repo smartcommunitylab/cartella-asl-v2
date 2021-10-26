@@ -53,6 +53,9 @@ export class EnteDettaglioComponent implements OnInit {
   enteResponsabile;
   toolTipoStatoResponsabile;
   toolTipAttivaAccesso;
+  codiceAteco: string = '';
+  descAteco: string = '';
+  attachedAteco = [];
 
   breadcrumbItems = [
     {
@@ -72,7 +75,7 @@ export class EnteDettaglioComponent implements OnInit {
 
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
-        
+        this.updateAtecoCodiceList();
         this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
           this.enteResponsabile = res;
           this.dataService.getEnteConvenzione(id).subscribe((res) => {
@@ -92,6 +95,16 @@ export class EnteDettaglioComponent implements OnInit {
         () => console.log('getEnte'));
     });
 
+  }
+
+  updateAtecoCodiceList() {
+    this.attachedAteco = [];
+    if (this.ente.atecoCode && this.ente.atecoDesc) {
+      for (var i = 0; i < this.ente.atecoCode.length; i++) {
+        let atecoEntry = {codice: this.ente.atecoCode[i], descrizione: this.ente.atecoDesc[i]};
+        this.attachedAteco.push(atecoEntry);
+      }
+    }
   }
 
   openDetailCompetenza(competenza, $event) {

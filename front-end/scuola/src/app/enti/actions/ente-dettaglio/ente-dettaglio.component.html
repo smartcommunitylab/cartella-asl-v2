@@ -82,6 +82,7 @@
                 <span class="row"><span class="text-semibold">CAP:&nbsp;</span>{{ente.cap}}</span>
                 <span class="row"><span class="text-semibold">Comune:&nbsp;</span>{{ente.comune}}</span>
                 <span class="row"><span class="text-semibold">Provincia:&nbsp;</span>{{ente.provincia}}</span>
+                <span class="row"><strong>Codice ATECO:</strong></span>                
             </div>
             <div class="col-6">
                 <span class="row"><span class="text-semibold">Email:&nbsp;</span>{{ ente.email }}</span>
@@ -91,6 +92,11 @@
                 <span class="row"><span class="text-semibold">Responsabile della sicurezza:&nbsp;</span>{{ente.responsabileSicurezza}}</span>
                 <span class="row"><span class="text-semibold">Medico competente:&nbsp;</span>{{ente.medicoCompetente}}</span>
             </div>    
+        </div>
+        <div class="p-1 middle-div">
+            <span class="row" *ngFor="let ateco of attachedAteco">
+                <td class="col-sm-6">{{ateco.codice}} - {{ateco.descrizione}}</td>
+            </span>
         </div>
         <br>
         <div class="card-body m-16" *ngIf="ente">
