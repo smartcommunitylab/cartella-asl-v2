@@ -19,7 +19,7 @@ export class IstitutiComponent implements OnInit {
   filterSearch = false;
   totalRecords: number = 0;
   pageSize: number = 10;
-  menuContent = "In questa pagina trovi tutti gli istituti disponibili nel sistema. Puoi vedere il dettaglio di un singolo istituto cliccando sulla riga corrispondente";
+  menuContent = "In questa pagina trovi tutti gli istituti disponibili nel sistema che hanno una convenzione attiva con questo ente. Puoi vedere il dettaglio di un singolo istituto cliccando sulla riga corrispondente. Se cerchi un istituto in particolare ma non lo trovi - contatta direttamente il referente dell’istituto.";
   showContent: boolean = false;
 
   constructor(
