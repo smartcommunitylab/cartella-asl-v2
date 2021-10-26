@@ -200,6 +200,8 @@ export class EnteDettaglioComponent implements OnInit {
           modalRef.componentInstance.enteResponsabile = this.enteResponsabile;
           modalRef.componentInstance.onAbilita.subscribe((res) => {
             this.dataService.attivaRichiestaRegistrazione(this.enteResponsabile.id).subscribe((res) => {
+              let message = "Hai invitato con successo " +  this.enteResponsabile.nomeReferente + " " + this.enteResponsabile.cognomeReferente + " a gestire il profilo di " + this.ente.nome + " su EDIT - Ente" ;
+              this.growler.growl(message, GrowlerMessageType.Success);
               this.router.navigate(['../../'], { relativeTo: this.route });             
             })
           });
