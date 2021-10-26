@@ -1,29 +1,26 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { SERVER_API_URL } from '../../app.constants';
 import { AuthService } from '../auth/auth.service';
  
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
   
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    // if (!request || !request.url || (request.url.startsWith('http') && !(SERVER_API_URL && request.url.startsWith(SERVER_API_URL)))) {
-    //   return next.handle(request);
-    // }
-
-    const token = this.authService.getAuthorizationHeaderValue();
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: token
-        }
-      });
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (req.url.indexOf('/cartella-asl/api') > 0) {
+        const token = this.authService.getAuthorizationHeaderValue();
+      if (token) {
+        req = req.clone({
+          setHeaders: {
+            Authorization: token
+          }
+        });
+      }
+      return next.handle(req);
+    } else {
+      return next.handle(req);
     }
-    
-    return next.handle(request);
+      
   }
-
 }

@@ -1863,6 +1863,20 @@ export class DataService {
       ).catch(response => this.handleError);
   }
 
+  getAteco(code: string): Observable<any> {
+    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
+    return this.http.get(url,
+      {
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";

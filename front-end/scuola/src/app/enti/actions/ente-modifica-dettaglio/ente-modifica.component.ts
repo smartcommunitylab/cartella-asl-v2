@@ -40,6 +40,9 @@ export class EnteDettaglioModificaComponent implements OnInit {
   tipoInterna: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   tipoAzienda = [{ "id": 1, "value": "Associazione" }, { "id": 5, "value": "Cooperativa" }, { "id": 10, "value": "Impresa" }, { "id": 15, "value": "Libero professionista" }, { "id": 20, "value": "Pubblica amministrazione" }, { "id": 25, "value": "Ente privato/Fondazione" }];
+  ateco: {codice: string, descrizione: string};
+  atecoEntry: any;
+  attachedAteco = [];
 
   breadcrumbItems = [
     {
@@ -56,9 +59,17 @@ export class EnteDettaglioModificaComponent implements OnInit {
   ngOnInit() {
 
     this.route.params.subscribe(params => {
-      let id = params['id'];
+      let id = params['id'];    
+      this.ateco = {codice: '', descrizione: ''};
+      this.atecoEntry = {codice: '', descrizione: ''};    
       this.dataService.getAzienda(id).subscribe((res) => {
         this.ente = res;
+        if (this.ente.atecoCode) {
+          for (var i = 0; i < this.ente.atecoCode.length; i++) {
+            let atecoEntry = {codice: this.ente.atecoCode[i], descrizione: this.ente.atecoDesc[i]};
+            this.attachedAteco.push(atecoEntry);
+          }
+        }
         setTimeout(() => { //ensure that map div is rendered
           this.drawMap();
         }, 0);
@@ -93,11 +104,21 @@ export class EnteDettaglioModificaComponent implements OnInit {
       (this.ente.pec) ? this.ente.pec = this.ente.pec.trim() : this.ente.pec = null;
       (this.ente.phone) ? this.ente.phone = this.ente.phone.trim() : this.ente.phone = null;
 
+      this.ente.atecoCode = [];
+      this.ente.atecoDesc = [];
+
+      if (this.attachedAteco && this.attachedAteco.length > 0) {
+        this.attachedAteco.forEach(ateco => {
+          this.ente.atecoCode.push(ateco.codice);
+          this.ente.atecoDesc.push(ateco.descrizione)
+        })
+      } 
+
       this.dataService.addAzienda(this.ente).subscribe((res) => {
-        this.router.navigate(['../detail', res.id], { relativeTo: this.route });
+        this.router.navigate(['../../'], { relativeTo: this.route });
       },
         (err: any) => console.log(err),
-        () => console.log('get piani attivi'));
+        () => console.log('modifica ente dettaglio'));
 
     } else {
       this.forceErrorDisplay = true;
@@ -179,6 +200,52 @@ export class EnteDettaglioModificaComponent implements OnInit {
     )
 
   formatterAddress = (x: { name: string }) => x.name;
+
+  searchingAteco = false;
+  searchAtecoFailed = false;
+
+  getAteco = (text$: Observable<string>) => 
+    text$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      tap(() => this.searchingAteco = true),
+      switchMap(term => this.dataService.getAteco(term).pipe(
+        map(result => {
+          let entries = [];
+          if(result.Entries && result.Entries.Entry) {            
+            result.Entries.Entry.forEach(element => {
+              entries.push(element);
+            });
+          }
+          return entries;
+        }),
+        tap(() => this.searchAtecoFailed = false),
+        catchError((error) => {
+          console.log(error);
+          this.searchAtecoFailed = true;
+          return of([]);
+        })
+      )),
+      tap(() => this.searchingAteco = false)
+  )
+
+  formatterAteco = (x: {codice: string, descrizione: string}) => x.codice;
+
+  selectAteco(entry: any) {
+    if (entry && entry.codice && entry.descrizione) {
+      let index = this.attachedAteco.findIndex(x => x.codice === entry.codice);
+      if (index < 0) {
+        this.attachedAteco.push(entry);
+      }
+    }
+  }
+
+  deleteAteco(entry: any) {
+    let index = this.attachedAteco.findIndex(x => x.codice === entry.codice);
+    if (index > -1) {
+      this.attachedAteco.splice(index, 1);
+    }
+  }
 
   menuContentShow() {
     this.showContent = !this.showContent;
