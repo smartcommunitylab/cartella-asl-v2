@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { CreaNuovaUtenteModalComponent } from '../crea-nuova-utente-modal/crea-nuova-utente-modal.component';
 import { RuoloCancellaModal } from '../ruolo-cancella-modal/ruolo-cancella-modal.component';
+import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -17,6 +18,7 @@ export class EnteDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
+    private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   ente;
@@ -94,6 +96,8 @@ export class EnteDettaglioComponent implements OnInit {
     modalRef.componentInstance.newUtenteListener.subscribe((role) => {
       this.dataService.aggiungiRuoloReferenteAzienda(role).subscribe(res => {
         this.dataService.getRuoliByEnte().subscribe((roles) => {
+          let message = "Invio inviato con successo. Il delegato riceverà una mail con le istruzioni per attivare il proprio profilo EDIT ed iniziare a gestire i tirocini sull’interfaccia di " + this.ente.nome ;
+          this.growler.growl(message, GrowlerMessageType.Success);
           this.initializeRole(roles);
         });
       });
