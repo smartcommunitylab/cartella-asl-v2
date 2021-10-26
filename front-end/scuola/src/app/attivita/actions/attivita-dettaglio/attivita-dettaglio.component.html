@@ -151,7 +151,7 @@
                 ngbTooltip="Associa almeno uno studente all'attività!">
                 Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
             <button *ngIf="attivita.rendicontazioneCorpo && !attivita.tutorClasse" class="btn btn-primary v-center-inline" placement="bottom"
-                ngbTooltip="Associa o rimuovi studenti da quest’attività" (click)="modificaOreStudenti()">
+                ngbTooltip="Valida, inserisci o modifica le ore svolte" (click)="modificaOreStudenti()">
                 Modifica Ore Studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
             <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])"
                 class="btn btn-primary v-center-inline" placement="bottom"
