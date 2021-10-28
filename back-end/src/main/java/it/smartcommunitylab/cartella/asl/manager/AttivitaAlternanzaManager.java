@@ -150,7 +150,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		sb.append(" ON es.attivitaAlternanzaId=aa.id");
 		if(tutorClasse) {
 			sb.append(" WHERE aa.istitutoId=(:istitutoId)");
-			sb.append(" AND (aa.referenteScuolaCF=(:referenteCf) OR (es.classeStudente IN (:classiAssociate)))");
+			sb.append(" AND (aa.referenteScuolaCF=(:referenteCf) OR es.classeStudente IN (:classiAssociate))");
 		} else {
 			if(tutorScolatico) {
 				sb.append(" WHERE aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
