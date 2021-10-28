@@ -1307,6 +1307,12 @@ export class DataService {
 
   addAzienda(az): Observable<any> {
     let url = this.host + "/azienda";
+    if(az.hasOwnProperty('registrazioneEnte')) {
+      delete az.registrazioneEnte;
+    }
+    if(az.hasOwnProperty('convenzione')) {
+      delete az.convenzione;
+    }
 
     return this.http.post<Azienda>(
       url,
