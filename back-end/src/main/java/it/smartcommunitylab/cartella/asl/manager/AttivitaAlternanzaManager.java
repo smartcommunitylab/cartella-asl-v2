@@ -150,8 +150,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		sb.append(" ON es.attivitaAlternanzaId=aa.id");
 		if(tutorClasse) {
 			sb.append(" WHERE aa.istitutoId=(:istitutoId)");
-			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + Stati.archiviata.toString() + "')");
-			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+			sb.append(" AND (aa.referenteScuolaCF=(:referenteCf) OR (es.classeStudente IN (:classiAssociate)))");
 		} else {
 			if(tutorScolatico) {
 				sb.append(" WHERE aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
@@ -173,7 +172,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(stato)) {
 			Stati statoEnum = Stati.valueOf(stato);
 			if(statoEnum == Stati.archiviata) {
-				if(!tutorScolatico && !tutorClasse) {
+				if(tutorClasse || (!tutorScolatico && !tutorClasse)) {
 					sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
 				}
 			} else {
