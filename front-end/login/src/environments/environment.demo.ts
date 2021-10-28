@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  prefixScuola: 'asl-scuola',
+  prefixScuola: 'asl-scuola-v2',
   prefixStudente: 'edit-studente',
-  prefixEnte: 'asl-azienda'
+  prefixEnte: 'asl-azienda-v2'
 };

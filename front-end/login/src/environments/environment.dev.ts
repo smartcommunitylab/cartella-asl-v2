@@ -4,8 +4,8 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  prefixScuola: 'asl-scuola',
-  prefixStudente: 'edit-studente',
-  prefixEnte: 'asl-azienda'
+    production: false,
+    prefixScuola: 'asl-scuola-v2',
+    prefixStudente: 'edit-studente',
+    prefixEnte: 'asl-azienda-v2'
 };
