@@ -173,7 +173,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(stato)) {
 			Stati statoEnum = Stati.valueOf(stato);
 			if(statoEnum == Stati.archiviata) {
-				if(tutorScolatico && !tutorClasse) {
+				if(!tutorScolatico && !tutorClasse) {
 					sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
 				}
 			} else {
