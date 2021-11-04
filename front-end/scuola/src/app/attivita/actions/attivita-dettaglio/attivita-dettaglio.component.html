@@ -101,8 +101,7 @@
                 <span class="row"><span class="text-semibold">Descrizione:&nbsp;</span>{{attivita.descrizione}}</span>
                 <span class="row"><span
                         class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
-                <span *ngIf="!tipoInterna" class="row"><span
-                        class="text-semibold">Ente:&nbsp;</span>{{attivita.nomeEnte}}</span>
+                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Ente:&nbsp;</span><a [routerLink]="" (click)="routeEntity()">{{ attivita.nomeEnte }}</a></span>
                 <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
                 <span class="row"><span class="text-semibold">Tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
@@ -255,7 +254,7 @@
                             <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ conv.dataFine | date:'dd/MM/yyyy' }}</span>
                         </td>
                         <td class="pointer">
-                            <span class="align-middle"><a [routerLink]="" (click)="routeEntity(conv)">{{ conv.nomeEnte }}</a></span>
+                            <span class="align-middle"><a [routerLink]="" (click)="routeEntity()">{{ conv.nomeEnte }}</a></span>
                         </td>
                         <!-- stato -->
                         <td class="pointer">

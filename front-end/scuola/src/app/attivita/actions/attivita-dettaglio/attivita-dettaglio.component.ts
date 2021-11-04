@@ -354,8 +354,8 @@ styleOptionConvenzione(convenzione) {
     });
   }
 
-  routeEntity(conv) {
-    this.router.navigateByUrl('/enti/detail/' + conv.enteId); 
+  routeEntity() {
+    this.router.navigateByUrl('/enti/detail/' + this.ente.id); 
   }
   
 }
