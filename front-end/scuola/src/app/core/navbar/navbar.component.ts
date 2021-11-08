@@ -142,7 +142,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     navigateToAttivita() {
-        this.storageService.clearAll();
+        // this.storageService.clearAll();
         this.router.navigate(['/attivita/list', (new Date()).getTime()], {skipLocationChange: true});
     }
 
