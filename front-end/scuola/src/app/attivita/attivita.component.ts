@@ -10,6 +10,7 @@ import { AttivitaAlternanza } from '../shared/classes/AttivitaAlternanza.class';
 import { environment } from '../../environments/environment';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-attivita-modal-primo.component';
+import { StateStorageService } from '../core/auth/state-storage.service';
 
 @Component({
     selector: 'attivita',
@@ -46,7 +47,7 @@ export class AttivitaComponent implements OnInit {
         public dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
-        private location: Location,
+        private storageService: StateStorageService,
         private modalService: NgbModal
     ) {
         route.params.subscribe(params => {
@@ -59,7 +60,7 @@ export class AttivitaComponent implements OnInit {
     ngOnInit(): void {
         this.title = 'Lista attività';
         // retrieve filter states.
-        this.filtro = JSON.parse(localStorage.getItem('filtroAttivita'));
+        this.filtro = JSON.parse(this.storageService.getfiltroAttivita());
         if (!this.filtro) {
             this.filtro = {
                 tipologia: '',
@@ -370,6 +371,6 @@ export class AttivitaComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        localStorage.setItem('filtroAttivita', JSON.stringify(this.filtro));
+        this.storageService.storefiltroAttivita(JSON.stringify(this.filtro));
     }
 }

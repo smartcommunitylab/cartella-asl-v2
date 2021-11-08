@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
+import { StateStorageService } from '../core/auth/state-storage.service';
 
 @Component({
     selector: 'offerte',
@@ -42,14 +43,14 @@ export class OfferteComponent implements OnInit {
         private dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
-        private location: Location,
+        private storageService: StateStorageService,
         private modalService: NgbModal
     ) {}
 
     ngOnInit(): void {
         this.title = 'Lista offerte';
         // retrieve filter states.
-        this.filtro = JSON.parse(localStorage.getItem('filtroOfferte'));
+        this.filtro = JSON.parse(this.storageService.getfiltroOfferta());
         if (!this.filtro) {
             this.filtro = {
                 tipologia: '',
@@ -225,7 +226,7 @@ export class OfferteComponent implements OnInit {
     }
 
     ngOnDestroy() {
-        localStorage.setItem('filtroOfferte', JSON.stringify(this.filtro));
+        this.storageService.storefiltroOfferta(JSON.stringify(this.filtro))
     }
 
 }
