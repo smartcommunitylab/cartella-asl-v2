@@ -184,19 +184,6 @@
                     </div>
                 </div>
                 <div class="row v-center form-group">
-                    <!-- <div class="col-5"
-                        [class.has-danger]="referenteScuolaInput.invalid && (referenteScuolaInput.dirty || referenteScuolaInput.touched)">
-                        <input type="text" class="form-control" [(ngModel)]="attivita.referenteScuola"
-                            id="referenteScuola" #referenteScuolaInput="ngModel"
-                            (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
-                        <label for="referenteScuola" *ngIf="attivita.referenteScuola" class="active">Referente
-                            scolastico</label>
-                        <label for="referenteScuola" *ngIf="!attivita.referenteScuola">Referente scolastico</label>
-                        <div class="invalid-feedback"
-                            [class.d-block]="!referenteScuolaInput.value || forceReferenteScuolaErrorDisplay">
-                            Campo necessario.
-                        </div>
-                    </div> -->
                     <div class="col-5">
                         <ng-template #rtReferente let-riferente="result" let-term="term">
                             <div class="row">
@@ -208,18 +195,18 @@
                             <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
                                 <span  class="sr-only">Caricamento...</span>
                             </small>
-                        <label for="referente" *ngIf="riferente" class="active">Referente scolastico</label>
-                        <label for="referente" *ngIf="!riferente">Referente scolastico</label>
-                        <div class="invalid-feedback" [class.d-block]="forcereferenteDisplay">Campo necessario.</div>
-                        <div class="text-success text-semibold" *ngIf="forceSelectionMsg">Account referente scolastico selezionato</div>
+                        <label for="referente" *ngIf="riferente" class="active">Tutor scolastico</label>
+                        <label for="referente" *ngIf="!riferente">Tutor scolastico</label>
+                        <div class="invalid-feedback" [class.d-block]="forceReferenteScuolaErrorDisplay">Campo necessario.</div>
+                        <div class="text-success text-semibold" *ngIf="forceSelectionMsg">Account tutor scolastico selezionato</div>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">
                         <input disabled type="text" class="form-control" [(ngModel)]="attivita.referenteScuolaCF"
                             id="referenteScuolaCF" (focusout)="trimValue($event, 'trim')">
                         <label for="referenteScuolaCF" *ngIf="attivita.referenteScuolaCF" class="active">Codice fiscale
-                            referente scolastico</label>
-                        <label for="referenteScuolaCF" *ngIf="!attivita.referenteScuolaCF">Codice fiscale referente
+                            tutor scolastico</label>
+                        <label for="referenteScuolaCF" *ngIf="!attivita.referenteScuolaCF">Codice fiscale tutor
                             scolastico</label>
                     </div>
                 </div>

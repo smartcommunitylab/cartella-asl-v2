@@ -513,8 +513,8 @@ export class IstitutoComponent implements OnInit {
         ids.push(element.id);
       });
       this.dataService.aggiungiDocentiAccount(ids).subscribe(res => {
-          this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);
-          this.ngOnInit();
+        this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);  
+        this.ngOnInit();
       });
     });
   

@@ -29,8 +29,6 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportUtilizzoAzienda;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
-import it.smartcommunitylab.cartella.asl.services.PARIXService;
-import it.smartcommunitylab.cartella.asl.services.parix.DettaglioImpresa;
 
 @RestController
 public class EnteController implements AslController {
@@ -42,8 +40,8 @@ public class EnteController implements AslController {
 	private ASLRolesValidator usersValidator;
 	@Autowired
 	private AuditManager auditManager;	
-	@Autowired
-	private PARIXService parixService;
+	//@Autowired
+	//private PARIXService parixService;
 
 	@GetMapping("/api/azienda/search")
 	public @ResponseBody Page<Azienda> searchAziende(
@@ -63,7 +61,10 @@ public class EnteController implements AslController {
 	public @ResponseBody Azienda getAzienda(
 			@PathVariable String id,
 			HttpServletRequest request) throws Exception {
-		usersValidator.checkRoles(request,  Sets.newHashSet(ASLRole.DIRIGENTE_SCOLASTICO, ASLRole.FUNZIONE_STRUMENTALE));
+		usersValidator.checkRoles(request,  Sets.newHashSet(
+				ASLRole.DIRIGENTE_SCOLASTICO, 
+				ASLRole.FUNZIONE_STRUMENTALE,
+				ASLRole.TUTOR_SCOLASTICO));
 		Azienda azienda = aziendaManager.getAzienda(id);
 		if(azienda == null) {
 			throw new BadRequestException("entity not found");

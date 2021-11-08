@@ -3,8 +3,8 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular
 import { Observable } from 'rxjs/Observable';
 import { catchError, map, } from 'rxjs/operators';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { serverAPIConfig } from '../serverAPIConfig'
 import { PermissionService } from './permission.service';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -13,7 +13,7 @@ const httpOptions = {
 export class DataService {
 
 
-  host: string = serverAPIConfig.host;
+  host: string;
 
   static growler;
 
@@ -27,6 +27,7 @@ export class DataService {
     private growler: GrowlerService,
     private permissionService: PermissionService) {
     DataService.growler = growler;
+    this.host = environment.serverAPIURL;
   }
 
 
@@ -46,6 +47,8 @@ export class DataService {
         params = params.append('role', filters.role);
       if (filters.text)
         params = params.append('text', filters.text);
+      if (filters.userDomainId)
+        params = params.append('userDomainId', filters.userDomainId);
     }
 
     return this.http.get<any>(
@@ -214,7 +217,7 @@ export class DataService {
     params = params.append('text', text);
 
     return this.http.get<any>(
-      this.host + "/istituto/search",
+      this.host + "/dashboard/istituti",
       {
         params: params
       })

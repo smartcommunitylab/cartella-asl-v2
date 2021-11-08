@@ -1,10 +1,16 @@
 ## Building application.
 
-*  DEV Mode (default)
+*  Development Mode (default)
 	mvn -f azienda\pom.xml clean package
 
-*  Production mode
+*  Production machine
 	mvn -f azienda\pom.xml clean package -P prod
+
+*  Demo machine
+   mvn -f azienda\pom.xml clean package -P demo
+
+*  Dev machine
+   mvn -f azienda\pom.xml clean package -P dev
 
 ## Running the Application
 1. Install `Node.js 12.13.1` or higher. *IMPORTANT: The server uses ES2015 features AND the Angular CLI so you need Node 6.11 or higher!!!!*

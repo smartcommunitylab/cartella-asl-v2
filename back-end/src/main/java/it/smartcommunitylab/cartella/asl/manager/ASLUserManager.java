@@ -98,8 +98,12 @@ public class ASLUserManager extends DataEntityManager {
 	}
 	
 	public ASLUser createASLUser(ASLUser user) {
-		user.setCf(user.getCf().trim().toUpperCase());
-		user.setEmail(user.getEmail().trim().toLowerCase());
+		if(Utils.isNotEmpty(user.getCf())) {
+			user.setCf(user.getCf().trim().toUpperCase());
+		}
+		if(Utils.isNotEmpty(user.getEmail())) {
+			user.setEmail(user.getEmail().trim().toLowerCase());
+		}
 		ASLUser old = getExistingASLUser(user);
 		if (old != null) {
 			user.setId(old.getId());
@@ -120,6 +124,11 @@ public class ASLUserManager extends DataEntityManager {
 	public ASLUser getExistingASLUser(String email) {
 		ASLUser old = userRepository.findByEmail(email);
 		return old;
+	}
+	
+	public ASLUser getASLUserByCf(String cf) {
+		ASLUser old = userRepository.findByCf(cf);
+		return old;		
 	}
 	
 	public ASLUser getASLUser(long id) {
@@ -147,8 +156,12 @@ public class ASLUserManager extends DataEntityManager {
 	}
 	
 	public void updateASLUser(ASLUser user) {
-		user.setCf(user.getCf().trim().toUpperCase());
-		user.setEmail(user.getEmail().trim().toLowerCase());
+		if(Utils.isNotEmpty(user.getCf())) {
+			user.setCf(user.getCf().trim().toUpperCase());
+		}
+		if(Utils.isNotEmpty(user.getEmail())) {
+			user.setEmail(user.getEmail().trim().toLowerCase());
+		}
 		userRepository.update(user);
 	}
 	

@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../core/services/data.service';
-import { config } from '../config';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'cm-home',
@@ -16,10 +16,12 @@ export class HomeComponent implements OnInit {
   type: string = '';
   errMsg: string = '';
   actualOption;
+  env = environment;
+
   options = [
-    { "id": 1, "name": "Scuola", "prefix": config.prefixScuola, "disabled": false }, 
-    { "id": 2, "name": "Studente", "prefix": config.prefixStudente, "disabled": false }, 
-    { "id": 3, "name": "Ente Ospitante", "prefix": config.prefixEnte, "disabled": false }
+    { "id": 1, "name": "Scuola", "prefix": this.env.prefixScuola, "disabled": false }, 
+    { "id": 2, "name": "Studente", "prefix": this.env.prefixStudente, "disabled": false }, 
+    { "id": 3, "name": "Ente Ospitante", "prefix": this.env.prefixEnte, "disabled": false }
   ];
 
   constructor(

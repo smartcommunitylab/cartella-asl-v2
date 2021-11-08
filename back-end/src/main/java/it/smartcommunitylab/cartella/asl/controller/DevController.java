@@ -279,6 +279,8 @@ public class DevController {
 		apiUpdateManager.importCartellaAziende();
 		apiUpdateManager.importCartellaStudenti();
 		apiUpdateManager.importCartellaRegistration();
+		apiUpdateManager.importInfoTNProfessoriClassi();
+		apiUpdateManager.importInfoTNProfessori();
 	}
 
 	/**

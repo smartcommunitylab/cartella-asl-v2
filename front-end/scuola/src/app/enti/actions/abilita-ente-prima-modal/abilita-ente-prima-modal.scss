@@ -6,6 +6,13 @@
     .card-wrapper {
         margin: 10px;
     }
+    .card-inner1 {
+        border: 3px solid #D1D6DB;
+        left: 20%;
+        width: 60%;
+        opacity: 1;
+        position: relative;
+    }
     .card-inner {
         border: 3px solid #FF9700;
         left: 10%;
@@ -14,7 +21,7 @@
         position: relative;
     }
     .card-body {
-        background: #F0F6FC 0% 0% no-repeat padding-box;
+        // background: #F0F6FC 0% 0% no-repeat padding-box;
         font-size: 25px;
     }
 }

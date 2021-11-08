@@ -24,4 +24,6 @@ public interface RegistrazioneEnteRepository extends JpaRepository<Registrazione
 	
 	public Optional<RegistrazioneEnte> findOneByAziendaIdAndRole(String aziendaId, ASLRole role);
 	
+	public Optional<RegistrazioneEnte> findOneByAziendaIdAndUserId(String aziendaId, Long userId);
+	
 }

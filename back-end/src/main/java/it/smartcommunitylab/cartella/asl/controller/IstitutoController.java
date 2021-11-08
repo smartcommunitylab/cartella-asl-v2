@@ -1,5 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
+import java.time.LocalDate;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -50,7 +53,9 @@ public class IstitutoController implements AslController {
 	
 	@PutMapping("/api/istituto/{istitutoId}/sogliaOraria/{hoursThreshold}")
 	public @ResponseBody void updateHoursThreshold(@PathVariable String istitutoId, @PathVariable Double hoursThreshold, HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
 		
 		if (hoursThreshold < 0 || hoursThreshold > 1) {
 			throw new BadRequestException(errorLabelManager.get("hoursThreshold.outofrange"));
@@ -90,8 +95,11 @@ public class IstitutoController implements AslController {
 	public @ResponseBody Istituzione getIstitutoProfile(
 			@PathVariable String istitutoId, 
 			HttpServletRequest request) throws Exception {
-		//usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		Istituzione istituto = istituzioneManager.getIstituto(istitutoId);
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
+		Istituzione istituto = istituzioneManager.getIstituto(istitutoId, null);
 		if(istituto == null) {
 			throw new BadRequestException("entity not found");
 		}
@@ -103,9 +111,14 @@ public class IstitutoController implements AslController {
 	
 	@GetMapping(value = "/api/istituto/search")
 	public @ResponseBody Page<Istituzione> searchIstituti(
+			@RequestParam String istitutoId,
 			@RequestParam String text, 
 			Pageable pageRequest,
 			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
 		Page<Istituzione> result = istituzioneManager.findIstituti(text, pageRequest);
 		if (logger.isInfoEnabled()) {
 			logger.info(String.format("searchIstituti: %s", text));
@@ -117,7 +130,8 @@ public class IstitutoController implements AslController {
 	public @ResponseBody Istituzione updateIstituto(
 			@RequestBody Istituzione istituto,
 			HttpServletRequest request) throws Exception {
-		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istituto.getId()), 
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istituto.getId()), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istituto.getId())));
 		
 		if (logger.isInfoEnabled()) {
@@ -135,13 +149,50 @@ public class IstitutoController implements AslController {
 			@RequestParam(required = false) String text,
 			Pageable pageRequest, 
 			HttpServletRequest request) throws Exception {
-		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
 		Page<ReportIstitutoEnte> result = istituzioneManager.findIstitutiByEnte(enteId, text, pageRequest);
 		if (logger.isInfoEnabled()) {
 			logger.info(String.format("searchIstitutiByEnte: %s - %s", enteId, text));
 		}		
 		return result;		
+	}
+	
+	@GetMapping("/api/istituto/{istitutoId}/ente")
+	public @ResponseBody Istituzione getIstitutoByEnte(
+			@PathVariable String istitutoId, 
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Istituzione istituto = istituzioneManager.getIstituto(istitutoId, enteId);
+		if(istituto == null) {
+			throw new BadRequestException("entity not found");
+		}
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("getIstitutoByEnte: %s / %s", istitutoId, enteId));
+		}
+		return istituto;
+	}
+	
+	@GetMapping(value = "/api/istituto/offerta")
+	public @ResponseBody Page<Istituzione> searchIstitutiByOfferta(
+			@RequestParam String enteId,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo,			
+			@RequestParam(required=false) String text, 
+			Pageable pageRequest,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		Page<Istituzione> result = istituzioneManager.findIstitutiByOfferta(enteId, dateFrom, dateTo, text, pageRequest);
+		if (logger.isInfoEnabled()) {
+			logger.info(String.format("searchIstitutiByOfferta: %s / %s / %s / %s", enteId, dateFrom, dateTo, text));
+		}		
+		return result;
 	}
 	
 }

@@ -7,23 +7,53 @@
     </div>
 </div>
 <div class="modal-body">
-    <p class="text-center text-bold color-1">Sarà inviato un invito alla mail <a href="" onclick="return false;"
-            class="footer-textUnderline">{{ ente.email }}</a> per accedere al sistema come ente "{{ ente.nome }}"</p>
+    <p class="text-center color-1">
+        Hai scelto di invitare <span class="text-bold">{{ enteResponsabile.nomeReferente }}&nbsp;{{ enteResponsabile.cognomeReferente }}</span> a diventare responsabile della gestione del
+        profilo EDIT dell’ente <span class="text-bold">{{ ente.nome}}</span>
+    </p>
+    <!-- <p class="text-center text-bold color-1">Sarà inviato un invito alla mail <a href="" onclick="return false;"
+            class="footer-textUnderline">{{ ente.email }}</a> per accedere al sistema come ente "{{ ente.nome }}"</p> -->
+    <br />
+    <div class="card-wrapper">
+        <div class="card-inner1">
+            <div class="card-body">
+                <p class="text-center text-semibold">Prima di tutto, controlla che i seguenti dati siano corretti.</p>
+                <br />
+                <div class="row">
+                    <span class="col-1"></span>
+                    <span class="col-5">
+                        <p><span class="text-semibold">Nome:&nbsp;</span>{{ enteResponsabile.nomeReferente }}</p>
+                    </span>
+                    <span class="col-6">
+                        <p><span class="text-semibold">Codice fiscale:&nbsp;</span>{{ enteResponsabile.cf }}</p>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="col-1"></span>
+                    <span class="col-5">
+                        <p><span class="text-semibold">Cognome:&nbsp;</span>{{ enteResponsabile.cognomeReferente }}</p>
+                    </span>
+                    <span class="col-6">
+                        <p><span class="text-semibold">Email:&nbsp;</span>{{ enteResponsabile.email }}</p>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
     <br />
     <div class="card-wrapper">
         <div class="card-inner">
             <div class="card-body">
-                <p><span class="text-bold">La mail inviata dal sistema a <a href="" onclick="return false;"
-                            class="footer-textUnderline">{{ ente.email }}</a> conterrà un link per l’attivazione del
-                        profilo</span></p>
-                <p>Clicando sul link l’ente potrà prendere il controllo del proprio profilo sul sistema EDIT. Da quel
-                    momento in poi, la scuola non sarà più in grado di modificare le informazioni relative all’ente, né di creare
-                    offerte a suo nome.</p>
+                <p>Il sistema invierà una mail all’indirizzo <span class="text-bold">{{ enteResponsabile.email }}</span> tramite la quale <span class="text-bold">{{ enteResponsabile.nomeReferente }}&nbsp;{{ enteResponsabile.cognomeReferente }}</span> potrà associare la propria identità
+                    digitale (SPID) al profilo EDIT dell’ente <span class="text-bold">{{ ente.nome }}</span></p>
                 <br />
-                <p><span class="text-bold">Controlla che la mail di riferimento sia corretta e che vi siano accordi in
-                        essere con l’ente invitato!</span></p>
-                <p>L’invito ad accedere permetterà all’ente di:</p>
+                <p>Se la procedura di autenticazione andrà a buon fine, <span class="text-bold">{{ enteResponsabile.nomeReferente }}&nbsp;{{ enteResponsabile.cognomeReferente }}</span> 
+                    diventerà quindi responsabile del profilo dell’ente <span class="text-bold">{{ ente.nome }}</span>
+                </p>
                 <br />
+                <p>La scuola non potrà più modificare nessuna informazione del profilo ente, che potrà: </p>
+                <br />
+                <p>Da quel momento in poi, <span class="text-bold">{{ enteResponsabile.nomeReferente }}&nbsp;{{ enteResponsabile.cognomeReferente }}</span> potrà: </p>
                 <ul>
                     <li>
                         <p>Validare autonomamente le presenze dei ragazzi che vi svolgono tirocinio</p>
@@ -32,7 +62,9 @@
                         <p>Creare offerte di attività per le scuole</p>
                     </li>
                     <li>
-                        <p>Visualizzare lo stato delle attività presso la sua sede</p>
+                        <p>Visualizzare lo stato dei tirocini presso la sua sede, assieme ad alcune informazioni
+                            personali degli studenti
+                            (nome, cognome, classe, data di nascita) coinvolti</p>
                     </li>
                 </ul>
 

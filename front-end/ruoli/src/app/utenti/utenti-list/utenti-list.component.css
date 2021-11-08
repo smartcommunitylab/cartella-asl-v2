@@ -1,0 +1,4 @@
+::ng-deep .tooltip-inner {
+  font-size: 12px !important;
+  max-width: 350px;
+}
