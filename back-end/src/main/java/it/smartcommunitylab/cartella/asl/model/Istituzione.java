@@ -39,6 +39,7 @@ public class Istituzione {
 	
 	private String rdpAddress;
 	private String rdpEmail;
+	private String rdpPec;
 	private String rdpName;
 	private String rdpPhoneFax;
 	private String privacyLink;
@@ -204,5 +205,13 @@ public class Istituzione {
 
 	public void setConvenzione(Convenzione convenzione) {
 		this.convenzione = convenzione;
+	}
+
+	public String getRdpPec() {
+		return rdpPec;
+	}
+
+	public void setRdpPec(String rdpPec) {
+		this.rdpPec = rdpPec;
 	}
 }
