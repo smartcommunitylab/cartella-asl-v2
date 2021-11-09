@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { NewAttivtaModalPrimo } from './actions/new-attivita-modal-primo/new-attivita-modal-primo.component';
 import { StateStorageService } from '../core/auth/state-storage.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'attivita',
@@ -29,6 +30,8 @@ export class AttivitaComponent implements OnInit {
     currentpage: number = 0;
     tipologie;
     tipologia = "Tipologia";
+    anni = [];
+    anno = 'Anno scolastico';
     stato;
     menuContent = "In questa pagina trovi tutte le attività. Puoi cercarle o filtrarle per tipologia o stato. Con il tasto blu sulla destra puoi andare direttamente alla gestione presenze. Per visualizzare un’attività, clicca sulla riga corrispondente.";
     showContent: boolean = false;
@@ -55,6 +58,13 @@ export class AttivitaComponent implements OnInit {
                 this.ngOnInit();
             }
         })
+
+        var i =moment();
+        var p = moment(i).add(-1, 'year');
+        var pp = moment(p).add(-1, 'year');
+        this.anni[0] = this.dataService.getAnnoScolstico(moment(i));
+        this.anni[1] = this.dataService.getAnnoScolstico(moment(p));
+        this.anni[2] = this.dataService.getAnnoScolstico(moment(pp));
     }
 
     ngOnInit(): void {
@@ -65,7 +75,8 @@ export class AttivitaComponent implements OnInit {
             this.filtro = {
                 tipologia: '',
                 titolo: '',
-                stato: ''
+                stato: '',
+                anno: ''
             };
         }
         if (this.filtro.stato)
@@ -74,6 +85,11 @@ export class AttivitaComponent implements OnInit {
             this.tipologia = this.filtro.tipologia;
         } else {
             this.tipologia = 'Tipologia';
+        }
+        if (this.filtro.anno) {
+            this.anno = this.filtro.anno;
+        } else {
+            this.anno = 'Anno scolastico';
         }
         
         console.log(this.route);
@@ -183,6 +199,17 @@ export class AttivitaComponent implements OnInit {
             this.filtro.tipologia = this.tipologia;
         } else {
             this.filtro.tipologia = null;
+        }
+        this.filterSearch = true;
+        this.getAttivitaAltPage(1);
+    }
+
+    selectAnnoFilter() {
+        this.cmPagination.changePage(1);
+        if (this.anno && this.anno != 'Anno scolastico') {
+            this.filtro.anno = this.anno;
+        } else {
+            this.filtro.anno = null;
         }
         this.filterSearch = true;
         this.getAttivitaAltPage(1);
@@ -364,10 +391,41 @@ export class AttivitaComponent implements OnInit {
             titolo: '',
             stato: ''
         }
-        this.tipologia = "Tipologia"
+        this.tipologia = "Tipologia";
+        this.anno = 'Anno scolastico';
         this.stato = undefined;
         this.filterSearch = false;
         this.getAttivitaAltPage(1);
+    }
+
+    customTipologiaOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.tipologia != 'Tipologia') {
+            return style;
+        }
+    }
+
+    customAnnoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.anno != 'Anno scolastico') {
+            return style;
+        }
+    }
+
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
     }
 
     ngOnDestroy() {
