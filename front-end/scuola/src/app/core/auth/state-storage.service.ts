@@ -34,7 +34,7 @@ export class StateStorageService {
     sessionStorage.setItem(this.filtroStudenteKey, localValue);
   }
 
-  getfiltroOfferta(): string | null | undefined {
+  getfiltroStudente(): string | null | undefined {
     return sessionStorage.getItem(this.filtroStudenteKey);
   }
 

@@ -32,7 +32,7 @@
   <div class="row">
     <div class="col-4">
       <div class="row form-group center-formGroup" [ngStyle]="{'margin-top':'0'}">
-        <input type="text" id="cercaStudenti" class="col-10 form-control" [(ngModel)]="filtro.text"
+        <input type="text" id="cercaStudenti" class="col-10 form-control" [ngStyle]="customSearchOption()" [(ngModel)]="filtro.text"
           (keyup.enter)="cerca()">
         <label for="cercaStudenti" class="active">Cerca CF, cognome o classe</label>
         <it-button class="col-2 v-center-inline" (click)="cerca()">

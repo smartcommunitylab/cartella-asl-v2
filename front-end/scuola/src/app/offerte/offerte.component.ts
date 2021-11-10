@@ -47,6 +47,7 @@ export class OfferteComponent implements OnInit {
 
     ngOnInit(): void {
         this.title = 'Lista offerte';
+        this.tipologia = 'Tipologia';
         this.filtro = {
             tipologia: '',
             titolo: '',
@@ -192,11 +193,51 @@ export class OfferteComponent implements OnInit {
             stato: '',
             ownerIstituto: null
         }
-        this.tipologia = "Tipologie"
+        this.tipologia = "Tipologia"
         this.stato = undefined;
         this.owner = undefined;
         this.filterSearch = false;
         this.getOffertePage(1);
+    }
+
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+
+    customTipologiaOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.tipologia != 'Tipologia') {
+            return style;
+        }
+    }
+
+    customSourceOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.owner != undefined) {
+            return style;
+        }
+    }
+
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
     }
 
 }
