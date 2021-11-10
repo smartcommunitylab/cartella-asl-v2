@@ -529,7 +529,7 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato != null)
       params = params.append('stato', filter.stato);
-    if (filter.anno != null)
+    if (filter.anno)
       params = params.append('annoScolastico', filter.anno);
 
     params = params.append('istitutoId', this.istitutoId);

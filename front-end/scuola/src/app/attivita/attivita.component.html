@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col-5">
             <div class="row form-group" [ngStyle]="{'margin-top':'0'}">
-                <input type="text" id="cercaAttivita" class="col-10 form-control" [(ngModel)]="filtro.titolo"
+                <input type="text" id="cercaAttivita" class="col-10 form-control" [ngStyle]="customSearchOption()" [(ngModel)]="filtro.titolo"
                     (keyup.enter)="cerca()">
                 <label *ngIf="!filtro.titolo" for="cercaAttivita">Cerca titolo, CF, cognome o classe</label>
                 <it-button class="col-2 v-center-inline" (click)="cerca()">

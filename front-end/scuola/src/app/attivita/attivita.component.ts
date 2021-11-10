@@ -428,6 +428,16 @@ export class AttivitaComponent implements OnInit {
         }
     }
 
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+
     ngOnDestroy() {
         this.storageService.storefiltroAttivita(JSON.stringify(this.filtro));
     }
