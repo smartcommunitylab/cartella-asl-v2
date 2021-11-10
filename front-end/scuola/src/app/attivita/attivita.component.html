@@ -43,34 +43,34 @@
     <br />
     <br />
     <div class="row">
-        <div class="col-3 v-center-inline">
-            <div class="form-group center-formGroup">
-                <input type="text" id="cercaAttivita" class="form-control search-input" [(ngModel)]="filtro.titolo"
+        <div class="col-5">
+            <div class="row form-group" [ngStyle]="{'margin-top':'0'}">
+                <input type="text" id="cercaAttivita" class="col-10 form-control" [(ngModel)]="filtro.titolo"
                     (keyup.enter)="cerca()">
                 <label *ngIf="!filtro.titolo" for="cercaAttivita">Cerca titolo, CF, cognome o classe</label>
+                <it-button class="col-2 v-center-inline" (click)="cerca()">
+                    <svg class="icon icon-primary">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
+                    </svg>
+                </it-button>    
             </div>
-            <it-button class="v-center-inline" (click)="cerca()">
-                <svg class="icon icon-primary">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-search"></use>
-                </svg>
-            </it-button>
         </div>
         <div class="col-3">
-            <select class="custom-select form-control" [ngStyle]="customTipologiaOption()" style="width: 300px;" [(ngModel)]="tipologia"
+            <select class="custom-select form-control" [ngStyle]="customTipologiaOption()" [(ngModel)]="tipologia"
                 (ngModelChange)="selectTipologiaFilter()">
                 <option selected="selected">Tipologia</option>
                 <option [value]="tipologia.id" *ngFor="let tipologia of tipologie">{{tipologia.titolo}}</option>
             </select>
         </div>
-        <div class="col-3">
-            <select class="custom-select form-control" [ngStyle]="customAnnoOption()" style="width: 300px;" [(ngModel)]="anno"
+        <div class="col-2">
+            <select class="custom-select form-control" [ngStyle]="customAnnoOption()" [(ngModel)]="anno"
                 (ngModelChange)="selectAnnoFilter()">
                 <option selected="selected">Anno scolastico</option>
                 <option [value]="anno" *ngFor="let anno of anni">{{anno}}</option>
             </select>
         </div>
-        <div class="col-3">
-            <select class="float-right custom-select form-control" [ngStyle]="customStatoOption()" style="width: 300px;" [(ngModel)]="stato"
+        <div class="col-2">
+            <select class="float-right custom-select form-control" [ngStyle]="customStatoOption()" [(ngModel)]="stato"
                 (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Stato</option>
                 <option [ngValue]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
