@@ -17,7 +17,6 @@ import { CreaCompetenzaModalComponent } from './actions/create-competenza-modal/
 export class CompetenzeComponent implements OnInit {
   @ViewChild('cmPagination') private cmPagination: PaginationComponent;
   competenze: Competenza[] = [];
-  filterText
   title: string;
   filtro;
   filterSearch = false;
@@ -40,7 +39,7 @@ export class CompetenzeComponent implements OnInit {
     this.filtro = {
       owner: [this.dataService.istitutoId, 'ISFOL'],
       stato: null,
-      filterText: null
+      filterText: ''
     }
   }
 
@@ -101,11 +100,6 @@ export class CompetenzeComponent implements OnInit {
   cerca() {
     if (this.cmPagination)
       this.cmPagination.changePage(1);
-    if (this.filterText) {
-      this.filtro.filterText = this.filterText;
-    } else {
-      this.filtro.filterText = null;
-    }
     this.filterSearch = true;
     this.getCompetenzePage(1);
   }
@@ -133,12 +127,42 @@ export class CompetenzeComponent implements OnInit {
   refreshCompetenza() {
     this.stato = undefined;
     this.filtro.stato = null;
-    this.filterText = null;
-    this.filtro.filterText = null;
+    this.filtro.filterText = '';
     this.owner = undefined;
     this.filtro.owner = [this.dataService.istitutoId, 'ISFOL'];
     this.filterSearch = false;
     this.getCompetenzePage(1);
     // this.router.navigate(['/competenza/list'], { relativeTo: this.route });
   }
+
+  customSourceOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.owner != undefined) {
+        return style;
+    }
+  }
+
+  customSearchOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.filtro.filterText != '') {
+        return style;
+    }
+  }
+
+  customStatoOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.stato != undefined) {
+        return style;
+    }
+  }
+
 }
