@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class StateStorageService {
   private previousUrlKey = 'previousUrl';
   private filtroAttivitaKey = 'filtroAttivita';
-  private filtroOffertaKey = 'filtroOfferte';
+  private filtroStudenteKey = 'filtroStudente';
 
   constructor() {}
 
@@ -30,18 +30,18 @@ export class StateStorageService {
     return sessionStorage.getItem(this.filtroAttivitaKey);
   }
   
-  storefiltroOfferta(localValue: string): void {
-    sessionStorage.setItem(this.filtroOffertaKey, localValue);
+  storefiltroStudente(localValue: string): void {
+    sessionStorage.setItem(this.filtroStudenteKey, localValue);
   }
 
   getfiltroOfferta(): string | null | undefined {
-    return sessionStorage.getItem(this.filtroOffertaKey);
+    return sessionStorage.getItem(this.filtroStudenteKey);
   }
 
   clearAll() {
     sessionStorage.removeItem(this.previousUrlKey);
     sessionStorage.removeItem(this.filtroAttivitaKey);
-    sessionStorage.removeItem(this.filtroOffertaKey);
+    sessionStorage.removeItem(this.filtroStudenteKey);
   }
   
 }
