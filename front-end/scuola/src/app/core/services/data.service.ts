@@ -884,10 +884,7 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato)
       params = params.append('stato', filter.stato);
-    if (filter.ownerIstituto != null) {
-      params = params.append('ownerIstituto', filter.ownerIstituto);
-    }
-
+    
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
     params = params.append('size', pageSize);

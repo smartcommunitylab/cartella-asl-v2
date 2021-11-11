@@ -24,7 +24,6 @@ export class OfferteComponent implements OnInit {
     tipologie;
     tipologia = "Tipologia";
     stato;
-    owner;
     menuContent = "In questa pagina trovi tutte le offerte accessibili al tuo istituto. Puoi crearne di nuove, o cercare nella lista. Per creare un’attività a partire da un’offerta, clicca sulla riga e vai alla sua pagina.";
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
@@ -120,22 +119,6 @@ export class OfferteComponent implements OnInit {
         this.getOffertePage(1);
     }
 
-    selectOwnerFilter() {
-        if (this.cmPagination)
-            this.cmPagination.changePage(1);
-        if (this.owner) {
-            if (this.owner == 'istituto') {
-                this.filtro.ownerIstituto = true;
-            } else {
-                this.filtro.ownerIstituto = false;
-            }
-        } else {
-            this.filtro.ownerIstituto = null;
-        }
-        this.filterSearch = true;
-        this.getOffertePage(1);
-    }
-
     selectStatoFilter() {
         this.cmPagination.changePage(1);
         if (this.stato) {
@@ -195,7 +178,6 @@ export class OfferteComponent implements OnInit {
         }
         this.tipologia = "Tipologia"
         this.stato = undefined;
-        this.owner = undefined;
         this.filterSearch = false;
         this.getOffertePage(1);
     }
@@ -216,16 +198,6 @@ export class OfferteComponent implements OnInit {
             'font-weight': 'bold'
         };
         if (this.tipologia != 'Tipologia') {
-            return style;
-        }
-    }
-
-    customSourceOption() {
-        var style = {
-            'border-bottom': '2px solid #06c',
-            'font-weight': 'bold'
-        };
-        if (this.owner != undefined) {
             return style;
         }
     }

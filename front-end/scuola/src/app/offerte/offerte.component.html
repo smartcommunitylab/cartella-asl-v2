@@ -51,10 +51,10 @@
             </select>
         </div>
         <div class="col-2 v-center-inline">
-            <select class="custom-select form-control" [ngStyle]="customSourceOption()" [(ngModel)]="owner" (ngModelChange)="selectOwnerFilter()">
+            <!-- <select class="custom-select form-control" [ngStyle]="customSourceOption()" [(ngModel)]="owner" (ngModelChange)="selectOwnerFilter()">
                 <option [ngValue]="undefined">Creata da</option>
                 <option [value]="src.value" *ngFor="let src of sources">{{src.name}}</option>
-            </select>
+            </select> -->
         </div>
         <div class="col-2 v-center-inline">
             <select class="float-right custom-select form-control" [ngStyle]="customStatoOption()" [(ngModel)]="stato"
