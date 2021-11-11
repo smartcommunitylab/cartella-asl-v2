@@ -88,6 +88,6 @@ export class IstitutiComponent implements OnInit {
     if (this.filtro.filterText != '') {
         return style;
     }
-}
+  }
 
 }
