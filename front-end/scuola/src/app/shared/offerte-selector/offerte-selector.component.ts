@@ -15,6 +15,7 @@ export class OfferteSelectorComponent implements OnInit {
   @Output() onNewOffertaAddedListener = new EventEmitter<any[]>();
 
   filtro;
+  filterSearch = false;
   offerte;
   selectedId;
   tipologie;
@@ -130,6 +131,7 @@ export class OfferteSelectorComponent implements OnInit {
     } else {
       this.filtro.titolo = null;
     }
+    this.filterSearch = true;
     this.getOffertePage(1);
   }
 
@@ -141,6 +143,7 @@ export class OfferteSelectorComponent implements OnInit {
     } else {
       this.filtro.tipologia = null;
     }
+    this.filterSearch = true;
     this.getOffertePage(1);
   }
 
@@ -156,10 +159,12 @@ export class OfferteSelectorComponent implements OnInit {
     } else {
       this.filtro.ownerIstituto = null;
     }
+    this.filterSearch = true;
     this.getOffertePage(1);
   }
 
   onFilterChange(off, tp) {
+    this.filterSearch = true;
     tp.close();
     off.valida = !off.valida;
     off.toolTip = 'Attività selezionata';
@@ -208,6 +213,7 @@ export class OfferteSelectorComponent implements OnInit {
     this.tipologia = "Tipologie"
     this.owner = undefined;
     this.filterText = undefined;
+    this.filterSearch = false;
     this.getOffertePage(1);
   }
 

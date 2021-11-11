@@ -83,8 +83,19 @@
                         </tr>
                     </tbody>
                 </table>
-                <div *ngIf="!offerte?.length" class="font-14 text-center font-weight-bold">
-                    <div class="row">
+                <div class="font-14 text-center font-weight-bold">
+                    <div class="row" *ngIf="!offerte?.length && !filterSearch">
+                        <div class="col-xl-12 text-center errorIconPaddingTop">
+                            <svg class="icon icon-lightGrey icon-xl">
+                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                            </svg>
+                        </div>
+                        <div class="col-xl-12 text-center">
+                            <span class="searchError">Questa lista è vuota</span>
+                        </div>
+                        <div class="col-sm-12 text-center searchErrorMsg text-semibold">Non ci sono offerte associate al tuo istituto.</div>
+                    </div>         
+                    <div class="row" *ngIf="!offerte?.length && filterSearch">
                         <div class="col-xl-12 text-center errorIconPaddingTop">
                             <svg class="icon icon-danger icon-xl">
                                 <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
@@ -95,7 +106,6 @@
                         </div>
                         <div class="col-sm-12 text-center">
                             <button type="button" class="btn" (click)='refreshOfferte()'>
-                
                                 <span class="resetFilterBtn">
                                     <div class="row">
                                         <div class="col-sm-2 text-center">
@@ -110,7 +120,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             <cm-pagination style="text-align:center" class="modify-bgcolor" #cmPagination [maxPages]="5"
                 [totalItems]="totalRecords" [pageSize]="pageSize" (pageChanged)="pageChanged($event)"></cm-pagination>
