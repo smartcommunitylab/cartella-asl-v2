@@ -33,12 +33,10 @@ export class EntiComponent implements OnInit {
         private router: Router,
         private location: Location,
         private modalService: NgbModal
-    ) {
-        // force route reload whenever params change;
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    }
+    ) {}
 
     ngOnInit(): void {
+        this.filtro = '';
         this.getEntiPaged(1);
     }
 
@@ -63,20 +61,6 @@ export class EntiComponent implements OnInit {
                 () => console.log('get piani attivi'));
     }
 
-    recreateFilterUrl() {
-        let queryParams: any = {};
-        if (this.filtro.corsoStudio) {
-            queryParams.corsostudio = this.filtro.corsoStudio;
-        }
-        if (this.filtro.inUso) {
-            queryParams.inuso = this.filtro.inUso;
-        }
-        const url = this.router
-            .createUrlTree([], { relativeTo: this.route, queryParams: queryParams })
-            .toString();
-        this.location.go(url);
-    }
-
     menuContentShow() {
         this.showContent = !this.showContent;
     }
@@ -93,7 +77,7 @@ export class EntiComponent implements OnInit {
     }
 
     refreshEnti() {
-        this.filtro = null;
+        this.filtro = '';
         this.filterSearch = false;
         this.getEntiPaged(1);
     }
@@ -169,6 +153,16 @@ export class EntiComponent implements OnInit {
                 ente.toolTipoConvRiga = 'Questo ente non ha nessuna convenzione attiva con questo istituto. Vai al profilo ente per caricare una convenzione valida.';
             }
 
+        }
+    }
+
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro != '') {
+            return style;
         }
     }
 
