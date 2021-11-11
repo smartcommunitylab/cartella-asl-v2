@@ -27,7 +27,7 @@ export class IstitutiComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router) {
     this.filtro = {
-      filterText: null
+      filterText: ''
     }
   }
 
@@ -65,7 +65,7 @@ export class IstitutiComponent implements OnInit {
   }
 
   refresh() {
-    this.filtro.filterText = null;
+    this.filtro.filterText = '';
     this.filterSearch = false;
     this.getIstitutiPage(1);
   }
@@ -79,5 +79,15 @@ export class IstitutiComponent implements OnInit {
 
     return style;
   }
+
+  customSearchOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.filtro.filterText != '') {
+        return style;
+    }
+}
 
 }

@@ -33,7 +33,7 @@
         <div class="col-5 v-center-inline">
             <div class="form-group center-formGroup">
                 <input type="text" id="cercaCompetenza" class="form-control search-input"
-                    [(ngModel)]="filtro.filterText" (keyup.enter)="cerca()" style="width: 300px;">
+                [ngStyle]="customSearchOption()" [(ngModel)]="filtro.filterText" (keyup.enter)="cerca()" style="width: 300px;">
                 <label for="cercaCompetenza">Cerca istituto</label>
             </div>
             <it-button class="v-center-inline" (click)="cerca()">

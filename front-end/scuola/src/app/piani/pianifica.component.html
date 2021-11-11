@@ -45,7 +45,7 @@
     <div class="row">
         <div class="col-4 v-center-inline">
             <div class="form-group center-formGroup">
-                <input type="text" id="cercaPiani" class="form-control search-input" [(ngModel)]="filtro.titolo"
+                <input type="text" id="cercaPiani" class="form-control search-input" [ngStyle]="customSearchOption()" [(ngModel)]="filtro.titolo"
                     (keyup.enter)="cerca()">
                 <label for="cercaPiani">Cerca Titolo...</label>
             </div>
@@ -56,7 +56,7 @@
             </it-button>
         </div>
         <div class="col-4">
-            <select class="custom-select form-control" style="width: 300px;" [(ngModel)]="corsodistudio"
+            <select class="custom-select form-control" style="width: 300px;" [ngStyle]="customCorsoOption()" [(ngModel)]="corsodistudio"
                 (ngModelChange)="selectCorsoFilter()">
                 <option [ngValue]="undefined">Seleziona corso di studio</option>
                 <option [ngValue]="corsodistudio.courseId" *ngFor="let corsodistudio of corsiStudio">
@@ -64,7 +64,7 @@
             </select>
         </div>
         <div class="col-4">
-            <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="stato"
+            <select class="float-right custom-select form-control" style="width: 300px;" [ngStyle]="customStatoOption()" [(ngModel)]="stato"
                 (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Seleziona stato</option>
                 <option [ngValue]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
