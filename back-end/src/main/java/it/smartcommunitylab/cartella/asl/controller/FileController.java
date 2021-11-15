@@ -1,6 +1,7 @@
 package it.smartcommunitylab.cartella.asl.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +10,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +44,11 @@ import it.smartcommunitylab.cartella.asl.model.Documento;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.Documento.TipoDoc;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
+import it.smartcommunitylab.cartella.asl.model.ext.OdtFile;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
+import it.smartcommunitylab.cartella.asl.services.ProgettoFormativoFormatter;
 import it.smartcommunitylab.cartella.asl.storage.LocalDocumentManager;
 
 @RestController
@@ -62,6 +69,8 @@ public class FileController {
 	private AttivitaAlternanzaManager attivitaAlternanzaManager;
 	@Autowired
 	private ConvenzioneManager convenzioneManager;
+	@Autowired
+	private ProgettoFormativoFormatter progettoFormativoFormatter;
 	
 	private static Log logger = LogFactory.getLog(FileController.class);
 
@@ -357,6 +366,27 @@ public class FileController {
 		}
 		checkAttivitaEnte(uuid, enteId, false);
 		return documentManager.getDocumentByEnte(uuid);
+	}
+	
+	@GetMapping("/api/download/progettoformativo")
+	public @ResponseBody HttpEntity<byte[]> exportProgettoFormativoToODT(
+			@RequestParam Long esperienzaSvoltaId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request, 
+			HttpServletResponse response) throws Exception {
+		
+		OdtFile odtFile = progettoFormativoFormatter.getOtdFile(istitutoId, esperienzaSvoltaId);
+		FileInputStream fisODT = new FileInputStream(odtFile.getFile());
+		byte[] odt = IOUtils.toByteArray(fisODT);
+		HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+    headers.setContentLength(odt.length);
+    headers.add("Content-Disposition", "attachment;filename=" + odtFile.getFilename());
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("exportProgettoFormativoToODT: %s", esperienzaSvoltaId));
+		}
+    return new HttpEntity<byte[]>(odt, headers);		
+		
 	}
 
 	private void checkAccessoAttivita(String uuid, String istitutoId, boolean doc, ASLUser user) throws BadRequestException {
