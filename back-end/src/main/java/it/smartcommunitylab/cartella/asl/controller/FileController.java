@@ -374,7 +374,8 @@ public class FileController {
 			@RequestParam String istitutoId,
 			HttpServletRequest request, 
 			HttpServletResponse response) throws Exception {
-		
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));				
 		OdtFile odtFile = progettoFormativoFormatter.getOtdFile(istitutoId, esperienzaSvoltaId);
 		FileInputStream fisODT = new FileInputStream(odtFile.getFile());
 		byte[] odt = IOUtils.toByteArray(fisODT);
