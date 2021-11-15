@@ -19,6 +19,9 @@ public class ProgettoFormativoOdt {
 	private String estNominativo;
 	private String estEmail;
 	private String descrizione;
+	private String polizzaInail;
+	private String rctPat;
+	private String infortuniPat;
 	
 	public String getCognome() {
 		return cognome;
@@ -127,6 +130,24 @@ public class ProgettoFormativoOdt {
 	}
 	public void setIndirizzo(String indirizzo) {
 		this.indirizzo = indirizzo;
+	}
+	public String getPolizzaInail() {
+		return polizzaInail;
+	}
+	public void setPolizzaInail(String polizzaInail) {
+		this.polizzaInail = polizzaInail;
+	}
+	public String getRctPat() {
+		return rctPat;
+	}
+	public void setRctPat(String rctPat) {
+		this.rctPat = rctPat;
+	}
+	public String getInfortuniPat() {
+		return infortuniPat;
+	}
+	public void setInfortuniPat(String infortuniPat) {
+		this.infortuniPat = infortuniPat;
 	}
 	
 }

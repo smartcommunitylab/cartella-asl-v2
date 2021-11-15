@@ -44,6 +44,10 @@ public class Istituzione {
 	private String rdpPhoneFax;
 	private String privacyLink;
 	
+	private String polizzaInail;
+	private String rctPat;
+	private String infortuniPat;
+	
 	@Transient
 	private Convenzione convenzione;
 	
@@ -213,5 +217,29 @@ public class Istituzione {
 
 	public void setRdpPec(String rdpPec) {
 		this.rdpPec = rdpPec;
+	}
+
+	public String getPolizzaInail() {
+		return polizzaInail;
+	}
+
+	public void setPolizzaInail(String polizzaInail) {
+		this.polizzaInail = polizzaInail;
+	}
+
+	public String getRctPat() {
+		return rctPat;
+	}
+
+	public void setRctPat(String rctPat) {
+		this.rctPat = rctPat;
+	}
+
+	public String getInfortuniPat() {
+		return infortuniPat;
+	}
+
+	public void setInfortuniPat(String infortuniPat) {
+		this.infortuniPat = infortuniPat;
 	}
 }

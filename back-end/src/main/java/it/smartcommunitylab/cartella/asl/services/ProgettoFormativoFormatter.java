@@ -26,12 +26,14 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.ext.OdtFile;
 import it.smartcommunitylab.cartella.asl.model.ext.ProgettoFormativoOdt;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.AziendaRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
+import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -52,6 +54,9 @@ public class ProgettoFormativoFormatter {
 	private AziendaRepository aziendaRepository;
 	
 	@Autowired
+	private IstituzioneRepository istituzioneRepository;
+	
+	@Autowired
 	private ResourceLoader resourceLoader;
 	
 	@Autowired
@@ -66,6 +71,10 @@ public class ProgettoFormativoFormatter {
 		}
 		if(!es.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istituto non corrispondente");
+		}
+		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
+		if(istituzione == null) {
+			throw new BadRequestException("istituto non trovato");
 		}
 		Studente studente = studenteRepository.findById(es.getStudenteId()).orElse(null);
 		if(studente == null) {
@@ -102,7 +111,10 @@ public class ProgettoFormativoFormatter {
 		pf.setIntEmail(getNotEmpty(aa.getReferenteScuolaEmail()));
 		pf.setEstNominativo(getNotEmpty(aa.getReferenteEsterno()));
 		pf.setEstEmail(getNotEmpty(aa.getReferenteEsternoEmail()));
-		pf.setDescrizione(getNotEmpty(aa.getDescrizione()));		
+		pf.setDescrizione(getNotEmpty(aa.getDescrizione()));
+		pf.setPolizzaInail(getNotEmpty(istituzione.getPolizzaInail()));
+		pf.setRctPat(getNotEmpty(istituzione.getRctPat()));
+		pf.setInfortuniPat(getNotEmpty(istituzione.getInfortuniPat()));
 		
 		// Load ODT file and set Velocity template engine and cache it to the registry
 		Resource resource = resourceLoader.getResource("classpath:templates/progetto_formativo_it.odt");
@@ -127,6 +139,7 @@ public class ProgettoFormativoFormatter {
 			logger.info("getOtdFile:" + outputFileODT.getAbsolutePath());
 		}
 		String filename = "Progetto formativo " + es.getNominativoStudente() + " " + es.getClasseStudente() + " " + aa.getTitolo() + ".odt";
+		filename = filename.replace(" ", "_");
     OdtFile odtFile = new OdtFile();
     odtFile.setFile(outputFileODT);
     odtFile.setFilename(filename);
