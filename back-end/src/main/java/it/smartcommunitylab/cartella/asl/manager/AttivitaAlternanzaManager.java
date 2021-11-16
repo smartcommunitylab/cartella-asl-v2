@@ -35,6 +35,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaRegistrati
 import it.smartcommunitylab.cartella.asl.model.report.ReportEsperienzaStudente;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzaGiornalieraGruppo;
 import it.smartcommunitylab.cartella.asl.model.report.ReportPresenzeAttvitaAlternanza;
+import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
@@ -64,6 +65,8 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 	RegistrazioneDocenteManager registrazioneDocenteManager;
 	@Autowired
 	ConvenzioneManager convenzioneManager;
+	@Autowired
+	ValutazioniManager valutazioniManager;
 	@Autowired
 	ErrorLabelManager errorLabelManager;
 	@Autowired
@@ -709,6 +712,12 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			EsperienzaSvolta es = (EsperienzaSvolta) obj[1];
 			ReportEsperienzaStudente report = new ReportEsperienzaStudente(aa, es);
 			report.setStato(getStato(aa).toString());
+			try {
+				ValutazioneAttivitaReport valutazione = valutazioniManager.getValutazioneAttivitaReportByStudente(es.getId(), studenteId);
+				report.setValutazioneAttivita(valutazione.getStato().toString());
+			} catch (Exception e) {
+				report.setValutazioneAttivita(ValutazioneAttivitaReport.Stato.non_compilata.toString());
+			}
 			reportList.add(report);
 			reportMap.put(es.getId(), report);
 		}
