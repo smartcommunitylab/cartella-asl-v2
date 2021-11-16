@@ -9,18 +9,19 @@ public class ReportDettaglioAttivitaEsperienza {
 	private int oreValidate;
 	private int oreDaValidare;
 	private int oreTotali;
-
+	private String valutazioneAttivita;
 
 	public ReportDettaglioAttivitaEsperienza() {
 	}
 
 	public ReportDettaglioAttivitaEsperienza(AttivitaAlternanza aa, EsperienzaSvolta es,
-			int oreValidate, int oreDaValidare, int oreTotali) {
+			int oreValidate, int oreDaValidare, int oreTotali, String valutazioneAttivita) {
 		this.aa = aa;
 		this.es = es;
 		this.oreTotali = oreTotali;
 		this.oreValidate = oreValidate;
 		this.oreDaValidare = oreDaValidare;
+		this.valutazioneAttivita = valutazioneAttivita;
 	}
 
 	public AttivitaAlternanza getAa() {
@@ -61,6 +62,14 @@ public class ReportDettaglioAttivitaEsperienza {
 
 	public void setOreDaValidare(int oreDaValidare) {
 		this.oreDaValidare = oreDaValidare;
+	}
+
+	public String getValutazioneAttivita() {
+		return valutazioneAttivita;
+	}
+
+	public void setValutazioneAttivita(String valutazioneAttivita) {
+		this.valutazioneAttivita = valutazioneAttivita;
 	}
 
 }

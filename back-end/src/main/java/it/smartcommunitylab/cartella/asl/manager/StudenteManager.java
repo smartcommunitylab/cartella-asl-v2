@@ -44,6 +44,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnt
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
+import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
@@ -77,6 +78,8 @@ public class StudenteManager extends DataEntityManager {
 	private CompetenzaManager competenzaManager;
 	@Autowired
 	private IstituzioneManager istituzioneManager;
+	@Autowired
+	private ValutazioniManager valutazioniManager;
 	@Autowired
 	private CorsoMetaInfoRepository corsoMetaInfoRepository;
 	@Autowired
@@ -607,6 +610,7 @@ public class StudenteManager extends DataEntityManager {
 		if(aa == null) {
 			throw new BadRequestException("attivitaAlternanza not found");
 		}
+		ValutazioneAttivitaReport valutazione = valutazioniManager.getValutazioneAttivitaReportByStudente(esperienzaSvoltaId, studenteId);
 		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienzaSvoltaId);
 		int oreValidate = 0;
 		int oreDaValidare = 0;
@@ -619,7 +623,7 @@ public class StudenteManager extends DataEntityManager {
 				}
 			}
 		}
-		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre());
+		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre(), valutazione.getStato().toString());
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeStudente(Long esperienzaSvoltaId, LocalDate dateFrom, 
