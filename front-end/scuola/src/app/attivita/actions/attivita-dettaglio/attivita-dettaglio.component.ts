@@ -357,5 +357,15 @@ styleOptionConvenzione(convenzione) {
   routeEntity() {
     this.router.navigateByUrl('/enti/detail/' + this.ente.id); 
   }
+
+  generaProgettoFormativo() {
+    this.dataService.downloadProgettoFormazione(this.esperienze[0].esperienzaSvoltaId).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
   
 }
