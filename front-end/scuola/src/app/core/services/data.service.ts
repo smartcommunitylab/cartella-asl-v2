@@ -1895,6 +1895,29 @@ export class DataService {
     return annoScolastico;
   }
 
+  downloadProgettoFormazione(espId): Observable<any> {
+    let url = this.host + '/download/progettoformativo';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer',
+        params: params,
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data],
+          { type: "application/vnd.oasis.opendocument.text" }
+        );
+        const url = URL.createObjectURL(blob);
+        return url;
+      },
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 
