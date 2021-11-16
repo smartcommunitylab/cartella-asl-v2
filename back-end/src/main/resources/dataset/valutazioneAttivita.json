@@ -1,0 +1,104 @@
+[
+{
+	"codiceDomanda": "VA_v1_1",
+	"posizione": 1,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_2",
+	"posizione": 2,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_3",
+	"posizione": 3,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_4",
+	"posizione": 4,
+	"rispostaChiusa": false,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_5",
+	"posizione": 5,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_6",
+	"posizione": 6,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_7",
+	"posizione": 7,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_8",
+	"posizione": 8,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_9",
+	"posizione": 9,
+	"rispostaChiusa": false,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_10",
+	"posizione": 10,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_11",
+	"posizione": 11,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_12",
+	"posizione": 12,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_13",
+	"posizione": 13,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_14",
+	"posizione": 14,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_15",
+	"posizione": 15,
+	"rispostaChiusa": true,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_16",
+	"posizione": 16,
+	"rispostaChiusa": false,
+	"punteggio": 0
+},
+{
+	"codiceDomanda": "VA_v1_17",
+	"posizione": 17,
+	"rispostaChiusa": false,
+	"punteggio": 0
+}
+]
