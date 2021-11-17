@@ -190,6 +190,15 @@
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
                 </svg>
             </button>
+            &nbsp;
+            <button (click)="generaProgettoFormativo()" *ngIf="attivita.stato!='archiviata' && attivita.tipologia == 7"
+                class="btn btn-primary v-center-inline btn-icon" placement="right"
+                ngbTooltip="">
+                Genera progetto formativo&nbsp;&nbsp;&nbsp;
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                </svg>
+            </button>
         </div>
         <div class="table list-group" *ngIf="documenti && documenti.length > 0">
             <table class="table table-striped table-hover">
