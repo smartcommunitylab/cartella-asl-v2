@@ -1,102 +1,119 @@
 [
 {
 	"codiceDomanda": "VA_v1_1",
+	"descrizione": "Le attività realizzate ti sono sembrate in linea con il percorso di studi intrapreso?",
 	"posizione": 1,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_2",
+	"descrizione": "Le attività realizzate ti sono sembrate utili ai fini dell’orientamento alla scelta universitaria o lavorativa?",
 	"posizione": 2,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_3",
+	"descrizione": "Il programma di avvicinamento che la scuola ha messo in campo in vista del tirocinio è stato utile al buon esito del percorso?",
 	"posizione": 3,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_4",
+	"descrizione": "Suggerimenti per migliorare tale attività di preparazione:",
 	"posizione": 4,
 	"rispostaChiusa": false,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_5",
+	"descrizione": "La relazione che si è instaurata con il tutor aziendale è stata positiva?",
 	"posizione": 5,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_6",
+	"descrizione": "Il contesto in cui sei stato/a inserito/a ti ha messo nelle condizioni di acquisire spazi di autonomia e di iniziativa personale?",
 	"posizione": 6,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_7",
+	"descrizione": "Ritieni che l'esperienza di tirocinio ti abbia permesso di conoscere e comprendere l'organizzazione del lavoro in cui sei stato/a inserito/a?",
 	"posizione": 7,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_8",
+	"descrizione": "Il tempo a disposizione per il tirocinio curriculare si è rivelato adeguato per raggiungere gli obiettivi prefissati?",
 	"posizione": 8,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_9",
+	"descrizione": "Se “poco” o “per nulla”, indica la durata che avresti preferito",
 	"posizione": 9,
 	"rispostaChiusa": false,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_10",
+	"descrizione": "Le abilità, conoscenze e competenze da te possedute all’inizio del tirocinio si sono rivelate adeguate per vivere al meglio l’esperienza?",
 	"posizione": 10,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_11",
+	"descrizione": "Durante l'esperienza di tirocinio ritieni di aver acquisito conoscenze, abilità e/o competenze  specifiche del tuo indirizzo di studio?",
 	"posizione": 11,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_12",
+	"descrizione": "Durante l'esperienza di tirocinio ritieni di aver acquisito metodologie, strumenti e sistemi di lavoro specifici del tuo indirizzo di studio?",
 	"posizione": 12,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_13",
+	"descrizione": "Durante l'esperienza di tirocinio ritieni di aver migliorato le tue competenze comunicative utili per il tuo futuro percorso di studi o lavorativo?",
 	"posizione": 13,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_14",
+	"descrizione": "Durante l'esperienza di tirocinio hai consolidato l’uso di una lingua straniera?",
 	"posizione": 14,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_15",
+	"descrizione": "Il tirocinio appena realizzato ha suscitato in te nuovi interessi e curiosità?",
 	"posizione": 15,
 	"rispostaChiusa": true,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_16",
+	"descrizione": "A tuo parere, quali sono stati i punti di forza dell'esperienza appena vissuta?",
 	"posizione": 16,
 	"rispostaChiusa": false,
 	"punteggio": 0
 },
 {
 	"codiceDomanda": "VA_v1_17",
+	"descrizione": "A tuo parere, quali sono stati i punti di debolezza dell'esperienza appena vissuta?",
 	"posizione": 17,
 	"rispostaChiusa": false,
 	"punteggio": 0

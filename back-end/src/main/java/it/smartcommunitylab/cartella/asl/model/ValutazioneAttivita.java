@@ -34,6 +34,8 @@ public class ValutazioneAttivita {
 	private Boolean rispostaChiusa;
 	private Integer punteggio = 0;
 	@Column(columnDefinition="VARCHAR(2048)")
+	private String descrizione;
+	@Column(columnDefinition="VARCHAR(2048)")
 	private String risposta;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@JsonDeserialize(using = LocalDateDeserializer.class)
@@ -104,6 +106,12 @@ public class ValutazioneAttivita {
 	}
 	public void setUltimaModifica(LocalDate ultimaModifica) {
 		this.ultimaModifica = ultimaModifica;
+	}
+	public String getDescrizione() {
+		return descrizione;
+	}
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 
 
