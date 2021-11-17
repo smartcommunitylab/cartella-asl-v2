@@ -14,17 +14,20 @@ export class DocumentUploadModalComponent implements OnInit {
   saveFileObj = { type: null, file: null };
   optionTypes = {
     "1": "piano_formativo",
-    "2": "convenzione",
-    "3": "valutazione_studente",
-    "4": "valutazione_esperienza",
-    "5": "doc_generico"    
+    "2": "valutazione_studente",
+    "3": "valutazione_esperienza",
+    "4": "doc_generico"
   }
+  docTypes;
   @Input() attivitaIndividuale: boolean;
+  @Input() tipologiaId;
   @Output() newDocumentListener = new EventEmitter<Object>();
 
   constructor(public activeModal: NgbActiveModal) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.docTypes = this.getDocumentTypes();
+  }
 
   create(option) {
     this.optionSelected = true;
@@ -32,7 +35,7 @@ export class DocumentUploadModalComponent implements OnInit {
     var x = document.getElementById(option);
     if (x)
       x.classList.add('active');
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 4; i++) {
       if (i !== option) {
         var x = document.getElementById(i + '');
         if (x)
@@ -52,6 +55,310 @@ export class DocumentUploadModalComponent implements OnInit {
   carica() {
     this.newDocumentListener.emit(this.saveFileObj);
     this.activeModal.dismiss(this.saveFileObj);;
+  }
+
+  getDocumentTypes() {
+    switch (this.tipologiaId) {
+      case 1: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 2: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 3: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 4: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 5: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 6: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 7: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }]
+      }
+      case 8: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 9: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 10: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 11: {
+        return [
+          {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+      case 12: {
+        return [
+ {
+            "titolo": "Piano formativo",
+            "id": 1,
+            "type": "piano_formativo",
+            "descr": "Il piano formativo è il documento che descrive le specificità del percorso relativo al tirocinio in oggetto.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione studente",
+            "id": 2,
+            "type": "valutazione_studente",
+            "descr": "Il documento di valutazione compilato dall’ente sullo studente coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          },
+          {
+            "titolo": "Valutazione esperienza",
+            "id": 3,
+            "type": "valutazione_esperienza",
+            "descr": "Il documento di valutazione compilato dallo studente rispetto all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è possibile per la scuola caricarlo qui.",
+            "visibile": ['Scuola', 'Studente']
+          },
+          {
+            "titolo": "Altro",
+            "id": 4,
+            "type": "doc_generico",
+            "descr": "Se vuoi condividere un documento rapidamente puoi scegliere questa opzione.",
+            "visibile": ['Scuola', 'Ente', 'Studente']
+          }
+        ]
+      }
+    }
   }
 
 }
