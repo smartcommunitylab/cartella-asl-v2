@@ -3,6 +3,7 @@ package it.smartcommunitylab.cartella.asl.manager;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.smartcommunitylab.cartella.asl.exception.BadRequestException;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
+import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
 import it.smartcommunitylab.cartella.asl.model.ValutazioneAttivita;
+import it.smartcommunitylab.cartella.asl.model.ValutazioneCompetenza;
 import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
-import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport.Stato;
+import it.smartcommunitylab.cartella.asl.model.report.ValutazioneCompetenzeReport;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
 import it.smartcommunitylab.cartella.asl.repository.ValutazioneAttivitaRepository;
+import it.smartcommunitylab.cartella.asl.repository.ValutazioneCompetenzaRepository;
 
 @Repository
 @Transactional
@@ -33,10 +37,16 @@ public class ValutazioniManager extends DataEntityManager {
 	ValutazioneAttivitaRepository valutazioneAttivitaRepository;
 	
 	@Autowired
+	ValutazioneCompetenzaRepository valutazioneCompetenzaRepository;
+	
+	@Autowired
 	AttivitaAlternanzaRepository attivitaAlternanzaRepository;
 	
 	@Autowired
 	EsperienzaSvoltaRepository esperienzaSvoltaRepository;
+	
+	@Autowired
+	CompetenzaManager competenzaManager;
 	
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -51,13 +61,14 @@ public class ValutazioniManager extends DataEntityManager {
 		ValutazioneAttivitaReport report = new ValutazioneAttivitaReport();
 		int count = countDomandeCompilate(valutazioni);
 		if(count == 0) {
-			report.setStato(Stato.non_compilata);
+			report.setStato(ValutazioneAttivitaReport.Stato.non_compilata);
 		} else if(count == risposteChiuse) {
-			report.setStato(Stato.compilata);
+			report.setStato(ValutazioneAttivitaReport.Stato.compilata);
 		} else {
-			report.setStato(Stato.incompleta);
+			report.setStato(ValutazioneAttivitaReport.Stato.incompleta);
 		}
 		if(valutazioni.size() > 0) {
+			//TODO cercare ultima modifica più recente
 			report.setUltimaModifica(valutazioni.get(0).getUltimaModifica());
 		}
 		if(valutazioni.size() == 0) {
@@ -150,5 +161,132 @@ public class ValutazioniManager extends DataEntityManager {
 		Resource resource = resourceLoader.getResource("classpath:dataset/valutazioneAttivita.json");
 		List<ValutazioneAttivita> valutazioni = mapper.readValue(resource.getInputStream(), new TypeReference<List<ValutazioneAttivita>>() {});
 		return valutazioni;
+	}
+	
+	private ValutazioneCompetenzeReport getValutazioneCompetenzeReport(EsperienzaSvolta es) throws Exception {
+		List<ValutazioneCompetenza> valutazioni = valutazioneCompetenzaRepository.findByEsperienzaSvoltaIdOrderByOrdineAsc(es.getId());
+		ValutazioneCompetenzeReport report = new ValutazioneCompetenzeReport();
+		int acquisite = countCompetenzeAcquisite(valutazioni);
+		report.setAcquisite(acquisite);
+		if(valutazioni.size() > 0) {
+			//TODO cercare ultima modifica più recente
+			report.setUltimaModifica(valutazioni.get(0).getUltimaModifica());
+			report.setValutazioni(valutazioni);
+			report.setStato(getValutazioneCompetenzeStato(valutazioni));
+		}
+		if(valutazioni.size() == 0) {
+			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+			if(aa == null) {
+				throw new BadRequestException("attività non trovata");
+			}
+			report.setValutazioni(getEmptyValutazioneCompetenze(aa));
+			report.setStato(ValutazioneCompetenzeReport.Stato.non_compilata);
+		}
+		return report;
+	}
+	
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByStudente(Long esperienzaSvoltaId, String studenteId) throws Exception {
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findById(esperienzaSvoltaId).orElse(null);
+		if(es == null) {
+			throw new BadRequestException("esperienza non trovata");
+		}
+		if(!es.getStudenteId().equals(studenteId)) {
+			throw new BadRequestException("utente non autorizzato");
+		}
+		return getValutazioneCompetenzeReport(es);
+	}
+	
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByIstituto(Long esperienzaSvoltaId, String istitutoId) throws Exception {
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findById(esperienzaSvoltaId).orElse(null);
+		if(es == null) {
+			throw new BadRequestException("esperienza non trovata");
+		}
+		if(!es.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istituto non autorizzato");
+		}
+		return getValutazioneCompetenzeReport(es);
+	}
+
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByEnte(Long esperienzaSvoltaId, String enteId) throws Exception {
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findById(esperienzaSvoltaId).orElse(null);
+		if(es == null) {
+			throw new BadRequestException("esperienza non trovata");
+		}
+		AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+		if(aa == null) {
+			throw new BadRequestException("attività non trovata");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("ente non autorizzato");
+		}
+		return getValutazioneCompetenzeReport(es);
+	}
+	
+	private List<ValutazioneCompetenza> getEmptyValutazioneCompetenze(AttivitaAlternanza aa) {
+		List<ValutazioneCompetenza> result = new ArrayList<>();
+		List<Competenza> competenze = competenzaManager.getRisorsaCompetenze(aa.getUuid());
+		for(int i=0; i < competenze.size(); i++) {
+			Competenza c = competenze.get(i);
+			ValutazioneCompetenza v = new ValutazioneCompetenza(c);
+			v.setOrdine(i+1);
+			result.add(v);
+		}
+		return result;
+	}
+	
+	public ValutazioneCompetenzeReport saveValutazioneCompetenze(String enteId, Long esperienzaSvoltaId, 
+			List<ValutazioneCompetenza> valutazioni) throws Exception {
+		EsperienzaSvolta es = esperienzaSvoltaRepository.findById(esperienzaSvoltaId).orElse(null);
+		if(es == null) {
+			throw new BadRequestException("esperienza non trovata");
+		}
+		AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+		if(aa == null) {
+			throw new BadRequestException("attività non trovata");
+		}
+		if(!enteId.equals(aa.getEnteId())) {
+			throw new BadRequestException("ente non autorizzato");
+		}
+		if(aa.getStato().equals(Stati.archiviata)) {
+			throw new BadRequestException("attività archiviata");
+		}
+		String istitutoId = es.getIstitutoId();
+		Long attivitaAlternanzaId = es.getAttivitaAlternanzaId();
+		LocalDate ultimaModifica = LocalDate.now();
+		for(ValutazioneCompetenza vc : valutazioni) {
+			vc.setAttivitaAlternanzaId(attivitaAlternanzaId);
+			vc.setIstitutoId(istitutoId);
+			vc.setEsperienzaSvoltaId(esperienzaSvoltaId);
+			vc.setStudenteId(es.getStudenteId());
+			vc.setUltimaModifica(ultimaModifica);
+			valutazioneCompetenzaRepository.save(vc);
+		}
+		return getValutazioneCompetenzeReport(es);
+	}
+
+	private int countCompetenzeAcquisite(List<ValutazioneCompetenza> valutazioni) {
+		int count = 0;
+		for(ValutazioneCompetenza v : valutazioni) {
+			if(v.getPunteggio() > 1) {
+				count++;
+			}
+		}
+		return count;
+	}
+	
+	private ValutazioneCompetenzeReport.Stato getValutazioneCompetenzeStato(List<ValutazioneCompetenza> valutazioni) {
+		int count = 0;
+		for(ValutazioneCompetenza v : valutazioni) {
+			if(v.getPunteggio() > 0) {
+				count++;
+			}
+		}
+		if(count == 0) {
+			return ValutazioneCompetenzeReport.Stato.non_compilata;
+		}
+		if(count == valutazioni.size()) {
+			return ValutazioneCompetenzeReport.Stato.compilata;
+		}
+		return ValutazioneCompetenzeReport.Stato.incompleta;
 	}
 }

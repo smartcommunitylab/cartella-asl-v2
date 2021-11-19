@@ -19,8 +19,10 @@ import it.smartcommunitylab.cartella.asl.manager.ASLRolesValidator;
 import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.ValutazioniManager;
 import it.smartcommunitylab.cartella.asl.model.ValutazioneAttivita;
+import it.smartcommunitylab.cartella.asl.model.ValutazioneCompetenza;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
 import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
+import it.smartcommunitylab.cartella.asl.model.report.ValutazioneCompetenzeReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -82,5 +84,68 @@ public class ValutazioniController implements AslController {
 		}
 		return report;
 	}
+
+	@GetMapping("/api/valutazione/competenze/istituto")
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByIstituto(
+			@RequestParam String istitutoId,
+			@RequestParam Long esperienzaSvoltaId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
+				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
+		ValutazioneCompetenzeReport report = valutazioniManager.getValutazioneCompetenzeReportByIstituto(esperienzaSvoltaId, istitutoId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getValutazioneCompetenzeReportByIstituto:%s - %s", istitutoId, esperienzaSvoltaId));
+		}
+		return report;
+	}
+
+	@GetMapping("/api/valutazione/competenze/studente")
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByStudente(
+			@RequestParam String studenteId,
+			@RequestParam Long esperienzaSvoltaId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.STUDENTE, studenteId)));
+		ValutazioneCompetenzeReport report = valutazioniManager.getValutazioneCompetenzeReportByStudente(esperienzaSvoltaId, studenteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getValutazioneCompetenzeReportByStudente:%s - %s", studenteId, esperienzaSvoltaId));
+		}
+		return report;
+	}
+	
+	@GetMapping("/api/valutazione/competenze/ente")
+	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByEnte(
+			@RequestParam String enteId,
+			@RequestParam Long esperienzaSvoltaId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId),
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ValutazioneCompetenzeReport report = valutazioniManager.getValutazioneCompetenzeReportByEnte(esperienzaSvoltaId, enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getValutazioneCompetenzeReportByEnte:%s - %s", enteId, esperienzaSvoltaId));
+		}
+		return report;
+	}
+	
+	@PostMapping("/api/valutazione/competenze/ente")
+	public ValutazioneCompetenzeReport saveValutazioneCompetenze(
+			@RequestParam String enteId,
+			@RequestParam Long esperienzaSvoltaId,
+			@RequestBody List<ValutazioneCompetenza> valutazioni,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(
+				new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId),
+				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ValutazioneCompetenzeReport report = valutazioniManager.saveValutazioneCompetenze(enteId, esperienzaSvoltaId, valutazioni);
+		AuditEntry audit = new AuditEntry(request.getMethod(), ValutazioneCompetenza.class, esperienzaSvoltaId, user, new Object(){});
+		auditManager.save(audit);					
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("saveValutazioneCompetenze:%s - %s", enteId, esperienzaSvoltaId));
+		}
+		return report;
+	}			
 
 }

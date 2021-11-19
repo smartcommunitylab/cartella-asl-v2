@@ -38,6 +38,15 @@ public class ValutazioneCompetenza {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate ultimaModifica;
 	
+	public ValutazioneCompetenza() {}
+	
+	public ValutazioneCompetenza(Competenza c) {
+		this.competenzaTitolo = c.getTitolo();
+		this.competenzaOwnerName = c.getOwnerName();
+		this.competenzaSource = c.getSource();
+		this.competenzaUri = c.getUri();
+	}
+	
 	public Long getId() {
 		return id;
 	}

@@ -24,6 +24,7 @@ public class ValutazioneCompetenzeReport {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate ultimaModifica;
 	private List<ValutazioneCompetenza> valutazioni = new ArrayList<>();
+	private int acquisite;
 	
 	public LocalDate getUltimaModifica() {
 		return ultimaModifica;
@@ -42,6 +43,12 @@ public class ValutazioneCompetenzeReport {
 	}
 	public void setStato(Stato stato) {
 		this.stato = stato;
+	}
+	public int getAcquisite() {
+		return acquisite;
+	}
+	public void setAcquisite(int acquisite) {
+		this.acquisite = acquisite;
 	}
 
 }
