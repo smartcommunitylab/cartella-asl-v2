@@ -19,7 +19,11 @@ public class LocalDateDeserializer  extends StdDeserializer<LocalDate> {
 
 	public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
-		return Instant.ofEpochMilli(jp.getLongValue()).atZone(ZoneId.systemDefault()).toLocalDate();
+		if(jp.getCurrentToken().isNumeric()) {
+			return Instant.ofEpochMilli(jp.getLongValue()).atZone(ZoneId.systemDefault()).toLocalDate();
+		} else {
+			return LocalDate.parse(jp.getValueAsString());
+		}
 	}
 
 }
