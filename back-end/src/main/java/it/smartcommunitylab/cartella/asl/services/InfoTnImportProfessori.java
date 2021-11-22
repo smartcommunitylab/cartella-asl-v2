@@ -75,7 +75,8 @@ public class InfoTnImportProfessori {
 		String url;
 
 		if (metaInfo.getEpocTimestamp() > 0) {
-			url = infoTNAPIUrl + "/professori?timestamp=" + metaInfo.getEpocTimestamp();
+			url = infoTNAPIUrl + "/professori";
+			//url = infoTNAPIUrl + "/professori?timestamp=" + metaInfo.getEpocTimestamp();
 		} else {
 			metaInfo.setEpocTimestamp(System.currentTimeMillis()); //set it for the first time.
 			url = infoTNAPIUrl + "/professori";
