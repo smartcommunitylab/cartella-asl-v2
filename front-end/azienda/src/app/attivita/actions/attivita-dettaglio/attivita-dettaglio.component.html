@@ -163,6 +163,34 @@
             </div>
         </div>
         <br>
+        <div *ngIf="isValutazioneCompetenzeActive()">
+            <div class="title" >
+                Valutazioni<br/>
+                <button (click)="valutaCompetenze()" class="btn btn-primary v-center-inline btn-icon" placement="right"
+                    ngbTooltip="Valuta l’acquisizione da parte del tirocinante delle competenze associate all’attività">
+                    Compila valutazione competenze&nbsp;&nbsp;&nbsp;
+                    <svg class="icon icon-white icon-sm">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
+                    </svg>
+                </button>    
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col col-2"></div>
+                <div class="col col-2">Data compilazione</div>
+                <div class="col col-3">Compilato da</div>
+                <div class="col col-3">Esito</div>
+                <div class="col col-2">Stato</div>
+            </div>
+            <div class="row">
+                <div class="col col-2">Valutazione competenze</div>
+                <div class="col col-2">{{getDataValutazione()}}</div>
+                <div class="col col-3"></div>
+                <div class="col col-3" >{{getEsitoValutazione()}}</div>
+                <div class="col col-2 valutazione {{getValutazioneClass()}}">{{getStatoValutazione()}}</div>
+            </div>
+        </div>
+        <br/>
         <div class="title">
             Documenti allegati<br />
             <button (click)="openDocumentUpload()" *ngIf="attivita.stato!='archiviata'"

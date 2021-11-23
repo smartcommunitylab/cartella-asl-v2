@@ -8,6 +8,7 @@ import { GrowlerService } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
+import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 registerLocaleData(localeIT);
 
 declare var moment: any;
@@ -29,6 +30,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   attivita: AttivitaAlternanza;
   esperienze;
   offertaAssociata;
+  valutazioneCompetenzeReport;
   navTitle: string = "Dettaglio attivita alternanza";
   cardTitle: string = "Vedi";
   individuale: boolean;
@@ -98,6 +100,15 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.dataService.getRisorsaCompetenze(this.attivita.uuid).subscribe((res) => {
           this.atttivitaCompetenze = res;
         });
+
+        if(this.isValutazioneCompetenzeActive()) {
+          if(this.esperienze.length > 0) {
+            var esp = this.esperienze[0];
+            this.dataService.getValutazioneCompetenzeReport(esp.esperienzaSvoltaId).subscribe((res) => {
+              this.valutazioneCompetenzeReport = res;
+            });  
+          }
+        }
 
       },
         (err: any) => console.log(err),
@@ -240,6 +251,65 @@ export class AttivitaDettaglioComponent implements OnInit {
       return 'Monte ore forfettario';
     } else {
       return 'Rendicontazione ore giornaliera';
+    }
+  }
+
+  isValutazioneCompetenzeActive() {
+    if(this.attivita.tipologia == 7) {
+      var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
+      var now = moment();
+      if(dataMinima.isBefore(now)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getStatoValutazione() {
+    if(this.valutazioneCompetenzeReport) {
+      if(this.valutazioneCompetenzeReport.stato = 'non_compilata') {
+        return "Non compilata";
+      }
+      if(this.valutazioneCompetenzeReport.stato = 'incompleta') {
+        return "Incompleta";
+      }
+      if(this.valutazioneCompetenzeReport.stato = 'compilata') {
+        return "Compilata";
+      }  
+    }
+  }
+
+  getValutazioneClass() {
+    if(this.valutazioneCompetenzeReport) {
+      return this.valutazioneCompetenzeReport.stato; 
+    }
+    return "";
+  }
+
+  getEsitoValutazione() {
+    if(this.valutazioneCompetenzeReport && (this.valutazioneCompetenzeReport.stato != 'non_compilata')) {
+      var acquisite = 0;
+      this.valutazioneCompetenzeReport.valutazioni.array.forEach(v => {
+        if(v.punteggio > 1) {
+          acquisite++;
+        }
+      });
+      return acquisite + "/" + this.valutazioneCompetenzeReport.valutazioni.length + " competenze acquisite";  
+    }
+    return "-";
+  }
+
+
+  getDataValutazione() {
+    if(this.valutazioneCompetenzeReport && this.valutazioneCompetenzeReport.ultimaModifica) {
+      return this.valutazioneCompetenzeReport.ultimaModifica;
+    }
+    return "-";
+  }
+
+  valutaCompetenze() {
+    if (this.valutazioneCompetenzeReport) {
+      this.router.navigate(['valuta/competenze/'], { relativeTo: this.route });
     }
   }
 
