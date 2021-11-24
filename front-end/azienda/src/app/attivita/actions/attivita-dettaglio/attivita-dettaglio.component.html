@@ -166,12 +166,13 @@
         <div *ngIf="isValutazioneCompetenzeActive()">
             <div class="title" >
                 Valutazioni<br/>
-                <button (click)="valutaCompetenze()" class="btn btn-primary v-center-inline btn-icon" placement="right"
+                <button (click)="valutaCompetenze()" class="btn btn-primary v-center-inline btn-icon" placement="right" *ngIf="attivita.stato!='archiviata'"
                     ngbTooltip="Valuta l’acquisizione da parte del tirocinante delle competenze associate all’attività">
                     Compila valutazione competenze&nbsp;&nbsp;&nbsp;
-                    <svg class="icon icon-white icon-sm">
+                    <img class="btn-val" src="assets/images/valutazione_studente.svg">
+                    <!--svg class="icon icon-white icon-sm">
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
-                    </svg>
+                    </svg-->
                 </button>    
             </div>
             <br/>
@@ -183,7 +184,9 @@
                 <div class="col col-2">Stato</div>
             </div>
             <div class="row">
-                <div class="col col-2">Valutazione competenze</div>
+                <div class="col col-2">
+                    <a class="valutazione link" (click)="valutaCompetenze()">Valutazione competenze</a>
+                </div>
                 <div class="col col-2">{{dataValutazione}}</div>
                 <div class="col col-3">{{nomeEnte}}</div>
                 <div class="col col-3" >{{esitoValutazione}}</div>
@@ -238,13 +241,17 @@
                     <thead>
                         <tr>
                             <th width="20%">Creato da</th>
-                            <th width="80%">Definizione</th>
+                            <th *ngIf="!isValutazioneCompetenzeActive()" width="80%">Definizione</th>
+                            <th *ngIf="isValutazioneCompetenzeActive()" width="60%">Definizione</th>
+                            <th *ngIf="isValutazioneCompetenzeActive()" width="20%">Valutazione</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let competenza of atttivitaCompetenze">
                             <td>{{competenza.ownerName}}</td>
                             <td>{{competenza.titolo}}</td>
+                            <td *ngIf="isValutazioneCompetenzeActive()" class="valutazione {{getValutazioneCss(competenza)}}">
+                                {{getValutazione(competenza)}}</td>
                         </tr>
                     </tbody>
                 </table>

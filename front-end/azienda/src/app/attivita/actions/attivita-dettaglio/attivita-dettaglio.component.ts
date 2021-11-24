@@ -320,4 +320,37 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
   }
 
+  getValutazione(competenza) {
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    switch(punteggio) {
+      case 0: return "-";
+      case 1: return "Non acquisita";
+      case 2: return "Base";
+      case 3: return "Intermedio";
+      case 4: return "Avanzato";
+      default: return "-";
+    }
+  }
+
+  getValutazioneCss(competenza) {
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    switch(punteggio) {
+      case 0: return "non_acquisita";
+      case 1: return "non_acquisita";
+      default: return "acquisita";
+    }
+  }
+
+  getValutazioneByUri(uri) {
+    if (this.valutazioneCompetenzeReport) {
+      for (let index = 0; index < this.valutazioneCompetenzeReport.valutazioni.length; index++) {
+        const v = this.valutazioneCompetenzeReport.valutazioni[index];
+        if(v.competenzaUri == uri) {
+          return v.punteggio;
+        }
+      }
+    }
+    return 0;
+  }
+
 }

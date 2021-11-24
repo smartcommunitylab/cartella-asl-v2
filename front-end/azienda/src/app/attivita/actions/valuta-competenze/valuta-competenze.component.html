@@ -67,7 +67,7 @@
       <div class="col col-2">{{valutazione.competenzaOwnerName}}</div>
       <div class="col col-8">{{valutazione.competenzaTitolo}}</div>
       <div class="col col-2">
-        <select class="custom-select form-control" id="punteggio" [(ngModel)]="valutazione.punteggio" title="test">
+        <select class="custom-select form-control" id="punteggio" [(ngModel)]="valutazione.punteggio" [disabled]="isArchivio">
           <option value="1">Non acquisita</option>
           <option value="2">Base</option>
           <option value="3">Intermedio</option>
