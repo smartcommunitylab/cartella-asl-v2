@@ -37,7 +37,9 @@ export class ValutaCompetenzeComponent implements OnInit {
 
   report: any;
   attivita: any;
+  esperienza: any;
   nominativo: string;
+  isArchivio: boolean = false;
 
   menuContent = "In questa sezione trovi le competenze che l'istituto ha associato all'attività. Ti viene chiesto di valutare il livello dell'acquisizione di ciascuna competenza. Puoi usare quattro valori: Non acquisita, Base, Intermedio, Avanzato";
   showContent: boolean = false;
@@ -64,17 +66,20 @@ export class ValutaCompetenzeComponent implements OnInit {
       let id = params['id'];
       this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
+        if(this.attivita.stato=='archiviata') {
+          this.isArchivio = true;
+        }
         if(res.esperienze.length > 0) {
-          var esp = res.esperienze[0];
-          this.nominativo = esp.nominativoStudente;
-          this.dataService.getValutazioneCompetenzeReport(esp.esperienzaSvoltaId).subscribe((report) => {
+          this.esperienza = res.esperienze[0];
+          this.nominativo = this.esperienza.nominativoStudente;
+          this.dataService.getValutazioneCompetenzeReport(this.esperienza.esperienzaSvoltaId).subscribe((report) => {
             this.report = report;
           });  
         }
       });
     });
   }
-  
+
   ngOnDestroy(){
     this.evn.modificationFlag=false;
   }
@@ -83,7 +88,13 @@ export class ValutaCompetenzeComponent implements OnInit {
     this.router.navigate(['../../'], { relativeTo: this.activeRoute });
   }
 
-  saveValutazioni() {}
+  saveValutazioni() {
+    this.dataService.saveValutazioneCompetenze(this.esperienza.esperienzaSvoltaId, this.report.valutazioni).subscribe(report => {
+      this.report = report;
+      let message = "Salvataggio effettuato con successo!";
+      this.growler.growl(message, GrowlerMessageType.Success);
+    });
+  }
 
   menuContentShow() {
     this.showContent = !this.showContent;

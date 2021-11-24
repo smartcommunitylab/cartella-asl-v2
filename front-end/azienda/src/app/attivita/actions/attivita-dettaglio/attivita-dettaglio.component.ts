@@ -31,6 +31,11 @@ export class AttivitaDettaglioComponent implements OnInit {
   esperienze;
   offertaAssociata;
   valutazioneCompetenzeReport;
+  dataValutazione: string;
+  esitoValutazione: string;
+  statoValutazione: string;
+  statoValutazioneCss: string;
+  nomeEnte: string;
   navTitle: string = "Dettaglio attivita alternanza";
   cardTitle: string = "Vedi";
   individuale: boolean;
@@ -105,7 +110,7 @@ export class AttivitaDettaglioComponent implements OnInit {
           if(this.esperienze.length > 0) {
             var esp = this.esperienze[0];
             this.dataService.getValutazioneCompetenzeReport(esp.esperienzaSvoltaId).subscribe((res) => {
-              this.valutazioneCompetenzeReport = res;
+              this.loadReport(res);
             });  
           }
         }
@@ -114,6 +119,15 @@ export class AttivitaDettaglioComponent implements OnInit {
         (err: any) => console.log(err),
         () => console.log('getAttivita'));
     });
+  }
+
+  loadReport(report) {
+    this.valutazioneCompetenzeReport = report;
+    this.dataValutazione = this.getDataValutazione();
+    this.esitoValutazione = this.getEsitoValutazione();
+    this.statoValutazione = this.getStatoValutazione();
+    this.statoValutazioneCss = report.stato;
+    this.nomeEnte = this.dataService.aziendaName;
   }
 
   openDetail(attivita) {
@@ -267,29 +281,22 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   getStatoValutazione() {
     if(this.valutazioneCompetenzeReport) {
-      if(this.valutazioneCompetenzeReport.stato = 'non_compilata') {
+      if(this.valutazioneCompetenzeReport.stato == 'non_compilata') {
         return "Non compilata";
       }
-      if(this.valutazioneCompetenzeReport.stato = 'incompleta') {
+      if(this.valutazioneCompetenzeReport.stato == 'incompleta') {
         return "Incompleta";
       }
-      if(this.valutazioneCompetenzeReport.stato = 'compilata') {
+      if(this.valutazioneCompetenzeReport.stato == 'compilata') {
         return "Compilata";
       }  
     }
   }
 
-  getValutazioneClass() {
-    if(this.valutazioneCompetenzeReport) {
-      return this.valutazioneCompetenzeReport.stato; 
-    }
-    return "";
-  }
-
   getEsitoValutazione() {
     if(this.valutazioneCompetenzeReport && (this.valutazioneCompetenzeReport.stato != 'non_compilata')) {
       var acquisite = 0;
-      this.valutazioneCompetenzeReport.valutazioni.array.forEach(v => {
+      this.valutazioneCompetenzeReport.valutazioni.forEach(v => {
         if(v.punteggio > 1) {
           acquisite++;
         }

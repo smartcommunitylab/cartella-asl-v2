@@ -582,6 +582,26 @@ export class DataService {
       );
   }
 
+  saveValutazioneCompetenze(esperienzaSvoltaId, valutazioni): Observable<any> {
+    let url = this.host + '/valutazione/competenze/ente';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('esperienzaSvoltaId', esperienzaSvoltaId);
+
+    return this.http.post<any>(url, valutazioni,
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
   associaIstitutiToOfferta(id, istitutiToSave) {
     let url = this.host + '/offerta/' + id + '/istituti';
     let istitutoStub = [];
