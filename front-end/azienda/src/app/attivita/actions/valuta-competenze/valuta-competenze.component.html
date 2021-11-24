@@ -25,11 +25,9 @@
         <button *ngIf="!isArchivio" class="btn btn-success btn-xs btn-icon py-1 pr-2 btnCreate mLeft12"
           placement="bottom" ngbTooltip="{{toolTipSave}}" (click)="saveValutazioni()">
           <span class="row btnCreateText">
-            <span class="col-8">Valida presenze&nbsp;</span>
-            <span class="col-4">
-              <svg class="icon icon-white icon-sm m-right36">
-                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-note"></use>
-              </svg>
+            <span class="col-8 leftItem">Salva&nbsp;</span>
+            <span class="col-4 rightItem">
+              <i class="material-icons btnModificationIcon">save</i>
             </span>
           </span>
         </button>
