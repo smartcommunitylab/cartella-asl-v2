@@ -31,6 +31,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   esperienze;
   offertaAssociata;
   valutazioneCompetenzeReport;
+  valutazioneCompetenzeActive: boolean = false;
   dataValutazione: string;
   esitoValutazione: string;
   statoValutazione: string;
@@ -81,6 +82,7 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.attivita.nomeIstituto = res.nomeIstituto;
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
+        this.valutazioneCompetenzeActive = this.isValutazioneCompetenzeActive();
 
         if (this.attivita.offertaId) {
           this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
@@ -106,7 +108,7 @@ export class AttivitaDettaglioComponent implements OnInit {
           this.atttivitaCompetenze = res;
         });
 
-        if(this.isValutazioneCompetenzeActive()) {
+        if(this.valutazioneCompetenzeActive) {
           if(this.esperienze.length > 0) {
             var esp = this.esperienze[0];
             this.dataService.getValutazioneCompetenzeReport(esp.esperienzaSvoltaId).subscribe((res) => {

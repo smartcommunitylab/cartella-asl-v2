@@ -163,7 +163,7 @@
             </div>
         </div>
         <br>
-        <div *ngIf="isValutazioneCompetenzeActive()">
+        <div *ngIf="valutazioneCompetenzeActive">
             <div class="title" >
                 Valutazioni<br/>
                 <button (click)="valutaCompetenze()" class="btn btn-primary v-center-inline btn-icon" placement="right" *ngIf="attivita.stato!='archiviata'"
@@ -241,16 +241,16 @@
                     <thead>
                         <tr>
                             <th width="20%">Creato da</th>
-                            <th *ngIf="!isValutazioneCompetenzeActive()" width="80%">Definizione</th>
-                            <th *ngIf="isValutazioneCompetenzeActive()" width="60%">Definizione</th>
-                            <th *ngIf="isValutazioneCompetenzeActive()" width="20%">Valutazione</th>
+                            <th *ngIf="!valutazioneCompetenzeActive" width="80%">Definizione</th>
+                            <th *ngIf="valutazioneCompetenzeActive" width="60%">Definizione</th>
+                            <th *ngIf="valutazioneCompetenzeActive" width="20%">Valutazione</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let competenza of atttivitaCompetenze">
                             <td>{{competenza.ownerName}}</td>
                             <td>{{competenza.titolo}}</td>
-                            <td *ngIf="isValutazioneCompetenzeActive()" class="valutazione {{getValutazioneCss(competenza)}}">
+                            <td *ngIf="valutazioneCompetenzeActive" class="valutazione {{getValutazioneCss(competenza)}}">
                                 {{getValutazione(competenza)}}</td>
                         </tr>
                     </tbody>

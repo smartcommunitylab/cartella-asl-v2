@@ -134,8 +134,13 @@
                         </span>
                     </td>
 
-                    <td class="pointer">
+                    <td>
                         <span *ngIf="aa.stato=='in_attesa'" class="align-middle"></span>
+                        <span *ngIf="isValutazioneCompetenzeActive(aa)" class="align-middle spaceRight" ngbTooltip="Valuta le competenze acquisite durante il tirocinio">
+                            <div class='btn btn-primary btn-icon btn-xs' (click)="valutaCompetenze(aa)">
+                                <img class="btn-val" src="assets/images/valutazione_studente.svg">
+                            </div>
+                        </span>
                         <span *ngIf="!aa.rendicontazioneCorpo && aa.individuale && (aa.stato=='revisione' || aa.stato=='in_corso')"
                             class="align-middle">
                             <span #tooltipBotton="ngbTooltip" placement="bottom" ngbTooltip="{{aa.toolTipButton}}"
@@ -152,8 +157,7 @@
                                 </div>
                             </span>
                         </span>
-                        <span *ngIf="aa.stato=='archiviata'" placement="bottom" ngbTooltip="archiviata"
-                            class="align-middle" (click)="openDetail(aa)"></span>
+                        <span *ngIf="aa.stato=='archiviata'" class="align-middle"></span>
                     </td>
                 </tr>
             </tbody>
