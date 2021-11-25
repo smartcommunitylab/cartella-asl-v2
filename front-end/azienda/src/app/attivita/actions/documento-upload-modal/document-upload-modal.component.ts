@@ -12,8 +12,8 @@ export class DocumentUploadModalComponent implements OnInit {
   selectedFileName;
   saveFileObj = { type: null, file: null };
   optionTypes = {
-    "1": "doc_generico",
-    "2": "valutazione_studente"
+    "1": "valutazione_studente",
+    "2": "doc_generico",
   }
   @Input() attivitaIndividuale: boolean;
   @Output() newDocumentListener = new EventEmitter<Object>();
