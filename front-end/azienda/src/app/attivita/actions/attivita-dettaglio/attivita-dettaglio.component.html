@@ -241,9 +241,8 @@
                     <thead>
                         <tr>
                             <th width="20%">Creato da</th>
-                            <th *ngIf="!valutazioneCompetenzeActive" width="80%">Definizione</th>
-                            <th *ngIf="valutazioneCompetenzeActive" width="60%">Definizione</th>
-                            <th *ngIf="valutazioneCompetenzeActive" width="20%">Valutazione</th>
+                            <th width="60%">Definizione</th>
+                            <th width="20%">Valutazione</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -252,7 +251,9 @@
                             <td>{{competenza.titolo}}</td>
                             <td *ngIf="valutazioneCompetenzeActive" class="valutazione {{getValutazioneCss(competenza)}}">
                                 {{getValutazione(competenza)}}</td>
-                        </tr>
+                            <td *ngIf="!valutazioneCompetenzeActive" class="valutazione" ngbTooltip="Alla fine del periodo dell’attività 
+                            ti sarà richiesto di valutare l’acquisizione delle competenze da parte del tirocinante">-</td>
+                            </tr>
                     </tbody>
                 </table>
             </div>
