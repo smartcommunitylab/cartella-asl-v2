@@ -186,6 +186,9 @@ public class IstituzioneManager extends DataEntityManager {
 			dbIst.setRdpName(istituto.getRdpName());
 			dbIst.setRdpPhoneFax(istituto.getRdpPhoneFax());
 			dbIst.setPrivacyLink(istituto.getPrivacyLink());
+			dbIst.setPolizzaInail(istituto.getPolizzaInail());
+			dbIst.setRctPat(istituto.getRctPat());
+			dbIst.setInfortuniPat(istituto.getInfortuniPat());
 			istituzioneRepository.save(dbIst);
 		}
 		return null;
