@@ -263,6 +263,13 @@ public class ValutazioniManager extends DataEntityManager {
 		}
 		return getValutazioneCompetenzeReport(es);
 	}
+	
+	public void deleteValutazioniByEsperienzaId(Long esperienzaSvoltaId) {
+		List<ValutazioneCompetenza> valutazioniCompetenze = valutazioneCompetenzaRepository.findByEsperienzaSvoltaIdOrderByOrdineAsc(esperienzaSvoltaId);
+		List<ValutazioneAttivita> valutazioniAttivita = valutazioneAttivitaRepository.findByEsperienzaSvoltaIdOrderByPosizioneAsc(esperienzaSvoltaId);
+		valutazioneCompetenzaRepository.deleteAll(valutazioniCompetenze);
+		valutazioneAttivitaRepository.deleteAll(valutazioniAttivita);
+	}
 
 	private int countCompetenzeAcquisite(List<ValutazioneCompetenza> valutazioni) {
 		int count = 0;

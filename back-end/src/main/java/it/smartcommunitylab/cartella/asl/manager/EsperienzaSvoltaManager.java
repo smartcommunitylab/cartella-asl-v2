@@ -46,6 +46,8 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 	TeachingUnitManager tuManager;
 	@Autowired
 	EsperienzaAllineamentoManager esperienzaAllineamentoManager;
+	@Autowired
+	ValutazioniManager valutazioniManager;
 
 	public EsperienzaSvolta getEsperienzaSvolta(Long id) {
 		return esperienzaSvoltaRepository.findById(id).orElse(null);
@@ -85,6 +87,7 @@ public class EsperienzaSvoltaManager extends DataEntityManager {
 	public void deleteEsperienza(EsperienzaSvolta esperienza) {
 		presenzaManager.deletePresenzeByEsperienza(esperienza.getId());
 		documentManager.deleteDocumentsByRisorsaId(esperienza.getUuid());
+		valutazioniManager.deleteValutazioniByEsperienzaId(esperienza.getId());
 		esperienzaSvoltaRepository.deleteById(esperienza.getId());
 	}
 
