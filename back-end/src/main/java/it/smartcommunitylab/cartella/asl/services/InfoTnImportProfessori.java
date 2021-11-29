@@ -105,7 +105,14 @@ public class InfoTnImportProfessori {
 				ReferenteAlternanza professorLocal = referenteAlternanzaRepository
 						.findReferenteAlternanzaByExtId(professorExt.getExtId());
 				if (professorLocal != null) {
-					logger.info("skipping existing Professor: " + professorExt.getExtId());
+					logger.info("existing Professor: " + professorExt.getExtId());
+					if(Utils.isNotEmpty(professorExt.getEmail())) {
+						String email = professorExt.getEmail().trim();
+						if(Utils.isEmpty(professorLocal.getEmail()) || (!professorLocal.getEmail().equals(email))) {
+							professorLocal.setEmail(email);
+							referenteAlternanzaRepository.save(professorLocal);							
+						}
+					}
 					continue;
 				} 
 				List<ProfessoriClassi> classi = professoriClassiRepository.findByTeacherExtId(professorExt.getExtId());
