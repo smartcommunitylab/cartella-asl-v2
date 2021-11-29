@@ -102,7 +102,7 @@ public class StudenteManager extends DataEntityManager {
 			sb.append(" AND r0.courseId = (:courseId) ");
 		}
 		if (Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.cf) LIKE (:text))");
+			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.cf) = (:textCf))");
 		}
 		sb.append(" ORDER BY s0.surname, s0.name, r0.classroom");
 		String q = sb.toString();
@@ -116,6 +116,7 @@ public class StudenteManager extends DataEntityManager {
 		}
 		if (Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+			query.setParameter("textCf", text.trim().toUpperCase());
 		}
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
@@ -311,7 +312,7 @@ public class StudenteManager extends DataEntityManager {
 				sb.append(" AND r.courseId = (:courseId) ");
 			}
 			if (Utils.isNotEmpty(text)) {
-				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.cf) LIKE (:text))");
+				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.cf) = (:textCf))");
 			}
 			sb.append(" ORDER BY s.surname, s.name, r.classroom");
 			String q = sb.toString();
@@ -327,6 +328,7 @@ public class StudenteManager extends DataEntityManager {
 			if (Utils.isNotEmpty(text)) {
 				String like = "%" + text.trim().toUpperCase() + "%";
 				queryTutorClasse.setParameter("text", like);
+				queryTutorClasse.setParameter("textCf", text.trim().toUpperCase());
 			}
 
 			@SuppressWarnings("unchecked")
