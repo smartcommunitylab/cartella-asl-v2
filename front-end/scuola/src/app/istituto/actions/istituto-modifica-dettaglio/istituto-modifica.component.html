@@ -145,9 +145,28 @@
                                 #PECRDPInput="ngModel" placeholder="PEC RDP">
                         </div>
                         <div class="col-2"></div>
-                        <div class="col-5"></div>
+                        <div class="col-sm-5"
+                            [class.has-danger]="polizzaInailInput.invalid && (polizzaInailInput.dirty || polizzaInailInput.touched || forceErrorDisplay)">
+                            <label for="polizzaInail" *ngIf="istituto.rdpPec" class="active">Polizza INAIL</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.polizzaInail" id="polizzaInail" name="polizzaInail"
+                                #polizzaInailInput="ngModel" placeholder="Polizza INAIL">
+                        </div>
                     </div>
-
+                    <div class="row v-center form-group">
+                        <div class="col-sm-5"
+                            [class.has-danger]="rctPatInput.invalid && (rctPatInput.dirty || rctPatInput.touched || forceErrorDisplay)">
+                            <label for="rctPat" *ngIf="istituto.rctPat" class="active">RCT PAT</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.rctPat" id="rctPat" name="rctPat"
+                                #rctPatInput="ngModel" placeholder="RCT PAT">
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-sm-5"
+                            [class.has-danger]="infortuniPatInput.invalid && (infortuniPatInput.dirty || infortuniPatInput.touched || forceErrorDisplay)">
+                            <label for="infortuniPat" *ngIf="istituto.infortuniPat" class="active">Infortuni PAT</label>
+                            <input type="text" class="form-control" [(ngModel)]="istituto.infortuniPat" id="infortuniPat" name="infortuniPat"
+                                #infortuniPatInput="ngModel" placeholder="Infortuni PAT">
+                        </div>
+                    </div>
                     <div class="row v-center form-group">
                         <div class="col-5">
                             <ng-template #rtAddress let-place="result" let-term="term">
