@@ -13,8 +13,11 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
   esperienze;
   valutazionEsperienza;
   domande;
-  menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
+  menuContent = "In questa sezione trovi i risultati della valutazione che l’alunno/a ha fatto rispetto alla conguenza dell’esperienza svolta presso l’ente con il proprio percorso di studi.";
   showContent: boolean = false;
+  domanteTotale = 0;
+  domandeCompilati = 0;
+  percentage;
 
   valutazioni = [
     { titolo: 'Moltissimo', punteggio: 5 },
@@ -47,18 +50,39 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       let id = params['id'];
+      this.initCounter();
       this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
+        this.percentage = ((this.esperienze[0].oreRendicontate / this.attivita.ore) * 100).toFixed(0);
         this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
           this.valutazionEsperienza = valutazione;
           this.domande = valutazione.valutazioni;
+          this.domande.forEach(d=> {
+            if (d.rispostaChiusa) {
+              this.domanteTotale++;
+            }
+            if (d.punteggio > 0) {
+              this.domandeCompilati++;
+            }
+          })
         });
       });
     });
-
   }
 
+  initCounter() {
+    this.domanteTotale = 0;
+    this.domandeCompilati = 0;
+  }
+
+  setOreInserite() {
+    var label = '';
+    if (this.attivita && this.esperienze[0])
+       label = this.esperienze[0].oreRendicontate + "/" + this.attivita.ore + " (" + this.percentage + "%)";
+    return label;
+  }
+  
   menuContentShow() {
     this.showContent = !this.showContent;
   }
