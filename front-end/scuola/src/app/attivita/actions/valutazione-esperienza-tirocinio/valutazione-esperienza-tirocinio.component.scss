@@ -4,7 +4,6 @@
 .broderRight{
     border-right: 2.5px solid #393939;
 }
-
 .broderLeft{
     border-left: 2.5px solid #393939;
 }
@@ -17,5 +16,9 @@
 .row-fixed-height {
     display: flex; /* equal height of the children */
     height: 80px;
-    overflow-y: auto;
+    overflow-y: auto;    
+}
+table {
+    table-layout:fixed;
+    width:900px
 }

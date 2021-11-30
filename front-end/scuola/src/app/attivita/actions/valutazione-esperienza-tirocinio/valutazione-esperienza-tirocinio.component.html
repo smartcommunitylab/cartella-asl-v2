@@ -30,6 +30,7 @@
             <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
         </div>
     </div>
+    <br>
     <div class="callNote default">
         <span class="row">
           <span class="col font-weight-bold">Compilato il</span>
@@ -40,20 +41,20 @@
           <span class="col font-weight-bold">Ore Inserite</span>
         </span> 
         <span class="row">
-          <span class="col">13/05/2021</span>
-          <span class="col">13 su 13</span>
-          <span class="col">1.2</span>
-          <span class="col">20/11/2019</span>
-          <span class="col">20/11/2019</span>
-          <span class="col"></span>
+          <span class="col">{{ valutazionEsperienza.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+          <span class="col">{{ domandeCompilati }} su {{ domanteTotale }}</span>
+          <span class="col">{{ valutazionEsperienza.media }}</span>
+          <span class="col">{{ attivita.dataInizio | date:'dd/MM/yyyy' }}</span>
+          <span class="col">{{ attivita.dataFine | date:'dd/MM/yyyy' }}</span>
+          <span class="col">{{ setOreInserite() }}</span>
         </span>
       </div>
       <br>
       <br>
-    <div class="card-body m-16">
+    <div class="modify-card-body m-16 modify-bgcolor">
         <div class="row">
             <!-- left column -->
-            <div class="col-6 card broderRight">
+            <div class="col-6 broderRight">
                 <label class="font-weight-bold">Domande</label>
                 <table class="table">
                      <tbody>
@@ -64,13 +65,14 @@
                 </table>
             </div>
             <!-- right column -->
-            <div class="card col-6 broderLeft">
+            <div class="col-6 broderLeft">
                 <label class="font-weight-bold">Risposte</label>
                 <table class="table">
                     <tbody>
                         <tr *ngFor="let d of domande">
                             <td *ngIf="d.rispostaChiusa" class="row-fixed-height align-middle">{{ setLabel(d.punteggio) }}</td>
-                            <td *ngIf="!d.rispostaChiusa" class="row-fixed-height align-middle">{{ setRisposta(d.risposta) }}</td>
+                            <td *ngIf="!d.rispostaChiusa" class="text row-fixed-height align-middle">
+                                <span class="text">{{ setRisposta(d.risposta) }}</span></td>
                         </tr>
                     </tbody>
                 </table>
