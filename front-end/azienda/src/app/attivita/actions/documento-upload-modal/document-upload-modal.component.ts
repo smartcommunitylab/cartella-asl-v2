@@ -16,6 +16,7 @@ export class DocumentUploadModalComponent implements OnInit {
     "2": "doc_generico",
   }
   @Input() attivitaIndividuale: boolean;
+  @Input() tirocinioCurriculare: boolean;
   @Output() newDocumentListener = new EventEmitter<Object>();
 
   constructor(public activeModal: NgbActiveModal) { }

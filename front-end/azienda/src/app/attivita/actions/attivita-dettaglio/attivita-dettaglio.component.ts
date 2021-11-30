@@ -236,6 +236,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   openDocumentUpload() {
     const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "documentUploadModalClass" });
     modalRef.componentInstance.attivitaIndividuale = this.individuale;
+    modalRef.componentInstance.tirocinioCurriculare = (this.attivita.tipologia == 7);
     modalRef.componentInstance.newDocumentListener.subscribe((option) => {
       console.log(option);
       this.dataService.uploadDocumentToRisorsa(option, this.attivita.uuid + '').subscribe((doc) => {
