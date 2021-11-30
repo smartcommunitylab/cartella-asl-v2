@@ -229,6 +229,45 @@
         </div>
     </div>
     <br>
+    <div *ngIf="attivita && isTiro() && ( attivita.stato=='archiviata' || isValutazioneActive() )">
+        <div class="title">Valutazioni</div>
+        <div class="list-group">
+             <table class="table table-hover">
+                <thead *ngIf="valEsperienzaTiro || valCompetenzeTiro">
+                    <tr>
+                        <th></th>
+                        <th>Data compilazione</th>
+                        <th>Compilata da</th>
+                        <th>Esito</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="valEsperienzaTiro">
+                        <td class="pointer">
+                            <span class="align-middle" onclick="return false;"
+                                ngbTooltip="Visualizza la valutazione dell’esperienza fatta dallo studente" placement="right">
+                                <a [routerLink]="" (click)="routeValutazioneEsperienza()">Valutazione esperienza</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{ valEsperienzaTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{esperienze[0].nominativoStudente}}</span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{ setMedia(valEsperienzaTiro.media) }}</span>
+                        </td>
+                        <td><span class="align-middle" [ngStyle]="styleStatoVal(valEsperienzaTiro)">{{
+                                setStatoValutazione(valEsperienzaTiro) }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <br />
+    </div>
     <div *ngIf="attivita && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])
     && (attivita.tipologia == 7 || attivita.tipologia == 10)">
         <div class="title">Convenzioni</div>

@@ -115,6 +115,11 @@ export class AttivitaDettaglioComponent implements OnInit {
               }
               this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
                 this.convenzioni = res;
+                if (this.isValutazioneActive() && this.isTiro()) {
+                  this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
+                    this.valEsperienzaTiro = valutazione;
+                  });
+                }
               },
                 (err: any) => console.log(err),
                 () => console.log('getEnteConvenzioni'));
@@ -406,6 +411,49 @@ styleOptionConvenzione(convenzione) {
       }
     }
     return 0;
+  }
+
+  isValutazioneActive() {
+    var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
+    var now = moment();
+    if (dataMinima.isBefore(now)) {
+      return true;
+    }
+    return false;
+  }
+
+  routeValutazioneEsperienza() {
+    this.router.navigate(['valutazione/esperienza/'], { relativeTo: this.route });    
+  }
+
+  setMedia(val) {
+    if (val == 'NaN') {
+      return '-';
+    } else {
+      return 'Media risposte ' + val;
+    }
+  }
+
+  styleStatoVal(esp) {
+    var style = {
+      'color': '#707070', //grey
+    };
+    if (esp.stato == 'incompleta') {
+      style['color'] = '#F83E5A'; // red
+    } else if (esp.stato == 'non_compilata') {
+      style['color'] = '#F83E5A'; // red
+    }
+    return style;
+  }
+
+  setStatoValutazione(val) {
+    let stato = 'Compilata';
+    if (val.stato == 'incompleta') {
+      stato = 'In compilata';
+    } else if (val.stato == 'non_compilata') {
+      stato = 'Non compilata';
+    }
+    return stato;
   }
   
 }
