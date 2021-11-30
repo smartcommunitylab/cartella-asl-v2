@@ -46,6 +46,15 @@ export class AttivitaDettaglioComponent implements OnInit {
   zeroStudent: boolean;
   ente;
   convenzioni = [];
+  valEsperienzaTiro;
+  valCompetenzeTiro;
+  valutazioni = [
+    { titolo: 'Avanzato', punteggio: 4 },
+    { titolo: 'Intermedio', punteggio: 3 },
+    { titolo: 'Base', punteggio: 2 },
+    { titolo: 'Non acquisita', punteggio: 1 },
+    { titolo: '-', punteggio: 0 }
+  ];
 
   breadcrumbItems = [
     {
@@ -64,12 +73,6 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
-
-        // if (this.attivita.offertaId) {
-        //   this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
-        //     this.offertaAssociata = off;
-        //   })
-        // }
 
         this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
         
@@ -373,6 +376,35 @@ styleOptionConvenzione(convenzione) {
       return true;
     }
     return false;
+  }
+
+  styleLabel(competenza) {
+    var style = {};
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    if (punteggio > 1) {
+      style['font-weight'] = 600;      
+    }
+    return style;
+  }
+
+  setLabel(competenza) {
+    let titolo = '-';
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    let rtn = this.valutazioni.find(data => data.punteggio == punteggio);
+    if (rtn) titolo = rtn.titolo;
+    return titolo;
+  }
+
+  getValutazioneByUri(uri) {
+    if (this.valCompetenzeTiro) {
+      for (let index = 0; index < this.valCompetenzeTiro.valutazioni.length; index++) {
+        const v = this.valCompetenzeTiro.valutazioni[index];
+        if(v.competenzaUri == uri) {
+          return v.punteggio;
+        }
+      }
+    }
+    return 0;
   }
   
 }
