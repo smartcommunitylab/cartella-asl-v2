@@ -369,7 +369,7 @@ styleOptionConvenzione(convenzione) {
   }
 
   isTiro() {
-    if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
+    if (this.attivita.tipologia == 7) {
       return true;
     }
     return false;
