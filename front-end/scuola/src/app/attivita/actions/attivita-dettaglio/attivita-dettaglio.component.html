@@ -247,7 +247,7 @@
                 <tbody>
                     <tr *ngFor="let conv of convenzioni">
                         <!-- Nome -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle">{{ conv.nome }}</span>
                         </td>
                         <!-- File convenzione -->
@@ -255,18 +255,18 @@
                             <span class="align-middle"><a [routerLink]="" (click)="downloadConvenzioneDoc(conv)">{{conv.nomeFile}}</a></span>
                         </td>
                         <!-- Data inizio -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle">{{ conv.dataInizio | date:'dd/MM/yyyy' }}</span>
                         </td>
                         <!-- Data fine -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ conv.dataFine | date:'dd/MM/yyyy' }}</span>
                         </td>
                         <td class="pointer">
                             <span class="align-middle"><a [routerLink]="" (click)="routeEntity()">{{ conv.nomeEnte }}</a></span>
                         </td>
                         <!-- stato -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ setStatoConvenzione(conv)
                                 }}</span>
                         </td>

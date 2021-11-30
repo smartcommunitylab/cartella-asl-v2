@@ -35,6 +35,7 @@ const routes: Routes = [
       { path: 'detail/:id/modifica/studenti/presenze/individuale', component: GestionePresenzeIndividualeComponent },
       { path: 'detail/:id/modifica/studenti/presenze/gruppo', component: GestionePresenzeGruppoComponent },
       { path: 'detail/:id/modifica/studenti/ore', component: ModificaOreStudentiComponent },
+      { path: 'detail/:id/valutazione/esperienza', component: ValutazioneEsperienzaTirocinioComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
