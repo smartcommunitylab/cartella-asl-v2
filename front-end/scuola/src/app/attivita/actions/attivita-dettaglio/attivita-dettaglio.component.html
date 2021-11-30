@@ -191,7 +191,7 @@
                 </svg>
             </button>
             &nbsp;
-            <button (click)="generaProgettoFormativo()" *ngIf="attivita.stato!='archiviata' && attivita.tipologia == 7"
+            <button (click)="generaProgettoFormativo()" *ngIf="attivita.stato!='archiviata' && isTiro()"
                 class="btn btn-primary v-center-inline btn-icon" placement="right"
                 ngbTooltip="">
                 Genera progetto formativo&nbsp;&nbsp;&nbsp;

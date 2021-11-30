@@ -19,6 +19,7 @@ import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-m
 import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
 import { ModificaOreStudentiComponent } from'./actions/modifica-ore-studenti/modifica-ore-studenti';
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { ValutazioneEsperienzaTirocinioComponent } from './actions/valutazione-esperienza-tirocinio/valutazione-esperienza-tirocinio.component';
 
 const routes: Routes = [
   {
@@ -62,7 +63,8 @@ export class AttivitaRoutingModule {
     ArchiaviazioneAttivitaModal,
     AssociaOffertaComponent,
     ModificaOreStudentiComponent,
-    AvvisoEnteConvenzioneModal
+    AvvisoEnteConvenzioneModal,
+    ValutazioneEsperienzaTirocinioComponent
   ];
 }
 

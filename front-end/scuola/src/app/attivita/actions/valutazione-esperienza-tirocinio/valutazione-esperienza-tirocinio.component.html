@@ -1,0 +1,80 @@
+<div class="mb-3 list-container md-margin sub-navbar-content-below m16">
+    <div class="row m-left" *ngIf="attivita">
+        <div class="col-6 v-center">
+            <span class="title">{{attivita.titolo}}</span>&nbsp;&nbsp;
+            <span (click)="menuContentShow()" class="pointer">
+                <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
+                </svg>
+                <img *ngIf="showContent" src="assets/images/it-help-circle-FULL.svg" class="helpIcon">
+            </span>
+        </div>
+    </div>
+    <hr class="hr" />
+    <div *ngIf="showContent" class="row rectangle v-center-inline">
+        <div class="col-1 helpMessageIcon-mRight">
+            <svg class="icon icon-sm fill-darkblue">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-info-circle"></use>
+            </svg>
+        </div>
+        <div class="col-10 helpMessage-mLeft">
+            <span>{{menuContent}}</span>
+        </div>
+        <div class="col-1"><svg class="icon float-right fill-darkblue pointer helpMessageClose-mRight"
+                (click)="menuContentShow()">
+                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+            </svg></div>
+    </div>
+    <div class="row m-subNav">
+        <div class="col-12">
+            <sub-navbar [breadcrumbItems]="breadcrumbItems"></sub-navbar>
+        </div>
+    </div>
+    <div class="callNote default">
+        <span class="row">
+          <span class="col font-weight-bold">Compilato il</span>
+          <span class="col font-weight-bold">Item compilati</span>
+          <span class="col font-weight-bold">Media risposte</span>
+          <span class="col font-weight-bold">Inizio attività</span>
+          <span class="col font-weight-bold">Fine attività</span>
+          <span class="col font-weight-bold">Ore Inserite</span>
+        </span> 
+        <span class="row">
+          <span class="col">13/05/2021</span>
+          <span class="col">13 su 13</span>
+          <span class="col">1.2</span>
+          <span class="col">20/11/2019</span>
+          <span class="col">20/11/2019</span>
+          <span class="col"></span>
+        </span>
+      </div>
+      <br>
+      <br>
+    <div class="card-body m-16">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-6 card broderRight">
+                <label class="font-weight-bold">Domande</label>
+                <table class="table">
+                     <tbody>
+                        <tr *ngFor="let d of domande">
+                            <td class="row-fixed-height align-middle">{{d.posizione}}&nbsp;. {{d.descrizione}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- right column -->
+            <div class="card col-6 broderLeft">
+                <label class="font-weight-bold">Risposte</label>
+                <table class="table">
+                    <tbody>
+                        <tr *ngFor="let d of domande">
+                            <td *ngIf="d.rispostaChiusa" class="row-fixed-height align-middle">{{ setLabel(d.punteggio) }}</td>
+                            <td *ngIf="!d.rispostaChiusa" class="row-fixed-height align-middle">{{ setRisposta(d.risposta) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

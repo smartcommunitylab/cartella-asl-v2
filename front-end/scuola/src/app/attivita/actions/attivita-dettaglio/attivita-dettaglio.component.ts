@@ -367,5 +367,12 @@ styleOptionConvenzione(convenzione) {
       document.body.removeChild(downloadLink);
     });
   }
+
+  isTiro() {
+    if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
+      return true;
+    }
+    return false;
+  }
   
 }
