@@ -76,12 +76,12 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
     this.domandeCompilati = 0;
   }
 
-  setOreInserite() {
-    var label = '';
-    if (this.attivita && this.esperienze[0])
-       label = this.esperienze[0].oreRendicontate + "/" + this.attivita.ore + " (" + this.percentage + "%)";
-    return label;
-  }
+  // setOreInserite() {
+  //   var label = '';
+  //   if (this.attivita && this.esperienze[0])
+  //      label = this.esperienze[0].oreRendicontate + "/" + this.attivita.ore + " (" + this.percentage + "%)";
+  //   return label;
+  // }
   
   menuContentShow() {
     this.showContent = !this.showContent;
