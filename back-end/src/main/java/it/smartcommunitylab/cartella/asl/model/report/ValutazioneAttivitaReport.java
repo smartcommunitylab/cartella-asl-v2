@@ -24,7 +24,11 @@ public class ValutazioneAttivitaReport {
 	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate ultimaModifica;
 	private String media;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataFine;
 	private int ore;
 	private int oreInserite;

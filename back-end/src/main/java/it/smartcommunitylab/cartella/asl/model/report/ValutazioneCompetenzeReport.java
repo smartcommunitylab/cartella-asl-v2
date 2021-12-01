@@ -25,7 +25,11 @@ public class ValutazioneCompetenzeReport {
 	private LocalDate ultimaModifica;
 	private List<ValutazioneCompetenza> valutazioni = new ArrayList<>();
 	private int acquisite;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataInizio;	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate dataFine;
 	private int ore;
 	private int oreInserite;	
