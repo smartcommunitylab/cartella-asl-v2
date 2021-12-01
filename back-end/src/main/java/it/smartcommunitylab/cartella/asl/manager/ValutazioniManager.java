@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,14 @@ import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza.Stati;
 import it.smartcommunitylab.cartella.asl.model.Competenza;
 import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.PresenzaGiornaliera;
 import it.smartcommunitylab.cartella.asl.model.ValutazioneAttivita;
 import it.smartcommunitylab.cartella.asl.model.ValutazioneCompetenza;
 import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
 import it.smartcommunitylab.cartella.asl.model.report.ValutazioneCompetenzeReport;
 import it.smartcommunitylab.cartella.asl.repository.AttivitaAlternanzaRepository;
 import it.smartcommunitylab.cartella.asl.repository.EsperienzaSvoltaRepository;
+import it.smartcommunitylab.cartella.asl.repository.PresenzaGiornaliereRepository;
 import it.smartcommunitylab.cartella.asl.repository.ValutazioneAttivitaRepository;
 import it.smartcommunitylab.cartella.asl.repository.ValutazioneCompetenzaRepository;
 
@@ -46,6 +49,9 @@ public class ValutazioniManager extends DataEntityManager {
 	EsperienzaSvoltaRepository esperienzaSvoltaRepository;
 	
 	@Autowired
+	private PresenzaGiornaliereRepository presenzeRepository;
+	
+	@Autowired
 	CompetenzaManager competenzaManager;
 	
 	@Autowired
@@ -56,8 +62,8 @@ public class ValutazioniManager extends DataEntityManager {
 	private ObjectMapper mapper = new ObjectMapper()
 			.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	
-	private ValutazioneAttivitaReport getValutazioneAttivitaReport(Long esperienzaSvoltaId) throws Exception {
-		List<ValutazioneAttivita> valutazioni = valutazioneAttivitaRepository.findByEsperienzaSvoltaIdOrderByPosizioneAsc(esperienzaSvoltaId);
+	private ValutazioneAttivitaReport getValutazioneAttivitaReport(EsperienzaSvolta es, boolean perIstituto) throws Exception {
+		List<ValutazioneAttivita> valutazioni = valutazioneAttivitaRepository.findByEsperienzaSvoltaIdOrderByPosizioneAsc(es.getId());
 		ValutazioneAttivitaReport report = new ValutazioneAttivitaReport();
 		int count = countDomandeCompilate(valutazioni);
 		if(count == 0) {
@@ -78,6 +84,21 @@ public class ValutazioniManager extends DataEntityManager {
 			report.setMedia(getMedia(valutazioni));
 			report.setValutazioni(valutazioni);	
 		}
+		if(perIstituto) {
+			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+			if(aa == null) {
+				throw new BadRequestException("attività non trovata");
+			}
+			report.setDataInizio(aa.getDataInizio());
+			report.setDataFine(aa.getDataFine());
+			report.setOre(aa.getOre());
+			int oreInserite = 0;
+			List<PresenzaGiornaliera> presenze = presenzeRepository.findByEsperienzaSvoltaId(es.getId(), Sort.by(Sort.Direction.DESC, "giornata"));
+			for(PresenzaGiornaliera p : presenze) {
+				oreInserite += p.getOreSvolte();
+			}
+			report.setOreInserite(oreInserite);
+		}
 		return report;
 	}
 	
@@ -89,7 +110,7 @@ public class ValutazioniManager extends DataEntityManager {
 		if(!es.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istituto non autorizzato");
 		}
-		return getValutazioneAttivitaReport(esperienzaSvoltaId);
+		return getValutazioneAttivitaReport(es, true);
 	}
 	
 	public ValutazioneAttivitaReport getValutazioneAttivitaReportByStudente(Long esperienzaSvoltaId, String studenteId) throws Exception {
@@ -100,7 +121,7 @@ public class ValutazioniManager extends DataEntityManager {
 		if(!es.getStudenteId().equals(studenteId)) {
 			throw new BadRequestException("utente non autorizzato");
 		}
-		return getValutazioneAttivitaReport(esperienzaSvoltaId);
+		return getValutazioneAttivitaReport(es, false);
 	}
 	
 	public ValutazioneAttivitaReport saveValutazioneAttivita(String studenteId, Long esperienzaSvoltaId, 
@@ -130,7 +151,7 @@ public class ValutazioniManager extends DataEntityManager {
 			va.setUltimaModifica(ultimaModifica);
 			valutazioneAttivitaRepository.save(va);
 		}
-		return getValutazioneAttivitaReport(esperienzaSvoltaId);
+		return getValutazioneAttivitaReport(es, false);
 	}
 	
 	private int countDomandeCompilate(List<ValutazioneAttivita> valutazioni) {
@@ -163,7 +184,7 @@ public class ValutazioniManager extends DataEntityManager {
 		return valutazioni;
 	}
 	
-	private ValutazioneCompetenzeReport getValutazioneCompetenzeReport(EsperienzaSvolta es) throws Exception {
+	private ValutazioneCompetenzeReport getValutazioneCompetenzeReport(EsperienzaSvolta es, boolean perIstituto) throws Exception {
 		List<ValutazioneCompetenza> valutazioni = valutazioneCompetenzaRepository.findByEsperienzaSvoltaIdOrderByOrdineAsc(es.getId());
 		ValutazioneCompetenzeReport report = new ValutazioneCompetenzeReport();
 		int acquisite = countCompetenzeAcquisite(valutazioni);
@@ -182,6 +203,21 @@ public class ValutazioniManager extends DataEntityManager {
 			report.setValutazioni(getEmptyValutazioneCompetenze(aa));
 			report.setStato(ValutazioneCompetenzeReport.Stato.non_compilata);
 		}
+		if(perIstituto) {
+			AttivitaAlternanza aa = attivitaAlternanzaRepository.findById(es.getAttivitaAlternanzaId()).orElse(null);
+			if(aa == null) {
+				throw new BadRequestException("attività non trovata");
+			}
+			report.setDataInizio(aa.getDataInizio());
+			report.setDataFine(aa.getDataFine());
+			report.setOre(aa.getOre());
+			int oreInserite = 0;
+			List<PresenzaGiornaliera> presenze = presenzeRepository.findByEsperienzaSvoltaId(es.getId(), Sort.by(Sort.Direction.DESC, "giornata"));
+			for(PresenzaGiornaliera p : presenze) {
+				oreInserite += p.getOreSvolte();
+			}
+			report.setOreInserite(oreInserite);
+		}		
 		return report;
 	}
 	
@@ -193,7 +229,7 @@ public class ValutazioniManager extends DataEntityManager {
 		if(!es.getStudenteId().equals(studenteId)) {
 			throw new BadRequestException("utente non autorizzato");
 		}
-		return getValutazioneCompetenzeReport(es);
+		return getValutazioneCompetenzeReport(es, false);
 	}
 	
 	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByIstituto(Long esperienzaSvoltaId, String istitutoId) throws Exception {
@@ -204,7 +240,7 @@ public class ValutazioniManager extends DataEntityManager {
 		if(!es.getIstitutoId().equals(istitutoId)) {
 			throw new BadRequestException("istituto non autorizzato");
 		}
-		return getValutazioneCompetenzeReport(es);
+		return getValutazioneCompetenzeReport(es, true);
 	}
 
 	public ValutazioneCompetenzeReport getValutazioneCompetenzeReportByEnte(Long esperienzaSvoltaId, String enteId) throws Exception {
@@ -219,7 +255,7 @@ public class ValutazioniManager extends DataEntityManager {
 		if(!enteId.equals(aa.getEnteId())) {
 			throw new BadRequestException("ente non autorizzato");
 		}
-		return getValutazioneCompetenzeReport(es);
+		return getValutazioneCompetenzeReport(es, false);
 	}
 	
 	private List<ValutazioneCompetenza> getEmptyValutazioneCompetenze(AttivitaAlternanza aa) {
@@ -261,7 +297,7 @@ public class ValutazioniManager extends DataEntityManager {
 			vc.setUltimaModifica(ultimaModifica);
 			valutazioneCompetenzaRepository.save(vc);
 		}
-		return getValutazioneCompetenzeReport(es);
+		return getValutazioneCompetenzeReport(es, true);
 	}
 	
 	public void deleteValutazioniByEsperienzaId(Long esperienzaSvoltaId) {

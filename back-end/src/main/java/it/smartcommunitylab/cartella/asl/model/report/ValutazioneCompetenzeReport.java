@@ -25,6 +25,10 @@ public class ValutazioneCompetenzeReport {
 	private LocalDate ultimaModifica;
 	private List<ValutazioneCompetenza> valutazioni = new ArrayList<>();
 	private int acquisite;
+	private LocalDate dataInizio;	
+	private LocalDate dataFine;
+	private int ore;
+	private int oreInserite;	
 	
 	public LocalDate getUltimaModifica() {
 		return ultimaModifica;
@@ -49,6 +53,30 @@ public class ValutazioneCompetenzeReport {
 	}
 	public void setAcquisite(int acquisite) {
 		this.acquisite = acquisite;
+	}
+	public LocalDate getDataInizio() {
+		return dataInizio;
+	}
+	public void setDataInizio(LocalDate dataInizio) {
+		this.dataInizio = dataInizio;
+	}
+	public LocalDate getDataFine() {
+		return dataFine;
+	}
+	public void setDataFine(LocalDate dataFine) {
+		this.dataFine = dataFine;
+	}
+	public int getOre() {
+		return ore;
+	}
+	public void setOre(int ore) {
+		this.ore = ore;
+	}
+	public int getOreInserite() {
+		return oreInserite;
+	}
+	public void setOreInserite(int oreInserite) {
+		this.oreInserite = oreInserite;
 	}
 
 }
