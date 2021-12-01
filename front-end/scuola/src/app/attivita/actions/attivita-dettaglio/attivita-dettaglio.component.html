@@ -1,7 +1,7 @@
 <div class="mb-3 list-container md-margin sub-navbar-content-below m16">
     <div class="row m-left" *ngIf="attivita">
         <div class="col-6 v-center">
-            <span class="title">{{attivita.titolo}}</span>&nbsp;&nbsp;
+            <span class="modifyTitleStyle">{{attivita.titolo}}</span>&nbsp;&nbsp;
             <span (click)="menuContentShow()" class="pointer">
                 <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
@@ -237,7 +237,7 @@
                     <tr>
                         <th></th>
                         <th>Data compilazione</th>
-                        <th>Compilata da</th>
+                        <th>Compilabile da</th>
                         <th>Esito</th>
                         <th>Stato</th>
                     </tr>
@@ -251,7 +251,8 @@
                             </span>
                         </td>
                         <td>
-                            <span class="align-middle">{{ valEsperienzaTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+                            <span *ngIf="valEsperienzaTiro.ultimaModifica" class="align-middle">{{ valEsperienzaTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+                            <span *ngIf="!valEsperienzaTiro.ultimaModifica" class="align-middle">-</span>
                         </td>
                         <td>
                             <span class="align-middle">{{esperienze[0].nominativoStudente}}</span>
@@ -263,6 +264,29 @@
                                 setStatoValutazione(valEsperienzaTiro) }}</span>
                         </td>
                     </tr>
+                    <tr *ngIf="valCompetenzeTiro">
+                        <td class="pointer">
+                            <span class="align-middle" onclick="return false;"
+                                ngbTooltip="Visualizza la valutazione fatta dall’ente sull’acquisizione delle competenze associate all’attività"
+                                placement="right">
+                                <a [routerLink]="" (click)="routeValutazioneCompetenze()">Valutazione competenze</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngIf="valCompetenzeTiro.ultimaModifica" class="align-middle">{{ valCompetenzeTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+                            <span *ngIf="!valCompetenzeTiro.ultimaModifica" class="align-middle">-</span>
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle">{{ ente.nome }}</span>
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle">{{ setMedia(valCompetenzeTiro.media) }}</span>
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle" [ngStyle]="styleStatoValCompetenza(valCompetenzeTiro)">{{
+                                setStatoValutazioneCompetenze(valCompetenzeTiro) }}</span>
+                        </td>
+                    </tr>              
                 </tbody>
             </table>
         </div>

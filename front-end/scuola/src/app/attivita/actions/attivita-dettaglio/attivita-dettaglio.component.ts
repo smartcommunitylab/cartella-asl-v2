@@ -118,6 +118,9 @@ export class AttivitaDettaglioComponent implements OnInit {
                 if (this.isValutazioneActive() && this.isTiro()) {
                   this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                     this.valEsperienzaTiro = valutazione;
+                    this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
+                      this.valCompetenzeTiro = res;
+                    })
                   });
                 }
               },
@@ -427,7 +430,7 @@ styleOptionConvenzione(convenzione) {
   }
 
   setMedia(val) {
-    if (val == 'NaN') {
+    if (val == 'NaN' || !val || val == 'undefined' || val == 0) {
       return '-';
     } else {
       return 'Media risposte ' + val;
@@ -447,6 +450,32 @@ styleOptionConvenzione(convenzione) {
   }
 
   setStatoValutazione(val) {
+    let stato = 'Compilata';
+    if (val.stato == 'incompleta') {
+      stato = 'In compilata';
+    } else if (val.stato == 'non_compilata') {
+      stato = 'Non compilata';
+    }
+    return stato;
+  }
+
+  routeValutazioneCompetenze() {
+    this.router.navigate(['valutazione/competenze/'], { relativeTo: this.route });    
+  }
+
+  styleStatoValCompetenza(esp) {
+    var style = {
+      'color': '#707070', //grey
+    };
+    if (esp.stato == 'incompleta') {
+      style['color'] = '#F83E5A'; // red
+    } else if (esp.stato == 'non_compilata') {
+      style['color'] = '#F83E5A'; // red
+    }
+    return style;
+  }
+  
+  setStatoValutazioneCompetenze(val) {
     let stato = 'Compilata';
     if (val.stato == 'incompleta') {
       stato = 'In compilata';
