@@ -99,7 +99,7 @@ public class StudenteManager extends DataEntityManager {
 			sb.append(" AND r0.courseId = (:courseId) ");
 		}
 		if (Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.name) LIKE (:text))");
+			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.cf) LIKE (:text))");
 		}
 		sb.append(" ORDER BY s0.surname, s0.name, r0.classroom");
 		String q = sb.toString();
@@ -308,7 +308,7 @@ public class StudenteManager extends DataEntityManager {
 				sb.append(" AND r.courseId = (:courseId) ");
 			}
 			if (Utils.isNotEmpty(text)) {
-				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.name) LIKE (:text))");
+				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.cf) LIKE (:text))");
 			}
 			sb.append(" ORDER BY s.surname, s.name, r.classroom");
 			String q = sb.toString();

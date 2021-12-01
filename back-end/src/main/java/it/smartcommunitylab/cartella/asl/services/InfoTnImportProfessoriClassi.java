@@ -86,8 +86,8 @@ public class InfoTnImportProfessoriClassi {
 
 		// read epoc timestamp from db(if exist)
 		if (metaInfo.getEpocTimestamp() > 0) {
-			url = infoTNAPIUrl + "/professoriclassi?schoolYear=" + schoolYear + "&timestamp="
-					+ metaInfo.getEpocTimestamp();
+			url = infoTNAPIUrl + "/professoriclassi?schoolYear=" + schoolYear;
+			//url = infoTNAPIUrl + "/professoriclassi?schoolYear=" + schoolYear + "&timestamp=" + metaInfo.getEpocTimestamp();
 		} else {
 			metaInfo.setEpocTimestamp(System.currentTimeMillis()); //set it for the first time.
 			url = infoTNAPIUrl + "/professoriclassi?schoolYear=" + schoolYear;

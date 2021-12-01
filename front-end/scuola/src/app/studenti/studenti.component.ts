@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { DataService } from '../core/services/data.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { StateStorageService } from '../core/auth/state-storage.service';
 
 @Component({
   selector: 'cm-studenti',
@@ -23,14 +24,21 @@ export class StudentiComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private storageService: StateStorageService) {
     this.filtro = {
-      text: null,
-      corsoId: null
+      text: null
     }
   }
 
   ngOnInit() {
+    // retrieve filter states.
+    this.filtro = JSON.parse(this.storageService.getfiltroStudente());
+    if (!this.filtro) {
+      this.filtro = {
+        text: ''
+      };
+    }
     this.getStudenti(1);
   }
 
@@ -72,7 +80,7 @@ export class StudentiComponent implements OnInit {
                 studente.oreSvolteTerza.pgBType = 'warning';
               }
             }
-            
+
             if (studente.oreSvolteQuarta) {
               if (studente.oreSvolteQuarta.total > 0 && studente.oreSvolteQuarta.hours >= studente.oreSvolteQuarta.total) {
                 studente.oreSvolteQuarta.pgBType = 'success';
@@ -80,7 +88,7 @@ export class StudentiComponent implements OnInit {
                 studente.oreSvolteQuarta.pgBType = 'warning';
               }
             }
-            
+
             if (studente.oreSvolteQuinta) {
               if (studente.oreSvolteQuinta.total > 0 && studente.oreSvolteQuinta.hours >= studente.oreSvolteQuinta.total) {
                 studente.oreSvolteQuinta.pgBType = 'success';
@@ -88,7 +96,7 @@ export class StudentiComponent implements OnInit {
                 studente.oreSvolteQuinta.pgBType = 'warning';
               }
             }
-            
+
           } else {
             studente.oreSvolteSeconda.pgBType = 'error';
             studente.oreSvolteTerza.pgBType = 'error';
@@ -101,7 +109,7 @@ export class StudentiComponent implements OnInit {
         () => console.log('get lista studenti'));
   }
 
-  setProgressBarType(std, anno) {   
+  setProgressBarType(std, anno) {
     var label = '-';
     switch (anno) {
       case 2: {
@@ -115,7 +123,7 @@ export class StudentiComponent implements OnInit {
       case 4: {
         label = std.oreSvolteQuarta.pgBType;
         break;
-      } 
+      }
       case 5: {
         label = std.oreSvolteQuinta.pgBType;
         break;
@@ -129,7 +137,6 @@ export class StudentiComponent implements OnInit {
   }
 
   showTipRiga(ev, studente, year) {
-    // console.log(ev.target.title);
     if (studente.pianoId) {
       let lableConPiano = ' Piano triennale completo al *percentage*% (*fraction*) ore'; // (n/m ore)
       lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreValidate / studente.oreTotali) * 100).toFixed(0));
@@ -139,56 +146,28 @@ export class StudentiComponent implements OnInit {
       let labelSenzaPiano = 'Attenzione: non ci sono piani associati a questo corso di studio!';
       studente.toolTipRiga = labelSenzaPiano;
     }
-    // let lableConPiano = ' Piano *YS* completo al *percentage*% (*fraction*) ore'; // (n/m ore)
-    // if (studente.oreSvolteTerza && studente.oreSvolteQuarta && studente.oreSvolteQuinta) {
-    //   switch (year) {
-    //     case '3':
-    //       {
-    //         lableConPiano = lableConPiano.replace('*YS*', 'triennale');
-    //         if (studente.oreSvolteTerza.total > 0) {
-    //           lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreSvolteTerza.hours / studente.oreSvolteTerza.total) * 100).toFixed(0));
-    //         } else {
-    //           lableConPiano = lableConPiano.replace('*percentage*', '0');
-    //         }
-    //         lableConPiano = lableConPiano.replace('*fraction*', studente.oreSvolteTerza.hours + '/' + studente.oreSvolteTerza.total);
-    //         studente.toolTipRiga = lableConPiano;
-    //         break;
-    //       }
-    //     case '4':
-    //       {
-    //         lableConPiano = lableConPiano.replace('*YS*', 'triennale');
-    //         if (studente.oreSvolteQuarta.total > 0) {
-    //           lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreSvolteQuarta.hours / studente.oreSvolteQuarta.total) * 100).toFixed(0));
-    //         } else {
-    //           lableConPiano = lableConPiano.replace('*percentage*', '0');
-    //         }
-    //         lableConPiano = lableConPiano.replace('*fraction*', studente.oreSvolteQuarta.hours + '/' + studente.oreSvolteQuarta.total);
-    //         studente.toolTipRiga = lableConPiano;
-    //       };
-    //     case '5':
-    //       {
-    //         lableConPiano = lableConPiano.replace('*YS*', 'triennale');
-    //         if (studente.oreSvolteQuinta.total > 0) {
-    //           lableConPiano = lableConPiano.replace('*percentage*', ((studente.oreSvolteQuinta.hours / studente.oreSvolteQuinta.total) * 100).toFixed(0));
-    //         } else {
-    //           lableConPiano = lableConPiano.replace('*percentage*', '0');
-    //         }
-    //         lableConPiano = lableConPiano.replace('*fraction*', studente.oreSvolteQuinta.hours + '/' + studente.oreSvolteQuinta.total);
-    //         studente.toolTipRiga = lableConPiano;
-    //         break;
-    //       }
-    //   }
-    // } else {
-    //   studente.toolTipRiga = labelSenzaPiano;
-    // }
   }
 
   refreshStudenti() {
     this.filtro = {
-      text: null,
-      corsoId: null
+      text: ''
     }
     this.filterSearch = false;
     this.getStudenti(1);
   }
+
+  customSearchOption() {
+    var style = {
+      'border-bottom': '2px solid #06c',
+      'font-weight': 'bold'
+    };
+    if (this.filtro.text != '') {
+      return style;
+    }
+  }
+
+  ngOnDestroy() {
+    this.storageService.storefiltroStudente(JSON.stringify(this.filtro));
+  }
+
 }

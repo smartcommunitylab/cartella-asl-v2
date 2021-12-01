@@ -6,6 +6,7 @@ import { AuthService } from '../../core/auth/auth.service';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
 import { DataService } from '../services/data.service';
 import { environment } from '../../../environments/environment';
+import { StateStorageService } from '../auth/state-storage.service';
 
 @Component({
     selector: 'cm-navbar',
@@ -40,7 +41,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
         private growler: GrowlerService,
         private dataService: DataService,
         private authService: AuthService,
-        private _eref: ElementRef) { 
+        private _eref: ElementRef,
+        private storageService: StateStorageService) { 
         this.titleAnnoScolastico = dataService.schoolYear;
     }
 
@@ -140,12 +142,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
 
     navigateToAttivita() {
-        let filtro = {
-            tipologia: null,
-            titolo: null,
-            stato: null
-        };
-        localStorage.setItem('filtroAttivita', JSON.stringify(filtro));
+        // this.storageService.clearAll();
         this.router.navigate(['/attivita/list', (new Date()).getTime()], {skipLocationChange: true});
     }
 

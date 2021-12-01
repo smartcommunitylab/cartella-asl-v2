@@ -13,6 +13,7 @@ import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.clas
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -528,6 +529,8 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato != null)
       params = params.append('stato', filter.stato);
+    if (filter.anno)
+      params = params.append('annoScolastico', filter.anno);
 
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
@@ -881,10 +884,7 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato)
       params = params.append('stato', filter.stato);
-    if (filter.ownerIstituto != null) {
-      params = params.append('ownerIstituto', filter.ownerIstituto);
-    }
-
+    
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
     params = params.append('size', pageSize);
@@ -1882,6 +1882,17 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  getAnnoScolstico(date) {
+    var annoScolastico;
+    var lastDay = moment(date).month(8).date(1);
+    if (date.isBefore(lastDay)) {
+      annoScolastico = moment().year(date.year() - 1).format('YYYY') + '-' + date.format('YY');
+    } else {
+      annoScolastico = date.format('YYYY') + '-' + moment().year(date.year() + 1).format('YY');
+    }
+    return annoScolastico;
   }
 
   private handleError(error: HttpErrorResponse) {

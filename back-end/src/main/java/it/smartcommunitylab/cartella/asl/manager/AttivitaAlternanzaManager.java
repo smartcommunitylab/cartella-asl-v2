@@ -140,7 +140,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivitaAlternanzaRepository.deleteById(id);
 	}
 	
-	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
+	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, String annoScolastico, int tipologia, String stato,
 			Pageable pageRequest, ASLUser user) {
 		Map<String, Object> parameters = new HashMap<>();
 		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
@@ -161,7 +161,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+		}
+		
+		if(Utils.isNotEmpty(annoScolastico)) {
+			sb.append(" AND aa.annoScolastico=(:annoScolastico)");
 		}
 		
 		if(tipologia > 0) {
@@ -203,6 +207,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			String like = "%" + text.trim().toUpperCase() + "%";
 			query.setParameter("text", like);
 			parameters.put("text", like);
+		}
+		if(Utils.isNotEmpty(annoScolastico)) {
+			query.setParameter("annoScolastico", annoScolastico);
+			parameters.put("annoScolastico", annoScolastico);			
 		}
 		if(tipologia > 0) {
 			query.setParameter("tipologia", tipologia);

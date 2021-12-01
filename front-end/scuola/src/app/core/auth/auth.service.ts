@@ -90,16 +90,10 @@ export class AuthService {
   }
 
   logout(): void{
-    // var getUrl = window.location;
-    // var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
-    // var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`;        
-    
-    this.manager.signoutRedirect().then(()=> {
-      sessionStorage.clear();
-      this.user = null;
-      this.account = null;
-      // window.location.href = logoutUrl;
-    });    
+    this.stateStorageService.clearAll();
+    this.user = null;
+    this.account = null;
+    this.manager.signoutRedirect().then(()=> {});    
   }
 
   subscribeSignedIn(): Promise<void> {

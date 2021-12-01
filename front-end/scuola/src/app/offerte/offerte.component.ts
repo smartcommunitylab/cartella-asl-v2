@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
+import { StateStorageService } from '../core/auth/state-storage.service';
 
 @Component({
     selector: 'offerte',
@@ -24,8 +24,6 @@ export class OfferteComponent implements OnInit {
     tipologie;
     tipologia = "Tipologia";
     stato;
-    owner;
-    // filterText;
     menuContent = "In questa pagina trovi tutte le offerte accessibili al tuo istituto. Puoi crearne di nuove, o cercare nella lista. Per creare un’attività a partire da un’offerta, clicca sulla riga e vai alla sua pagina.";
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
@@ -42,38 +40,21 @@ export class OfferteComponent implements OnInit {
         private dataService: DataService,
         private route: ActivatedRoute,
         private router: Router,
-        private location: Location,
+        private storageService: StateStorageService,
         private modalService: NgbModal
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.title = 'Lista offerte';
-        // retrieve filter states.
-        this.filtro = JSON.parse(localStorage.getItem('filtroOfferte'));
-        if (!this.filtro) {
-            this.filtro = {
-                tipologia: '',
-                titolo: '',
-                stato: '',
-                ownerIstituto: null
-            };
-        }
-        if (this.filtro.stato)
-        this.stato = this.filtro.stato;
-        if (this.filtro.tipologia) {
-            this.tipologia = this.filtro.tipologia;
-        } else {
-            this.tipologia = 'Tipologia';
-        }
-        if (this.filtro.ownerIstituto != null) {
-            this.filtro.ownerIstituto?this.owner='istituto':this.owner='ente';
-        }
-        console.log(this.route);
+        this.tipologia = 'Tipologia';
+        this.filtro = {
+            tipologia: '',
+            titolo: '',
+            stato: '',
+            ownerIstituto: null
+        };
         this.dataService.getAttivitaTipologie().subscribe((res) => {
             this.tipologie = res;
-            // if (this.tipologia && this.tipologia != 'Tipologia') {
-            //     this.filtro.tipologia = this.tipologia;
-            // }
             this.getOffertePage(1);
         },
             (err: any) => console.log(err),
@@ -122,11 +103,6 @@ export class OfferteComponent implements OnInit {
     cerca() {
         if (this.cmPagination)
             this.cmPagination.changePage(1);
-        // if (this.filterText) {
-        //     this.filtro.titolo = this.filterText;
-        // } else {
-        //     this.filtro.titolo = null;
-        // }
         this.filterSearch = true;
         this.getOffertePage(1);
     }
@@ -138,22 +114,6 @@ export class OfferteComponent implements OnInit {
             this.filtro.tipologia = this.tipologia;
         } else {
             this.filtro.tipologia = null;
-        }
-        this.filterSearch = true;
-        this.getOffertePage(1);
-    }
-
-    selectOwnerFilter() {
-        if (this.cmPagination)
-            this.cmPagination.changePage(1);
-        if (this.owner) {
-            if (this.owner == 'istituto') {
-                this.filtro.ownerIstituto = true;
-            } else {
-                this.filtro.ownerIstituto = false;
-            }
-        } else {
-            this.filtro.ownerIstituto = null;
         }
         this.filterSearch = true;
         this.getOffertePage(1);
@@ -216,16 +176,40 @@ export class OfferteComponent implements OnInit {
             stato: '',
             ownerIstituto: null
         }
-        this.tipologia = "Tipologie"
+        this.tipologia = "Tipologia"
         this.stato = undefined;
-        this.owner = undefined;
-        // this.filterText = undefined;
         this.filterSearch = false;
         this.getOffertePage(1);
     }
 
-    ngOnDestroy() {
-        localStorage.setItem('filtroOfferte', JSON.stringify(this.filtro));
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+
+    customTipologiaOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.tipologia != 'Tipologia') {
+            return style;
+        }
+    }
+
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
     }
 
 }

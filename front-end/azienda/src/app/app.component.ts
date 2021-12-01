@@ -24,11 +24,11 @@ export class AppComponent implements OnInit {
     }
 
     this.dataService.getProfile().subscribe(profile => {
-      if (!profile.authorized) {
-        this.router.navigate(['/terms', profile.authorized]);
-      } else {
+      // if (!profile.authorized) {
+        // this.router.navigate(['/terms', profile.authorized]);
+      // } else {
         this.hide = false;
-      }
+      // }
     });
   }
 

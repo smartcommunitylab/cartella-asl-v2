@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-4 v-center-inline">
             <div class="form-group center-formGroup">
-                <input type="text" id="cercaAttivita" class="form-control search-input" [(ngModel)]="filtro.titolo"
+                <input type="text" id="cercaAttivita" class="form-control search-input" [ngStyle]="customSearchOption()" [(ngModel)]="filtro.titolo"
                     (keyup.enter)="cerca()">
                 <label for="cercaAttivita">Cerca titolo, studente o istituto</label>
             </div>
@@ -44,7 +44,7 @@
         </div>
         <div class="col-4"></div>
         <div class="col-4">
-            <select class="float-right custom-select form-control" style="width: 300px;" [(ngModel)]="stato"
+            <select class="float-right custom-select form-control" style="width: 300px;" [ngStyle]="customStatoOption()" [(ngModel)]="stato"
                 (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Seleziona stato</option>
                 <option [ngValue]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>
