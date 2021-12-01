@@ -54,9 +54,9 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
       this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
-        this.percentage = ((this.esperienze[0].oreRendicontate / this.attivita.ore) * 100).toFixed(0);
         this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
           this.valutazionEsperienza = valutazione;
+          this.percentage = ((this.valutazionEsperienza.oreInserite / this.valutazionEsperienza.ore) * 100).toFixed(0);
           this.domande = valutazione.valutazioni;
           this.domande.forEach(d=> {
             if (d.rispostaChiusa) {
@@ -76,12 +76,12 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
     this.domandeCompilati = 0;
   }
 
-  // setOreInserite() {
-  //   var label = '';
-  //   if (this.attivita && this.esperienze[0])
-  //      label = this.esperienze[0].oreRendicontate + "/" + this.attivita.ore + " (" + this.percentage + "%)";
-  //   return label;
-  // }
+  setOreInserite() {
+    var label = '';
+    if (this.valutazionEsperienza)
+       label = this.valutazionEsperienza.oreInserite + "/" + this.valutazionEsperienza.ore + " (" + this.percentage + "%)";
+    return label;
+  }
   
   menuContentShow() {
     this.showContent = !this.showContent;

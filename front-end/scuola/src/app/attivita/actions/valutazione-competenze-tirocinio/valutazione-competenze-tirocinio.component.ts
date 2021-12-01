@@ -12,8 +12,13 @@ export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
   attivita;
   esperienze;
   valutazioneCompetenze;
-  menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando. Utilizza i tasti blu per modificare ciascuna sezione.";
+  menuContent = "In questa sezione trovi i risultati della valutazione che l’ente ha compiuto dell’esperienza svolta dall’alunno/a presso la sua sede. L’ente ha valutato lo stato dell’acquisizione delle competenze associate all’attività.";
   showContent: boolean = false;
+  competenze;
+  competenzeTotale = 0;
+  competenzeValutate = 0;
+  competenzeAcquisite = 0;
+  percentage;
 
   valutazioni = [
     { titolo: 'Avanzato', punteggio: 4 },
@@ -48,47 +53,22 @@ export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
       this.dataService.getAttivita(id).subscribe((res) => {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
-        this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
-          this.valutazioneCompetenze = res.valutazioni;
+        this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
+          this.valutazioneCompetenze = valutazione;
+          this.percentage = ((this.valutazioneCompetenze.oreInserite / this.valutazioneCompetenze.ore) * 100).toFixed(0);
+          this.competenze = valutazione.valutazioni;
+          this.competenze.forEach(d=> {
+            this.competenzeTotale++;
+            if (d.punteggio > 0) {
+              this.competenzeValutate++;
+            }
+            if (d.punteggio > 1) {
+              this.competenzeAcquisite++;
+            }
+          })
         });
       });
     });
-    // this.valutazioneCompetenze = [];
-    // this.valutazioneCompetenze[0] = {
-    //   id: 1,
-    //   competenzaTitolo: 'Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo ',
-    //   punteggio: 2,
-    //   competenzaOwnerName: 'ISFOL'
-    // }
-
-    // this.valutazioneCompetenze[1] = {
-    //   id: 2,
-    //   competenzaTitolo: 'Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo',
-    //   punteggio: 4,
-    //   competenzaOwnerName: 'ISTITUTO'
-    // }
-
-    // this.valutazioneCompetenze[2] = {
-    //   id: 3,
-    //   competenzaTitolo: 'Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo',
-    //   punteggio: 3,
-    //   competenzaOwnerName: 'ESCO'
-    // }
-
-    // this.valutazioneCompetenze[3] = {
-    //   id: 4,
-    //   competenzaTitolo: 'Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo. Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo',
-    //   risposta: 2,
-    //   competenzaOwnerName: 'ESCO'
-    // }
-
-    // this.valutazioneCompetenze[4] = {
-    //   id: 5,
-    //   competenzaTitolo: 'Valutare le caratteristiche contestuali dell’ambiente per svolgere le proprie mansioni in maniera corretta e non fuori luogo',
-    //   punteggio: 1,
-    //   competenzaOwnerName: 'ISFOL'
-    // }
-
   }
 
   menuContentShow() {
@@ -108,6 +88,19 @@ export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
       style['font-weight'] = 600;      
     }
     return style;
+  }
+
+  initCounter() {
+    this.competenzeTotale = 0;
+    this.competenzeValutate = 0;
+    this.competenzeAcquisite = 0;
+  }
+
+  setOreInserite() {
+    var label = '';
+    if (this.valutazioneCompetenze)
+        label = this.valutazioneCompetenze.oreInserite + "/" + this.valutazioneCompetenze.ore + " (" + this.percentage + "%)";
+    return label;
   }
 
 }

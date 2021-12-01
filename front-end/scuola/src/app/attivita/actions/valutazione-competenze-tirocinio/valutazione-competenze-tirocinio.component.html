@@ -34,25 +34,25 @@
     <div class="callNote default">
         <span class="row">
             <span class="col font-weight-bold">Compilato il</span>
-            <span class="col font-weight-bold">Item compilati</span>
-            <span class="col font-weight-bold">Media risposte</span>
+            <span class="col font-weight-bold">Competenze valutate</span>
+            <span class="col font-weight-bold">Competenze acquisite</span>
             <span class="col font-weight-bold">Inizio attività</span>
             <span class="col font-weight-bold">Fine attività</span>
             <span class="col font-weight-bold">Ore Inserite</span>
         </span>
         <span class="row">
-            <span class="col">13/05/2021</span>
-            <span class="col">13 su 13</span>
-            <span class="col">1.2</span>
-            <span class="col">20/11/2019</span>
-            <span class="col">20/11/2019</span>
-            <span class="col"></span>
+            <span class="col">{{ valutazioneCompetenze.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+            <span class="col">{{ competenzeValutate }} su {{ competenzeTotale }}</span>
+            <span class="col">{{ competenzeAcquisite }} su {{ competenzeTotale }}</span>
+            <span class="col">{{ attivita.dataInizio | date:'dd/MM/yyyy' }}</span>
+            <span class="col">{{ attivita.dataFine | date:'dd/MM/yyyy' }}</span>
+            <span class="col">{{ setOreInserite() }}</span>
         </span>
     </div>
     <br>
     <br>
     <div class="m-16">
-        <div class="modify-card-body row">
+        <div *ngIf="competenze && competenze.length > 0" class="modify-card-body row">
             <table class="table table-hover">
                 <thead class="bg-white">
                     <tr>
@@ -62,13 +62,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let v of valutazioneCompetenze">
+                    <tr *ngFor="let v of competenze">
                         <td>{{ v.competenzaOwnerName }}</td>
                         <td>{{ v.competenzaTitolo }}</td>
                         <td [ngStyle]="styleLabel(v.punteggio)">{{ setLabel(v.punteggio) }}</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div *ngIf="!competenze?.length" class="col-xl-12 text-center">
+            <span class="searchError">Nessuna competenza associata a attività</span>
         </div>
     </div>
 </div>
