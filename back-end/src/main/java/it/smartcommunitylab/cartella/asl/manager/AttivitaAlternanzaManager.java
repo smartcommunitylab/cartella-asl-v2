@@ -164,7 +164,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.cfStudente) = (:textCf) OR UPPER(es.classeStudente) LIKE (:text))");
 		}
 		
 		if(Utils.isNotEmpty(annoScolastico)) {
@@ -208,8 +208,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		parameters.put("istitutoId", istitutoId);
 		if(Utils.isNotEmpty(text)) {
 			String like = "%" + text.trim().toUpperCase() + "%";
-			query.setParameter("text", like);
+			query.setParameter("text", like);			
 			parameters.put("text", like);
+			String cf = text.trim().toUpperCase();
+			query.setParameter("textCf", cf);
+			parameters.put("textCf", cf);
 		}
 		if(Utils.isNotEmpty(annoScolastico)) {
 			query.setParameter("annoScolastico", annoScolastico);
