@@ -67,7 +67,9 @@ export class OfferteComponent implements OnInit {
 
     creaOfferta() {
         const modalRef = this.modalService.open(CreaOffertaModalComponent, { windowClass: "creaAttivitaModalClass" });
-        let enteTipologie = this.tipologie.filter(f => !f.interna);
+        let enteTipologie = this.tipologie.filter(f => {
+            return (f.tipologia == 7) || (f.tipologia == 10);
+        });
         modalRef.componentInstance.tipologie = enteTipologie;
         modalRef.componentInstance.newOffertaListener.subscribe((offerta) => {
             this.dataService.createOfferta(offerta).subscribe((response) => {
