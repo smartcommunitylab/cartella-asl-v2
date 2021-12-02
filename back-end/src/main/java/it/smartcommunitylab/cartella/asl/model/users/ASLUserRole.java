@@ -6,12 +6,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "asluser_role")
+@Table(name = "asluser_role", indexes = { 
+		@Index(name = "userId_idx", columnList = "userId", unique = false)})
 public class ASLUserRole {
 
 	@Id
