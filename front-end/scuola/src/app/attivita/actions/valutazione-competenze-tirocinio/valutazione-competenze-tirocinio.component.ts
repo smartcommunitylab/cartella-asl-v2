@@ -8,7 +8,6 @@ import { DataService } from '../../../core/services/data.service';
   styleUrls: ['./valutazione-competenze-tirocinio.component.scss']
 })
 export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
-
   attivita;
   esperienze;
   valutazioneCompetenze;

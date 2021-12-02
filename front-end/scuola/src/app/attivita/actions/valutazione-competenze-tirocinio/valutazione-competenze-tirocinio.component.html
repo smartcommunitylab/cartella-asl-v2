@@ -70,8 +70,17 @@
                 </tbody>
             </table>
         </div>
-        <div *ngIf="!competenze?.length" class="col-xl-12 text-center">
-            <span class="searchError">Nessuna competenza associata a attività</span>
+        <div class="row" *ngIf="!competenze?.length">
+            <div class="col-xl-12 text-center errorIconPaddingTop">
+                <svg class="icon icon-lightGrey icon-xl">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-error"></use>
+                </svg>
+            </div>
+            <div class="col-xl-12 text-center">
+                <span class="searchError">Non ci sono competenze associate a quest’attività</span>
+            </div>
+            <div class="col-sm-12 text-center searchErrorMsg text-semibold">Per associare delle competenze, vai alla sezione “Associa competenze”.
+            </div>
         </div>
     </div>
 </div>

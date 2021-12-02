@@ -31,7 +31,6 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   attivita: AttivitaAlternanza;
   esperienze;
-  // offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   individuale: boolean;
   corsiStudio;
@@ -48,6 +47,9 @@ export class AttivitaDettaglioComponent implements OnInit {
   convenzioni = [];
   valEsperienzaTiro;
   valCompetenzeTiro;
+  competenzeTotale = 0;
+  competenzeValutate = 0;
+  competenzeAcquisite = 0;
   valutazioni = [
     { titolo: 'Avanzato', punteggio: 4 },
     { titolo: 'Intermedio', punteggio: 3 },
@@ -120,6 +122,15 @@ export class AttivitaDettaglioComponent implements OnInit {
                     this.valEsperienzaTiro = valutazione;
                     this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
                       this.valCompetenzeTiro = res;
+                      res.valutazioni.forEach(d => {
+                        this.competenzeTotale++;
+                        if (d.punteggio > 0) {
+                          this.competenzeValutate++;
+                        }
+                        if (d.punteggio > 1) {
+                          this.competenzeAcquisite++;
+                        }
+                      })
                     })
                   });
                 }
@@ -483,6 +494,12 @@ styleOptionConvenzione(convenzione) {
       stato = 'Non compilata';
     }
     return stato;
+  }
+
+  initCounter() {
+    this.competenzeTotale = 0;
+    this.competenzeValutate = 0;
+    this.competenzeAcquisite = 0;
   }
   
 }
