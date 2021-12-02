@@ -18,6 +18,7 @@ import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { LocalizedDatePipe } from '../shared/pipes/localizedDatePipe';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-mo
   ],
   providers: [
     NgbActiveModal,
+    LocalizedDatePipe
   ],
   entryComponents: [
     NewAttivtaModalPrimo,

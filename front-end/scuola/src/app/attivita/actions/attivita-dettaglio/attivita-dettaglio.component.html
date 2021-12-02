@@ -229,7 +229,7 @@
         </div>
     </div>
     <br>
-    <div *ngIf="attivita && isTiro() && ( attivita.stato=='archiviata' || isValutazioneActive() )">
+    <div *ngIf="attivita && isTiro() && this.esperienze[0] && ( attivita.stato=='archiviata' || isValutazioneActive() )">
         <div class="title">Valutazioni</div>
         <div class="list-group">
              <table class="table table-hover">
@@ -251,11 +251,10 @@
                             </span>
                         </td>
                         <td>
-                            <span *ngIf="valEsperienzaTiro.ultimaModifica" class="align-middle">{{ valEsperienzaTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
-                            <span *ngIf="!valEsperienzaTiro.ultimaModifica" class="align-middle">-</span>
+                            <span class="align-middle">{{ setDate(valEsperienzaTiro.ultimaModifica) }}</span>
                         </td>
                         <td>
-                            <span class="align-middle">{{esperienze[0].nominativoStudente}}</span>
+                            <span class="align-middle">{{ esperienze[0].nominativoStudente }}</span>
                         </td>
                         <td>
                             <span class="align-middle">{{ setMedia(valEsperienzaTiro.media) }}</span>
@@ -271,9 +270,8 @@
                                 <a [routerLink]="" (click)="routeValutazioneCompetenze()">Valutazione competenze</a>
                             </span>
                         </td>
-                        <td>
-                            <span *ngIf="valCompetenzeTiro.ultimaModifica" class="align-middle">{{ valCompetenzeTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
-                            <span *ngIf="!valCompetenzeTiro.ultimaModifica" class="align-middle">-</span>
+                        <td>                            
+                            <span class="align-middle">{{ setDate(valCompetenzeTiro.ultimaModifica) }}</span>
                         </td>
                         <td class="pointer">
                             <span class="align-middle">{{ ente.nome }}</span>

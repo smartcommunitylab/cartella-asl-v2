@@ -10,6 +10,7 @@ import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growle
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
+import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 declare var moment: any;
 moment['locale']('it');
@@ -27,7 +28,8 @@ export class AttivitaDettaglioComponent implements OnInit {
     private route: ActivatedRoute,
     public dataService: DataService,
     private growler: GrowlerService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private localizedDatePipe: LocalizedDatePipe) {}
 
   attivita: AttivitaAlternanza;
   esperienze;
@@ -117,7 +119,7 @@ export class AttivitaDettaglioComponent implements OnInit {
               }
               this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
                 this.convenzioni = res;
-                if (this.isValutazioneActive() && this.isTiro()) {
+                if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
                   this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                     this.valEsperienzaTiro = valutazione;
                     this.initCounter();
@@ -436,6 +438,14 @@ export class AttivitaDettaglioComponent implements OnInit {
 
   routeValutazioneEsperienza() {
     this.router.navigate(['valutazione/esperienza/'], { relativeTo: this.route });    
+  }
+
+  setDate(val) {
+    let date = '-';
+    if (val) {
+      date = this.localizedDatePipe.transform(val, 'dd/MM/yyyy')
+    }
+    return date;
   }
 
   setMedia(val) {
