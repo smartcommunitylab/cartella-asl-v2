@@ -260,8 +260,7 @@
                         <td>
                             <span class="align-middle">{{ setMedia(valEsperienzaTiro.media) }}</span>
                         </td>
-                        <td><span class="align-middle" [ngStyle]="styleStatoVal(valEsperienzaTiro)">{{
-                                setStatoValutazione(valEsperienzaTiro) }}</span>
+                        <td><span class="align-middle" [ngStyle]="styleStatoVal(valEsperienzaTiro)">{{ setStatoValutazione(valEsperienzaTiro) }}</span>
                         </td>
                     </tr>
                     <tr *ngIf="valCompetenzeTiro">
@@ -280,11 +279,10 @@
                             <span class="align-middle">{{ ente.nome }}</span>
                         </td>
                         <td class="pointer">
-                            <span class="align-middle">{{ setMedia(valCompetenzeTiro.media) }}</span>
+                            <span class="align-middle">{{ setEsitoCompetenze(valCompetenzeTiro) }}</span>                            
                         </td>
                         <td class="pointer">
-                            <span class="align-middle" [ngStyle]="styleStatoValCompetenza(valCompetenzeTiro)">{{
-                                setStatoValutazioneCompetenze(valCompetenzeTiro) }}</span>
+                            <span class="align-middle" [ngStyle]="styleStatoValCompetenza(valCompetenzeTiro)">{{ setStatoValutazioneCompetenze(valCompetenzeTiro) }}</span>
                         </td>
                     </tr>              
                 </tbody>

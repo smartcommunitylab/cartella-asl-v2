@@ -120,6 +120,7 @@ export class AttivitaDettaglioComponent implements OnInit {
                 if (this.isValutazioneActive() && this.isTiro()) {
                   this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                     this.valEsperienzaTiro = valutazione;
+                    this.initCounter();
                     this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
                       this.valCompetenzeTiro = res;
                       res.valutazioni.forEach(d => {
@@ -349,22 +350,19 @@ export class AttivitaDettaglioComponent implements OnInit {
         stato = 'Non attiva';
     }
     return stato;
-}
+  }
 
-styleOptionConvenzione(convenzione) {
+  styleOptionConvenzione(convenzione) {
     var style = {
         'color': '#707070', //grey
     };
-
     if (convenzione.stato == 'non_attiva') {
         style['color'] = '#F83E5A'; // red
     } else if (convenzione.stato == 'attiva') {
         style['color'] = '#00CF86'; // green
     }
-
     return style;
-}
-
+  }
 
   downloadConvenzioneDoc(doc) {
     this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
@@ -494,6 +492,14 @@ styleOptionConvenzione(convenzione) {
       stato = 'Non compilata';
     }
     return stato;
+  }
+
+  setEsitoCompetenze(val) {
+    let esito = '-';
+    if (val.stato != 'non_compilata') {
+      esito = this.competenzeAcquisite + ' su ' +  this.competenzeTotale;
+    }
+    return esito;
   }
 
   initCounter() {
