@@ -34,9 +34,7 @@
                                 <span class="align-middle">Valutazione esperienza</span>
                             </td>
                             <td>
-                                <span *ngIf="valutazionEsperienzaTiro.ultimaModifica" class="align-middle">{{
-                                    valutazionEsperienzaTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
-                                <span *ngIf="!valutazionEsperienzaTiro.ultimaModifica" class="align-middle">-</span>
+                                <span class="align-middle">{{ setDate(valutazionEsperienzaTiro.ultimaModifica) }}</span>                                
                             </td>
                             <td>
                                 <span class="align-middle">{{esperienza.nominativoStudente}}</span>
@@ -50,9 +48,7 @@
                                 <span class="align-middle">Valutazione competenze</span>
                             </td>
                             <td>
-                                <span *ngIf="valutazionCompetenzeTiro.ultimaModifica" class="align-middle">{{
-                                    valutazionCompetenzeTiro.ultimaModifica | date:'dd/MM/yyyy' }}</span>
-                                <span *ngIf="!valutazionCompetenzeTiro.ultimaModifica" class="align-middle">-</span>
+                                <span class="align-middle">{{ setDate(valutazionCompetenzeTiro.ultimaModifica) }}</span>
                             </td>
                             <td>
                                 <span class="align-middle">{{ ente.nome }}</span>

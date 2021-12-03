@@ -1,5 +1,6 @@
 import { Component, Output, Input, EventEmitter } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { DataService } from '../../../core/services/data.service';
 
 @Component({
@@ -16,7 +17,9 @@ export class AvvisoArchiviaTiroModal {
   valutazionEsperienzaTiro;
   valutazionCompetenzeTiro;
   
-  constructor(public activeModal: NgbActiveModal, private dataService: DataService) {}
+  constructor(public activeModal: NgbActiveModal,
+     private dataService: DataService,
+     private localizedDatePipe: LocalizedDatePipe) {}
 
   ngOnInit() {
     this.dataService.getAttivitaValutazione(this.esperienza.esperienzaSvoltaId).subscribe((valutazione) => {
@@ -69,6 +72,14 @@ export class AvvisoArchiviaTiroModal {
       style['color'] = '#F83E5A'; // red
     }
     return style;
+  }
+
+  setDate(val) {
+    let date = '-';
+    if (val) {
+      date = this.localizedDatePipe.transform(val, 'dd/MM/yyyy')
+    }
+    return date;
   }
 
   confirm() {
