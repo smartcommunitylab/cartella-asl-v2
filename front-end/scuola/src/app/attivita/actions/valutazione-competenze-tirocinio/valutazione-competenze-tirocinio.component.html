@@ -41,7 +41,7 @@
             <span class="col font-weight-bold">Ore Inserite</span>
         </span>
         <span class="row">
-            <span class="col">{{ valutazioneCompetenze.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+            <span class="col">{{ setDate(valutazioneCompetenze.ultimaModifica) }}</span>
             <span class="col">{{ competenzeValutate }} su {{ competenzeTotale }}</span>
             <span class="col">{{ competenzeAcquisite }} su {{ competenzeTotale }}</span>
             <span class="col">{{ attivita.dataInizio | date:'dd/MM/yyyy' }}</span>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { DataService } from '../../../core/services/data.service';
 
 @Component({
@@ -43,7 +44,8 @@ export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private localizedDatePipe: LocalizedDatePipe) {
   }
 
   ngOnInit() {
@@ -100,6 +102,14 @@ export class ValutazioneCompetenzeTirocinioComponent implements OnInit {
     if (this.valutazioneCompetenze)
         label = this.valutazioneCompetenze.oreInserite + "/" + this.valutazioneCompetenze.ore + " (" + this.percentage + "%)";
     return label;
+  }
+
+  setDate(val) {
+    let date = '-';
+    if (val) {
+      date = this.localizedDatePipe.transform(val, 'dd/MM/yyyy')
+    }
+    return date;
   }
 
 }

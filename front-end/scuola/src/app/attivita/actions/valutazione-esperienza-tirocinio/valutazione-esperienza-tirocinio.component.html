@@ -41,9 +41,9 @@
           <span class="col font-weight-bold">Ore Inserite</span>
         </span> 
         <span class="row">
-          <span class="col">{{ valutazionEsperienza.ultimaModifica | date:'dd/MM/yyyy' }}</span>
+          <span class="col">{{ setDate(valutazionEsperienza.ultimaModifica) }}</span>
           <span class="col">{{ domandeCompilati }} su {{ domanteTotale }}</span>
-          <span class="col">{{ valutazionEsperienza.media }}</span>
+          <span class="col">{{ setMedia(valutazionEsperienza.media) }}</span>
           <span class="col">{{ attivita.dataInizio | date:'dd/MM/yyyy' }}</span>
           <span class="col">{{ attivita.dataFine | date:'dd/MM/yyyy' }}</span>
           <span class="col">{{ setOreInserite() }}</span>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { DataService } from '../../../core/services/data.service';
 
 @Component({
@@ -43,7 +44,8 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService) {
+    private dataService: DataService,
+    private localizedDatePipe: LocalizedDatePipe) {
   }
 
   ngOnInit() {
@@ -97,6 +99,22 @@ export class ValutazioneEsperienzaTirocinioComponent implements OnInit {
       return risposta
     }
     return '-';
+  }
+
+  setDate(val) {
+    let date = '-';
+    if (val) {
+      date = this.localizedDatePipe.transform(val, 'dd/MM/yyyy')
+    }
+    return date;
+  }
+
+  setMedia(val) {
+    if (val == 'NaN' || !val || val == 'undefined' || val == 0) {
+      return '-';
+    } else {
+      return val;
+    }
   }
 
 }
