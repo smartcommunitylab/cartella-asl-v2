@@ -95,10 +95,10 @@ container_scanning_image2:
 
 
 backend-deploy:
-  stage: platform-new
+  stage: deploy
   image: smartcommunitylab/kubectl-alpine:latest
   environment:
-    name: develop
+    name: platform-new
   script:
     - echo "deploy backend"
     - kubectl -n cartella set image deployments/cartella-backend-$CI_COMMIT_REF_NAME cartella-backend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_BACKEND --record=true
@@ -108,10 +108,10 @@ backend-deploy:
     - demo
 
 frontend-deploy:
-  stage: platform-new
+  stage: deploy
   image: smartcommunitylab/kubectl-alpine:latest
   environment:
-    name: develop
+    name: platform-new
   script:
     - echo "deploy frontend"
     - kubectl -n cartella set image deployments/cartella-frontend-$CI_COMMIT_REF_NAME cartella-frontend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_FRONTEND --record=true
