@@ -95,7 +95,7 @@ container_scanning_image2:
 
 
 backend-deploy:
-  stage: platform-new
+  stage: deploy
   image: smartcommunitylab/kubectl-alpine:latest
   environment:
     name: platform-new
@@ -108,7 +108,7 @@ backend-deploy:
     - demo
 
 frontend-deploy:
-  stage: platform-new
+  stage: deploy
   image: smartcommunitylab/kubectl-alpine:latest
   environment:
     name: platform-new
