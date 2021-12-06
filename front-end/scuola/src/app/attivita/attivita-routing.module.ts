@@ -21,6 +21,7 @@ import { ModificaOreStudentiComponent } from'./actions/modifica-ore-studenti/mod
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 import { ValutazioneEsperienzaTirocinioComponent } from './actions/valutazione-esperienza-tirocinio/valutazione-esperienza-tirocinio.component';
 import { ValutazioneCompetenzeTirocinioComponent } from './actions/valutazione-competenze-tirocinio/valutazione-competenze-tirocinio.component';
+import { AvvisoArchiviaTiroModal } from './actions/avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
 
 const routes: Routes = [
   {
@@ -68,7 +69,8 @@ export class AttivitaRoutingModule {
     ModificaOreStudentiComponent,
     AvvisoEnteConvenzioneModal,
     ValutazioneEsperienzaTirocinioComponent,
-    ValutazioneCompetenzeTirocinioComponent
+    ValutazioneCompetenzeTirocinioComponent,
+    AvvisoArchiviaTiroModal
   ];
 }
 

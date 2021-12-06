@@ -8,10 +8,11 @@ import { AttivitaCancellaModal } from '../cancella-attivita-modal/attivita-cance
 import { ArchiaviazioneAttivitaModal } from '../archiaviazione-attivita-modal/archiaviazione-attivita.component';
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
-import localeIT from '@angular/common/locales/it'
+import localeIT from '@angular/common/locales/it';
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
 import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { AvvisoArchiviaTiroModal } from '../avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
 declare var moment: any;
 moment['locale']('it');
 registerLocaleData(localeIT);
@@ -225,6 +226,34 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   archivia() {
+    if (!this.isTiro()) {
+      this.showArchive();
+
+    } else {
+      let showArchiviaDialog = false;
+      if (this.ValutazioniTiroCompilata()) {
+        showArchiviaDialog = true;
+      } else {
+        const modalRef = this.modalService.open(AvvisoArchiviaTiroModal, { windowClass: "abilitaEnteModalClass" });
+        modalRef.componentInstance.ente = this.ente;
+        modalRef.componentInstance.esperienza = this.esperienze[0];
+        modalRef.componentInstance.onArchivia.subscribe((res) => {
+          if (res == 'CONFIRM') {
+            this.showArchive();
+          }
+        });
+      }
+      if (showArchiviaDialog) {
+        this.showArchive();
+      }
+    }
+  }
+
+  ValutazioniTiroCompilata() {
+    return (this.valEsperienzaTiro && this.valEsperienzaTiro.stato == 'compilata' && this.valCompetenzeTiro && this.valCompetenzeTiro.stato == 'compilata')
+  }
+  
+  showArchive() {
     this.dataService.attivitaAlternanzaEsperienzeReport(this.attivita.id)
       .subscribe((response) => {
         const modalRef = this.modalService.open(ArchiaviazioneAttivitaModal, { windowClass: "archiviazioneModalClass" });
@@ -353,7 +382,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
     return stato;
   }
-
+  
   styleOptionConvenzione(convenzione) {
     var style = {
         'color': '#707070', //grey
@@ -447,7 +476,7 @@ export class AttivitaDettaglioComponent implements OnInit {
     }
     return date;
   }
-
+  
   setMedia(val) {
     if (val == 'NaN' || !val || val == 'undefined' || val == 0) {
       return '-';
