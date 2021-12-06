@@ -60,6 +60,7 @@ public class AttivitaAlternanzaController implements AslController {
 	public @ResponseBody Page<ReportAttivitaAlternanzaRicerca> searchAttivitaAlternanza(
 			@RequestParam String istitutoId,
 			@RequestParam(required = false) String text,
+			@RequestParam(required = false) String annoScolastico,
 			@RequestParam(required = false, defaultValue="0") int tipologia,
 			@RequestParam(required = false) String stato,
 			Pageable pageRequest, 
@@ -68,7 +69,7 @@ public class AttivitaAlternanzaController implements AslController {
 				new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId),
 				new ASLAuthCheck(ASLRole.TUTOR_SCOLASTICO, istitutoId)));
-		Page<ReportAttivitaAlternanzaRicerca> result = attivitaAlternanzaManager.findAttivita(istitutoId, text, tipologia, stato, pageRequest, user);
+		Page<ReportAttivitaAlternanzaRicerca> result = attivitaAlternanzaManager.findAttivita(istitutoId, text, annoScolastico, tipologia, stato, pageRequest, user);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("searchAttivitaAlternanza:%s", text));
 		}

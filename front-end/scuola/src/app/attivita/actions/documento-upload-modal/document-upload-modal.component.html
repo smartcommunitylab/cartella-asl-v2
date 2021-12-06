@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
         <div class="row v-center">
-            <div class="col-1"></div>
+            <div class="col-2"></div>
             <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(1)">
@@ -18,14 +18,15 @@
                             </p>
                             <span class="position-visible">
                                 <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br>Ente
+                                    <br />Scuola<br>Ente<br/>Studente
                                 </p>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-2"></div>
+            <!--<div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(2)">
                         <div id="2" class="card-body">
@@ -41,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(5)">
@@ -58,10 +59,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-1"></div>
+            <div class="col-2"></div>
         </div>
         <div class="row" *ngIf="attivitaIndividuale">
-            <div class="col-1"></div>
+            <div class="col-2"></div>
             <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(3)">
@@ -72,13 +73,14 @@
                             </p>
                             <span class="position-visible">
                                 <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente
+                                    <br />Scuola<br />Ente<br />Studente
                                 </p>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-2"></div>
             <div class="col-3">
                 <div class="card-wrapper">
                     <div class="card" (click)="create(4)">
@@ -91,19 +93,19 @@
                             </p>
                             <span class="position-visible">
                                 <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente
+                                    <br />Scuola<br />Studente
                                 </p>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-3"></div>
-            <div class="col-1"></div>
+            <div class="col-2"></div>
+            <!-- <div class="col-1"></div> -->
         </div>
         <br />
         <div class="row" *ngIf="optionSelected">
-            <div class="col-1"></div>
+            <div class="col-2"></div>
             <div class="m-10">
                 <label class="btn btn-primary v-center-inline btn-icon" placement="right"
                     ngbTooltip="Allega un nuovo documento all’attività">
@@ -118,7 +120,7 @@
         </div>
         <div *ngIf="fileSelected">
             <span class="row file-title">
-                <span class="col-1"></span>
+                <span class="col-2"></span>
                 <span class="m-10">File selezionato: {{ selectedFileName }}</span>
             </span>
             <br />

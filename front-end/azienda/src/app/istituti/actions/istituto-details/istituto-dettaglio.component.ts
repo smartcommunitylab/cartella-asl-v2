@@ -256,4 +256,24 @@ export class IstitutoDettaglioComponent implements OnInit {
     // });
   }
 
+  styleOptionConvenzione(conv) {
+    var style = {};
+
+    if (conv.stato == 'non_attiva') {
+      style['color'] = '#F83E5A'; // red
+    }
+    return style;
+  }
+
+  downloadConvenzioneDoc(doc) {
+    this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = doc.nomeFile;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
 }

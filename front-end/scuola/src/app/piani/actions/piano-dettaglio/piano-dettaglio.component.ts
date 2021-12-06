@@ -7,7 +7,6 @@ import { PianificaCancellaModal } from '../cancella-piano-modal/pianifica-cancel
 import { DocumentoCancellaModal } from '../documento-cancella-modal/documento-cancella-modal.component';
 import { ActivatePianoModal } from '../activate-piano-modal/activate-piano-modal.component';
 import { SorterService } from '../../../core/services/sorter.service';
-import { serverAPIConfig } from '../../../core/serverAPIConfig'
 import { EditPianoModalComponent } from '../edit-piano-modal/edit-piano-modal.component';
 import { DuplicaPianoModal } from '../duplica-piano-modal/duplica-piano-modal.component';
 import { DeactivatePianoModal } from '../deactivate-piano-modal/deactivate-piano-modal.component';

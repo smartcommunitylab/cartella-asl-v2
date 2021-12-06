@@ -10,6 +10,7 @@ export class DeleteEsperienzaModalComponent implements OnInit {
   
   @Input() nomeEsperienza;
   @Input() nominativoStudente;
+  @Input() titoloEsperienza;
   @Output() onDelete = new EventEmitter();
 
   constructor(public activeModal: NgbActiveModal) { }

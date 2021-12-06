@@ -33,12 +33,10 @@ export class EntiComponent implements OnInit {
         private router: Router,
         private location: Location,
         private modalService: NgbModal
-    ) {
-        // force route reload whenever params change;
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    }
+    ) {}
 
     ngOnInit(): void {
+        this.filtro = '';
         this.getEntiPaged(1);
     }
 
@@ -63,20 +61,6 @@ export class EntiComponent implements OnInit {
                 () => console.log('get piani attivi'));
     }
 
-    recreateFilterUrl() {
-        let queryParams: any = {};
-        if (this.filtro.corsoStudio) {
-            queryParams.corsostudio = this.filtro.corsoStudio;
-        }
-        if (this.filtro.inUso) {
-            queryParams.inuso = this.filtro.inUso;
-        }
-        const url = this.router
-            .createUrlTree([], { relativeTo: this.route, queryParams: queryParams })
-            .toString();
-        this.location.go(url);
-    }
-
     menuContentShow() {
         this.showContent = !this.showContent;
     }
@@ -93,7 +77,7 @@ export class EntiComponent implements OnInit {
     }
 
     refreshEnti() {
-        this.filtro = null;
+        this.filtro = '';
         this.filterSearch = false;
         this.getEntiPaged(1);
     }
@@ -134,5 +118,53 @@ export class EntiComponent implements OnInit {
 
         }
     }
+
+    setConvenzioneStato(ente) {
+        let stato = 'Assente';
+        if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+            stato = 'Attiva';
+        } else if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+            stato = 'Non attiva';
+        }
+        return stato;
+    }
+
+    styleOptionConvenzione(ente) {
+        var style = {
+            'color': '#707070', //grey
+        };
+
+        if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+            style['color'] = '#F83E5A'; // red
+        } else if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+            style['color'] = '#00CF86'; // green
+        }
+
+        return style;
+    }
+
+    showTipStatoRigaConvenzione(ente) {
+        if (!ente.toolTipoConvRiga) {
+            if (ente.convenzione && ente.convenzione.stato == 'non_attiva') {
+                ente.toolTipoConvRiga = 'La convenzione non è attiva. L’ente non può gestire i tirocini tramite la sua interfaccia EDIT.  Vai alla pagina profilo ente per aggiungere una convenzione valida.';
+            } else if (ente.convenzione && ente.convenzione.stato == 'attiva') {
+                ente.toolTipoConvRiga = 'La convenzione è attiva, e l’ente può collaborare tramite EDIT alla gestione dei tirocini.';
+            } else {
+                ente.toolTipoConvRiga = 'Questo ente non ha nessuna convenzione attiva con questo istituto. Vai al profilo ente per caricare una convenzione valida.';
+            }
+
+        }
+    }
+
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro != '') {
+            return style;
+        }
+    }
+
 
 }

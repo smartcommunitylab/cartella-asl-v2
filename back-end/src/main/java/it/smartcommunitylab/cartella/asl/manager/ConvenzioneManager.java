@@ -72,7 +72,23 @@ public class ConvenzioneManager extends DataEntityManager {
 		}
 	}
 	
-	public Convenzione getUltimaConvenzioneAttiva(String istitutoId, String enteId) {
+	public Convenzione getConvenzione(Long convenzioneId) {
+		Convenzione c = convenzioneRepository.findById(convenzioneId).orElse(null);
+		if(c != null) {
+			completaConvenzione(c);
+		}
+		return c;
+	}
+	
+	public Convenzione getConvenzioneByUuid(String uuid) {
+		Convenzione c = convenzioneRepository.findByUuid(uuid);
+		if(c != null) {
+			completaConvenzione(c);
+		}
+		return c;
+	}
+	
+	public Convenzione getUltimaConvenzione(String istitutoId, String enteId) {
 		List<Convenzione> convenzioni = getConvenzioni(istitutoId, enteId);
 		for(Convenzione c: convenzioni) {
 			if(Stato.attiva.equals(c.getStato())) {
@@ -108,5 +124,21 @@ public class ConvenzioneManager extends DataEntityManager {
 			cDb.setDataFine(c.getDataFine());
 			return convenzioneRepository.save(cDb);
 		}	
+	}
+	
+	public Convenzione deleteConvenzione(String istitutoId, Long convenzioneId) throws BadRequestException {
+		Convenzione c = convenzioneRepository.findById(convenzioneId).orElse(null);
+		if(c == null) {
+			throw new BadRequestException("convenzione non trovata");
+		}
+		if(!istitutoId.equals(c.getIstitutoId())) {
+			throw new BadRequestException("convenzione errata");
+		}
+		List<Documento> docs = documentoRepository.findDocumentoByRisorsaId(c.getUuid());
+		for(Documento doc : docs) {
+			documentoRepository.delete(doc);
+		}
+		convenzioneRepository.delete(c);
+		return c;
 	}
 }

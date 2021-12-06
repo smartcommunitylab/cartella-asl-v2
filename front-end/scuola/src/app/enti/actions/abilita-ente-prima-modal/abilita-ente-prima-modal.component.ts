@@ -10,6 +10,7 @@ export class AbilitaEntePrimaModal {
   closeResult: string;
 
   @Input() ente;
+  @Input() enteResponsabile;
   @Output() onAbilita = new EventEmitter<string>();
 
   constructor(public activeModal: NgbActiveModal) { }

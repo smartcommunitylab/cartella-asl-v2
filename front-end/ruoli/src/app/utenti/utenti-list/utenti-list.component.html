@@ -8,14 +8,14 @@
         </div>
         <h2>Ricerca utente:</h2>
         <div class="row">
-            <div class="col">
+            <div class="col col-5">
                 <div class="form-group">
                     <label for="text">Nominativo o codice fiscale o email</label>
                     <input type="text" class="form-control" id="cf" placeholder="Ricerca tramite nome, cognome, codice fiscale o email" 
                     [(ngModel)]="filtro.text" (keyup.enter)="searchUser()">
                 </div>
             </div>
-            <div class="col">
+            <div class="col col-3">
                 <div class="form-group">
                     <label for="ruolo">Ruolo</label>
                     <select class="form-control" id="ruolo" [(ngModel)]="filtro.role"
@@ -23,6 +23,27 @@
                         <option [ngValue]="undefined">TUTTI</option>
                         <option [ngValue]="ruolo" *ngFor="let ruolo of ruoli">{{ruolo}}</option>
                     </select>
+                </div>
+            </div>
+            <div class="col col-4">
+                <div class="form-group">
+                    <ng-template #rtIstituto let-r="result" let-t="term">
+                        <div class="row">
+                                <ngb-highlight [result]="r.name" [term]="t"></ngb-highlight>
+                        </div>
+                    </ng-template>    
+                    <label for="ruolo">Istituto</label>
+                    <div class="row" [style.margin-left]="0">
+                        <input type="text" class="form-control col col-10" [(ngModel)]="istituto"
+                            id="istituto" name="istituto" [ngbTypeahead]="getIstituti" 
+                            [resultTemplate]="rtIstituto" [inputFormatter]="formatterIstituto"
+                            placeholder="Cerca per nome istituto">
+                        <i class="material-icons pointer col col-2" ngbTooltip="cancella istituto"
+                            (click)="resetIstituto()">cancel</i>
+                    </div>
+                    <small *ngIf="searchingIstituto" class="progress-spinner progress-spinner-active size-sm">
+                            <span class="sr-only">Caricamento...</span>
+                    </small>
                 </div>
             </div>
         </div>

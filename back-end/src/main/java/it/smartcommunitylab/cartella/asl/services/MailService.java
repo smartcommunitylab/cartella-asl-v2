@@ -118,7 +118,7 @@ public class MailService {
 		vars.put("token", reg.getToken());
 		vars.put("nomeIstituto", reg.getNomeIstituto());
 		vars.put("nomeEnte", reg.getNomeEnte());
-		sendEmail(reg.getEmail(), "Attivazione accesso sistema EDIT - Gestione esperienze Alternanza Scuola Lavoro istituti superiori", 
+		sendEmail(reg.getEmail(), "Attivazione profilo EDIT - Gestione dell’alternanza scuola-lavoro per gli Istituti Secondari della Provincia di Trento", 
 				"registrazioneEnte", vars);
 	}
 	
@@ -128,7 +128,7 @@ public class MailService {
 		vars.put("token", reg.getToken());
 		vars.put("nominativoInvito", reg.getNominativoInvito());
 		vars.put("nomeEnte", reg.getNomeEnte());
-		sendEmail(reg.getEmail(), "Attivazione account EDIT per conto di " + reg.getNomeEnte(), 
+		sendEmail(reg.getEmail(), "Attivazione profilo delegato EDIT - Gestione dell’alternanza scuola-lavoro per gli Istituti Secondari della Provincia di Trento", 
 				"ruoloReferenteAzienda", vars);
 	}
 

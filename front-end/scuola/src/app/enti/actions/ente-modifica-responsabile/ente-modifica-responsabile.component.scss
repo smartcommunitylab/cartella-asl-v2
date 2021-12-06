@@ -1,0 +1,80 @@
+
+.list-container{
+    margin-top: 40px;
+
+    >.row {
+        margin: 0px;
+    }
+
+    .card-body {
+        >.row {
+            align-items: center;
+            .filter-data {
+                span {
+                    position: absolute;
+                    right: 20px;
+                    bottom: 0px;
+                    font-size: 15px;
+                }
+            }
+        }
+        button {
+            span {
+                margin: 4px;
+            }
+        }
+    }
+
+    .list-group {
+        margin-top: 20px;
+        .row {
+            align-items: center;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .content {
+            font-size: 20px;
+        }
+    }
+
+    .menu-content {
+        border-bottom: 10px solid #3DBBD2;
+    }
+
+    .middle-table {
+        position: relative;
+        max-width: 50%;        
+        left: 20%;
+    }
+
+    .title{
+        text-align: left;
+        letter-spacing: 0;
+        color: #5A6772;
+        opacity: 1;
+        font-size: larger;
+        font-weight: bold;
+    }
+
+    .azienda {
+        position: relative;
+        top: 20px;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .btnDeleteConv {
+        width: 260px;
+        height: 40px;
+        background-color: #A2ADB8!important;
+        font-family: Titillium Web !important;
+        font-size: 18px;
+        font-weight: 600;
+        color: #FFFFFF !important;
+        position: relative;
+    }
+}

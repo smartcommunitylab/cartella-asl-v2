@@ -13,6 +13,8 @@ import { environment } from '../../../environments/environment';
 export class IstitutiSelectorComponent implements OnInit {
 
   @Input() attachedIstituti;
+  @Input() offertaDataInizio;
+  @Input() offertaDataFine;
   @Input() addButtonText: string;
   @Output() onNewIstitutiAddedListener = new EventEmitter<any[]>();
   
@@ -48,7 +50,7 @@ export class IstitutiSelectorComponent implements OnInit {
   mergeIstituti() {
     if (this.istitute && this.attachedIstituti) {
       this.istitute.forEach(element => {
-        if (this.attachedIstituti.find(function (el) { return el.id == element.id; })) {
+        if (this.attachedIstituti.find(function (el) { return el.istitutoId == element.id; })) {
           element['disabled'] = true;
         }
       });
@@ -63,7 +65,7 @@ export class IstitutiSelectorComponent implements OnInit {
   }
 
   getIstituti(page) {
-    this.dataService.searchIstitutiAPI(this.searchistitutoTxt, (page - 1), this.pageSize).subscribe((response: IPagedIstituto) => {
+    this.dataService.searchIstitutiAPI(this.offertaDataInizio, this.offertaDataFine, this.searchistitutoTxt, (page - 1), this.pageSize).subscribe((response: IPagedIstituto) => {
       this.istitute = response.content;
       this.totalRecords = response.totalElements;
       this.mergeIstituti();
@@ -119,7 +121,7 @@ export class IstitutiSelectorComponent implements OnInit {
   deleteistituto(istituto) {
     this.attachedIstituti.splice(this.attachedIstituti.indexOf(istituto), 1);
     this.istitute.forEach(element => {
-      if (element.id == istituto.id) {
+      if (element.id == istituto.istitutoId) {
         element['disabled'] = false;
       }
     })

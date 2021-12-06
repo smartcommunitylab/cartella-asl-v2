@@ -1,11 +1,10 @@
 package it.smartcommunitylab.cartella.asl.manager;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import it.smartcommunitylab.cartella.asl.model.Azienda;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte.Stato;
-import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUserRole;
@@ -51,19 +49,19 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 	}
 	
-	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String email) throws Exception {
+	public RegistrazioneEnte creaRichiestaRegistrazione(String istitutoId, String enteId, String cf, String email,
+			String nome, String cognome, String telefono) throws Exception {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
-			if(Stato.confermato.equals(reg.getStato())) {
+			if(Stato.confermato.equals(reg.getStato()) || Stato.inattivo.equals(reg.getStato())) {
 				throw new BadRequestException("richiesta registrazione per questo ente già presente");
 			}
 			LocalDate today = LocalDate.now();
 			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
-				registrazioneEnteRepository.delete(reg);
 				throw new BadRequestException("richiesta registrazione per questo ente già presente");
 			}
-			registrazioneEnteRepository.delete(reg);
+			registrazioneEnteRepository.delete(reg);				
 		}
 		Optional<Istituzione> istituto = istituzioneRepository.findById(istitutoId);
 		Optional<Azienda> ente = aziendaRepository.findById(enteId);
@@ -72,17 +70,38 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setIstitutoId(istitutoId);
 		reg.setOwnerId(Long.valueOf(-1));
 		reg.setNominativoInvito("Sistema");
-		reg.setToken(Utils.getUUID());
+		reg.setNomeReferente(nome);
+		reg.setCognomeReferente(cognome);
+		reg.setTelefonoReferente(telefono);
 		reg.setDataInvito(LocalDate.now());
-		reg.setEmail(email);
+		reg.setEmail(email.toLowerCase().trim());
+		reg.setCf(cf.toUpperCase().trim());
 		reg.setRole(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
-		reg.setStato(Stato.inviato);
+		reg.setStato(Stato.inattivo);
 		if(istituto.isPresent()) {
 			reg.setNomeIstituto(istituto.get().getName());
 		}
 		if(ente.isPresent())  {
 			reg.setNomeEnte(ente.get().getNome());
 		}
+		registrazioneEnteRepository.save(reg);
+		return reg;
+	}
+	
+	public RegistrazioneEnte attivaRichiestaRegistrazione(String istitutoId, Long registrazioneId) throws Exception {
+		Optional<RegistrazioneEnte> optional = registrazioneEnteRepository.findById(registrazioneId);
+		if(!optional.isPresent()) {
+			throw new BadRequestException("registrazione non trovata");
+		}
+		RegistrazioneEnte reg = optional.get();
+		if(!reg.getIstitutoId().equals(istitutoId)) {
+			throw new BadRequestException("istituto non autorizzato");
+		}
+		if(!Stato.inattivo.equals(reg.getStato())) {
+			throw new BadRequestException("stato registrazione non compatibile");
+		}
+		reg.setToken(Utils.getUUID());
+		reg.setStato(Stato.inviato);
 		mailService.inviaRichiestaRegistrazione(reg);
 		registrazioneEnteRepository.save(reg);
 		return reg;
@@ -116,10 +135,13 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				registrazioneEnteRepository.delete(registrazioneEnte);
 				throw new BadRequestException("richiesta registrazione scaduta");
 			}
-			ASLUser user = userManager.getExistingASLUser(registrazioneEnte.getEmail());
+			ASLUser user = userManager.getASLUserByCf(registrazioneEnte.getCf());
 			if(user == null) {
-				user = new ASLUser();
+				user = new ASLUser();				
+				user.setCf(registrazioneEnte.getCf());
 				user.setEmail(registrazioneEnte.getEmail());
+				user.setName(registrazioneEnte.getNomeReferente());
+				user.setSurname(registrazioneEnte.getCognomeReferente());
 				user = userManager.createASLUser(user);
 			}
 			registrazioneEnte.setUserId(user.getId());
@@ -148,16 +170,23 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		if(ownerRole == null) {
 			throw new BadRequestException("gestore non autorizzato");
 		}
-		ASLUser user = userManager.getExistingASLUser(email);
+		ASLUser user = userManager.getASLUserByCf(cf);
+		if(user == null) {
+			user = userManager.getExistingASLUser(email);
+		}
 		if(user != null) {
-			user.setCf(cf);
+			ASLUserRole userRoleLegale = userManager.findASLUserRole(user.getId(), 
+					ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId);
+			if(userRoleLegale != null) {
+				throw new BadRequestException("ruolo non compatibile");
+			}
 			user.setName(nome);
 			user.setSurname(cognome);
 			userManager.updateASLUser(user);
 		} else {
 			user = new ASLUser();
-			user.setEmail(email);
 			user.setCf(cf);
+			user.setEmail(email);
 			user.setName(nome);
 			user.setSurname(cognome);
 			userManager.createASLUser(user);
@@ -176,8 +205,10 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		reg.setDataInvito(LocalDate.now());
 		reg.setDataAccettazione(LocalDate.now());
 		reg.setEmail(email);
+		reg.setCf(cf);
 		reg.setNominativoInvito(owner.getName() + " " + owner.getSurname());
-		reg.setNominativoReferente(nome + " " + cognome);
+		reg.setNomeReferente(nome);
+		reg.setCognomeReferente(cognome);
 		reg.setToken(Utils.getUUID());
 		reg.setStato(Stato.confermato);
 		reg.setRole(ASLRole.REFERENTE_AZIENDA);
@@ -227,35 +258,40 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		return reg;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<RegistrazioneEnteReport> getRuoliByEnte(String enteId) throws Exception {
-		StringBuilder sb = new StringBuilder("SELECT reg, u FROM RegistrazioneEnte reg, ASLUser u");
-		sb.append(" WHERE reg.userId=u.id AND reg.aziendaId=(:enteId) ORDER BY reg.dataInvito DESC");
-
-		Query query = em.createQuery(sb.toString());
+	public List<RegistrazioneEnte> getRuoliByEnte(String enteId) throws Exception {
+		StringBuilder sb = new StringBuilder("SELECT reg FROM RegistrazioneEnte reg");
+		sb.append(" WHERE reg.aziendaId=(:enteId) ORDER BY reg.dataInvito DESC");
+		TypedQuery<RegistrazioneEnte> query = em.createQuery(sb.toString(), RegistrazioneEnte.class);
 		query.setParameter("enteId", enteId);
-		List<Object[]> result = query.getResultList();
-		
-		List<RegistrazioneEnteReport> list = new ArrayList<>();
-		for (Object[] obj : result) {
-			RegistrazioneEnte reg = (RegistrazioneEnte) obj[0];
-			ASLUser user = (ASLUser) obj[1];
-			RegistrazioneEnteReport report = new RegistrazioneEnteReport(reg, user);
-			list.add(report);
-		}
+		List<RegistrazioneEnte> list = query.getResultList();		
 		return list;
 	}
 	
 	public ASLUser aggiornaDatiUtenteAzienda(String enteId, String nome, 
-			String cognome, String cf, Long userId) throws Exception {
+			String cognome, String email, Long userId) throws Exception {
 		ASLUser user = userManager.getASLUserById(userId);
 		if(user == null) {
 			throw new BadRequestException("gestore non trovato");
-		}		
+		}
+		RegistrazioneEnte reg = registrazioneEnteRepository.findOneByAziendaIdAndUserId(enteId, userId).orElse(null);
+		if(reg == null) {
+			throw new BadRequestException("registrazione non trovata");
+		}
 		user.setName(nome);
 		user.setSurname(cognome);
-		user.setCf(cf);
+		email = email.toLowerCase().trim();
+		if(!email.equals(user.getEmail())) {
+			ASLUser aslUser = userManager.getExistingASLUser(email);
+			if(aslUser != null) {
+				throw new BadRequestException("email già esistente");
+			}
+			user.setEmail(email);
+		}
 		userManager.updateASLUser(user);
+		reg.setNomeReferente(nome);
+		reg.setCognomeReferente(cognome);
+		reg.setEmail(email);
+		registrazioneEnteRepository.save(reg);
 		return user;
 	}
 	
@@ -264,7 +300,7 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 				ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
-			if(Stato.confermato.equals(reg.getStato())) {
+			if(Stato.confermato.equals(reg.getStato()) || Stato.inattivo.equals(reg.getStato())) {
 				return reg;
 			}
 			LocalDate today = LocalDate.now();
@@ -274,4 +310,5 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		}
 		return null;
 	}
+	
 }

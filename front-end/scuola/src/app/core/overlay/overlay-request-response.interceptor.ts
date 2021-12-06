@@ -6,7 +6,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/delay';
 import { EventBusService, EmitEvent, Events } from '../services/event-bus.service';
-import { config } from '../../config';
 import { AuthService } from '../auth/auth.service';
 
 @Injectable()

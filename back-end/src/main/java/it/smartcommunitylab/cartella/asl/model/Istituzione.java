@@ -3,6 +3,7 @@ package it.smartcommunitylab.cartella.asl.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -38,9 +39,13 @@ public class Istituzione {
 	
 	private String rdpAddress;
 	private String rdpEmail;
+	private String rdpPec;
 	private String rdpName;
 	private String rdpPhoneFax;
 	private String privacyLink;
+	
+	@Transient
+	private Convenzione convenzione;
 	
 	public String getId() {
 		return id;
@@ -192,5 +197,21 @@ public class Istituzione {
 
 	public void setPrivacyLink(String privacyLink) {
 		this.privacyLink = privacyLink;
+	}
+
+	public Convenzione getConvenzione() {
+		return convenzione;
+	}
+
+	public void setConvenzione(Convenzione convenzione) {
+		this.convenzione = convenzione;
+	}
+
+	public String getRdpPec() {
+		return rdpPec;
+	}
+
+	public void setRdpPec(String rdpPec) {
+		this.rdpPec = rdpPec;
 	}
 }

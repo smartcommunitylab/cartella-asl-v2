@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { CreaNuovaUtenteModalComponent } from '../crea-nuova-utente-modal/crea-nuova-utente-modal.component';
 import { RuoloCancellaModal } from '../ruolo-cancella-modal/ruolo-cancella-modal.component';
+import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -17,6 +18,7 @@ export class EnteDettaglioComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
+    private growler: GrowlerService,
     private modalService: NgbModal) { }
 
   ente;
@@ -45,7 +47,7 @@ export class EnteDettaglioComponent implements OnInit {
   codiceAteco: string = '';
   descAteco: string = '';
   ruoli;
-  menuContent = "In questa pagina trovi tutte le informazioni. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza.";
+  menuContent = "In questa pagina trovi tutte le informazioni relative al profilo EDIT di questo ente. Usa il tasto “modifica dati ente” per modificare i dati. Con il tasto “Aggiungi account” puoi dare l’accesso ad altre persone per la gestione quotidiana delle attività di alternanza";
   showContent: boolean = false;
   attachedAteco = [];
 
@@ -94,6 +96,8 @@ export class EnteDettaglioComponent implements OnInit {
     modalRef.componentInstance.newUtenteListener.subscribe((role) => {
       this.dataService.aggiungiRuoloReferenteAzienda(role).subscribe(res => {
         this.dataService.getRuoliByEnte().subscribe((roles) => {
+          let message = "Invio inviato con successo. Il delegato riceverà una mail con le istruzioni per attivare il proprio profilo EDIT ed iniziare a gestire i tirocini sull’interfaccia di " + this.ente.nome ;
+          this.growler.growl(message, GrowlerMessageType.Success);
           this.initializeRole(roles);
         });
       });
@@ -127,10 +131,20 @@ export class EnteDettaglioComponent implements OnInit {
     });
   }
 
+  checkDeleteRole(ruolo) {
+    if (ruolo.userId == this.dataService.ownerId) {
+      return false;
+    }
+    if (ruolo.role == "LEGALE_RAPPRESENTANTE_AZIENDA") {
+      return false;
+    }
+    return true;
+  }
+
   initializeRole(roles) {
     this.ruoli = roles.filter(role => {
       if (role.userId == this.dataService.ownerId) {
-        return false;
+        return true;
       }
       return true;
     });

@@ -253,4 +253,34 @@ export class PianificaComponent implements OnInit {
         this.getPianiPage(1);
     }
 
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+
+    customCorsoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.corsodistudio != undefined) {
+            return style;
+        }
+    }
+
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
+    }
+
 }

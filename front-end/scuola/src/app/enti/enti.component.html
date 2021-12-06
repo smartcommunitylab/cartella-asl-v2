@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-4 v-center-inline">
             <div class="form-group center-formGroup">
-                <input type="text" id="cercaPiani" class="form-control search-input" [(ngModel)]="filtro"
+                <input type="text" id="cercaPiani" class="form-control search-input" [ngStyle]="customSearchOption()" [(ngModel)]="filtro"
                     (keyup.enter)="cerca()">
                 <label for="cercaPiani">Cerca ente o partita IVA</label>
             </div>
@@ -63,9 +63,8 @@
                     <th>Partita IVA</th>
                     <th>Ente</th>
                     <th>Indirizzo</th>
-                    <th>Telefono</th>
-                    <th>Mail</th>
-                    <th>Account</th>
+                    <th>Account ente</th>
+                    <th>Convenzione</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,10 +72,14 @@
                     <td class="align-middle pointer">{{ente.partita_iva}}</td>
                     <td class="align-middle pointer">{{ente.nome}}</td>
                     <td class="align-middle pointer">{{ente.address}}</td>
-                    <td class="align-middle pointer">{{ente.phone }}</td>
-                    <td class="align-middle pointer">{{ente.email}}</td>
-                     <td class="align-middle pointer" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
-                        (mouseenter)="showTipStatoRiga(ente);" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}
+                    <td>
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{ente.toolTipoStatoRiga}}"
+                            (mouseenter)="showTipStatoRiga(ente);" [ngStyle]="styleOption(ente)">{{ setStatus(ente) }}</span>
+                    </td>
+                    <td>
+                        <span #tooltipStato="ngbTooltip" placement="bottom" ngbTooltip="{{ente.toolTipoConvRiga}}"
+                            (mouseenter)="showTipStatoRigaConvenzione(ente);" [ngStyle]="styleOptionConvenzione(ente)">{{
+                            setConvenzioneStato(ente) }}</span>
                     </td>
                 </tr>
             </tbody>

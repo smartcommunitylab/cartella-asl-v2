@@ -10,6 +10,7 @@ export class AnnullaInvitoModal {
   closeResult: string;
 
   @Input() ente;
+  @Input() enteResponsabile;
   @Output() onAnnulla = new EventEmitter<string>();
 
   constructor(public activeModal: NgbActiveModal) { }

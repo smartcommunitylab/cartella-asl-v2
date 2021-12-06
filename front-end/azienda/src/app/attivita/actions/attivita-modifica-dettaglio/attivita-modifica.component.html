@@ -169,17 +169,17 @@
                         <input disabled type="text" class="form-control" [(ngModel)]="attivita.referenteScuola"
                             id="referenteScuola" #referenteScuolaInput="ngModel"
                             (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
-                        <label for="referenteScuola" *ngIf="attivita.referenteScuola" class="active">Referente
+                        <label for="referenteScuola" *ngIf="attivita.referenteScuola" class="active">Tutor
                             scolastico</label>
-                        <label for="referenteScuola" *ngIf="!attivita.referenteScuola">Referente scolastico</label>
+                        <label for="referenteScuola" *ngIf="!attivita.referenteScuola">Tutor scolastico</label>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5 disabled">
                         <input disabled type="text" class="form-control" [(ngModel)]="attivita.referenteScuolaCF"
                             id="referenteScuolaCF" (focusout)="trimValue($event, 'trim')">
-                        <label for="referenteScuolaCF" *ngIf="attivita.referenteScuolaCF" class="active">CF referente
+                        <label for="referenteScuolaCF" *ngIf="attivita.referenteScuolaCF" class="active">CF tutor
                             scolastico</label>
-                        <label for="referenteScuolaCF" *ngIf="!attivita.referenteScuolaCF">CF referente
+                        <label for="referenteScuolaCF" *ngIf="!attivita.referenteScuolaCF">CF tutor
                             scolastico</label>
                     </div>
                 </div>

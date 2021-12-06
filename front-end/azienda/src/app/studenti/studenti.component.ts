@@ -27,7 +27,7 @@ export class StudentiComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router) {
     this.filtro = {
-      text: null
+      text: ''
     }
   }
 
@@ -72,7 +72,7 @@ export class StudentiComponent implements OnInit {
 
   refreshStudenti() {
     this.filtro = {
-      text: null
+      text: ''
     }
     this.filterSearch = false;
     this.getStudenti(1);
@@ -97,5 +97,16 @@ export class StudentiComponent implements OnInit {
       return statoValue;
     }
   }
+
+  customSearchOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.filtro.text != '') {
+        return style;
+    }
+  }
+
 
 }

@@ -188,17 +188,17 @@
                         <input disabled type="text" class="form-control" [(ngModel)]="offerta.referenteScuola"
                             id="referenteScuola" #referenteScuolaInput="ngModel"
                             (keyup)="trimValue($event, 'scolastico')" (focusout)="trimValue($event, 'trim')" required>
-                        <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Referente
+                        <label for="referenteScuola" *ngIf="offerta.referenteScuola" class="active">Tutor
                             scolastico</label>
-                        <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Referente scolastico</label>
+                        <label for="referenteScuola" *ngIf="!offerta.referenteScuola">Tutor scolastico</label>
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">
                         <input disabled type="text" class="form-control" [(ngModel)]="offerta.referenteScuolaCF"
                             id="referenteScuolaCF" (focusout)="trimValue($event, 'trim')">
                         <label for="referenteScuolaCF" *ngIf="offerta.referenteScuolaCF" class="active">Codice fiscale
-                            referente scolastico</label>
-                        <label for="referenteScuolaCF" *ngIf="!offerta.referenteScuolaCF">Codice fiscale referente
+                            tutor scolastico</label>
+                        <label for="referenteScuolaCF" *ngIf="!offerta.referenteScuolaCF">Codice fiscale tutor
                             scolastico</label>
                     </div>
                 </div>

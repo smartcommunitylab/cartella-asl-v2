@@ -123,7 +123,7 @@ public class OffertaManager extends DataEntityManager {
 		query.setMaxResults(pageRequest.getPageSize());
 		List<Offerta> rows = query.getResultList();
 		rows.forEach(o -> {
-			o.setStato(getStato(o));
+			o.setStato(getStato(o, true));
 		});
 		
 		Query cQuery = queryToCount(q.replace("DISTINCT off", "COUNT(DISTINCT off)"), query);
@@ -133,7 +133,7 @@ public class OffertaManager extends DataEntityManager {
 		return page;
 	}
 	
-	private Stati getStato(Offerta offerta) {
+	private Stati getStato(Offerta offerta, boolean perIstituto) {
 		if(offerta.getPostiRimanenti() <= 0) {
 			return Stati.scaduta;
 		}
@@ -141,7 +141,7 @@ public class OffertaManager extends DataEntityManager {
 		if(localDate.isAfter(offerta.getDataFine())) {
 			return Stati.scaduta;
 		}
-		if(offerta.getIstitutiAssociati().size() == 0) {
+		if(!perIstituto && (offerta.getIstitutiAssociati().size() == 0)) {
 			return Stati.bozza;
 		}
 		return Stati.disponibile;
@@ -150,10 +150,10 @@ public class OffertaManager extends DataEntityManager {
 	public Offerta getOffertaByIstituto(String istitutoId, Long offertaId) {
 		OffertaIstituto oi = offertaIstitutoRepository.findByOffertaIdAndIstitutoId(offertaId, istitutoId);
 		if(oi != null) {
-			Offerta o = getOfferta(offertaId);
+			Offerta o = getOfferta(offertaId, true);
 			if(o != null) {
 				LocalDate today = LocalDate.now();
-				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(o.getIstitutoId(), o.getEnteId());
+				LocalDate dataConvenzioneAttiva = convenzioneManager.getDataConvenzioneAttiva(istitutoId, o.getEnteId());
 				if((dataConvenzioneAttiva == null) || today.isAfter(dataConvenzioneAttiva)) {
 					return null;
 				}
@@ -163,14 +163,14 @@ public class OffertaManager extends DataEntityManager {
 		return null;
 	}
 	
-	public Offerta getOfferta(Long id) {
+	public Offerta getOfferta(Long id, boolean perIstituto) {
 		if(id != null) {
 			Optional<Offerta> optional = offertaRepository.findById(id);
 			if(optional.isPresent()) {
 				Offerta offerta = optional.get();
 				offerta.setNumeroAttivita(countAttivitaAlternanzaByOfferta(id));
 				completaAssociazioni(offerta);
-				offerta.setStato(getStato(offerta));
+				offerta.setStato(getStato(offerta, perIstituto));
 				return offerta;
 			}			
 		}
@@ -187,7 +187,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public Offerta saveOffertaIstituto(Offerta offerta, String istitutoId) throws Exception {
-		Offerta offertaDb = getOfferta(offerta.getId());
+		Offerta offertaDb = getOfferta(offerta.getId(), true);
 		if(offertaDb == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		} else {
@@ -204,7 +204,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 	
 	public Offerta deleteOfferta(Long id, String istitutoId) throws Exception {
-		Offerta offerta = getOfferta(id);
+		Offerta offerta = getOfferta(id, true);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
@@ -221,7 +221,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public Offerta saveOffertaByEnte(Offerta offerta, String enteId) throws Exception {
-		Offerta offertaDb = getOfferta(offerta.getId());
+		Offerta offertaDb = getOfferta(offerta.getId(), false);
 		if(offertaDb == null) {
 			offerta.setEnteId(enteId);
 			Azienda azienda = aziendaManager.getAzienda(enteId);
@@ -246,7 +246,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public Offerta deleteOffertaByEnte(Long id, String enteId) throws Exception {
-		Offerta offerta = getOfferta(id);
+		Offerta offerta = getOfferta(id, false);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
@@ -264,7 +264,7 @@ public class OffertaManager extends DataEntityManager {
 
 	public void associaIstitutiByEnte(Long id, String enteId, 
 			List<OffertaIstitutoStub> istituti) throws Exception{
-		Offerta offerta = getOfferta(id);
+		Offerta offerta = getOfferta(id, false);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
@@ -297,7 +297,7 @@ public class OffertaManager extends DataEntityManager {
 	}
 
 	public Offerta getOffertaByEnte(Long id, String enteId) throws Exception {
-		Offerta offerta = getOfferta(id);
+		Offerta offerta = getOfferta(id, false);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
@@ -350,7 +350,7 @@ public class OffertaManager extends DataEntityManager {
 		List<Offerta> list = new ArrayList<>();
 		for (Object[] obj : rows) {
 			Long offertaId = (Long) obj[0];
-			Offerta offerta = getOfferta(offertaId);
+			Offerta offerta = getOfferta(offertaId, false);
 			list.add(offerta);
 		}
 		

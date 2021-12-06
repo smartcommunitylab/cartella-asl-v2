@@ -7,6 +7,7 @@ import { UpdateDocenteModalComponent } from './actions/update-docente-modal/upda
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RuoloCancellaModal } from './actions/ruolo-cancella-modal/ruolo-cancella-modal.component';
 import { GrowlerService, GrowlerMessageType } from '../core/growler/growler.service';
+import { StateStorageService } from '../core/auth/state-storage.service';
 
 @Component({
   selector: 'istituto',
@@ -103,7 +104,8 @@ export class IstitutoComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private growler: GrowlerService
+    private growler: GrowlerService,
+    private storageSerivce: StateStorageService
   ) {}
 
   ngOnInit(): void {
@@ -484,7 +486,7 @@ export class IstitutoComponent implements OnInit {
       titolo: '',
       stato: stato
     };
-    localStorage.setItem('filtroAttivita', JSON.stringify(this.filtro));
+    this.storageSerivce.storefiltroAttivita(JSON.stringify(this.filtro))
     this.router.navigateByUrl('/attivita/list');
   }
 
@@ -513,8 +515,8 @@ export class IstitutoComponent implements OnInit {
         ids.push(element.id);
       });
       this.dataService.aggiungiDocentiAccount(ids).subscribe(res => {
-          this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);
-          this.ngOnInit();
+        this.growler.growl('Account attivati con successo!', GrowlerMessageType.Success);  
+        this.ngOnInit();
       });
     });
   

@@ -15,12 +15,11 @@ export class OfferteSelectorComponent implements OnInit {
   @Output() onNewOffertaAddedListener = new EventEmitter<any[]>();
 
   filtro;
+  filterSearch = false;
   offerte;
   selectedId;
   tipologie;
   tipologia = "Tipologia";
-  owner;
-  filterText;
   evn = environment;
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -36,8 +35,7 @@ export class OfferteSelectorComponent implements OnInit {
     this.filtro = {
       tipologia: '',
       titolo: '',
-      stato: '',
-      ownerIstituto: null
+      stato: ''
     }
   }
 
@@ -125,11 +123,7 @@ export class OfferteSelectorComponent implements OnInit {
   cerca() {
     if (this.cmPagination)
       this.cmPagination.changePage(1);
-    if (this.filterText) {
-      this.filtro.titolo = this.filterText;
-    } else {
-      this.filtro.titolo = null;
-    }
+    this.filterSearch = true;
     this.getOffertePage(1);
   }
 
@@ -141,25 +135,12 @@ export class OfferteSelectorComponent implements OnInit {
     } else {
       this.filtro.tipologia = null;
     }
-    this.getOffertePage(1);
-  }
-
-  selectOwnerFilter() {
-    if (this.cmPagination)
-      this.cmPagination.changePage(1);
-    if (this.owner) {
-      if (this.owner == 'istituto') {
-        this.filtro.ownerIstituto = true;
-      } else {
-        this.filtro.ownerIstituto = false;
-      }
-    } else {
-      this.filtro.ownerIstituto = null;
-    }
+    this.filterSearch = true;
     this.getOffertePage(1);
   }
 
   onFilterChange(off, tp) {
+    this.filterSearch = true;
     tp.close();
     off.valida = !off.valida;
     off.toolTip = 'Attività selezionata';
@@ -203,12 +184,30 @@ export class OfferteSelectorComponent implements OnInit {
       tipologia: '',
       titolo: '',
       stato: '',
-      ownerIstituto: null
     }
-    this.tipologia = "Tipologie"
-    this.owner = undefined;
-    this.filterText = undefined;
+    this.tipologia = "Tipologia"
+    this.filterSearch = false;
     this.getOffertePage(1);
+  }
+
+  customSearchOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.filtro.titolo != '') {
+        return style;
+    }
+  }
+
+  customTipologiaOption() {
+    var style = {
+        'border-bottom': '2px solid #06c',
+        'font-weight': 'bold'
+    };
+    if (this.tipologia != 'Tipologia') {
+        return style;
+    }
   }
 
 }

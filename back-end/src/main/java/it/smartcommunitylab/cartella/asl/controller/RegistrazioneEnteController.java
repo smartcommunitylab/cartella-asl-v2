@@ -22,7 +22,6 @@ import it.smartcommunitylab.cartella.asl.manager.AuditManager;
 import it.smartcommunitylab.cartella.asl.manager.RegistrazioneEnteManager;
 import it.smartcommunitylab.cartella.asl.model.RegistrazioneEnte;
 import it.smartcommunitylab.cartella.asl.model.audit.AuditEntry;
-import it.smartcommunitylab.cartella.asl.model.report.RegistrazioneEnteReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLAuthCheck;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
@@ -39,12 +38,12 @@ public class RegistrazioneEnteController implements AslController {
 	private AuditManager auditManager;
 	
 	@GetMapping("/api/registrazione-ente/ruoli")
-	public @ResponseBody List<RegistrazioneEnteReport> getRuoliByEnte(
+	public @ResponseBody List<RegistrazioneEnte> getRuoliByEnte(
 			@RequestParam String enteId,
 			HttpServletRequest request) throws Exception {
 		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
 				new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
-		List<RegistrazioneEnteReport> list = registrazioneEnteManager.getRuoliByEnte(enteId);
+		List<RegistrazioneEnte> list = registrazioneEnteManager.getRuoliByEnte(enteId);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getRuoliByEnte:%s - %s", enteId, list.size()));
 		}		
@@ -55,8 +54,8 @@ public class RegistrazioneEnteController implements AslController {
 	public @ResponseBody ASLUser aggiornaDatiUserAzienda(
 			@RequestParam String enteId, 
 			@RequestParam String nome, 
-			@RequestParam String cognome, 
-			@RequestParam String cf, 
+			@RequestParam String cognome,
+			@RequestParam String email,
 			@RequestParam Long userId,
 			HttpServletRequest request) throws Exception {
 		ASLUser caller = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId),
@@ -64,7 +63,7 @@ public class RegistrazioneEnteController implements AslController {
 		if(!caller.getId().equals(userId)) {
 			throw new BadRequestException("id utente non corrispondente");
 		}
-		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, cf, userId);
+		ASLUser user = registrazioneEnteManager.aggiornaDatiUtenteAzienda(enteId, nome, cognome, email, userId);
 		AuditEntry audit = new AuditEntry(request.getMethod(), ASLUser.class, userId, caller, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -100,12 +99,17 @@ public class RegistrazioneEnteController implements AslController {
 	@PostMapping("/api/registrazione-ente/richiesta")
 	public @ResponseBody RegistrazioneEnte creaRichiestaRegistrazione(
 			@RequestParam String istitutoId, 
-			@RequestParam String enteId, 
+			@RequestParam String enteId,
+			@RequestParam String cf,
 			@RequestParam String email,
+			@RequestParam String nome,
+			@RequestParam String cognome,
+			@RequestParam String telefono,
 			HttpServletRequest request) throws Exception {
 		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
 				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
-		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, email);
+		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.creaRichiestaRegistrazione(istitutoId, enteId, cf, email, 
+				nome, cognome, telefono);
 		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneEnte.class, registrazioneEnte.getId(), user, new Object(){});
 		auditManager.save(audit);			
 		if(logger.isInfoEnabled()) {
@@ -113,6 +117,22 @@ public class RegistrazioneEnteController implements AslController {
 		}		
 		return registrazioneEnte;		
 	}
+	
+	@PostMapping("/api/registrazione-ente/richiesta/attiva")
+	public @ResponseBody RegistrazioneEnte attivaRichiestaRegistrazione(
+			@RequestParam String istitutoId, 
+			@RequestParam Long registrazioneId,
+			HttpServletRequest request) throws Exception {
+		ASLUser user = usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		RegistrazioneEnte registrazioneEnte = registrazioneEnteManager.attivaRichiestaRegistrazione(istitutoId, registrazioneId);
+		AuditEntry audit = new AuditEntry(request.getMethod(), RegistrazioneEnte.class, registrazioneEnte.getId(), user, new Object(){});
+		auditManager.save(audit);			
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("attivaRichiestaRegistrazione:%s - %s", istitutoId, registrazioneId));
+		}		
+		return registrazioneEnte;		
+	}	
 	
 	@DeleteMapping("/api/registrazione-ente/richiesta")
 	public @ResponseBody RegistrazioneEnte annullaRichiestaRegistrazione(
@@ -164,6 +184,20 @@ public class RegistrazioneEnteController implements AslController {
 			logger.info(String.format("cancellaRuoloReferenteAzienda:%s - %s", enteId, registrazioneId));
 		}		
 		return registrazioneEnte;		
+	}
+	
+	@GetMapping("/api/registrazione-ente/richiesta")
+	public @ResponseBody RegistrazioneEnte getRichiestaRegistrazione(
+			@RequestParam String istitutoId,
+			@RequestParam String enteId,
+			HttpServletRequest request) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.DIRIGENTE_SCOLASTICO, istitutoId), 
+				new ASLAuthCheck(ASLRole.FUNZIONE_STRUMENTALE, istitutoId)));
+		RegistrazioneEnte reg = registrazioneEnteManager.getRichiestaRegistrazione(enteId);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getRichiestaRegistrazione:%s - %s", enteId, istitutoId));
+		}		
+		return reg;
 	}
 		
 

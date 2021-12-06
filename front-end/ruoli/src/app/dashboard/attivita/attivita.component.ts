@@ -26,7 +26,14 @@ export class DashboardAttivitaComponent implements OnInit {
     private permissionService: PermissionService) { }
 
   profile;
-  report = {};
+  report = {
+    numeroEsperienze: 0,
+    numeroEsperienzeAnnullate: 0,
+    numeroEsperienzeAllineate: 0,
+    numeroAttivita: 0,
+    numeroAttivitaArchiviate: 0,
+    numeroAttivitaSenzaStudenti: 0
+  };
   annoScolastico = '2019-20';
   text = "";
   attivitaList = [];

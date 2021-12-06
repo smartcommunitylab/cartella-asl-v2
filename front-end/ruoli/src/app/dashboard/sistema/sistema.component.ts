@@ -24,7 +24,12 @@ export class DashboardSistemaComponent implements OnInit {
     private permissionService: PermissionService) { }
 
   profile;
-  report = {};
+  report = {
+    numeroStudentiIscritti: 0,
+    numeroStudentiConEsperienze: 0,
+    numeroAttivita: 0,
+    numeroEsperienze: 0
+  };
   annoScolastico = '2019-20';
   doughnut;
   tipologieMap = {

@@ -140,7 +140,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivitaAlternanzaRepository.deleteById(id);
 	}
 	
-	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, int tipologia, String stato,
+	public Page<ReportAttivitaAlternanzaRicerca> findAttivita(String istitutoId, String text, String annoScolastico, int tipologia, String stato,
 			Pageable pageRequest, ASLUser user) {
 		Map<String, Object> parameters = new HashMap<>();
 		boolean tutorScolatico = usersValidator.hasRole(user, ASLRole.TUTOR_SCOLASTICO, istitutoId);
@@ -150,8 +150,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		sb.append(" ON es.attivitaAlternanzaId=aa.id");
 		if(tutorClasse) {
 			sb.append(" WHERE aa.istitutoId=(:istitutoId)");
-			sb.append(" AND ((aa.referenteScuolaCF=(:referenteCf) AND aa.stato!='" + Stati.archiviata.toString() + "')");
-			sb.append(" OR (es.classeStudente IN (:classiAssociate)))");
+			sb.append(" AND (aa.referenteScuolaCF=(:referenteCf) OR es.classeStudente IN (:classiAssociate))");
 		} else {
 			if(tutorScolatico) {
 				sb.append(" WHERE aa.istitutoId=(:istitutoId) AND aa.referenteScuolaCF=(:referenteCf)");
@@ -162,7 +161,11 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		}
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+			sb.append(" AND (UPPER(aa.titolo) LIKE (:text) OR UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text))");
+		}
+		
+		if(Utils.isNotEmpty(annoScolastico)) {
+			sb.append(" AND aa.annoScolastico=(:annoScolastico)");
 		}
 		
 		if(tipologia > 0) {
@@ -173,7 +176,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		if(Utils.isNotEmpty(stato)) {
 			Stati statoEnum = Stati.valueOf(stato);
 			if(statoEnum == Stati.archiviata) {
-				if(tutorScolatico && !tutorClasse) {
+				if(tutorClasse || (!tutorScolatico && !tutorClasse)) {
 					sb.append(" AND aa.stato='" + Stati.archiviata.toString() + "'");
 				}
 			} else {
@@ -204,6 +207,10 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 			String like = "%" + text.trim().toUpperCase() + "%";
 			query.setParameter("text", like);
 			parameters.put("text", like);
+		}
+		if(Utils.isNotEmpty(annoScolastico)) {
+			query.setParameter("annoScolastico", annoScolastico);
+			parameters.put("annoScolastico", annoScolastico);			
 		}
 		if(tipologia > 0) {
 			query.setParameter("tipologia", tipologia);
@@ -292,7 +299,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		attivita.setStato(getStato(aa));
 		ReportAttivitaAlternanzaDettaglio report = new ReportAttivitaAlternanzaDettaglio();
 		report.setAttivitaAlternanza(attivita);
-		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+		Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId(), null);
 		if(istituto != null) {
 			report.setNomeIstituto(istituto.getName());
 		}
@@ -347,7 +354,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, 
 				Sort.by(Sort.Direction.ASC, "nominativoStudente"));
 		if(aa.getOffertaId() != null) {
-			Offerta offerta = offertaManager.getOfferta(aa.getOffertaId());
+			Offerta offerta = offertaManager.getOfferta(aa.getOffertaId(), true);
 			if(offerta != null) {
 				int toDelete = 0;
 				int toKeep = 0;
@@ -738,7 +745,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 
 	public AttivitaAlternanza associaOfferta(long offertaId, String istitutoId, Boolean rendicontazioneCorpo) 
 			throws BadRequestException {
-		Offerta offerta = offertaManager.getOfferta(offertaId);
+		Offerta offerta = offertaManager.getOfferta(offertaId, true);
 		if(offerta == null) {
 			throw new BadRequestException(errorLabelManager.get("offerta.notfound"));
 		}
@@ -868,7 +875,7 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		for (AttivitaAlternanza aa : aaList) {
 			ReportAttivitaAlternanzaRicercaEnte report = new ReportAttivitaAlternanzaRicercaEnte(aa); 
 			report.setStato(getStato(aa).toString());
-			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId());
+			Istituzione istituto = istituzioneManager.getIstituto(aa.getIstitutoId(), null);
 			if(istituto != null) {
 				report.setNomeIstituto(istituto.getName());
 			}

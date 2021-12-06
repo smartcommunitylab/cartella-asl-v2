@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
 
+import it.smartcommunitylab.cartella.asl.model.Convenzione;
 import it.smartcommunitylab.cartella.asl.model.Istituzione;
 import it.smartcommunitylab.cartella.asl.model.report.ReportIstitutoEnte;
 import it.smartcommunitylab.cartella.asl.repository.IstituzioneRepository;
@@ -31,6 +32,8 @@ import it.smartcommunitylab.cartella.asl.util.Utils;
 public class IstituzioneManager extends DataEntityManager {
 	@Autowired
 	private IstituzioneRepository istituzioneRepository;
+	@Autowired
+	ConvenzioneManager convenzioneManager;
 
 	public Page<Istituzione> findIstituti(String text, double[] coordinate, Integer distance, Pageable pageRequest) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -83,8 +86,14 @@ public class IstituzioneManager extends DataEntityManager {
 		return page;
 	}
 	
-	public Istituzione getIstituto(String istitutoId) {
+	public Istituzione getIstituto(String istitutoId, String enteId) {
 		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
+		if(Utils.isNotEmpty(enteId)) {
+			Convenzione c = convenzioneManager.getUltimaConvenzione(istitutoId, enteId);
+			if(c != null) {
+				istituzione.setConvenzione(c);
+			}
+		}
 		return istituzione;
 	}
 	
@@ -124,7 +133,7 @@ public class IstituzioneManager extends DataEntityManager {
 		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
 		
 		if(Utils.isNotEmpty(text)) {
-			sb.append(" WHERE UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text)");
+			sb.append(" AND (UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text))");
 		}
 		sb.append(" GROUP BY i.id ORDER BY COUNT(aa.id) DESC");
 		String q = sb.toString();
@@ -144,7 +153,7 @@ public class IstituzioneManager extends DataEntityManager {
 		List<ReportIstitutoEnte> list = new ArrayList<>();
 		for (Object[] obj : rows) {
 			String istitutoId = (String) obj[0];
-			Istituzione istituto = getIstituto(istitutoId);
+			Istituzione istituto = getIstituto(istitutoId, null);
 			Long attivita = (Long) obj[1];
 			ReportIstitutoEnte report = new ReportIstitutoEnte();
 			report.setIstituto(istituto);
@@ -173,11 +182,40 @@ public class IstituzioneManager extends DataEntityManager {
 			dbIst.setLongitude(istituto.getLongitude());
 			dbIst.setRdpAddress(istituto.getRdpAddress());
 			dbIst.setRdpEmail(istituto.getRdpEmail());
+			dbIst.setRdpPec(istituto.getRdpPec());
 			dbIst.setRdpName(istituto.getRdpName());
 			dbIst.setRdpPhoneFax(istituto.getRdpPhoneFax());
 			dbIst.setPrivacyLink(istituto.getPrivacyLink());
 			istituzioneRepository.save(dbIst);
 		}
 		return null;
+	}
+
+	public Page<Istituzione> findIstitutiByOfferta(String enteId, LocalDate dateFrom, LocalDate dateTo, String text,
+			Pageable pageRequest) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i FROM Istituzione i, Convenzione c");
+		sb.append(" WHERE c.istitutoId=i.id AND c.enteId=(:enteId) AND c.dataInizio<=(:dateFrom) AND c.dataFine>=(:dateTo)");
+		if(Utils.isNotEmpty(text)) {
+			sb.append(" AND (UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text))");
+		}
+		sb.append(" ORDER BY i.name");
+		String q = sb.toString();
+		
+		TypedQuery<Istituzione> query = em.createQuery(q, Istituzione.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("dateFrom", dateFrom);
+		query.setParameter("dateTo", dateTo);
+		if(Utils.isNotEmpty(text)) {
+			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+		}
+		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
+		query.setMaxResults(pageRequest.getPageSize());
+		List<Istituzione> list = query.getResultList();
+		
+		String counterQuery = q.replace("SELECT DISTINCT i", "SELECT COUNT(DISTINCT i)");
+		Query cQuery = queryToCount(counterQuery, query);
+		long total = (Long) cQuery.getSingleResult();
+		Page<Istituzione> page = new PageImpl<Istituzione>(list, pageRequest, total);
+		return page;
 	}
 }

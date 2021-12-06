@@ -14,19 +14,23 @@
         <div class="card-inner">
             <div class="card-body">
                 <div class="row">
-                    <span class="col-6 color-1 text-center">
-                        <p>Indirizzo mail:</p>
+                    <span class="col-2"></span>
+                    <span class="col-4">
+                        <p><span class="text-semibold">Nome:&nbsp;</span>{{ enteResponsabile.nomeReferente }}</p>
                     </span>
-                    <span class="col-6 color-1 text-center">
-                        <p>Ente invitato:</p>
+                    <span class="col-2"></span>
+                    <span class="col-4">
+                        <p><span class="text-semibold">Codice fiscale:&nbsp;</span>{{ enteResponsabile.cf }}</p>
                     </span>
                 </div>
                 <div class="row">
-                    <span class="text-bold col-6 text-center">
-                        <p>{{ ente.email }}</p>
+                    <span class="col-2"></span>
+                    <span class="col-4">
+                        <p><span class="text-semibold">Cognome:&nbsp;</span>{{ enteResponsabile.cognomeReferente }}</p>
                     </span>
-                    <span class="text-bold col-6 text-center">
-                        <p>{{ ente.nome }}</p>
+                    <span class="col-2"></span>
+                    <span class="col-4">
+                        <p><span class="text-semibold">Email:&nbsp;</span>{{ enteResponsabile.email }}</p>
                     </span>
                 </div>
             </div>

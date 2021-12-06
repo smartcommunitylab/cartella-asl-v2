@@ -247,4 +247,24 @@ export class AttivitaComponent implements OnInit {
         this.getAttivitaAltPage(1);
     }
 
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+    
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
+    }    
+
 }

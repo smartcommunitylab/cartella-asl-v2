@@ -165,7 +165,21 @@
                                 #ProvinciaInput="ngModel" placeholder="Provincia">
                         </div>
                         <div class="col-2"></div>
-                        <div class="col-sm-5"></div>
+                        <div class="col-sm-5">
+                            <ng-template #rtAteco let-r="result" let-t="term">
+                                <div class="row">
+                                    <ngb-highlight [result]="r.codice + ' - ' + r.descrizione" [term]="t"></ngb-highlight>
+                                </div>
+                            </ng-template>
+                            <label for="codiceAteco" *ngIf="ateco.codice" class="active">Codice ATECO</label>
+                            <input type="text" class="form-control" [(ngModel)]="ateco" value="ateco.codice"
+                                id="codiceAteco" name="codiceAteco" 
+                                [ngbTypeahead]="getAteco" [resultTemplate]="rtAteco" [inputFormatter]="formatterAteco"
+                                placeholder="Codice ATECO" (ngModelChange)="selectAteco(ateco)">
+                            <small *ngIf="searchingAteco" class="progress-spinner progress-spinner-active size-sm">
+                                <span class="sr-only">Caricamento...</span>
+                            </small>
+                        </div>
                     </div>
     
                     <div class="row v-center form-group">
@@ -185,6 +199,21 @@
                             <label for="luogoSvolgimento" *ngIf="ente.address" class="active">Posizione</label>
                             <label for="luogoSvolgimento" *ngIf="!ente.address">Posizione</label>
                             <div class="invalid-feedback" [class.d-block]="forceAddressDisplay">Campo necessario.</div>
+                        </div>
+                        <div class="col-2"></div>
+                        <div class="col-sm-5">
+                            <table class="table">
+                                <tr *ngFor="let ateco of attachedAteco">
+                                    <td class="col-sm-6">{{ateco.descrizione}}</td>
+                                    <td class="col-sm-6">
+                                        <div class='btn btn-primary btn-icon btn-xs float-right'>
+                                            <svg class="icon icon-white icon-sm" (click)="deleteAteco(ateco)">
+                                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-delete"></use>
+                                            </svg>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
 

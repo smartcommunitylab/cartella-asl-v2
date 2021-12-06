@@ -44,14 +44,14 @@
     <br />
     <div class="row">
         <div class="col-2 v-center-inline">
-            <select class="custom-select form-control" [(ngModel)]="owner" (ngModelChange)="selectOwnerFilter()">
+            <select class="custom-select form-control" [ngStyle]="customSourceOption()" [(ngModel)]="owner" (ngModelChange)="selectOwnerFilter()">
                 <option [ngValue]="undefined">Creata da</option>
                 <option [value]="src.value" *ngFor="let src of sources">{{src.name}}</option>
             </select>
         </div>
         <div class="col-5 v-center-inline">
             <div class="form-group center-formGroup">
-                <input type="text" id="cercaCompetenza" class="form-control search-input" [(ngModel)]="filterText"
+                <input type="text" id="cercaCompetenza" class="form-control search-input" [ngStyle]="customSearchOption()" [(ngModel)]="filtro.filterText"
                     (keyup.enter)="cerca()" style="width: 300px;">
                 <label for="cercaCompetenza">Cerca tra i nomi competenza</label>
             </div>
@@ -63,7 +63,7 @@
         </div>
         <div class="col-3"></div>
         <div class="col-2 v-center-inline">
-            <select class="float-right custom-select form-control" [(ngModel)]="stato"
+            <select class="float-right custom-select form-control" [ngStyle]="customStatoOption()" [(ngModel)]="stato"
                 (ngModelChange)="selectStatoFilter()">
                 <option [ngValue]="undefined">Seleziona stato</option>
                 <option [value]="stato.value" *ngFor="let stato of stati">{{stato.name}}</option>

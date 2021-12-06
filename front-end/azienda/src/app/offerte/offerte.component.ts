@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataService } from '../core/services/data.service'
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Location } from '@angular/common';
 import { PaginationComponent } from '../shared/pagination/pagination.component';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { CreaOffertaModalComponent } from './actions/crea-offerta-modal/crea-offerta-modal.component';
@@ -24,7 +23,6 @@ export class OfferteComponent implements OnInit {
     filterSearch = false;
     stato;
     owner;
-    filterText;
     menuContent = "In questa pagina trovi tutte le offerte di attività presso il tuo ente. Puoi creare una nuova offerta utilizzando il tasto verde “crea offerta”, oppure puoi consultare i dettagli di ciascuna offerta cliccando sulla riga corrispondente”. La creazione di attività, anche a partire dalle offerte, è compito esclusivo degli istituti scolastici";
     showContent: boolean = false;
     stati = [{ "name": "Disponibile", "value": "disponibile" }, { "name": "Scaduta", "value": "scaduta" }];
@@ -108,11 +106,6 @@ export class OfferteComponent implements OnInit {
         this.filterSearch = true;
         if (this.cmPagination)
             this.cmPagination.changePage(1);
-        if (this.filterText) {
-            this.filtro.titolo = this.filterText;
-        } else {
-            this.filtro.titolo = null;
-        }
         this.getOffertePage(1);
     }
 
@@ -172,7 +165,6 @@ export class OfferteComponent implements OnInit {
             stato: '',
         }
         this.stato = undefined;
-        this.filterText = undefined;
         this.filterSearch = false;
         this.getOffertePage(1);
     }
@@ -220,6 +212,26 @@ export class OfferteComponent implements OnInit {
             }
         }
         return label;
+    }
+
+    customSearchOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.filtro.titolo != '') {
+            return style;
+        }
+    }
+
+    customStatoOption() {
+        var style = {
+            'border-bottom': '2px solid #06c',
+            'font-weight': 'bold'
+        };
+        if (this.stato != undefined) {
+            return style;
+        }
     }
 
 }

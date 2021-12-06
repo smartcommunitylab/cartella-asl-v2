@@ -84,7 +84,7 @@ public class CompetenzaController implements AslController {
 			logger.info(String.format("getCompetenzeOrderByIstitutoId(%s", istitutoId + ")"));
 		}
 
-		return competenzaManager.getCompetenzeOrderByIstituto(istitutoId, ownerIds, filterText, stato, pageRequest);
+		return competenzaManager.getCompetenzeOrderByIstituto(ownerIds, filterText, stato, pageRequest);
 	}
 
 	@PostMapping("/api/competenza/istituto/{istitutoId}")

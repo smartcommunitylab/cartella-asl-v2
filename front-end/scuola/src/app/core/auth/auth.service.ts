@@ -5,17 +5,17 @@ import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import { BASE_URL } from '../../../app/app.constants';
 import { Account } from '../../shared/user/account.model';
 import { StateStorageService } from './state-storage.service';
-import { config } from '../../config'
+import { environment } from '../../../environments/environment';
 
 export function getClientSettings(): UserManagerSettings {
   const url = BASE_URL || window.location.protocol + '//' + window.location.host + '/';
   return {
-      authority: config.aacUrl,
-      client_id: config.aacClientId,
-      redirect_uri: config.redirectUrl,
-      post_logout_redirect_uri: url + config.logout_redirect,
+      authority: environment.aacUrl,
+      client_id: environment.aacClientId,
+      redirect_uri: environment.redirectUrl,
+      post_logout_redirect_uri: url + environment.logout_redirect,
       response_type: 'code',
-      scope: config.scope,
+      scope: environment.scope,
       filterProtocolClaims: true,
       loadUserInfo: false,      
   };
@@ -90,16 +90,10 @@ export class AuthService {
   }
 
   logout(): void{
-    // var getUrl = window.location;
-    // var baseUrl = getUrl.protocol + "//" + getUrl.host; // + "/" + getUrl.pathname.split('/')[1]
-    // var logoutUrl = `${config.aacUrl}/logout?target=${baseUrl}/asl-login/`;        
-    
-    this.manager.signoutRedirect().then(()=> {
-      sessionStorage.clear();
-      this.user = null;
-      this.account = null;
-      // window.location.href = logoutUrl;
-    });    
+    this.stateStorageService.clearAll();
+    this.user = null;
+    this.account = null;
+    this.manager.signoutRedirect().then(()=> {});    
   }
 
   subscribeSignedIn(): Promise<void> {

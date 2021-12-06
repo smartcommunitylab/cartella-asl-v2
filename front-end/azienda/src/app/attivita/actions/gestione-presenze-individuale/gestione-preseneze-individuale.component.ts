@@ -135,12 +135,13 @@ export class GestionePresenzeIndividualeComponent implements OnInit {
           this.limitMax = moment(this.report.dataFine);
 
           this.date.dataInizio = moment(this.report.dataInizio);
-          var dataFine = addDays(this.date.dataInizio, 7);
-          if (dataFine < this.limitMax) {
-            this.date.dataFine = moment(dataFine);
-          } else {
-            this.date.dataFine = this.limitMax;
-          }
+          this.date.dataFine = this.limitMax;
+          // var dataFine = addDays(this.date.dataInizio, 7);
+          // if (dataFine < this.limitMax) {
+          //   this.date.dataFine = moment(dataFine);
+          // } else {
+          //   this.date.dataFine = this.limitMax;
+          // }
 
           this.dataService.getAttivitaPresenzeIndividualeListaGiorni(id, moment(this.date.dataInizio).format('YYYY-MM-DD'), moment(this.date.dataFine).format('YYYY-MM-DD')).subscribe((giornate => {
             this.presenze = giornate;

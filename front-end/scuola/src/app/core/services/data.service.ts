@@ -8,12 +8,12 @@ import { PianoAlternanza } from '../../shared/classes/PianoAlternanza.class';
 import { IApiResponse } from '../../shared/classes/IApiResponse.class';
 import { IPagedCompetenze } from '../../shared/classes/IPagedCompetenze.class';
 import { GrowlerService, GrowlerMessageType } from '../growler/growler.service';
-import { serverAPIConfig } from '../serverAPIConfig'
 import { Azienda, IPagedAA } from '../../shared/interfaces';
 import { AttivitaAlternanza } from '../../shared/classes/AttivitaAlternanza.class';
 import { IPagedAzienda } from '../../shared/classes/Azienda.class';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,8 +25,8 @@ export class DataService {
   schoolYear: string = "";
   listIstituteIds = [];
   istituto: string = "Centro Formazione Professionale Agrario - S. Michele all'Adige'";
-  host: string = serverAPIConfig.host;
-  corsiStudio = this.host + '/corsiDiStudio/';
+  host: string;
+  // corsiStudio = this.host + '/corsiDiStudio/';
   corsoDiStudioAPIUrl: string = '/corsi';
   esperienzaSvoltaAPIUrl: string = '/esperienzaSvolta';
   attiitaAlternanzaAPIUrl: string = '/attivitaAlternanza'
@@ -42,6 +42,7 @@ export class DataService {
     private growler: GrowlerService,
     private sanitizer: DomSanitizer) {
     DataService.growler = growler;
+    this.host = environment.serverAPIURL;
   }
 
   setIstitutoId(id) {
@@ -460,7 +461,8 @@ export class DataService {
   }
 
   getCorsiStudio() {
-    return this.http.get(this.corsiStudio + this.istitutoId,
+    let url = this.host + '/corsiDiStudio/'
+    return this.http.get(url + this.istitutoId,
       {
         params: {
           annoScolastico: this.schoolYear
@@ -527,6 +529,8 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato != null)
       params = params.append('stato', filter.stato);
+    if (filter.anno)
+      params = params.append('annoScolastico', filter.anno);
 
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
@@ -880,10 +884,7 @@ export class DataService {
       params = params.append('text', filter.titolo);
     if (filter.stato)
       params = params.append('stato', filter.stato);
-    if (filter.ownerIstituto != null) {
-      params = params.append('ownerIstituto', filter.ownerIstituto);
-    }
-
+    
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
     params = params.append('size', pageSize);
@@ -1226,6 +1227,7 @@ export class DataService {
   getListaAziende(term, page: any, pageSize: any) {
     let url = this.host + "/azienda/search";
     let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
     params = params.append('page', page);
     params = params.append('size', pageSize);
 
@@ -1305,6 +1307,12 @@ export class DataService {
 
   addAzienda(az): Observable<any> {
     let url = this.host + "/azienda";
+    if(az.hasOwnProperty('registrazioneEnte')) {
+      delete az.registrazioneEnte;
+    }
+    if(az.hasOwnProperty('convenzione')) {
+      delete az.convenzione;
+    }
 
     return this.http.post<Azienda>(
       url,
@@ -1340,12 +1348,60 @@ export class DataService {
       );
   }
 
-  creaRichiestaRegistrazione(az): Observable<any> {
+  getEnteResponsabile(az) {
     let url = this.host + "/registrazione-ente/richiesta";
     let params = new HttpParams();
     params = params.append('istitutoId', this.istitutoId);
     params = params.append('enteId', az.id);
-    params = params.append('email', az.email);
+  
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params    
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  creaRichiestaRegistrazione(az, cf, email, nome, cognome, telefono): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('enteId', az.id);
+    params = params.append('cf', cf);
+    params = params.append('email',email);
+    params = params.append('nome', nome);
+    params = params.append('cognome', cognome);
+    params = params.append('telefono', telefono);
+    return this.http.post<any>(
+      url,
+      null,
+      { 
+        params: params,
+        observe: 'response',
+       })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          if (res.ok) {
+            return (res.body as any);
+          } else
+            return res;
+        }
+        ),
+        catchError(this.handleError))
+  }
+
+  attivaRichiestaRegistrazione(regId): Observable<any> {
+    let url = this.host + "/registrazione-ente/richiesta/attiva";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('registrazioneId', regId);
     return this.http.post<any>(
       url,
       null,
@@ -1677,6 +1733,167 @@ export class DataService {
         )
       );
   }  
+
+  addConvenzione(convenzione): Observable<any> {
+    let url = this.host + '/convenzione'
+    return this.http.post<PianoAlternanza>(url, convenzione)
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+        ),
+        catchError(this.handleError)
+      );
+  }
+
+  getEnteConvenzione(enteId): Observable<any> {
+    let url = this.host + "/convenzione/ente/" + enteId;
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getAttivaConvenzione(enteId): Observable<any> {
+    let url = this.host + "/convenzione/ente/" + enteId + '/attiva';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+  
+  getConvenzioneDettaglio(convId: any): Observable<any> {
+    let url = this.host + "/convenzione/" + convId;
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+
+    return this.http.get<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+ 
+  annullaConvenzione(id): Observable<any> {
+    let url = this.host + "/convenzione/" + id;
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    
+    return this.http.delete<any>(url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+ 
+  uploadDocumentConvenzione(option, uuid: string): Observable<any> {
+    let url = this.host + '/upload/document/convenzione/' + uuid + '/istituto/' + this.istitutoId;
+    let formData: FormData = new FormData();
+    formData.append('data', option.file, option.file.name);
+    formData.append('tipo', option.type);
+    let headers = new Headers();
+
+    return this.http.post<any>(url, formData)
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        }),
+        catchError(this.handleError)
+      )
+  }
+
+  downloadDocumentConvenzioneBlob(doc): Observable<any> {
+    let url = this.host + '/download/document/convenzione/' + doc.uuid + '/istituto/' + this.istitutoId;
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data], { type: doc.formatoDocumento });
+        const url = URL.createObjectURL(blob);
+        return url;
+        //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      },
+        catchError(this.handleError)
+      );
+  }
+
+  deleteConvenzioneDocument(id: any): Promise<any> {
+    let url = this.host + '/remove/document/convenzione/' + id + '/istituto/' + this.istitutoId;
+
+    return this.http.delete(url)
+      .timeout(this.timeout)
+      .toPromise().then(response => {
+        return response;
+      }
+      ).catch(response => this.handleError);
+  }
+
+  getAteco(code: string): Observable<any> {
+    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
+    return this.http.get(url,
+      {
+        observe: 'response'
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res.body;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getAnnoScolstico(date) {
+    var annoScolastico;
+    var lastDay = moment(date).month(8).date(1);
+    if (date.isBefore(lastDay)) {
+      annoScolastico = moment().year(date.year() - 1).format('YYYY') + '-' + date.format('YY');
+    } else {
+      annoScolastico = date.format('YYYY') + '-' + moment().year(date.year() + 1).format('YY');
+    }
+    return annoScolastico;
+  }
 
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
