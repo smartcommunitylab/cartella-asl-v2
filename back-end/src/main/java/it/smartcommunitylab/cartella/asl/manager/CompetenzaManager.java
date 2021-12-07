@@ -222,7 +222,7 @@ public class CompetenzaManager extends DataEntityManager {
 	}
 
 	public List<Competenza> getRisorsaCompetenze(String uuid) {
-		String q = "SELECT DISTINCT c FROM Competenza c, AssociazioneCompetenze ac WHERE ac.competenzaId=c.id AND ac.risorsaId=(:uuid) ORDER BY ac.ordine ASC";
+		String q = "SELECT c FROM Competenza c, AssociazioneCompetenze ac WHERE ac.competenzaId=c.id AND ac.risorsaId=(:uuid) ORDER BY ac.ordine ASC";
 		TypedQuery<Competenza> query = em.createQuery(q, Competenza.class);
 		query.setParameter("uuid", uuid);
 		return query.getResultList();
