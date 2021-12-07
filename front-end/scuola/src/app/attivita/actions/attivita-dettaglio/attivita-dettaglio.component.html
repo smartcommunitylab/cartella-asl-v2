@@ -347,7 +347,7 @@
     <br>
     <div class="title">
         Competenze associate<br />
-        <button *ngIf="attivita && attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="right"
+        <button *ngIf="attivita && attivita.stato!='archiviata' && !isValutazioneActive()" class="btn btn-primary v-center-inline" placement="right"
             ngbTooltip="Aggiungi, modifica o rimuovi competenze associate" (click)="updateCompetenzePiano()">
             Modifica competenze&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
     </div>
