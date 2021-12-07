@@ -19,6 +19,9 @@ import { ArchiaviazioneAttivitaModal } from './actions/archiaviazione-attivita-m
 import { AssociaOffertaComponent } from './actions/associa-offerta/associa-offerta.component';
 import { ModificaOreStudentiComponent } from'./actions/modifica-ore-studenti/modifica-ore-studenti';
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { ValutazioneEsperienzaTirocinioComponent } from './actions/valutazione-esperienza-tirocinio/valutazione-esperienza-tirocinio.component';
+import { ValutazioneCompetenzeTirocinioComponent } from './actions/valutazione-competenze-tirocinio/valutazione-competenze-tirocinio.component';
+import { AvvisoArchiviaTiroModal } from './actions/avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
 
 const routes: Routes = [
   {
@@ -34,6 +37,8 @@ const routes: Routes = [
       { path: 'detail/:id/modifica/studenti/presenze/individuale', component: GestionePresenzeIndividualeComponent },
       { path: 'detail/:id/modifica/studenti/presenze/gruppo', component: GestionePresenzeGruppoComponent },
       { path: 'detail/:id/modifica/studenti/ore', component: ModificaOreStudentiComponent },
+      { path: 'detail/:id/valutazione/esperienza', component: ValutazioneEsperienzaTirocinioComponent },
+      { path: 'detail/:id/valutazione/competenze', component: ValutazioneCompetenzeTirocinioComponent },
       { path: '**', pathMatch:'full', redirectTo: 'list' }
     ]
   }
@@ -62,7 +67,10 @@ export class AttivitaRoutingModule {
     ArchiaviazioneAttivitaModal,
     AssociaOffertaComponent,
     ModificaOreStudentiComponent,
-    AvvisoEnteConvenzioneModal
+    AvvisoEnteConvenzioneModal,
+    ValutazioneEsperienzaTirocinioComponent,
+    ValutazioneCompetenzeTirocinioComponent,
+    AvvisoArchiviaTiroModal
   ];
 }
 

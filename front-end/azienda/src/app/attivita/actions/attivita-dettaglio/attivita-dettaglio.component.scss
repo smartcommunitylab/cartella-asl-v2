@@ -63,3 +63,33 @@
        text-decoration: underline
     }
 }
+.valutazione.non_compilata{
+    color: #F83E5A;
+    font-weight: bold;
+}
+.valutazione.incompleta{
+    color: #858586;
+}
+.valutazione.compilata{
+    color: #858586;
+}
+.btn-val {
+    width: 25px!important; 
+}
+.centerItem{
+    text-align: center;
+}
+.valutazione.non_acquisita{
+    color: #858586;
+    font-weight: bold;
+}
+.valutazione.acquisita{
+    color: #332e2e;
+    font-weight: bold;
+}
+.valutazione.link {
+    color: #0073e6;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}

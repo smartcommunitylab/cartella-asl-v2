@@ -8,6 +8,7 @@ import { GrowlerService } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
 import localeIT from '@angular/common/locales/it'
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
+import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 registerLocaleData(localeIT);
 
 declare var moment: any;
@@ -29,6 +30,13 @@ export class AttivitaDettaglioComponent implements OnInit {
   attivita: AttivitaAlternanza;
   esperienze;
   offertaAssociata;
+  valutazioneCompetenzeReport;
+  valutazioneCompetenzeActive: boolean = false;
+  dataValutazione: string;
+  esitoValutazione: string;
+  statoValutazione: string;
+  statoValutazioneCss: string;
+  nomeEnte: string;
   navTitle: string = "Dettaglio attivita alternanza";
   cardTitle: string = "Vedi";
   individuale: boolean;
@@ -74,6 +82,7 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.attivita.nomeIstituto = res.nomeIstituto;
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
+        this.valutazioneCompetenzeActive = this.isValutazioneCompetenzeActive();
 
         if (this.attivita.offertaId) {
           this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
@@ -99,10 +108,28 @@ export class AttivitaDettaglioComponent implements OnInit {
           this.atttivitaCompetenze = res;
         });
 
+        if(this.valutazioneCompetenzeActive) {
+          if(this.esperienze.length > 0) {
+            var esp = this.esperienze[0];
+            this.dataService.getValutazioneCompetenzeReport(esp.esperienzaSvoltaId).subscribe((res) => {
+              this.loadReport(res);
+            });  
+          }
+        }
+
       },
         (err: any) => console.log(err),
         () => console.log('getAttivita'));
     });
+  }
+
+  loadReport(report) {
+    this.valutazioneCompetenzeReport = report;
+    this.dataValutazione = this.getDataValutazione();
+    this.esitoValutazione = this.getEsitoValutazione();
+    this.statoValutazione = this.getStatoValutazione();
+    this.statoValutazioneCss = report.stato;
+    this.nomeEnte = this.dataService.aziendaName;
   }
 
   openDetail(attivita) {
@@ -209,6 +236,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   openDocumentUpload() {
     const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "documentUploadModalClass" });
     modalRef.componentInstance.attivitaIndividuale = this.individuale;
+    modalRef.componentInstance.tirocinioCurriculare = (this.attivita.tipologia == 7);
     modalRef.componentInstance.newDocumentListener.subscribe((option) => {
       console.log(option);
       this.dataService.uploadDocumentToRisorsa(option, this.attivita.uuid + '').subscribe((doc) => {
@@ -241,6 +269,91 @@ export class AttivitaDettaglioComponent implements OnInit {
     } else {
       return 'Rendicontazione ore giornaliera';
     }
+  }
+
+  isValutazioneCompetenzeActive() {
+    if(this.attivita.tipologia == 7) {
+      var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
+      var now = moment();
+      if(dataMinima.isBefore(now)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getStatoValutazione() {
+    if(this.valutazioneCompetenzeReport) {
+      if(this.valutazioneCompetenzeReport.stato == 'non_compilata') {
+        return "Non compilata";
+      }
+      if(this.valutazioneCompetenzeReport.stato == 'incompleta') {
+        return "Incompleta";
+      }
+      if(this.valutazioneCompetenzeReport.stato == 'compilata') {
+        return "Compilata";
+      }  
+    }
+  }
+
+  getEsitoValutazione() {
+    if(this.valutazioneCompetenzeReport && (this.valutazioneCompetenzeReport.stato != 'non_compilata')) {
+      var acquisite = 0;
+      this.valutazioneCompetenzeReport.valutazioni.forEach(v => {
+        if(v.punteggio > 1) {
+          acquisite++;
+        }
+      });
+      return acquisite + "/" + this.valutazioneCompetenzeReport.valutazioni.length + " competenze acquisite";  
+    }
+    return "-";
+  }
+
+
+  getDataValutazione() {
+    if(this.valutazioneCompetenzeReport && this.valutazioneCompetenzeReport.ultimaModifica) {
+      return this.valutazioneCompetenzeReport.ultimaModifica;
+    }
+    return "-";
+  }
+
+  valutaCompetenze() {
+    if (this.valutazioneCompetenzeReport) {
+      this.router.navigate(['valuta/competenze/'], { relativeTo: this.route });
+    }
+  }
+
+  getValutazione(competenza) {
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    switch(punteggio) {
+      case 0: return "-";
+      case 1: return "Non acquisita";
+      case 2: return "Base";
+      case 3: return "Intermedio";
+      case 4: return "Avanzato";
+      default: return "-";
+    }
+  }
+
+  getValutazioneCss(competenza) {
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    switch(punteggio) {
+      case 0: return "non_acquisita";
+      case 1: return "non_acquisita";
+      default: return "acquisita";
+    }
+  }
+
+  getValutazioneByUri(uri) {
+    if (this.valutazioneCompetenzeReport) {
+      for (let index = 0; index < this.valutazioneCompetenzeReport.valutazioni.length; index++) {
+        const v = this.valutazioneCompetenzeReport.valutazioni[index];
+        if(v.competenzaUri == uri) {
+          return v.punteggio;
+        }
+      }
+    }
+    return 0;
   }
 
 }

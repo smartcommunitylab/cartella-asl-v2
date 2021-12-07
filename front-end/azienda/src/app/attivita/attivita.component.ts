@@ -6,6 +6,8 @@ import { AttivitaAlternanza } from '../shared/classes/AttivitaAlternanza.class';
 import { environment } from '../../environments/environment';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
+declare var moment: any;
+moment['locale']('it');
 
 @Component({
     selector: 'attivita',
@@ -265,6 +267,23 @@ export class AttivitaComponent implements OnInit {
         if (this.stato != undefined) {
             return style;
         }
-    }    
+    } 
+    
+    isValutazioneCompetenzeActive(aa:AttivitaAlternanza) {
+        if((aa.tipologia == 7) && (aa.stato != "archiviata")) {
+          var dataMinima = moment(aa.dataFine).subtract(1, 'days');
+          var now = moment();
+          if(dataMinima.isBefore(now)) {
+            return true;
+          }
+        }
+        return false;
+    }
+
+    valutaCompetenze(aa) {
+        //this.router.navigateByUrl('/attivita/detail/' + aa.id + '/modifica/studenti/presenze/individuale');
+        this.router.navigate(['/attivita/detail/' + aa.id + '/valuta/competenze'], { relativeTo: this.route });
+    }
+            
 
 }

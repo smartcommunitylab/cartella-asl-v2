@@ -8,9 +8,11 @@ import { AttivitaCancellaModal } from '../cancella-attivita-modal/attivita-cance
 import { ArchiaviazioneAttivitaModal } from '../archiaviazione-attivita-modal/archiaviazione-attivita.component';
 import { GrowlerService, GrowlerMessageType } from '../../../core/growler/growler.service';
 import { registerLocaleData } from '@angular/common';
-import localeIT from '@angular/common/locales/it'
+import localeIT from '@angular/common/locales/it';
 import { DocumentUploadModalComponent } from '../documento-upload-modal/document-upload-modal.component';
+import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { AvvisoArchiviaTiroModal } from '../avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
 declare var moment: any;
 moment['locale']('it');
 registerLocaleData(localeIT);
@@ -27,11 +29,11 @@ export class AttivitaDettaglioComponent implements OnInit {
     private route: ActivatedRoute,
     public dataService: DataService,
     private growler: GrowlerService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private localizedDatePipe: LocalizedDatePipe) {}
 
   attivita: AttivitaAlternanza;
   esperienze;
-  // offertaAssociata;
   navTitle: string = "Dettaglio attivita alternanza";
   individuale: boolean;
   corsiStudio;
@@ -46,6 +48,18 @@ export class AttivitaDettaglioComponent implements OnInit {
   zeroStudent: boolean;
   ente;
   convenzioni = [];
+  valEsperienzaTiro;
+  valCompetenzeTiro;
+  competenzeTotale = 0;
+  competenzeValutate = 0;
+  competenzeAcquisite = 0;
+  valutazioni = [
+    { titolo: 'Avanzato', punteggio: 4 },
+    { titolo: 'Intermedio', punteggio: 3 },
+    { titolo: 'Base', punteggio: 2 },
+    { titolo: 'Non acquisita', punteggio: 1 },
+    { titolo: '-', punteggio: 0 }
+  ];
 
   breadcrumbItems = [
     {
@@ -64,12 +78,6 @@ export class AttivitaDettaglioComponent implements OnInit {
         this.attivita = res.attivitaAlternanza;
         this.esperienze = res.esperienze;
         this.navTitle = res.titolo;
-
-        // if (this.attivita.offertaId) {
-        //   this.dataService.getOfferta(this.attivita.offertaId).subscribe((off) => {
-        //     this.offertaAssociata = off;
-        //   })
-        // }
 
         this.esperienze.length == 0 ? this.zeroStudent = true : this.zeroStudent = false;
         
@@ -112,6 +120,24 @@ export class AttivitaDettaglioComponent implements OnInit {
               }
               this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
                 this.convenzioni = res;
+                if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
+                  this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
+                    this.valEsperienzaTiro = valutazione;
+                    this.initCounter();
+                    this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
+                      this.valCompetenzeTiro = res;
+                      res.valutazioni.forEach(d => {
+                        this.competenzeTotale++;
+                        if (d.punteggio > 0) {
+                          this.competenzeValutate++;
+                        }
+                        if (d.punteggio > 1) {
+                          this.competenzeAcquisite++;
+                        }
+                      })
+                    })
+                  });
+                }
               },
                 (err: any) => console.log(err),
                 () => console.log('getEnteConvenzioni'));
@@ -200,6 +226,34 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   archivia() {
+    if (!this.isTiro()) {
+      this.showArchive();
+
+    } else {
+      let showArchiviaDialog = false;
+      if (this.ValutazioniTiroCompilata()) {
+        showArchiviaDialog = true;
+      } else {
+        const modalRef = this.modalService.open(AvvisoArchiviaTiroModal, { windowClass: "abilitaEnteModalClass" });
+        modalRef.componentInstance.ente = this.ente;
+        modalRef.componentInstance.esperienza = this.esperienze[0];
+        modalRef.componentInstance.onArchivia.subscribe((res) => {
+          if (res == 'CONFIRM') {
+            this.showArchive();
+          }
+        });
+      }
+      if (showArchiviaDialog) {
+        this.showArchive();
+      }
+    }
+  }
+
+  ValutazioniTiroCompilata() {
+    return (this.valEsperienzaTiro && this.valEsperienzaTiro.stato == 'compilata' && this.valCompetenzeTiro && this.valCompetenzeTiro.stato == 'compilata')
+  }
+  
+  showArchive() {
     this.dataService.attivitaAlternanzaEsperienzeReport(this.attivita.id)
       .subscribe((response) => {
         const modalRef = this.modalService.open(ArchiaviazioneAttivitaModal, { windowClass: "archiviazioneModalClass" });
@@ -263,6 +317,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   openDocumentUpload() {
     const modalRef = this.modalService.open(DocumentUploadModalComponent, { windowClass: "documentUploadModalClass" });
     modalRef.componentInstance.attivitaIndividuale = this.individuale;
+    modalRef.componentInstance.tipologiaId = this.attivita.tipologia;
     modalRef.componentInstance.newDocumentListener.subscribe((option) => {
       console.log(option);
       this.dataService.uploadDocumentToRisorsa(option, this.attivita.uuid + '').subscribe((doc) => {
@@ -326,22 +381,19 @@ export class AttivitaDettaglioComponent implements OnInit {
         stato = 'Non attiva';
     }
     return stato;
-}
-
-styleOptionConvenzione(convenzione) {
+  }
+  
+  styleOptionConvenzione(convenzione) {
     var style = {
         'color': '#707070', //grey
     };
-
     if (convenzione.stato == 'non_attiva') {
         style['color'] = '#F83E5A'; // red
     } else if (convenzione.stato == 'attiva') {
         style['color'] = '#00CF86'; // green
     }
-
     return style;
-}
-
+  }
 
   downloadConvenzioneDoc(doc) {
     this.dataService.downloadDocumentConvenzioneBlob(doc).subscribe((url) => {
@@ -356,6 +408,143 @@ styleOptionConvenzione(convenzione) {
 
   routeEntity() {
     this.router.navigateByUrl('/enti/detail/' + this.ente.id); 
+  }
+
+  generaProgettoFormativo() {
+    this.dataService.downloadProgettoFormazione(this.esperienze[0].esperienzaSvoltaId).subscribe((url) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  }
+
+  isTiro() {
+    if (this.attivita.tipologia == 7) {
+      return true;
+    }
+    return false;
+  }
+
+  styleLabel(competenza) {
+    var style = {};
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    if (punteggio > 1) {
+      style['font-weight'] = 600;      
+    }
+    return style;
+  }
+
+  setLabel(competenza) {
+    let titolo = '-';
+    const punteggio = this.getValutazioneByUri(competenza.uri);
+    let rtn = this.valutazioni.find(data => data.punteggio == punteggio);
+    if (rtn) titolo = rtn.titolo;
+    return titolo;
+  }
+
+  getValutazioneByUri(uri) {
+    if (this.valCompetenzeTiro) {
+      for (let index = 0; index < this.valCompetenzeTiro.valutazioni.length; index++) {
+        const v = this.valCompetenzeTiro.valutazioni[index];
+        if(v.competenzaUri == uri) {
+          return v.punteggio;
+        }
+      }
+    }
+    return 0;
+  }
+
+  isValutazioneActive() {
+    var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
+    var now = moment();
+    if (dataMinima.isBefore(now)) {
+      return true;
+    }
+    return false;
+  }
+
+  routeValutazioneEsperienza() {
+    this.router.navigate(['valutazione/esperienza/'], { relativeTo: this.route });    
+  }
+
+  setDate(val) {
+    let date = '-';
+    if (val) {
+      date = this.localizedDatePipe.transform(val, 'dd/MM/yyyy')
+    }
+    return date;
+  }
+  
+  setMedia(val) {
+    if (val == 'NaN' || !val || val == 'undefined' || val == 0) {
+      return '-';
+    } else {
+      return 'Media risposte ' + val;
+    }
+  }
+
+  styleStatoVal(esp) {
+    var style = {
+      'color': '#707070', //grey
+    };
+    if (esp.stato == 'incompleta') {
+      style['color'] = '#F83E5A'; // red
+    } else if (esp.stato == 'non_compilata') {
+      style['color'] = '#F83E5A'; // red
+    }
+    return style;
+  }
+
+  setStatoValutazione(val) {
+    let stato = 'Compilata';
+    if (val.stato == 'incompleta') {
+      stato = 'In compilata';
+    } else if (val.stato == 'non_compilata') {
+      stato = 'Non compilata';
+    }
+    return stato;
+  }
+
+  routeValutazioneCompetenze() {
+    this.router.navigate(['valutazione/competenze/'], { relativeTo: this.route });    
+  }
+
+  styleStatoValCompetenza(esp) {
+    var style = {
+      'color': '#707070', //grey
+    };
+    if (esp.stato == 'incompleta') {
+      style['color'] = '#F83E5A'; // red
+    } else if (esp.stato == 'non_compilata') {
+      style['color'] = '#F83E5A'; // red
+    }
+    return style;
+  }
+  
+  setStatoValutazioneCompetenze(val) {
+    let stato = 'Compilata';
+    if (val.stato == 'incompleta') {
+      stato = 'In compilata';
+    } else if (val.stato == 'non_compilata') {
+      stato = 'Non compilata';
+    }
+    return stato;
+  }
+
+  setEsitoCompetenze(val) {
+    let esito = '-';
+    if (val.stato != 'non_compilata') {
+      esito = this.competenzeAcquisite + ' su ' +  this.competenzeTotale;
+    }
+    return esito;
+  }
+
+  initCounter() {
+    this.competenzeTotale = 0;
+    this.competenzeValutate = 0;
+    this.competenzeAcquisite = 0;
   }
   
 }

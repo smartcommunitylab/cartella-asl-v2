@@ -167,16 +167,16 @@
 			<version>3.1</version>
 		</dependency>
 
-		<!-- DOCX -->
+		<!-- ODT -->
 		<dependency>
 			<groupId>fr.opensagres.xdocreport</groupId>
-			<artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
-			<version>2.0.1</version>
+			<artifactId>fr.opensagres.xdocreport.document.odt</artifactId>
+			<version>2.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.opensagres.xdocreport</groupId>
 			<artifactId>fr.opensagres.xdocreport.template.velocity</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.2</version>
 		</dependency>
 
 		<!-- Firebase -->

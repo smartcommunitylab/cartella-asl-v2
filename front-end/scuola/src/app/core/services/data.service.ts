@@ -872,6 +872,50 @@ export class DataService {
       );
   }
 
+  getAttivitaValutazione(espId: any): Observable<any> {
+    let url = this.host + "/valutazione/attivita/istituto";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getValutazioneCompetenze(espId): Observable<any> {
+    let url = this.host + "/valutazione/competenze/istituto";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   /** OFFERTE */
   getOffeteForIstitutoAPI(filter, page: any, pageSize: any): Observable<IPagedAA> {
     let url = this.host + "/offerta/search/";
@@ -1893,6 +1937,29 @@ export class DataService {
       annoScolastico = date.format('YYYY') + '-' + moment().year(date.year() + 1).format('YY');
     }
     return annoScolastico;
+  }
+
+  downloadProgettoFormazione(espId): Observable<any> {
+    let url = this.host + '/download/progettoformativo';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer',
+        params: params,
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data],
+          { type: "application/vnd.oasis.opendocument.text" }
+        );
+        const url = URL.createObjectURL(blob);
+        return url;
+      },
+        catchError(this.handleError)
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

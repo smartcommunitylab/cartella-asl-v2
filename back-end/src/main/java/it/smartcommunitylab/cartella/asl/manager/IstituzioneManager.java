@@ -126,47 +126,56 @@ public class IstituzioneManager extends DataEntityManager {
 	}	
 
 	public Page<ReportIstitutoEnte> findIstitutiByEnte(String enteId, String text, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id, COUNT(aa.id) FROM Istituzione i, AttivitaAlternanza aa, Convenzione c");
-		sb.append(" WHERE i.id=aa.istitutoId AND aa.dataInizio<=(:date) AND aa.dataFine>=(:date)");
-		sb.append(" AND aa.enteId=(:enteId) AND (aa.tipologia=7 OR aa.tipologia=10)");
-		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
-		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id FROM Istituzione i, Convenzione c");
+		sb.append(" WHERE c.istitutoId=i.id AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi)");
 		
 		if(Utils.isNotEmpty(text)) {
 			sb.append(" AND (UPPER(i.name) LIKE (:text) OR UPPER(i.cf) LIKE (:text))");
 		}
-		sb.append(" GROUP BY i.id ORDER BY COUNT(aa.id) DESC");
+		sb.append(" ORDER BY i.name ASC");
 		String q = sb.toString();
 		
-		Query query = em.createQuery(q);
+		TypedQuery<String> query = em.createQuery(q, String.class);
 		query.setParameter("enteId", enteId);
-		query.setParameter("date", LocalDate.now());
 		query.setParameter("oggi", LocalDate.now());
-		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));		
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
 		}
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
-		@SuppressWarnings("unchecked")
-		List<Object[]> rows = query.getResultList();
+		List<String> rows = query.getResultList();
 		List<ReportIstitutoEnte> list = new ArrayList<>();
-		for (Object[] obj : rows) {
-			String istitutoId = (String) obj[0];
+		for (String istitutoId  : rows) {
 			Istituzione istituto = getIstituto(istitutoId, null);
-			Long attivita = (Long) obj[1];
+			Long attivita = getNumAttivitaAttive(istitutoId, enteId);
 			ReportIstitutoEnte report = new ReportIstitutoEnte();
 			report.setIstituto(istituto);
 			report.setAttivitaInCorso(attivita);
 			list.add(report);
 		}
 
-		String counterQuery = q.replace("SELECT DISTINCT i.id, COUNT(aa.id)", "SELECT COUNT(DISTINCT i)")
-				.replace("GROUP BY i.id ORDER BY COUNT(aa.id) DESC", "");
+		String counterQuery = q.replace("SELECT DISTINCT i.id", "SELECT COUNT(DISTINCT i.id)");
 		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();
 		Page<ReportIstitutoEnte> page = new PageImpl<ReportIstitutoEnte>(list, pageRequest, total);
 		return page;
+	}
+	
+	private long getNumAttivitaAttive(String istitutoId, String enteId) {
+		StringBuilder sb = new StringBuilder("SELECT COUNT(DISTINCT aa) FROM Istituzione i, AttivitaAlternanza aa, Convenzione c");
+		sb.append(" WHERE i.id=(:istitutoId) AND i.id=aa.istitutoId AND aa.dataInizio<=(:oggi) AND aa.dataFine>=(:oggi)");
+		sb.append(" AND aa.enteId=(:enteId) AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId)");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
+		String q = sb.toString();
+		TypedQuery<Long> query = em.createQuery(q, Long.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));			
+		Long num = query.getSingleResult();
+		return num;
 	}
 
 	public Istituzione updateIstituto(Istituzione istituto) {
@@ -186,6 +195,9 @@ public class IstituzioneManager extends DataEntityManager {
 			dbIst.setRdpName(istituto.getRdpName());
 			dbIst.setRdpPhoneFax(istituto.getRdpPhoneFax());
 			dbIst.setPrivacyLink(istituto.getPrivacyLink());
+			dbIst.setPolizzaInail(istituto.getPolizzaInail());
+			dbIst.setRctPat(istituto.getRctPat());
+			dbIst.setInfortuniPat(istituto.getInfortuniPat());
 			istituzioneRepository.save(dbIst);
 		}
 		return null;

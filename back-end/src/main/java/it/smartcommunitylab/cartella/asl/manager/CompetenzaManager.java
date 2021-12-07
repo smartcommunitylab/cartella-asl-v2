@@ -2,7 +2,6 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -223,11 +222,10 @@ public class CompetenzaManager extends DataEntityManager {
 	}
 
 	public List<Competenza> getRisorsaCompetenze(String uuid) {
-		List<AssociazioneCompetenze> assciazionecompetenzes = associazioneCompetenzeRepository.findByRisorsaId(uuid);
-		List<Long> ids = assciazionecompetenzes.stream()
-                .map(AssociazioneCompetenze::getCompetenzaId).collect(Collectors.toList());
-		List<Competenza> result = competenzaRepository.findAllById(ids);
-		return result;
+		String q = "SELECT DISTINCT c FROM Competenza c, AssociazioneCompetenze ac WHERE ac.competenzaId=c.id AND ac.risorsaId=(:uuid) ORDER BY ac.ordine ASC";
+		TypedQuery<Competenza> query = em.createQuery(q, Competenza.class);
+		query.setParameter("uuid", uuid);
+		return query.getResultList();
 	}
 
 	public Boolean addCompetenzeToPianoAlternanza(String uuid, List<Long> ids) {

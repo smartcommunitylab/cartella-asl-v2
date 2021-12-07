@@ -1,0 +1,97 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white font-25">ATTENZIONE</h4>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="text-center color-grey text-bold">
+        <p>Attenzione: una o più valutazioni di questa attività non sono state completate</p>
+        <br>
+        <p>Se archivi l’attività adesso, non sarà <span class="color-black">MAI PIÙ</span> possibile compilare le
+            seguenti valutazioni:</p>
+    </div>
+    <br>
+    <br>
+    <div class="row conv-body">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="list-group" *ngIf="valutazionEsperienzaTiro && valutazionCompetenzeTiro">
+                <table class="table table-hover">
+                    <thead class="color-grey">
+                        <tr>
+                            <th></th>
+                            <th>Data ultima modifica</th>
+                            <th>Compilabile da</th>
+                            <th>Stato</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="align-middle">Valutazione esperienza</span>
+                            </td>
+                            <td>
+                                <span class="align-middle">{{ setDate(valutazionEsperienzaTiro.ultimaModifica) }}</span>                                
+                            </td>
+                            <td>
+                                <span class="align-middle">{{esperienza.nominativoStudente}}</span>
+                            </td>
+                            <td><span class="align-middle" [ngStyle]="styleStatoVal(valutazionEsperienzaTiro)">{{
+                                    setStatoValutazione(valutazionEsperienzaTiro) }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="align-middle">Valutazione competenze</span>
+                            </td>
+                            <td>
+                                <span class="align-middle">{{ setDate(valutazionCompetenzeTiro.ultimaModifica) }}</span>
+                            </td>
+                            <td>
+                                <span class="align-middle">{{ ente.nome }}</span>
+                            </td>
+                            <td>
+                                <span class="align-middle" [ngStyle]="styleStatoValCompetenza(valutazionCompetenzeTiro)">{{
+                                    setStatoValutazioneCompetenze(valutazionCompetenzeTiro) }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-1"></div>  
+    </div>   
+</div>
+<br />
+<br />
+<div class="text-center text-bold color-black">
+    <p>Prima di archiviare, contatta gli interessati e chiedi loro di completare la valutazione!</p>
+</div>
+<br />
+<div class="text-center">
+    <button type="button" class="btn btn-danger btn-icon btn-xs btnDuplica" placement="bottom" ngbTooltip="Annulla"
+        (click)="activeModal.close('Close click')">
+        <span class="row btnModificationText">
+            <span class="col-8 leftItem">Annulla</span>
+            <span class="col-4 rightItem">
+                <svg class="icon icon-white icon-sm btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close-big"></use>
+                </svg>
+            </span>
+        </span>
+    </button>
+    &nbsp;&nbsp;
+    <button class="btn btn-warning btn-icon btn-xs btnArchivia" placement="bottom"
+        ngbTooltip="Archivia senza valutazioni" (click)="confirm()">
+        <span class="row btnModificationText">
+            <span class="col-10 leftItem">Archivia senza valutazioni</span>
+            <span class="col-2 rightItem">
+                <img class="btn-val" src="assets/images/valutazione_studente.svg">
+            </span>
+        </span>
+    </button>
+</div>
+<br>

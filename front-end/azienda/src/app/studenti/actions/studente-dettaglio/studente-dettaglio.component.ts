@@ -210,4 +210,19 @@ export class StudenteDettaglioComponent implements OnInit {
     });
   }
 
+  isValutazioneCompetenzeActive(aa) {
+    if((aa.tipologia == 7) && (aa.stato != "archiviata")) {
+      var dataMinima = moment(aa.dataFine).subtract(1, 'days');
+      var now = moment();
+      if(dataMinima.isBefore(now)) {
+        return true;
+      }
+    }
+    return false;
+}
+
+valutaCompetenze(aa) {
+    this.router.navigateByUrl('/attivita/detail/' + aa.id + '/valuta/competenze');
+}
+
 }
