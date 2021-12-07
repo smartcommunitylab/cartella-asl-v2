@@ -457,10 +457,12 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
 
   isValutazioneActive() {
-    var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
-    var now = moment();
-    if (dataMinima.isBefore(now)) {
-      return true;
+    if(this.attivita.tipologia == 7) {
+      var dataMinima = moment(this.attivita.dataFine).subtract(1, 'days');
+      var now = moment();
+      if (dataMinima.isBefore(now)) {
+        return true;
+      }  
     }
     return false;
   }
