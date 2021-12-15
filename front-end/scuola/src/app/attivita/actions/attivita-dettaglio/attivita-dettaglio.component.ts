@@ -480,10 +480,14 @@ export class AttivitaDettaglioComponent implements OnInit {
   }
   
   setMedia(val) {
-    if (val == 'NaN' || !val || val == 'undefined' || val == 0) {
-      return '-';
+    if (val.stato == 'incompleta' || val.stato == 'non_compilata') {
+      return "-";
     } else {
-      return 'Media risposte ' + val;
+      if (val.media == 'NaN' || !val.media || val.media == 'undefined' || val.media == 0) {
+        return '-';
+      } else {
+        return 'Media risposte: ' + val.media;
+      }  
     }
   }
 
@@ -502,7 +506,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   setStatoValutazione(val) {
     let stato = 'Compilata';
     if (val.stato == 'incompleta') {
-      stato = 'In compilata';
+      stato = 'Incompleta';
     } else if (val.stato == 'non_compilata') {
       stato = 'Non compilata';
     }
