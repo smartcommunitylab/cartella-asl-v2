@@ -72,18 +72,17 @@
                         <div class="row v-center ">
                             <div class="col-1"><span>Dal:</span></div>
                             <div class="col-5">
-                                <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio"
-                                    [displayDate]="date.dataInizio" [config]="datePickerConfig" theme="dp-material"
-                                    id="dataInizio"></dp-date-picker>
-                                <div class="invalid-feedback" [class.d-block]="!date.dataInizio">Data richiesta.</div>
+                                <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio" (ngModelChange)="validateFormat()"
+                                    [config]="datePickerConfig" theme="dp-material" id="dataInizio"></dp-date-picker>
+                                <div class="invalid-feedback" [class.d-block]="!date.dataInizio || forceErrorInvalidInizioData">Data richiesta.</div>
                                 <div class="invalid-feedback" [class.d-block]="date.dataInizio > date.dataFine">La data
                                     inizio deve essere anteriore alla data fine</div>
                             </div>
                             <div class="col-1"><span>Al:</span></div>
                             <div class="col-5">
-                                <dp-date-picker #calendarEnd [(ngModel)]="date.dataFine" [displayDate]="date.dataFine"
+                                <dp-date-picker #calendarEnd [(ngModel)]="date.dataFine" (ngModelChange)="validateFormat()"
                                     [config]="datePickerConfig" theme="dp-material" id="dataFine"></dp-date-picker>
-                                <div class="invalid-feedback" [class.d-block]="!date.dataFine">Data richiesta.</div>
+                                <div class="invalid-feedback" [class.d-block]="!date.dataFine || forceErrorInvalidFineData">Data richiesta.</div>
                                 <div class="invalid-feedback"
                                     [class.d-block]="!date.dataFine || date.dataFine < date.dataInizio">La data fine
                                     deve essere posteriore alla data inizio</div>

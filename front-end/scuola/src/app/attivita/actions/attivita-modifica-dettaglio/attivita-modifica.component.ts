@@ -69,6 +69,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   forceErrorDisplayOraFine: boolean = false;
   forceAnnoScolasticoErrorDisplay: boolean = false;
   forceSelectionMsg: boolean = false;
+  forceErrorInvalidInizioData: boolean = false;
+  forceErrorInvalidFineData: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
   showContent: boolean = false;
   tipoInterna: boolean = false;
@@ -217,6 +219,20 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
   }
 
+  validateFormat() {
+    if (!moment(this.date.dataInizio).isValid()) {
+      this.forceErrorInvalidInizioData = true;
+    } else {
+      this.forceErrorInvalidInizioData = false;
+    }
+
+    if (!moment(this.date.dataFine).isValid()) {
+      this.forceErrorInvalidFineData = true;
+    } else {
+      this.forceErrorInvalidFineData = false;
+    }
+  }
+
   getAnnoScolasticoNum(now) {
     var lastDay = moment(now).month(8).date(1);
     if (now.isBefore(lastDay)) {
@@ -313,7 +329,8 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay && !this.forceReferenteScuolaErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay && !this.forceAnnoScolasticoErrorDisplay
-      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
+      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine
+      && !this.forceErrorInvalidFineData && !this.forceErrorInvalidInizioData) {
 
       (this.attivita.descrizione) ? this.attivita.descrizione = this.attivita.descrizione.trim() : this.attivita.descrizione = null;
       (this.attivita.formatore) ? this.attivita.formatore = this.attivita.formatore.trim() : this.attivita.formatore = null;
@@ -400,6 +417,7 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
   }
 
   changeDate(event: any) {
+    this.validateFormat();
     this.checkDate();
     this.schoolYears = [];
     if(this.zeroStudent) {

@@ -43,6 +43,8 @@ export class OffertaDettaglioModificaComponent implements OnInit {
   forceReferenteEsternoErrorDisplay: boolean = false;
   forceOreErrorDisplay: boolean = false;
   forceEnteDisplay: boolean = false;
+  forceErrorInvalidInizioData: boolean = false;
+  forceErrorInvalidFineData: boolean = false;
   menuContent = "In questa pagina trovi tutti i dati dell’offerta. Puoi modificare ogni sezione utilizzando i tasti blu “Modifica”. Puoi creare una nuova attività con i dati di questa offerta con il tasto “crea attività da offerta”. Puoi eliminare definitivamente questa offerta con il tasto elimina: in questo caso, le attività che hai già creato non saranno influenzate dall’eliminazione dell’offerta.";
   showContent: boolean = false;
   evn = environment;
@@ -191,7 +193,8 @@ export class OffertaDettaglioModificaComponent implements OnInit {
 
     if (!this.forceEnteDisplay && !this.forceTitoloErrorDisplay
       && !this.forceReferenteEsternoErrorDisplay && !this.forceOreErrorDisplay
-      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine) {
+      && !this.forceDalleAlleErrorDisplay && !this.forceErrorDisplayOraInizio && !this.forceErrorDisplayOraFine
+      && !this.forceErrorInvalidFineData && !this.forceErrorInvalidInizioData) {
       (this.offerta.descrizione) ? this.offerta.descrizione = this.offerta.descrizione.trim() : this.offerta.descrizione = null;
       (this.offerta.formatore) ? this.offerta.formatore = this.offerta.formatore.trim() : this.offerta.formatore = null;
       (this.offerta.formatoreCF) ? this.offerta.formatoreCF = this.offerta.formatoreCF.trim() : this.offerta.formatoreCF = null;
@@ -245,6 +248,20 @@ export class OffertaDettaglioModificaComponent implements OnInit {
       (event.target.value.trim().length == 0) ? this.forceReferenteEsternoErrorDisplay = true : this.forceReferenteEsternoErrorDisplay = false;
     } else if (type == 'trim') {
       event.target.value = event.target.value.trim();
+    }
+  }
+
+  validateFormat() {
+    if (!moment(this.date.dataInizio).isValid()) {
+      this.forceErrorInvalidInizioData = true;
+    } else {
+      this.forceErrorInvalidInizioData = false;
+    }
+
+    if (!moment(this.date.dataFine).isValid()) {
+      this.forceErrorInvalidFineData = true;
+    } else {
+      this.forceErrorInvalidFineData = false;
     }
   }
 

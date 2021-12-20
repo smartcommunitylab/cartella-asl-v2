@@ -8,7 +8,6 @@ export class AppLoadService {
 
   constructor(public dataService: DataService, public authService: AuthService) { }
 
-
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log(`initializeApp:: inside promise`);
