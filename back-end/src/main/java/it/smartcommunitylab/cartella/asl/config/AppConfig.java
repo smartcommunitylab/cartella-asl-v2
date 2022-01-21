@@ -45,9 +45,18 @@ public class AppConfig implements WebMvcConfigurer {
 	
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
+		return new Docket(DocumentationType.SWAGGER_2).groupName("api").select()
 				.apis(RequestHandlerSelectors.basePackage("it.smartcommunitylab.cartella.asl.controller"))
 				.paths(PathSelectors.ant("/api/**"))
+				.build()
+				.apiInfo(apiInfo());
+	}
+	
+	@Bean
+	public Docket admin() {
+		return new Docket(DocumentationType.SWAGGER_2).groupName("apiAdmin").select()
+				.apis(RequestHandlerSelectors.basePackage("it.smartcommunitylab.cartella.asl.controller"))
+				.paths(PathSelectors.ant("/admin/**"))
 				.build()
 				.apiInfo(apiInfo());
 	}
