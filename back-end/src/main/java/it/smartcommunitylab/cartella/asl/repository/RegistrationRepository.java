@@ -23,4 +23,6 @@ public interface RegistrationRepository extends JpaRepository<Registration, Stri
 	
 	@Query("SELECT r FROM Registration r WHERE r.courseId = (:courseId) AND r.schoolYear = (:schoolYear) AND r.instituteId = (:instituteId) AND  r.studentId = (:studentId) AND r.dateTo = (SELECT max(rm.dateTo) FROM Registration rm WHERE rm.courseId = (:courseId) AND rm.schoolYear = (:schoolYear) AND rm.instituteId = (:instituteId) AND  rm.studentId = (:studentId))")
 	public Registration findTeachingUnit(@Param("courseId") String courseId, @Param("schoolYear") String schoolYear, @Param("instituteId") String instituteId, @Param("studentId") String studentId);
+
+	public Registration findByExtIdAndOrigin(String extId, String origin);
 }

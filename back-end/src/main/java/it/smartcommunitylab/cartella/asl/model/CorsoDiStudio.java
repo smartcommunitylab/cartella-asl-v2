@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class CorsoDiStudio {
 
 	@Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String offertaId;
 
 	private String nome;

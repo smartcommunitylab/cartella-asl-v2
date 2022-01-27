@@ -26,6 +26,8 @@ public interface AziendaRepository extends JpaRepository<Azienda, String> {
 	@Query("SELECT a FROM Azienda a WHERE a.extId =:#{#extId}")
 	public Azienda findAziendaByExtId(@Param("extId") String extId);
 	
+	public Azienda findByExtIdAndOrigin(String extId, String origin);
+		
 	public List<Azienda> findByOrigin(String origin);
 	
 	@Query("SELECT az0 FROM Azienda az0 WHERE az0.partita_iva = (:partitaIva)")
