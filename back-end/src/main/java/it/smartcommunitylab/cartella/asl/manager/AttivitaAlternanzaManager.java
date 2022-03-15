@@ -973,6 +973,23 @@ public class AttivitaAlternanzaManager extends DataEntityManager {
 		return result;
 	}
 	
+	public List<AttivitaAlternanza> findAttivitaByIstitutoAndEnte(String istitutoId, String enteId) {
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT aa FROM AttivitaAlternanza aa, Convenzione c");
+		sb.append(" WHERE aa.enteId=(:enteId) AND aa.istitutoId=(:istitutoId)");
+		sb.append(" AND (aa.tipologia=7 OR aa.tipologia=10)");
+		sb.append(" AND c.istitutoId=aa.istitutoId AND c.enteId=(:enteId) ");
+		sb.append(" AND c.dataFine>=(:oggi) AND aa.dataFine>=(:unAnnoFa)");
+		sb.append(" ORDER BY aa.dataInizio DESC");
+
+		TypedQuery<AttivitaAlternanza> query = em.createQuery(sb.toString(), AttivitaAlternanza.class);
+		query.setParameter("enteId", enteId);
+		query.setParameter("istitutoId", istitutoId);
+		query.setParameter("oggi", LocalDate.now());
+		query.setParameter("unAnnoFa", LocalDate.now().minusYears(1));
+		List<AttivitaAlternanza> result = query.getResultList();
+		return result;
+	}
+	
 	public AttivitaAlternanza findByUuid(String uuid) {
 		return attivitaAlternanzaRepository.findByUuid(uuid);
 	}

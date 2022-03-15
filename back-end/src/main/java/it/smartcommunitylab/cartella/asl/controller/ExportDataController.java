@@ -95,6 +95,21 @@ public class ExportDataController implements AslController {
 		}	
 	}
 	
+	@GetMapping("/api/export/csv/ente/istituto")
+	public void getEnteIstitutoCsv(
+			@RequestParam String enteId,
+			@RequestParam String istitutoId,
+			HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		usersValidator.validate(request, Lists.newArrayList(new ASLAuthCheck(ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA, enteId), 
+			new ASLAuthCheck(ASLRole.REFERENTE_AZIENDA, enteId)));
+		ExportCsv reportCsv = exportDataManager.getEnteIstituto(enteId, istitutoId);
+		downloadCsv(reportCsv, response);
+		if(logger.isInfoEnabled()) {
+			logger.info(String.format("getEnteIstitutoCsv:%s / %s", enteId, istitutoId));
+		}	
+	}
+	
 	private void downloadCsv(ExportCsv reportCsv, HttpServletResponse response) throws IOException {
 		response.setContentType(reportCsv.getContentType());
 		response.setHeader("Content-Disposition", "attachment; filename=" + reportCsv.getFilename());

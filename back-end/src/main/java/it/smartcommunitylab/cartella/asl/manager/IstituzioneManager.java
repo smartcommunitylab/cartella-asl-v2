@@ -86,6 +86,10 @@ public class IstituzioneManager extends DataEntityManager {
 		return page;
 	}
 	
+	public Istituzione getIstituto(String istitutoId) {
+		return istituzioneRepository.findById(istitutoId).orElse(null);
+	}
+	
 	public Istituzione getIstituto(String istitutoId, String enteId) {
 		Istituzione istituzione = istituzioneRepository.findById(istitutoId).orElse(null);
 		if(Utils.isNotEmpty(enteId)) {
