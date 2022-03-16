@@ -1155,6 +1155,34 @@ export class DataService {
       );
   }
 
+  getEsperienzeistitutoCsv(istitutoId: any): Observable<any> {
+    let url = this.host + '/export/csv/ente/istituto';
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('enteId', this.aziendaId);
+    return this.http.get(
+      url,
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body], { type: response.headers.get('Content-Type')! });
+        const url = URL.createObjectURL(blob);
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=') + 1).replace(/\\\"/g, '');
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
+      },
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errMsg = "Errore del server! Prova a ricaricare la pagina.";
 
