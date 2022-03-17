@@ -130,7 +130,7 @@ public class IstituzioneManager extends DataEntityManager {
 	}	
 
 	public Page<ReportIstitutoEnte> findIstitutiByEnte(String enteId, String text, Pageable pageRequest) {
-		StringBuilder sb = new StringBuilder("SELECT DISTINCT i.id FROM Istituzione i, Convenzione c");
+		StringBuilder sb = new StringBuilder("SELECT DISTINCT i FROM Istituzione i, Convenzione c");
 		sb.append(" WHERE c.istitutoId=i.id AND c.enteId=(:enteId)");
 		sb.append(" AND c.dataFine>=(:oggi)");
 		
@@ -140,7 +140,7 @@ public class IstituzioneManager extends DataEntityManager {
 		sb.append(" ORDER BY i.name ASC");
 		String q = sb.toString();
 		
-		TypedQuery<String> query = em.createQuery(q, String.class);
+		TypedQuery<Istituzione> query = em.createQuery(q, Istituzione.class);
 		query.setParameter("enteId", enteId);
 		query.setParameter("oggi", LocalDate.now());
 		if(Utils.isNotEmpty(text)) {
@@ -148,18 +148,17 @@ public class IstituzioneManager extends DataEntityManager {
 		}
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
 		query.setMaxResults(pageRequest.getPageSize());
-		List<String> rows = query.getResultList();
+		List<Istituzione> rows = query.getResultList();
 		List<ReportIstitutoEnte> list = new ArrayList<>();
-		for (String istitutoId  : rows) {
-			Istituzione istituto = getIstituto(istitutoId, null);
-			Long attivita = getNumAttivitaAttive(istitutoId, enteId);
+		for (Istituzione istituto  : rows) {
+			Long attivita = getNumAttivitaAttive(istituto.getId(), enteId);
 			ReportIstitutoEnte report = new ReportIstitutoEnte();
 			report.setIstituto(istituto);
 			report.setAttivitaInCorso(attivita);
 			list.add(report);
 		}
 
-		String counterQuery = q.replace("SELECT DISTINCT i.id", "SELECT COUNT(DISTINCT i.id)");
+		String counterQuery = q.replace("SELECT DISTINCT i", "SELECT COUNT(DISTINCT i)");
 		Query cQuery = queryToCount(counterQuery, query);
 		long total = (Long) cQuery.getSingleResult();
 		Page<ReportIstitutoEnte> page = new PageImpl<ReportIstitutoEnte>(list, pageRequest, total);
