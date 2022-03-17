@@ -277,7 +277,7 @@ public class ExportDataManager {
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
 		LocalDate today = LocalDate.now();
 		String filename = "Resoconto_Attività_" + istituto.getName() + "_" + today.format(ldf) + ".csv";
-		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"dataNascita\";\"telefono\";\"email\";\"titolo attività\";\"tipo\";\"dataInizio\";\"dataFine\";\"oraInizio\";\"oraFine\";oreProgrammate;\"tutorScolastico\";\"tutorScolasticoEmail\";\"tutorScolasticoTelefono\";\"tutorEnte\";\"tutorEnteEmail\";\"tutorEnteTelefono\";\"nomeIstituto\";\"telefonoIstituto\";\"emailIstituto\";\"pecIstituto\";\"indirizzoIstituto\";\"polizzaInail\";\"rctPat\";\"infortuniPat\";\"rdpName\";\"rdpAddress\";\"rdpEmail\";\"rdpPec\";\"rdpPhoneFax\";\"privacyLink\"\n");
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"dataNascita\";\"telefono\";\"email\";\"titolo attività\";\"descrizone\";\"tipo\";\"dataInizio\";\"dataFine\";\"oraInizio\";\"oraFine\";oreProgrammate;\"tutorScolastico\";\"tutorScolasticoEmail\";\"tutorScolasticoTelefono\";\"tutorEnte\";\"tutorEnteEmail\";\"tutorEnteTelefono\";\"nomeIstituto\";\"telefonoIstituto\";\"emailIstituto\";\"pecIstituto\";\"indirizzoIstituto\";\"polizzaInail\";\"rctPat\";\"infortuniPat\";\"rdpName\";\"rdpAddress\";\"rdpEmail\";\"rdpPec\";\"rdpPhoneFax\";\"privacyLink\"\n");
 		for(ReportIstitutoDettaglioEnte report : list) {
 			String cognome = report.getStudente().getSurname();
 			String nome = report.getStudente().getName();
@@ -286,6 +286,7 @@ public class ExportDataManager {
 			String telefono = report.getStudente().getPhone();
 			String email = report.getStudente().getEmail();
 			String titolo = report.getAttivitaAlternanza().getTitolo();
+			String descrizione = report.getAttivitaAlternanza().getDescrizione();
 			String tipo = getTipologia(report.getAttivitaAlternanza());
 			String dataInizio = report.getAttivitaAlternanza().getDataInizio().format(ldf);
 			String dataFine = report.getAttivitaAlternanza().getDataFine().format(ldf);
@@ -319,6 +320,7 @@ public class ExportDataManager {
 			sb.append("\"" + telefono + "\";");
 			sb.append("\"" + email + "\";");
 			sb.append("\"" + titolo.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + descrizione.replace("\"", "\\\"") + "\";");
 			sb.append("\"" + tipo + "\";");
 			sb.append("\"" + dataInizio + "\";");
 			sb.append("\"" + dataFine + "\";");
@@ -335,7 +337,7 @@ public class ExportDataManager {
 			sb.append("\"" + telefonoIstituto + "\";");
 			sb.append("\"" + emailIstituto + "\";");
 			sb.append("\"" + pecIstituto + "\";");
-			sb.append("\"" + indirizzoIstituto + "\";");
+			sb.append("\"" + indirizzoIstituto.replace("\"", "\\\"") + "\";");
 			sb.append("\"" + polizzaInail + "\";");
 			sb.append("\"" + rctPat + "\";");
 			sb.append("\"" + infortuniPat + "\";");
