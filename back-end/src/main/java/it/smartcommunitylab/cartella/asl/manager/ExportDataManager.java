@@ -319,8 +319,8 @@ public class ExportDataManager {
 			sb.append("\"" + dataNascita + "\";");
 			sb.append("\"" + telefono + "\";");
 			sb.append("\"" + email + "\";");
-			sb.append("\"" + titolo.replace("\"", "\\\"") + "\";");
-			sb.append("\"" + descrizione.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + cleanString(titolo) + "\";");
+			sb.append("\"" + cleanString(descrizione) + "\";");
 			sb.append("\"" + tipo + "\";");
 			sb.append("\"" + dataInizio + "\";");
 			sb.append("\"" + dataFine + "\";");
@@ -337,12 +337,12 @@ public class ExportDataManager {
 			sb.append("\"" + telefonoIstituto + "\";");
 			sb.append("\"" + emailIstituto + "\";");
 			sb.append("\"" + pecIstituto + "\";");
-			sb.append("\"" + indirizzoIstituto.replace("\"", "\\\"") + "\";");
+			sb.append("\"" + cleanString(indirizzoIstituto) + "\";");
 			sb.append("\"" + polizzaInail + "\";");
 			sb.append("\"" + rctPat + "\";");
 			sb.append("\"" + infortuniPat + "\";");
 			sb.append("\"" + rdpName + "\";");
-			sb.append("\"" + rdpAddress + "\";");
+			sb.append("\"" + cleanString(rdpAddress) + "\";");
 			sb.append("\"" + rdpEmail + "\";");
 			sb.append("\"" + rdpPec + "\";");
 			sb.append("\"" + rdpPhoneFax + "\";");
