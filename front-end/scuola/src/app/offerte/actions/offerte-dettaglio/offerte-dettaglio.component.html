@@ -68,7 +68,7 @@
                 <span class="row"><span class="text-semibold">Dalle:&nbsp;</span>{{offerta.oraInizio}} &nbsp; <span class="text-semibold">Alle:&nbsp;</span>{{offerta.oraFine}}</span>
                 <span class="row"><span class="text-semibold">Posti disponibili:&nbsp;</span>{{ offerta.postiDisponibili }} &nbsp;<span class="text-semibold">Posti rimanenti:&nbsp;</span>{{offerta.postiRimanenti}}</span>
                 <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{offerta.ore}}</span>
-                <span class="row"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ offerta.luogoSvolgimento }}</span>
+                <span class="row"><span class="text-semibold">Indirizzo svolgimento attività:&nbsp;</span>{{ offerta.luogoSvolgimento }}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor esterno:&nbsp;</span>{{offerta.referenteEsterno}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor esterno:&nbsp;</span>{{offerta.referenteEsternoCF}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Telefono tutor esterno:&nbsp;</span>{{offerta.referenteEsternoTelefono}}</span>
