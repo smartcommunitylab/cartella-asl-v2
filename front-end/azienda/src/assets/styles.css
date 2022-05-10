@@ -14761,4 +14761,9 @@ div.dp-input-container> input.dp-picker-input:disabled {
   color: #FF667D
 }
 
+ngb-typeahead-window.dropdown-menu {
+  max-height: 400px !important;
+  overflow-y: auto;
+}
+
 /**/

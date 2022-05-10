@@ -8,7 +8,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as Leaflet from 'leaflet';
 import { ValidationService } from '../../../core/services/validation.service';
-import { filter } from 'rxjs-compat/operator/filter';
 
 @Component({
   selector: 'cm-ente-dettaglio',
