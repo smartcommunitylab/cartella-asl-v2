@@ -36,6 +36,8 @@ export class DataService {
   timeout: number = 120000;
   coorindateIstituto;
   roles;
+  atecoURL = 'assets/ateco/data.csv';
+  atecoData: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -43,8 +45,24 @@ export class DataService {
     private sanitizer: DomSanitizer) {
     DataService.growler = growler;
     this.host = environment.serverAPIURL;
+    this.setAtecoData();
+   
   }
 
+  setAtecoData() {
+    this.http.get(this.atecoURL, { responseType: 'text' }).subscribe(
+      data => {
+        const list = data.split('\n');
+        list.forEach(e => {
+          var item = e.split(',');
+          let entry = {};
+          entry['codice'] = item[0];
+          entry['descrizione'] = item[1];
+          this.atecoData.push(entry);
+        });
+      });
+  }
+    
   setIstitutoId(id) {
     if (id) {
       this.istitutoId = id;
@@ -1914,18 +1932,12 @@ export class DataService {
   }
 
   getAteco(code: string): Observable<any> {
-    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
-    return this.http.get(url,
-      {
-        observe: 'response'
-      })
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          return res.body;
-        }),
-        catchError(this.handleError)
-      );
+    console.log(this.atecoData);
+    let result: any[] = [];
+    if (code.length > 1) {
+      result = this.atecoData.filter(x => x.codice.startsWith(code));
+    } 
+    return Observable.of(result);
   }
 
   getAnnoScolstico(date) {

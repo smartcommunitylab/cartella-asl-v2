@@ -8,6 +8,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, tap, switchMap } from 'rxjs/operators';
 import * as Leaflet from 'leaflet';
 import { ValidationService } from '../../../core/services/validation.service';
+import { filter } from 'rxjs-compat/operator/filter';
 
 @Component({
   selector: 'cm-ente-dettaglio',
@@ -212,11 +213,9 @@ export class EnteDettaglioModificaComponent implements OnInit {
       switchMap(term => this.dataService.getAteco(term).pipe(
         map(result => {
           let entries = [];
-          if(result.Entries && result.Entries.Entry) {            
-            result.Entries.Entry.forEach(element => {
+            result.forEach(element => {
               entries.push(element);
             });
-          }
           return entries;
         }),
         tap(() => this.searchAtecoFailed = false),
