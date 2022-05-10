@@ -43,6 +43,7 @@ export class AppLoadService {
             ids.push(k);
           }
           this.dataService.setAziendaId(ids[0]);
+          this.dataService.setAtecoData();
           resolve(true);
         } else {
           reject();

@@ -45,7 +45,6 @@ export class DataService {
     private sanitizer: DomSanitizer) {
     DataService.growler = growler;
     this.host = environment.serverAPIURL;
-    this.setAtecoData();
   }
 
   setAtecoData() {
