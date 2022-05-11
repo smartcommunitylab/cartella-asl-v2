@@ -61,7 +61,7 @@
                 <div class="row v-center form-group">
                     <div class="col-5"
                         [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched)">
-                        <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
+                        <input type="text" class="form-control" maxlength="250" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
                             (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')" required>
                         <label for="titolo" class="active">Titolo</label>
                         <div class="invalid-feedback" [class.d-block]="!titoloInput.value || forceTitoloErrorDisplay">
@@ -92,7 +92,7 @@
                 </div>
                 <div class="row v-center form-group">
                     <div class="col-5">
-                        <input type="text" class="form-control" [(ngModel)]="offerta.descrizione" id="descrizione"
+                        <input type="text" class="form-control" maxlength="250" [(ngModel)]="offerta.descrizione" id="descrizione"
                             (focusout)="trimValue($event, 'trim')">
                         <label for="descrizione" *ngIf="offerta.descrizione" class="active">Descrizione</label>
                         <label for="descrizione" *ngIf="!offerta.descrizione">Descrizione</label>
