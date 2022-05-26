@@ -18,6 +18,7 @@ import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.repository.StudenteRepository;
 import it.smartcommunitylab.cartella.asl.util.Constants;
 import it.smartcommunitylab.cartella.asl.util.HttpsUtils;
+import it.smartcommunitylab.cartella.asl.util.Utils;
 
 @Service
 public class CartellaImportStudente {
@@ -69,16 +70,25 @@ public class CartellaImportStudente {
 					studenteRepository.save(studentExt);
 					totalSaved = totalSaved + 1;
 				} else {
-					stored.setBirthdate(studentExt.getBirthdate());
-					studenteRepository.save(stored);
+					if(Utils.isEmpty(stored.getBirthdate())) {
+						stored.setBirthdate(studentExt.getBirthdate());
+						studenteRepository.save(stored);						
+					}
+					if(Utils.isEmpty(stored.getExtId())) {
+						stored.setExtId(studentExt.getExtId());
+						studenteRepository.save(stored);
+					}
+					if(Utils.isEmpty(stored.getOrigin())) {
+						stored.setOrigin(studentExt.getOrigin());
+						studenteRepository.save(stored);
+					}
 				}
 			}
 
 			int numberOfElements = Integer.valueOf(pagedResponseMap.get("numberOfElements").toString());
 			totalRead = totalRead + numberOfElements;
 
-			System.err.println(
-					numberOfElements + " cartella students received with total of " + totalSaved + " saved inside ASL");
+			logger.info(numberOfElements + " cartella students received with total of " + totalSaved + " saved inside ASL");
 
 			// call recursively.
 			if (numberOfElements == size) {

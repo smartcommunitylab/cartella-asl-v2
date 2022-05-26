@@ -78,9 +78,9 @@
                             <div class="col-1"><span>Dal:</span></div>
                             <div class="col-5">
                                 <dp-date-picker #calendarStart [(ngModel)]="date.dataInizio"
-                                    (ngModelChange)="changeDate($event)" [displayDate]="date.dataInizio"
+                                    (ngModelChange)="changeDate($event)"
                                     [config]="datePickerConfig" theme="dp-material" id="dataInizio"></dp-date-picker>
-                                <div class="invalid-feedback" [class.d-block]="!date.dataInizio">Data richiesta.</div>
+                                <div class="invalid-feedback" [class.d-block]="!date.dataInizio || forceErrorInvalidInizioData">Data richiesta.</div>
                                 <div class="invalid-feedback" [class.d-block]="date.dataInizio > date.dataFine">La data
                                     inizio deve essere anteriore alla data fine</div>
                                 <div class="invalid-feedback" [class.d-block]="date.dataInizio < date.minInizio">La
@@ -89,9 +89,9 @@
                             <div class="col-1"><span>Al:</span></div>
                             <div class="col-5">
                                 <dp-date-picker #calendarEnd [(ngModel)]="date.dataFine" 
-                                    (ngModelChange)="changeDate($event)" [displayDate]="date.dataFine"
+                                    (ngModelChange)="changeDate($event)"
                                     [config]="datePickerConfig" theme="dp-material" id="dataFine"></dp-date-picker>
-                                <div class="invalid-feedback" [class.d-block]="!date.dataFine">Data richiesta.</div>
+                                <div class="invalid-feedback" [class.d-block]="!date.dataFine || forceErrorInvalidFineData">Data richiesta.</div>
                                 <div class="invalid-feedback"
                                     [class.d-block]="!date.dataFine || date.dataFine < date.dataInizio">La data fine
                                     deve essere posteriore alla data inizio</div>
@@ -271,8 +271,8 @@
                         <small *ngIf="searching" class="progress-spinner progress-spinner-active size-sm">
                             <span class="sr-only">Caricamento...</span>
                         </small>
-                        <label for="luogoSvolgimento" *ngIf="attivita.luogoSvolgimento" class="active">Indirizzo</label>
-                        <label for="luogoSvolgimento" *ngIf="!attivita.luogoSvolgimento">Indirizzo</label>
+                        <label for="luogoSvolgimento" *ngIf="attivita.luogoSvolgimento" class="active">Indirizzo svolgimento attività</label>
+                        <label for="luogoSvolgimento" *ngIf="!attivita.luogoSvolgimento">Indirizzo svolgimento attività</label>
                     </div>
                 </div>
                 <div class="row v-center form-group">

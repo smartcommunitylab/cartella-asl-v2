@@ -172,7 +172,7 @@
         <div class="row v-center form-group">
             <div class="col-sm-4"
                 [class.has-danger]="schoolYearInput.invalid && (schoolYearInput.dirty || schoolYearInput.touched || forceErrorDisplay)">
-                <label for="schoolYear" class="active">Anno accademico</label>
+                <label for="schoolYear" class="active">Anno scolastico</label>
                 <select class="custom-select form-control" [(ngModel)]="schoolYear" id="schoolYear"
                     #schoolYearInput="ngModel" (change)="onChange($event.target.value)" required>
                     <option [value]="year" *ngFor="let year of schoolYears">{{year}}</option>

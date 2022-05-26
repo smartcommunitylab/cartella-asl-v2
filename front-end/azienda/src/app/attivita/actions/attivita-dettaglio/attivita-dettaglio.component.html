@@ -163,6 +163,43 @@
             </div>
         </div>
         <br>
+        <div *ngIf="valutazioneCompetenzeActive">
+            <div class="title" >
+                Valutazioni<br/>
+                <button (click)="valutaCompetenze()" class="btn btn-primary v-center-inline btn-icon" placement="right" *ngIf="attivita.stato!='archiviata'"
+                    ngbTooltip="Valuta l’acquisizione da parte del tirocinante delle competenze associate all’attività">
+                    Compila valutazione competenze&nbsp;&nbsp;&nbsp;
+                    <img class="btn-val" src="assets/images/valutazione_studente.svg">
+                    <!--svg class="icon icon-white icon-sm">
+                        <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
+                    </svg-->
+                </button>    
+            </div>
+            <br/>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th width="15%"></th>
+                        <th width="15%">Data compilazione</th>
+                        <th width="35%">Compilato da</th>
+                        <th width="20%">Esito</th>
+                        <th width="15%">Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a class="valutazione link" (click)="valutaCompetenze()">Valutazione competenze</a>
+                        </td>
+                        <td>{{dataValutazione}}</td>
+                        <td>{{nomeEnte}}</td>
+                        <td>{{esitoValutazione}}</td>
+                        <td class="valutazione {{statoValutazioneCss}}">{{statoValutazione}}</td>        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br/>
         <div class="title">
             Documenti allegati<br />
             <button (click)="openDocumentUpload()" *ngIf="attivita.stato!='archiviata'"
@@ -210,14 +247,18 @@
                     <thead>
                         <tr>
                             <th width="20%">Creato da</th>
-                            <th width="80%">Definizione</th>
+                            <th width="80%" *ngIf="!valutazioneCompetenzeActive">Definizione</th>
+                            <th width="60%" *ngIf="valutazioneCompetenzeActive">Definizione</th>
+                            <th width="20%" *ngIf="valutazioneCompetenzeActive">Valutazione</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let competenza of atttivitaCompetenze">
                             <td>{{competenza.ownerName}}</td>
                             <td>{{competenza.titolo}}</td>
-                        </tr>
+                            <td *ngIf="valutazioneCompetenzeActive" class="valutazione {{getValutazioneCss(competenza)}}"
+                                ngbTooltip="Alla fine del periodo dell’attività ti sarà richiesto di valutare l’acquisizione delle competenze da parte del tirocinante">
+                                {{getValutazione(competenza)}}</td>
                     </tbody>
                 </table>
             </div>

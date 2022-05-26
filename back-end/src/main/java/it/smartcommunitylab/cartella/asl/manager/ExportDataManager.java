@@ -2,18 +2,24 @@ package it.smartcommunitylab.cartella.asl.manager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.smartcommunitylab.cartella.asl.model.AttivitaAlternanza;
 import it.smartcommunitylab.cartella.asl.model.Azienda;
+import it.smartcommunitylab.cartella.asl.model.EsperienzaSvolta;
+import it.smartcommunitylab.cartella.asl.model.Istituzione;
+import it.smartcommunitylab.cartella.asl.model.Studente;
 import it.smartcommunitylab.cartella.asl.model.TipologiaTipologiaAttivita;
 import it.smartcommunitylab.cartella.asl.model.export.ExportCsv;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDashboardEsperienza;
 import it.smartcommunitylab.cartella.asl.model.report.ReportDettaglioStudente;
+import it.smartcommunitylab.cartella.asl.model.report.ReportIstitutoDettaglioEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnte;
 import it.smartcommunitylab.cartella.asl.util.Utils;
 
@@ -28,6 +34,10 @@ public class ExportDataManager {
 	private AziendaManager aziendaManager;
 	@Autowired
 	private TipologiaTipologiaAttivitaManager tipologiaAttivitaManager;
+	@Autowired
+	private IstituzioneManager istituzioneManager;
+	@Autowired
+	private EsperienzaSvoltaManager esperienzaSvoltaManager;
 	@Autowired
 	private DashboardManager dashboardManager;
 	
@@ -246,6 +256,105 @@ public class ExportDataManager {
 		return exportCsv;
 	}
 
+	public ExportCsv getEnteIstituto(String enteId, String istitutoId) {
+		List<ReportIstitutoDettaglioEnte> list = new ArrayList<>();
+		Istituzione istituto = istituzioneManager.getIstituto(istitutoId);
+		if(istituto != null) {
+			List<AttivitaAlternanza> aaList = attivitaAlternanzaManager.findAttivitaByIstitutoAndEnte(istitutoId, enteId);
+			for(AttivitaAlternanza aa : aaList) {
+				ReportIstitutoDettaglioEnte r = new ReportIstitutoDettaglioEnte();
+				r.setAttivitaAlternanza(aa);
+				r.setIstituto(istituto);
+				List<EsperienzaSvolta> esperienze = esperienzaSvoltaManager.getEsperienzeByAttivita(aa, Sort.by(Sort.Direction.ASC, "id"));
+				if(esperienze.size() > 0) {
+					EsperienzaSvolta es = esperienze.get(0);
+					Studente studente = studenteManager.findStudente(es.getStudenteId());
+					r.setStudente(studente);
+					list.add(r);
+				}
+			}
+		}		
+		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("dd-MM-YYYY");
+		LocalDate today = LocalDate.now();
+		String filename = "Resoconto_Attività_" + istituto.getName() + "_" + today.format(ldf) + ".csv";
+		StringBuffer sb = new StringBuffer("\"cognome\";\"nome\";\"cf\";\"dataNascita\";\"telefono\";\"email\";\"titolo attività\";\"descrizone\";\"tipo\";\"dataInizio\";\"dataFine\";\"oraInizio\";\"oraFine\";oreProgrammate;\"tutorScolastico\";\"tutorScolasticoEmail\";\"tutorScolasticoTelefono\";\"tutorEnte\";\"tutorEnteEmail\";\"tutorEnteTelefono\";\"nomeIstituto\";\"telefonoIstituto\";\"emailIstituto\";\"pecIstituto\";\"indirizzoIstituto\";\"polizzaInail\";\"rctPat\";\"infortuniPat\";\"rdpName\";\"rdpAddress\";\"rdpEmail\";\"rdpPec\";\"rdpPhoneFax\";\"privacyLink\"\n");
+		for(ReportIstitutoDettaglioEnte report : list) {
+			String cognome = report.getStudente().getSurname();
+			String nome = report.getStudente().getName();
+			String cf = report.getStudente().getCf();
+			String dataNascita = report.getStudente().getBirthdate();
+			String telefono = report.getStudente().getPhone();
+			String email = report.getStudente().getEmail();
+			String titolo = report.getAttivitaAlternanza().getTitolo();
+			String descrizione = report.getAttivitaAlternanza().getDescrizione();
+			String tipo = getTipologia(report.getAttivitaAlternanza());
+			String dataInizio = report.getAttivitaAlternanza().getDataInizio().format(ldf);
+			String dataFine = report.getAttivitaAlternanza().getDataFine().format(ldf);
+			String oraInizio = report.getAttivitaAlternanza().getOraInizio();
+			String oraFine = report.getAttivitaAlternanza().getOraFine();
+			String oreProgrammate = String.valueOf(report.getAttivitaAlternanza().getOre());
+			String tutorScolastico = report.getAttivitaAlternanza().getReferenteScuola();
+			String tutorScolasticoEmail = report.getAttivitaAlternanza().getReferenteScuolaEmail();
+			String tutorScolasticoTelefono = report.getAttivitaAlternanza().getReferenteScuolaTelefono();
+			String tutorEnte = report.getAttivitaAlternanza().getReferenteEsterno();
+			String tutorEnteEmail = report.getAttivitaAlternanza().getReferenteEsternoEmail();
+			String tutorEnteTelefono = report.getAttivitaAlternanza().getReferenteEsternoTelefono();
+			String nomeIstituto = istituto.getName();
+			String telefonoIstituto = istituto.getPhone();
+			String emailIstituto = istituto.getEmail();
+			String pecIstituto = istituto.getPec();
+			String indirizzoIstituto = istituto.getAddress();
+			String polizzaInail = istituto.getPolizzaInail();
+			String rctPat = istituto.getRctPat();
+			String infortuniPat = istituto.getInfortuniPat();
+			String rdpName = istituto.getRdpName();
+			String rdpAddress = istituto.getRdpAddress();
+			String rdpEmail = istituto.getRdpEmail();
+			String rdpPec = istituto.getRdpPec();
+			String rdpPhoneFax = istituto.getRdpPhoneFax();
+			String privacyLink = istituto.getPrivacyLink();
+			sb.append("\"" + cognome + "\";");
+			sb.append("\"" + nome + "\";");
+			sb.append("\"" + cf + "\";");
+			sb.append("\"" + dataNascita + "\";");
+			sb.append("\"" + telefono + "\";");
+			sb.append("\"" + email + "\";");
+			sb.append("\"" + cleanString(titolo) + "\";");
+			sb.append("\"" + cleanString(descrizione) + "\";");
+			sb.append("\"" + tipo + "\";");
+			sb.append("\"" + dataInizio + "\";");
+			sb.append("\"" + dataFine + "\";");
+			sb.append("\"" + oraInizio + "\";");
+			sb.append("\"" + oraFine + "\";");
+			sb.append(oreProgrammate + ";");
+			sb.append("\"" + tutorScolastico + "\";");
+			sb.append("\"" + tutorScolasticoEmail + "\";");
+			sb.append("\"" + tutorScolasticoTelefono + "\";");
+			sb.append("\"" + tutorEnte + "\";");
+			sb.append("\"" + tutorEnteEmail + "\";");
+			sb.append("\"" + tutorEnteTelefono + "\";");
+			sb.append("\"" + nomeIstituto + "\";");
+			sb.append("\"" + telefonoIstituto + "\";");
+			sb.append("\"" + emailIstituto + "\";");
+			sb.append("\"" + pecIstituto + "\";");
+			sb.append("\"" + cleanString(indirizzoIstituto) + "\";");
+			sb.append("\"" + polizzaInail + "\";");
+			sb.append("\"" + rctPat + "\";");
+			sb.append("\"" + infortuniPat + "\";");
+			sb.append("\"" + rdpName + "\";");
+			sb.append("\"" + cleanString(rdpAddress) + "\";");
+			sb.append("\"" + rdpEmail + "\";");
+			sb.append("\"" + rdpPec + "\";");
+			sb.append("\"" + rdpPhoneFax + "\";");
+			sb.append("\"" + privacyLink + "\"\n");
+		}
+		ExportCsv exportCsv = new ExportCsv();
+		exportCsv.setFilename(filename);
+		exportCsv.setContentType("text/csv");
+		exportCsv.setContent(sb);
+		return exportCsv;
+	}
+	
 	private String getTipologia(AttivitaAlternanza aa) {
 		TipologiaTipologiaAttivita tta = tipologiaAttivitaManager.getTipologiaTipologiaAttivitaByTipologia(aa.getTipologia());
 		if(tta != null) {

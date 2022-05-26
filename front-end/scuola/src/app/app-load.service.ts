@@ -46,6 +46,7 @@ export class AppLoadService {
           this.dataService.getSchoolYear(ids[0], null)
             .subscribe((res) => {
               this.dataService.setSchoolYear(res.schoolYear);
+              this.dataService.setAtecoData();
               resolve(true);
             },
               (err: any) => console.log(err),

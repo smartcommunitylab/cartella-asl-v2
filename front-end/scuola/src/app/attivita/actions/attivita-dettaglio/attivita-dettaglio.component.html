@@ -1,7 +1,7 @@
 <div class="mb-3 list-container md-margin sub-navbar-content-below m16">
     <div class="row m-left" *ngIf="attivita">
         <div class="col-6 v-center">
-            <span class="title">{{attivita.titolo}}</span>&nbsp;&nbsp;
+            <span class="modifyTitleStyle">{{attivita.titolo}}</span>&nbsp;&nbsp;
             <span (click)="menuContentShow()" class="pointer">
                 <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
@@ -121,7 +121,7 @@
                 <span class="row"><span class="text-semibold">Anno
                         accademico:&nbsp;</span>{{ attivita.annoScolastico }}</span>
                 <span class="row"><span
-                        class="text-semibold">Indirizzo:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
+                        class="text-semibold">Indirizzo svolgimento attività:&nbsp;</span>{{ attivita.luogoSvolgimento }}</span>
                 <span class="row"><span class="text-semibold">CF Formatore:&nbsp;</span>{{attivita.formatoreCF}}</span>
                 <span class="row"><span class="text-semibold">CF tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuolaCF}}</span>
@@ -190,6 +190,15 @@
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
                 </svg>
             </button>
+            &nbsp;
+            <button (click)="generaProgettoFormativo()" *ngIf="attivita.stato!='archiviata' && isTiro()"
+                class="btn btn-primary v-center-inline btn-icon" placement="right"
+                ngbTooltip="Scarica un modello di Progetto Formativo precompilato con i dati già presenti in EDIT">
+                Genera progetto formativo&nbsp;&nbsp;&nbsp;
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-download"></use>
+                </svg>
+            </button>
         </div>
         <div class="table list-group" *ngIf="documenti && documenti.length > 0">
             <table class="table table-striped table-hover">
@@ -220,6 +229,65 @@
         </div>
     </div>
     <br>
+    <div *ngIf="attivita && isTiro() && this.esperienze[0] && ( attivita.stato=='archiviata' || isValutazioneActive() )">
+        <div class="title">Valutazioni</div>
+        <div class="list-group">
+             <table class="table table-hover">
+                <thead *ngIf="valEsperienzaTiro || valCompetenzeTiro">
+                    <tr>
+                        <th></th>
+                        <th>Data compilazione</th>
+                        <th>Compilabile da</th>
+                        <th>Esito</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="valEsperienzaTiro">
+                        <td class="pointer">
+                            <span class="align-middle" onclick="return false;"
+                                ngbTooltip="Visualizza la valutazione dell’esperienza fatta dallo studente" placement="right">
+                                <a [routerLink]="" (click)="routeValutazioneEsperienza()">Valutazione esperienza</a>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{ setDate(valEsperienzaTiro.ultimaModifica) }}</span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{ esperienze[0].nominativoStudente }}</span>
+                        </td>
+                        <td>
+                            <span class="align-middle">{{ setMedia(valEsperienzaTiro) }}</span>
+                        </td>
+                        <td><span class="align-middle" [ngStyle]="styleStatoVal(valEsperienzaTiro)">{{ setStatoValutazione(valEsperienzaTiro) }}</span>
+                        </td>
+                    </tr>
+                    <tr *ngIf="valCompetenzeTiro">
+                        <td class="pointer">
+                            <span class="align-middle" onclick="return false;"
+                                ngbTooltip="Visualizza la valutazione fatta dall’ente sull’acquisizione delle competenze associate all’attività"
+                                placement="right">
+                                <a [routerLink]="" (click)="routeValutazioneCompetenze()">Valutazione competenze</a>
+                            </span>
+                        </td>
+                        <td>                            
+                            <span class="align-middle">{{ setDate(valCompetenzeTiro.ultimaModifica) }}</span>
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle">{{ ente.nome }}</span>
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle">{{ setEsitoCompetenze(valCompetenzeTiro) }}</span>                            
+                        </td>
+                        <td class="pointer">
+                            <span class="align-middle" [ngStyle]="styleStatoValCompetenza(valCompetenzeTiro)">{{ setStatoValutazioneCompetenze(valCompetenzeTiro) }}</span>
+                        </td>
+                    </tr>              
+                </tbody>
+            </table>
+        </div>
+    <br />
+    </div>
     <div *ngIf="attivita && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])
     && (attivita.tipologia == 7 || attivita.tipologia == 10)">
         <div class="title">Convenzioni</div>
@@ -238,7 +306,7 @@
                 <tbody>
                     <tr *ngFor="let conv of convenzioni">
                         <!-- Nome -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle">{{ conv.nome }}</span>
                         </td>
                         <!-- File convenzione -->
@@ -246,18 +314,18 @@
                             <span class="align-middle"><a [routerLink]="" (click)="downloadConvenzioneDoc(conv)">{{conv.nomeFile}}</a></span>
                         </td>
                         <!-- Data inizio -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle">{{ conv.dataInizio | date:'dd/MM/yyyy' }}</span>
                         </td>
                         <!-- Data fine -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ conv.dataFine | date:'dd/MM/yyyy' }}</span>
                         </td>
                         <td class="pointer">
                             <span class="align-middle"><a [routerLink]="" (click)="routeEntity()">{{ conv.nomeEnte }}</a></span>
                         </td>
                         <!-- stato -->
-                        <td class="pointer">
+                        <td>
                             <span class="align-middle" [ngStyle]="styleOptionConvenzione(conv)">{{ setStatoConvenzione(conv)
                                 }}</span>
                         </td>
@@ -279,23 +347,26 @@
     <br>
     <div class="title">
         Competenze associate<br />
-        <button *ngIf="attivita && attivita.stato!='archiviata'" class="btn btn-primary v-center-inline" placement="right"
+        <button *ngIf="attivita && attivita.stato!='archiviata' && !isValutazioneActive()" class="btn btn-primary v-center-inline" placement="right"
             ngbTooltip="Aggiungi, modifica o rimuovi competenze associate" (click)="updateCompetenzePiano()">
             Modifica competenze&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
     </div>
-    <div *ngIf="atttivitaCompetenze[0]">
+    <div *ngIf="attivita && atttivitaCompetenze[0]">
         <div class="table list-group">
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th width="20%">Creato da</th>
-                        <th width="80%">Definizione</th>
+                        <th width="60%">Definizione</th>
+                        <th *ngIf="isTiro()" width="20%">Valutazione ente</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let competenza of atttivitaCompetenze">
-                        <td>{{competenza.ownerName}}</td>
-                        <td>{{competenza.titolo}}</td>
+                        <td>{{ competenza.ownerName }}</td>
+                        <td>{{ competenza.titolo }}</td>
+                        <td *ngIf="isTiro() && valCompetenzeTiro" [ngStyle]="styleLabel(competenza)">{{ setLabel(competenza) }}</td>
+                        <td *ngIf="isTiro() && !valCompetenzeTiro">-</td>                    
                     </tr>
                 </tbody>
             </table>

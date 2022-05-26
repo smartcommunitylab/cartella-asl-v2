@@ -36,6 +36,8 @@ export class DataService {
   timeout: number = 120000;
   coorindateIstituto;
   roles;
+  atecoURL = 'assets/ateco/data.csv';
+  atecoData: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -45,6 +47,20 @@ export class DataService {
     this.host = environment.serverAPIURL;
   }
 
+  setAtecoData() {
+    this.http.get(this.atecoURL, { responseType: 'text' }).subscribe(
+      data => {
+        const list = data.split('\n');
+        list.forEach(e => {
+          var item = e.split(',');
+          let entry = {};
+          entry['codice'] = item[0];
+          entry['descrizione'] = item[1];
+          this.atecoData.push(entry);
+        });
+      });
+  }
+    
   setIstitutoId(id) {
     if (id) {
       this.istitutoId = id;
@@ -869,6 +885,50 @@ export class DataService {
         },
           catchError(this.handleError)
         )
+      );
+  }
+
+  getAttivitaValutazione(espId: any): Observable<any> {
+    let url = this.host + "/valutazione/attivita/istituto";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  getValutazioneCompetenze(espId): Observable<any> {
+    let url = this.host + "/valutazione/competenze/istituto";
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get<any>(
+      url,
+      {
+        observe: 'response',
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return (res.body);
+
+        }),
+        catchError(this.handleError)
       );
   }
 
@@ -1870,18 +1930,12 @@ export class DataService {
   }
 
   getAteco(code: string): Observable<any> {
-    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
-    return this.http.get(url,
-      {
-        observe: 'response'
-      })
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          return res.body;
-        }),
-        catchError(this.handleError)
-      );
+    console.log(this.atecoData);
+    let result: any[] = [];
+    if (code.length > 1) {
+      result = this.atecoData.filter(x => x.codice.startsWith(code));
+    } 
+    return Observable.of(result);
   }
 
   getAnnoScolstico(date) {
@@ -1893,6 +1947,29 @@ export class DataService {
       annoScolastico = date.format('YYYY') + '-' + moment().year(date.year() + 1).format('YY');
     }
     return annoScolastico;
+  }
+
+  downloadProgettoFormazione(espId): Observable<any> {
+    let url = this.host + '/download/progettoformativo';
+    let params = new HttpParams();
+    params = params.append('istitutoId', this.istitutoId);
+    params = params.append('esperienzaSvoltaId', espId);
+
+    return this.http.get(url,
+      {
+        responseType: 'arraybuffer',
+        params: params,
+      })
+      .timeout(this.timeout)
+      .map(data => {
+        const blob = new Blob([data],
+          { type: "application/vnd.oasis.opendocument.text" }
+        );
+        const url = URL.createObjectURL(blob);
+        return url;
+      },
+        catchError(this.handleError)
+      );
   }
 
   private handleError(error: HttpErrorResponse) {

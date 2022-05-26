@@ -1,0 +1,42 @@
+.modal-body {
+    padding: 30px; 
+    .color-1 {
+        color: #707070
+     }
+    .card-wrapper {
+        margin: 10px;
+    }
+    .card-body {
+        background: #F0F6FC 0% 0% no-repeat padding-box;
+        font-size: 25px;
+    }
+    
+}
+.custom-size {
+    width: 200px!important;
+    height: 40px!important;
+}
+.vl {
+    position: relative;
+    width: 0px;
+    border-left: 1px solid #000000;
+}
+.color-grey {
+    color: #707070;
+}
+.color-black {
+    color: #393939;
+}
+.btnArchivia{
+    width: 260px;
+    height: 40px;
+    background-color: #FF9700!important;
+    font-family: Titillium Web !important;
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF !important;
+    position: relative;
+}
+.btn-val {
+    width: 25px!important; 
+} 

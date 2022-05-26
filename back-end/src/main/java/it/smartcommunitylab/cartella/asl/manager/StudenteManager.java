@@ -44,6 +44,7 @@ import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteDettaglioEnt
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteEnte;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteRicerca;
 import it.smartcommunitylab.cartella.asl.model.report.ReportStudenteSommario;
+import it.smartcommunitylab.cartella.asl.model.report.ValutazioneAttivitaReport;
 import it.smartcommunitylab.cartella.asl.model.users.ASLRole;
 import it.smartcommunitylab.cartella.asl.model.users.ASLUser;
 import it.smartcommunitylab.cartella.asl.repository.CorsoMetaInfoRepository;
@@ -78,6 +79,8 @@ public class StudenteManager extends DataEntityManager {
 	@Autowired
 	private IstituzioneManager istituzioneManager;
 	@Autowired
+	private ValutazioniManager valutazioniManager;
+	@Autowired
 	private CorsoMetaInfoRepository corsoMetaInfoRepository;
 	@Autowired
 	private NotificheStudenteRepository notificheStudenteRepository;
@@ -99,7 +102,7 @@ public class StudenteManager extends DataEntityManager {
 			sb.append(" AND r0.courseId = (:courseId) ");
 		}
 		if (Utils.isNotEmpty(text)) {
-			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.cf) LIKE (:text))");
+			sb.append(" AND (UPPER(r0.classroom) LIKE (:text) OR UPPER(s0.surname) LIKE (:text) OR UPPER(s0.cf) = (:textCf))");
 		}
 		sb.append(" ORDER BY s0.surname, s0.name, r0.classroom");
 		String q = sb.toString();
@@ -113,6 +116,7 @@ public class StudenteManager extends DataEntityManager {
 		}
 		if (Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");
+			query.setParameter("textCf", text.trim().toUpperCase());
 		}
 
 		query.setFirstResult((pageRequest.getPageNumber()) * pageRequest.getPageSize());
@@ -308,7 +312,7 @@ public class StudenteManager extends DataEntityManager {
 				sb.append(" AND r.courseId = (:courseId) ");
 			}
 			if (Utils.isNotEmpty(text)) {
-				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.cf) LIKE (:text))");
+				sb.append(" AND (UPPER(r.classroom) LIKE (:text) OR UPPER(s.surname) LIKE (:text) OR UPPER(s.cf) = (:textCf))");
 			}
 			sb.append(" ORDER BY s.surname, s.name, r.classroom");
 			String q = sb.toString();
@@ -324,6 +328,7 @@ public class StudenteManager extends DataEntityManager {
 			if (Utils.isNotEmpty(text)) {
 				String like = "%" + text.trim().toUpperCase() + "%";
 				queryTutorClasse.setParameter("text", like);
+				queryTutorClasse.setParameter("textCf", text.trim().toUpperCase());
 			}
 
 			@SuppressWarnings("unchecked")
@@ -607,6 +612,7 @@ public class StudenteManager extends DataEntityManager {
 		if(aa == null) {
 			throw new BadRequestException("attivitaAlternanza not found");
 		}
+		ValutazioneAttivitaReport valutazione = valutazioniManager.getValutazioneAttivitaReportByStudente(esperienzaSvoltaId, studenteId);
 		List<PresenzaGiornaliera> presenze = presenzaGiornalieraManager.findByEsperienzaSvolta(esperienzaSvoltaId);
 		int oreValidate = 0;
 		int oreDaValidare = 0;
@@ -619,7 +625,7 @@ public class StudenteManager extends DataEntityManager {
 				}
 			}
 		}
-		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre());
+		return new ReportDettaglioAttivitaEsperienza(aa, es, oreValidate, oreDaValidare, aa.getOre(), valutazione.getStato().toString());
 	}
 	
 	public List<PresenzaGiornaliera> getPresenzeStudente(Long esperienzaSvoltaId, LocalDate dateFrom, 

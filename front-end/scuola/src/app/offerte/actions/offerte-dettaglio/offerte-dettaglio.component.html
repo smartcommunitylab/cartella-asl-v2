@@ -1,7 +1,7 @@
 <div class="mb-3 list-container md-margin sub-navbar-content-below m16">
     <div class="row m-left" *ngIf="offerta">
         <div class="col-6 v-center">
-            <span class="title">{{offerta.titolo}}</span>&nbsp;&nbsp;
+            <span class="modifyTitleStyle">{{offerta.titolo}}</span>&nbsp;&nbsp;
             <span (click)="menuContentShow()" class="pointer">
                 <svg *ngIf="!showContent" class="icon icon-primary icon-bg">
                     <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-help-circle"></use>
@@ -23,18 +23,6 @@
                         </span>
                     </span>
                 </button>
-                <!-- <button class="btn btn-secondary btn-xs btn-icon py-1 pr-2 btnCrea mLeft12" placement="bottom" 
-                    [disabled]="offerta.postiRimanenti <= 0" ngbTooltip="Crea una nuova attività a partire da questa offerta" 
-                    (click)="associaOfferta()">
-                    <span class="row btnModificationText">
-                        <span class="col-10 leftItem">Crea attività da offerta</span>
-                        <span class="col-2 rightItem">
-                            <svg class="icon icon-white icon-sm btnModificationIcon">
-                                <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-plus-circle"></use>
-                            </svg>
-                        </span>                       
-                    </span>
-                </button> -->
             </span>
         </div>
     </div>
@@ -80,38 +68,14 @@
                 <span class="row"><span class="text-semibold">Dalle:&nbsp;</span>{{offerta.oraInizio}} &nbsp; <span class="text-semibold">Alle:&nbsp;</span>{{offerta.oraFine}}</span>
                 <span class="row"><span class="text-semibold">Posti disponibili:&nbsp;</span>{{ offerta.postiDisponibili }} &nbsp;<span class="text-semibold">Posti rimanenti:&nbsp;</span>{{offerta.postiRimanenti}}</span>
                 <span class="row"><span class="text-semibold">Ore totali:&nbsp;</span>{{offerta.ore}}</span>
-                <span class="row"><span class="text-semibold">Indirizzo:&nbsp;</span>{{ offerta.luogoSvolgimento }}</span>
+                <span class="row"><span class="text-semibold">Indirizzo svolgimento attività:&nbsp;</span>{{ offerta.luogoSvolgimento }}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Tutor esterno:&nbsp;</span>{{offerta.referenteEsterno}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">CF tutor esterno:&nbsp;</span>{{offerta.referenteEsternoCF}}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Telefono tutor esterno:&nbsp;</span>{{offerta.referenteEsternoTelefono}}</span>
+                <span class="row"><span class="text-semibold">Caratteristiche richieste/preferenziali:&nbsp;</span>{{offerta.prerequisiti}}</span>
             </div>    
         </div>
         <br/>
-        <div class="title">
-            Documenti allegati<br />
-            <button disabled *ngIf="isMyOfferta()" class="btn btn-secondary v-center-inline btn-icon"  placement="right"  ngbTooltip="Allega un nuovo documento all’offerta (dimensione massima 10MB)">
-                Carica file&nbsp;&nbsp;&nbsp;
-                <svg class="icon icon-white icon-sm">
-                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
-                </svg>
-                <input #fileInput type="file" hidden (click)="fileInput.value = null" value="" (change)="uploadDocument($event)">
-            </button>
-            <div>
-                <div class="v-center" *ngIf="documenti">
-                    <ul>
-                        <li *ngFor="let doc of documenti">
-                            <a [routerLink]="" (click)="downloadDoc(doc)">   
-                                <i class="material-icons">insert_drive_file</i>
-                                {{doc.nomeFile}}
-                            </a>
-                            &nbsp;&nbsp;
-                            <i *ngIf="offerta.stato!='archiviata'" class="material-icons pointer" (click)="deleteDoc(doc)">delete</i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>       
-        <br>
         <div class="title">
             Competenze associate<br/>
             <button *ngIf="isMyOfferta()" class="btn btn-primary v-center-inline" placement="right"  ngbTooltip="Modifica le competenze associate all’offerta" (click)="updateCompetenzePiano()">

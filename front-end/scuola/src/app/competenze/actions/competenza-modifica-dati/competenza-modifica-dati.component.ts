@@ -28,6 +28,7 @@ export class CompetenzaModificaDatiComponent implements OnInit {
   forceErrorDisplay: boolean;
   forceErrorDisplayTitolo: boolean = false;
   competenza: Competenza;
+  numeroAttivitaAltAssociate = 0;
   menuContent = "Raccolta di tutte le competenze sia ministeriali che di quelle inserite dalla scuola stessa. Le competenze inserite dalla scuola sono visibili solo ad essa e non condivise con altri istituti.";
   showContent: boolean = false;
   arrEQF=[1,2,3,4,5,6,7,8];
@@ -44,6 +45,7 @@ export class CompetenzaModificaDatiComponent implements OnInit {
 
       this.dataService.getIstiutoCompetenzaDetail(id).subscribe(response => {
         this.competenza = response.competenza;
+        this.numeroAttivitaAltAssociate = response.numeroAttivitaAltAssociate;
       },
         (err: any) => console.log(err),
         () => console.log('get Istiuto competenza detail'));

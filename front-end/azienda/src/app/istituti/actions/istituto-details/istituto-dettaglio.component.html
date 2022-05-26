@@ -38,15 +38,28 @@
                 <span class="row"><span class="text-semibold">Telefono:</span>&nbsp;{{istituto.phone}}</span>
                 <span class="row"><span class="text-semibold">Mail:</span>&nbsp;{{istituto.email}}</span>
                 <span class="row"><span class="text-semibold">Indirizzo:</span>&nbsp;{{istituto.address}}</span>
-                <span class="row"><span class="text-semibold">Convenzione:</span>&nbsp;&nbsp;<a *ngIf="istituto.convenzione && istituto.convenzione.uuidFile" class="row" [routerLink]="" (click)="downloadConvenzioneDoc(istituto.convenzione)">{{istituto.convenzione.nomeFile}}</a></span>
-                <span class="row" *ngIf="istituto.convenzione"><span class="text-semibold">Data inizio validità convenzione:</span>&nbsp;{{istituto.convenzione.dataInizio | date: 'dd/MM/yyyy'}}</span>
-                <span class="row" *ngIf="istituto.convenzione" [ngStyle]="styleOptionConvenzione(istituto.convenzione)"><span class="text-semibold">Data fine validità convenzione:</span>&nbsp;{{istituto.convenzione.dataFine | date: 'dd/MM/yyyy'}}<span *ngIf="istituto.convenzione.stato != 'attiva'">&nbsp;- Convenzione scaduta</span></span>
+                <br />
+                <span class="row"><span class="text-semibold">Privacy:</span></span><br />
+                <span class="row"><span class="text-semibold">Nome RDP:&nbsp;</span>{{istituto.rdpName}}</span>
+                <span class="row"><span class="text-semibold">Indirizzo RDP:&nbsp;</span>{{istituto.rdpAddress}}</span>
+                <span class="row"><span class="text-semibold">Telefono/Fax RDP:&nbsp;</span>{{istituto.rdpPhoneFax}}</span>
+                <span class="row"><span class="text-semibold">Email RDP:&nbsp;</span>{{istituto.rdpEmail}}</span>
+                <span class="row"><span class="text-semibold">PEC RDP:&nbsp;</span>{{istituto.rdpPec}}</span>            
+                <span class="row"><span class="text-semibold">Informativa privacy:&nbsp;</span><a href="{{istituto.privacyLink}}" target="_blank">{{istituto.privacyLink}}</a></span>
             </span>
             <span class="sub-div-data col-4">
-                <span *ngIf="istituto.privacyLink" class="text-semibold">Informativa privacy:&nbsp;</span><a href="{{istituto.privacyLink}}" target="_blank">{{istituto.privacyLink}}</a>
+                <span class="row"><span class="text-semibold">Convenzione:</span></span><br />
+                <span class="row"><span class="text-semibold">File Convenzione:</span>&nbsp;&nbsp;<a *ngIf="istituto.convenzione && istituto.convenzione.uuidFile" class="row" [routerLink]="" (click)="downloadConvenzioneDoc(istituto.convenzione)">{{istituto.convenzione.nomeFile}}</a></span>
+                <span class="row" *ngIf="istituto.convenzione"><span class="text-semibold">Data inizio validità convenzione:</span>&nbsp;{{istituto.convenzione.dataInizio | date: 'dd/MM/yyyy'}}</span>
+                <span class="row" *ngIf="istituto.convenzione" [ngStyle]="styleOptionConvenzione(istituto.convenzione)"><span class="text-semibold">Data fine validità convenzione:</span>&nbsp;{{istituto.convenzione.dataFine | date: 'dd/MM/yyyy'}}<span *ngIf="istituto.convenzione.stato != 'attiva'">&nbsp;- Convenzione scaduta</span></span>
+                <br/>
+                <span class="row"><span class="text-semibold">Estremi assicurativi:</span></span><br />
+                <span class="row"><span class="text-semibold">Polizza INAIL:&nbsp;</span>{{istituto.polizzaInail}}</span>
+                <span class="row"><span class="text-semibold">RCT PAT:&nbsp;</span>{{istituto.rctPat}}</span>
+                <span class="row"><span class="text-semibold">Infortuni PAT:&nbsp;</span>{{istituto.infortuniPat}}</span>
             </span>
             <span class="sub-div-data col-2">
-                <label class="disabled col-12 btn btn-primary v-center-inline btn-icon btn-csv"
+                <label class="col-12 btn btn-primary v-center-inline btn-icon btn-csv"
                     (click)="getEsperienzeistitutoCsv()" placement="bottom"
                     ngbTooltip="Esporta le attività dello istituto">
                     CSV dati istituto

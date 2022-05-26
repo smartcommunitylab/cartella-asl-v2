@@ -26,4 +26,6 @@ public interface CorsoDiStudioRepository extends JpaRepository<CorsoDiStudio, St
 	
 	@Query("SELECT DISTINCT cds0.nome FROM CorsoDiStudio cds0 WHERE cds0.courseId = (:courseId)")
 	String findNomeCorsoDiStudioByCorsoId(String courseId);
+	
+	CorsoDiStudio findByExtIdAndOrigin(String extId, String origin);
 }

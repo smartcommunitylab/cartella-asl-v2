@@ -8,17 +8,17 @@
         <div class="row v-center">
             <div class="col-2"></div>
             <div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(1)">
-                        <div id="1" class="card-body">
-                            <h5 class="card-title">Piano formativo</h5>
-                            <p class="card-text txtFont">Il piano formativo è il documento che descrive le specificità
-                                del percorso relativo al
-                                tirocinio in oggetto.
+                <div class="card-wrapper" *ngIf="docTypes[0]">
+                    <div class="card" (click)="create(docTypes[0].id)">
+                        <div id="{{docTypes[0].id}}" class="card-body">
+                            <h5 class="card-title">{{ docTypes[0].titolo }}</h5>
+                            <p class="card-text txtFont">{{ docTypes[0].descr }}
                             </p>
                             <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br>Ente<br/>Studente
+                                <p class="card-text"><span class="text-bold">Visibile da:</span><br />
+                                    <span *ngFor="let v of docTypes[0].visibile">
+                                        {{ v }} <br />
+                                    </span>
                                 </p>
                             </span>
                         </div>
@@ -26,33 +26,17 @@
                 </div>
             </div>
             <div class="col-2"></div>
-            <!--<div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(2)">
-                        <div id="2" class="card-body">
-                            <h5 class="card-title">Convenzione</h5>
-                            <p class="card-text txtFont">La convenzione è il documento che specifica il rapporto tra
-                                istituto, ente e ragazzo.
-                            </p>
-                            <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br>Ente
-                                </p>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
             <div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(5)">
-                        <div id="5" class="card-body">
-                            <h5 class="card-title">Altro</h5>
-                            <p class="card-text txtFont">Se vuoi condividere un documento rapidamente puoi scegliere
-                                questa opzione.</p>
+                <div class="card-wrapper" *ngIf="docTypes[1]">
+                    <div class="card" (click)="create(docTypes[1].id)">
+                        <div id="{{docTypes[1].id}}" class="card-body">
+                            <h5 class="card-title">{{ docTypes[1].titolo }}</h5>
+                            <p class="card-text txtFont">{{ docTypes[1].descr }}</p>
                             <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente<br />Studente
+                                <p class="card-text"><span class="text-bold">Visibile da:</span><br />
+                                    <span *ngFor="let v of docTypes[1].visibile">
+                                        {{ v }} <br />
+                                    </span>
                                 </p>
                             </span>
                         </div>
@@ -61,19 +45,19 @@
             </div>
             <div class="col-2"></div>
         </div>
-        <div class="row" *ngIf="attivitaIndividuale">
+        <div class="row">
             <div class="col-2"></div>
             <div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(3)">
-                        <div id="3" class="card-body">
-                            <h5 class="card-title ">Valutazione studente</h5>
-                            <p class="card-text txtFont">Il documento di valutazione compilato dall’ente sullo studente
-                                coinvolto. Se l’ente non ha un profilo attivo, è possibile per la scuola caricarlo qui.
-                            </p>
+                <div class="card-wrapper" *ngIf="docTypes[2]">
+                    <div class="card" (click)="create(docTypes[2].id)">
+                        <div id="{{docTypes[2].id}}" class="card-body">
+                            <h5 class="card-title ">{{ docTypes[2].titolo }}</h5>
+                            <p class="card-text txtFont">{{ docTypes[2].descr }}</p>
                             <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Ente<br />Studente
+                                <p class="card-text"><span class="text-bold">Visibile da:</span><br />
+                                    <span *ngFor="let v of docTypes[2].visibile">
+                                        {{ v }} <br />
+                                    </span>
                                 </p>
                             </span>
                         </div>
@@ -82,18 +66,16 @@
             </div>
             <div class="col-2"></div>
             <div class="col-3">
-                <div class="card-wrapper">
-                    <div class="card" (click)="create(4)">
-                        <div id="4" class="card-body">
-                            <h5 class="card-title ">Valutazione esperienza</h5>
-                            <p class="card-text txtFont">Il documento di valutazione compilato dallo studente rispetto
-                                all’esperienza svolta presso l’ente. Se lo studente non ha un profilo attivo, è
-                                possibile per la
-                                scuola caricarlo qui.
-                            </p>
+                <div class="card-wrapper" *ngIf="docTypes[3]">
+                    <div class="card" (click)="create(docTypes[3].id)">
+                        <div id="{{docTypes[3].id}}" class="card-body">
+                            <h5 class="card-title ">{{ docTypes[3].titolo }}</h5>
+                            <p class="card-text txtFont">{{ docTypes[3].descr }}</p>
                             <span class="position-visible">
-                                <p class="card-text"><span class="text-bold">Visibile da:</span>
-                                    <br />Scuola<br />Studente
+                                <p class="card-text"><span class="text-bold">Visibile da:</span><br />
+                                    <span *ngFor="let v of docTypes[3].visibile">
+                                        {{ v }} <br />
+                                    </span>
                                 </p>
                             </span>
                         </div>
@@ -101,7 +83,6 @@
                 </div>
             </div>
             <div class="col-2"></div>
-            <!-- <div class="col-1"></div> -->
         </div>
         <br />
         <div class="row" *ngIf="optionSelected">

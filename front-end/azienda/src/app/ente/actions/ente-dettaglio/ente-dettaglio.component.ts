@@ -150,4 +150,12 @@ export class EnteDettaglioComponent implements OnInit {
     });
   }
 
+  setRolelabel(role) {
+    let label = "Referente Azienda";
+    if (role == "LEGALE_RAPPRESENTANTE_AZIENDA") {
+      label = "Responsabile ASL Azienda";
+    }
+    return label;
+  }
+
 }

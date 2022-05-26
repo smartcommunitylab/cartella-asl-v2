@@ -34,7 +34,7 @@
             <div class="col-sm-4"
                 [class.has-danger]="titoloInput.invalid && (titoloInput.dirty || titoloInput.touched || forceErrorDisplay)">
                 <label for="titolo" *ngIf="titolo" class="active">Titolo</label>
-                <input type="text" class="form-control" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
+                <input type="text" class="form-control" maxlength="250" [(ngModel)]="titolo" id="titolo" #titoloInput="ngModel"
                     placeholder="Titolo" (keyup)="trimValue($event, 'titolo')" (focusout)="trimValue($event, 'trim')"
                     required>
                 <div class="invalid-feedback"

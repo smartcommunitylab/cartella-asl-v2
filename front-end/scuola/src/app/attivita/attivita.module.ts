@@ -18,6 +18,8 @@ import { NewAttivtaModal } from './actions/new-attivita-modal/new-attivita-modal
 import { CreaAttivitaModalComponent } from './actions/crea-attivita-modal/crea-attivita-modal.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
+import { AvvisoArchiviaTiroModal } from './actions/avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
+import { LocalizedDatePipe } from '../shared/pipes/localizedDatePipe';
 
 
 @NgModule({
@@ -35,6 +37,7 @@ import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-mo
   ],
   providers: [
     NgbActiveModal,
+    LocalizedDatePipe
   ],
   entryComponents: [
     NewAttivtaModalPrimo,
@@ -44,7 +47,8 @@ import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-mo
     DocumentoCancellaModal,
     AttivitaCancellaModal,
     ArchiaviazioneAttivitaModal,
-    AvvisoEnteConvenzioneModal
+    AvvisoEnteConvenzioneModal,
+    AvvisoArchiviaTiroModal
   ],
 declarations: [AttivitaRoutingModule.components]
 })

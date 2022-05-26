@@ -115,9 +115,16 @@ public class InfoTnImportProfessoriClassi {
 				//TODO test
 				professorClass.setOrigin("INFOTNISTRUZIONE");
 				professorClass.getCourse().setOrigin("INFOTNISTRUZIONE");
-				ProfessoriClassi professorClassLocal = professoriClassiRepository
-						.findProfessoriClassiByExtId(professorClass.getExtId());
-				if (professorClassLocal != null) {
+				ProfessoriClassi professorClassLocal = professoriClassiRepository.findProfessoriClassiByExtId(professorClass.getExtId());
+				if(professorClassLocal != null) {
+					if(Utils.isEmpty(professorClassLocal.getIstitutoId())) {
+						Istituzione istituto = istituzioneRepository.findIstitutzioneByExtId(professorClass.getOrigin(), professorClass.getExtIdInstitute());
+						if(istituto != null) {
+							logger.info("update existing ProfessoriClassi: " + professorClassLocal.getExtId());
+							professorClassLocal.setIstitutoId(istituto.getId());
+							professoriClassiRepository.save(professorClassLocal);
+						}
+					}
 					logger.info("skipping existing ProfessoriClassi: " + professorClassLocal.getExtId());
 					continue;
 				}

@@ -202,11 +202,9 @@ export class EnteDettaglioModificaComponent implements OnInit {
       switchMap(term => this.dataService.getAteco(term).pipe(
         map(result => {
           let entries = [];
-          if(result.Entries && result.Entries.Entry) {            
-            result.Entries.Entry.forEach(element => {
-              entries.push(element);
-            });
-          }
+          result.forEach(element => {
+            entries.push(element);
+          });
           return entries;
         }),
         tap(() => this.searchAtecoFailed = false),

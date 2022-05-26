@@ -8,7 +8,6 @@ export class AppLoadService {
 
   constructor(public dataService: DataService, public authService: AuthService) { }
 
-
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log(`initializeApp:: inside promise`);
@@ -44,6 +43,7 @@ export class AppLoadService {
             ids.push(k);
           }
           this.dataService.setAziendaId(ids[0]);
+          this.dataService.setAtecoData();
           resolve(true);
         } else {
           reject();

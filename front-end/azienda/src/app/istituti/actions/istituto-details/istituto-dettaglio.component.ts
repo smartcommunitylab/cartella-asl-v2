@@ -246,14 +246,14 @@ export class IstitutoDettaglioComponent implements OnInit {
   }
 
   getEsperienzeistitutoCsv() {
-    // this.dataService.getEsperienzeistitutoCsv(this.istituto).subscribe((doc) => {
-    //   const downloadLink = document.createElement("a");
-    //   downloadLink.href = doc.url;
-    //   downloadLink.download = doc.filename;
-    //   document.body.appendChild(downloadLink);
-    //   downloadLink.click();
-    //   document.body.removeChild(downloadLink);  
-    // });
+    this.dataService.getEsperienzeistitutoCsv(this.istituto.id).subscribe((doc) => {
+      const downloadLink = document.createElement("a");
+      downloadLink.href = doc.url;
+      downloadLink.download = doc.filename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);  
+    });
   }
 
   styleOptionConvenzione(conv) {

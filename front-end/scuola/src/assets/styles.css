@@ -14758,4 +14758,8 @@ div.dp-input-container> input.dp-picker-input{
 .font-35 {
   font-size: 35px!important;
 }
+ngb-typeahead-window.dropdown-menu {
+  max-height: 400px !important;
+  overflow-y: auto;
+}
 /**/

@@ -25,8 +25,15 @@ import it.smartcommunitylab.cartella.asl.services.CartellaImportInstitutes;
 import it.smartcommunitylab.cartella.asl.services.CartellaImportRegistration;
 import it.smartcommunitylab.cartella.asl.services.CartellaImportStudente;
 import it.smartcommunitylab.cartella.asl.services.CartellaImportTeachingUnit;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportAziende;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportCorsi;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportCourseMetaInfo;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportIscrizioneCorsi;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportIstituzioni;
 import it.smartcommunitylab.cartella.asl.services.InfoTnImportProfessori;
 import it.smartcommunitylab.cartella.asl.services.InfoTnImportProfessoriClassi;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportStudenti;
+import it.smartcommunitylab.cartella.asl.services.InfoTnImportUnita;
 
 @Component
 @Transactional
@@ -49,9 +56,23 @@ public class APIUpdateManager {
 	@Autowired
 	private MetaInfoRepository metaInfoRepository;
 	@Autowired
-	private InfoTnImportProfessori importInfoTNProfessori;
+	private InfoTnImportProfessori infoTnImportProfessori;
 	@Autowired
-	private InfoTnImportProfessoriClassi importInfoTnProfesoriClassi;
+	private InfoTnImportProfessoriClassi infoTnImportProfesoriClassi;
+	@Autowired
+	private InfoTnImportIstituzioni infoTnImportIstituzioni;
+	@Autowired
+	private InfoTnImportUnita infoTnImportUnita;
+	@Autowired
+	private InfoTnImportCourseMetaInfo infoTnImportCourseMetaInfo;
+	@Autowired
+	private InfoTnImportCorsi infoTnImportCorsi;
+	@Autowired
+	private InfoTnImportStudenti infoTnImportStudenti;
+	@Autowired
+	private InfoTnImportIscrizioneCorsi infoTnImportIscrizioneCorsi;
+	@Autowired
+	private InfoTnImportAziende infoTnImportAziende;
 	@Autowired
 	private CartellaImportRegistration importCartellaRegistation;
 	@Autowired
@@ -87,11 +108,9 @@ public class APIUpdateManager {
 	}
 
 	public void importAllCartella() {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start CartellaScheduledTask.importAll");
 		}
-
 		// istituti.
 		importCartellaIstituti.importIstitutiFromRESTAPI();
 		// teaching unit.
@@ -106,43 +125,33 @@ public class APIUpdateManager {
 		importCartellaStudente.importStudentsFromRESTAPI();
 		// registration.
 		importCartellaRegistation.importRegistationFromRESTAPI();
-
 	}
 
-	@Transactional
 	public void importCartellaRegistration() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start ScheduledTask.importCartellaRegistration(" + new Date() + ")");
 		}
 		// registation.
 		importCartellaRegistation.importRegistationFromRESTAPI();
-
 	}
 
-	@Transactional
 	public void importCartellaStudenti() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaStudenti");
 		}
 		// students.
 		importCartellaStudente.importStudentsFromRESTAPI();
-
 	}
 
 	public void importCartellaIstituti() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaIstituti");
 		}
 		// istituti.
 		importCartellaIstituti.importIstitutiFromRESTAPI();
-
 	}
 
 	public void importCartellaTeachingUnit() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaTeachingUnit");
 		}
@@ -150,9 +159,7 @@ public class APIUpdateManager {
 		importCartellaTeachingUnit.importTeachingUnitFromRESTAPI();
 	}
 
-	@Transactional
 	public void importCartellaAziende() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaAziende");
 		}
@@ -160,62 +167,109 @@ public class APIUpdateManager {
 		importCartellaAziende.importAziendeFromRESTAPI();
 		// align aziende.
 		aziendaManager.alignAziendeConsoleInfoTN();
-
 	}
 
 	public void importCartellaCourseMetaInfo() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaCourseMetaInfo");
 		}
 		// courseMetaInfo.
 		importCartellaCourseMetaInfo.importCourseMetaInfoFromRESTAPI();
-
 	}
 
 	public void importCartellaCourses() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importCartellaCourses");
 		}
 		// course.
 		importCartellaCourses.importCoursesFromRESTAPI();
-
 	}
 
-	// @Scheduled(cron = "0 58 23 * * ?")
 	public void importAllInfoTN() throws Exception {
-
 		if (logger.isInfoEnabled()) {
-			logger.info("start InfoTnScheduledTask.importAll");
+			logger.info("start InfoTnScheduledTask.importAllInfoTN");
 		}
-		// professori.
-		importInfoTNProfessori.importProfessoriFromRESTAPI();
-		// professoriClassi.
-		importInfoTnProfesoriClassi.importProfessoriClassiFromRESTAPI();
-
+		infoTnImportAziende.importAziendaFromRESTAPI();
+		infoTnImportIstituzioni.importIstituzioniFromRESTAPI();
+		infoTnImportUnita.importUnitaFromRESTAPI();
+		infoTnImportCourseMetaInfo.importCourseMetaInfoFromRESTAPI();
+		infoTnImportCorsi.importCorsiFromRESTAPI();
+		infoTnImportStudenti.importStudentiFromRESTAPI();
+		infoTnImportIscrizioneCorsi.importIscrizioneCorsiFromRESTAPI();
+		infoTnImportProfesoriClassi.importProfessoriClassiFromRESTAPI();
+		infoTnImportProfessori.importProfessoriFromRESTAPI();
 	}
 
+	@Transactional
 	public void importInfoTNProfessori() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importInfoTNProfessori");
 		}
 		// professori.
-		importInfoTNProfessori.importProfessoriFromRESTAPI();
-
+		infoTnImportProfessori.importProfessoriFromRESTAPI();
 	}
 
+	@Transactional
 	public void importInfoTNProfessoriClassi() throws Exception {
-
 		if (logger.isInfoEnabled()) {
 			logger.info("start InfoTnScheduledTask.importInfoTNProfessoriClassi");
 		}
 		// professoriClassi.
-		importInfoTnProfesoriClassi.importProfessoriClassiFromRESTAPI();
-
+		infoTnImportProfesoriClassi.importProfessoriClassiFromRESTAPI();
+	}
+	
+	public void importInfoTNIstituti() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNIstituti");
+		}
+		infoTnImportIstituzioni.importIstituzioniFromRESTAPI();
 	}
 
+	public void importInfoTNUnita() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNUnita");
+		}
+		infoTnImportUnita.importUnitaFromRESTAPI();
+	}
+	
+	public void importInfoTNCorsiMetaInfo() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNCorsiMetaInfo");
+		}
+		infoTnImportCourseMetaInfo.importCourseMetaInfoFromRESTAPI();
+	}
+	
+	public void importInfoTNCorsi() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNCorsi");
+		}
+		infoTnImportCorsi.importCorsiFromRESTAPI();
+	}
+	
+	@Transactional
+	public void importInfoTNStudenti() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNStudenti");
+		}
+		infoTnImportStudenti.importStudentiFromRESTAPI();
+	}
+	
+	@Transactional
+	public void importInfoTNRegistrazioni() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNRegistrazioni");
+		}
+		infoTnImportIscrizioneCorsi.importIscrizioneCorsiFromRESTAPI();
+	}
+	
+	@Transactional
+	public void importInfoTNAziende() throws Exception {
+		if (logger.isInfoEnabled()) {
+			logger.info("start InfoTnScheduledTask.importInfoTNAziende");
+		}
+		infoTnImportAziende.importAziendaFromRESTAPI();
+	}
+	
 	public List<MetaInfo> createMetaInfoForAPI(String apiKey, boolean multipleYears) {
 		List<MetaInfo> metaInfos = new ArrayList<MetaInfo>();
 		if (multipleYears) {

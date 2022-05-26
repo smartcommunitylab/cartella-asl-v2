@@ -36,6 +36,8 @@ export class DataService {
   listAziendaIds = [];
   aziendaName: string = "";
   coorindateAzienda;
+  atecoURL = 'assets/ateco/data.csv';
+  atecoData: any[] = [];
 
   constructor(
     private http: HttpClient,
@@ -43,6 +45,20 @@ export class DataService {
     private sanitizer: DomSanitizer) {
     DataService.growler = growler;
     this.host = environment.serverAPIURL;
+  }
+
+  setAtecoData() {
+    this.http.get(this.atecoURL, { responseType: 'text' }).subscribe(
+      data => {
+        const list = data.split('\n');
+        list.forEach(e => {
+          var item = e.split(',');
+          let entry = {};
+          entry['codice'] = item[0];
+          entry['descrizione'] = item[1];
+          this.atecoData.push(entry);
+        });
+      });
   }
 
   /** AZIENDA.  **/
@@ -562,6 +578,46 @@ export class DataService {
       );
   }
 
+  getValutazioneCompetenzeReport(esperienzaSvoltaId): Observable<any> {
+    let url = this.host + '/valutazione/competenze/ente';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('esperienzaSvoltaId', esperienzaSvoltaId);
+
+    return this.http.get<any>(url,
+      {
+         params: params
+      }
+    ).timeout(this.timeout)
+      .pipe(
+        map(report => {
+          return report;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
+  saveValutazioneCompetenze(esperienzaSvoltaId, valutazioni): Observable<any> {
+    let url = this.host + '/valutazione/competenze/ente';
+    let params = new HttpParams();
+    params = params.append('enteId', this.aziendaId);
+    params = params.append('esperienzaSvoltaId', esperienzaSvoltaId);
+
+    return this.http.post<any>(url, valutazioni,
+      {
+        params: params
+      })
+      .timeout(this.timeout)
+      .pipe(
+        map(res => {
+          return res;
+        },
+          catchError(this.handleError)
+        )
+      );
+  }
+
   associaIstitutiToOfferta(id, istitutiToSave) {
     let url = this.host + '/offerta/' + id + '/istituti';
     let istitutoStub = [];
@@ -1018,18 +1074,12 @@ export class DataService {
   }
 
   getAteco(code: string): Observable<any> {
-    let url = 'https://dss.coinnovationlab.it/services/ateco/ricerca/' + code;
-    return this.http.get(url,
-      {
-        observe: 'response'
-      })
-      .timeout(this.timeout)
-      .pipe(
-        map(res => {
-          return res.body;
-        }),
-        catchError(this.handleError)
-      );
+    console.log(this.atecoData);
+    let result: any[] = [];
+    if (code.length > 1) {
+      result = this.atecoData.filter(x => x.codice.startsWith(code));
+    } 
+    return Observable.of(result);
   }
 
   getAnnoScolstico(now) {
@@ -1110,6 +1160,34 @@ export class DataService {
         const url = URL.createObjectURL(blob);
         return url;
         //doc.url = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+      },
+        catchError(this.handleError)
+      );
+  }
+
+  getEsperienzeistitutoCsv(istitutoId: any): Observable<any> {
+    let url = this.host + '/export/csv/ente/istituto';
+    let params = new HttpParams();
+    params = params.append('istitutoId', istitutoId);
+    params = params.append('enteId', this.aziendaId);
+    return this.http.get(
+      url,
+      {
+        observe: 'response',
+        params: params,
+        responseType: 'arraybuffer'
+      })
+      .timeout(this.timeout)
+      .map((response) => {
+        const blob = new Blob([response.body], { type: response.headers.get('Content-Type')! });
+        const url = URL.createObjectURL(blob);
+        const disposition = response.headers.get('Content-Disposition')!;
+        const filename = disposition.substring(disposition.indexOf('=') + 1).replace(/\\\"/g, '');
+        let doc = {
+          'url': url,
+          'filename': filename
+        };
+        return doc;
       },
         catchError(this.handleError)
       );

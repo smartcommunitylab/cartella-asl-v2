@@ -6,12 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "consenso")
+@Table(name = "consenso", indexes = { 
+		@Index(name = "email_idx", columnList = "email", unique = false),
+		@Index(name = "cf_idx", columnList = "cf", unique = false)})
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Consenso {
 	@Id
