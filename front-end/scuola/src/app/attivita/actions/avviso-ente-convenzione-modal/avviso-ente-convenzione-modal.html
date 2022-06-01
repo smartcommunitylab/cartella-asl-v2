@@ -8,38 +8,37 @@
 </div>
 <div class="modal-body">
     <div class="text-center text-bold">
-        <p>Attenzione: l’ente associato ha una convenzione IN SCADENZA nel periodo
-            dell’attività che stai creando</p>
+        <p>Attenzione: l’ente associato non ha una convenzione che copra interamente il periodo dell’attività che stai creando</p>
         <br>
-        <p>L’ente {{ convAttiva.nomeEnte }} non potrà visualizzare i dati degli studenti del tuo istituto senza una convenzione valida
-            in corso.
+        <p>L’ente {{ ente.nome }} non potrà visualizzare i dati degli studenti del tuo istituto senza una convenzione valida
+            per quel periodo.
         </p>
-        <p>{{ convAttiva.nomeEnte }} non potrà compilare le presenze su EDIT nè potrà svolgere le valutazioni tramite il portale EDIT.
+        <p>{{ ente.nome }} non potrà compilare le presenze su EDIT nè potrà svolgere le valutazioni tramite il portale EDIT.
         </p>
         <p>L’attività può comunque essere creata e gestita in toto dal portale scuola e dalla webapp studenti.</p>
     </div>
-    <br>
+    <!--br>
     <br>
     <div class="p-1 row conv-body">
         <div class="col-1"></div>
         <div class="col-5">
                 <p><span class="text-semibold">Nome attività:&nbsp;</span>{{ attivita.titolo }}</p>
                 <p><span class="text-semibold">Ente:&nbsp;</span>{{ attivita.nomeEnte }}</p>
-                <p><span class="text-semibold">Data inizio attività:&nbsp;</span>{{ attivita.dataInizio }}</p>
-                <p class="revisione"><span class="text-semibold">Data fine:&nbsp;</span>{{ attivita.dataFine }}</p> 
+                <p><span class="text-semibold">Data inizio attività:&nbsp;</span>{{ attivita.dataInizio | date:'dd/MM/yyyy' }}</p>
+                <p class="revisione"><span class="text-semibold">Data fine:&nbsp;</span>{{ attivita.dataFine | date:'dd/MM/yyyy' }}</p> 
         </div>
         <div class="col-1 vl"></div>
         <div>
                 <p><span class="text-semibold">Nome convenzione:&nbsp;</span>{{ convAttiva.nome }}</p>
                 <p><span class="text-semibold">Nome ente:&nbsp;</span>{{ convAttiva.nomeEnte }}</p>
-                <p><span class="text-semibold">Data inizio validità:&nbsp;</span>{{ convAttiva.dataInizio }}</p>
-                <p class="revisione"><span class="text-semibold">Data fine validità:&nbsp;</span>{{ convAttiva.dataFine }}</p>
+                <p><span class="text-semibold">Data inizio validità:&nbsp;</span>{{ convAttiva.dataInizio | date:'dd/MM/yyyy' }}</p>
+                <p class="revisione"><span class="text-semibold">Data fine validità:&nbsp;</span>{{ convAttiva.dataFine | date:'dd/MM/yyyy' }}</p>
         </div>
-    </div>
+    </div-->
     <br>
-    <div class="text-center text-bold"><p>Se vuoi che l’ente {{ convAttiva.nomeEnte }} collabori inserendo presenze e/o
+    <div class="text-center text-bold"><p>Se vuoi che l’ente {{ ente.nome }} collabori inserendo presenze e/o
         valutazioni, ricordati di inserire una nuova convenzione.
-        Lo puoi fare nella sezione “Convenzioni” del profilo ente (cercalo nella tab "Enti"). ?</p></div>
+        Lo puoi fare nella sezione “Convenzioni” del profilo ente (cercalo nella tab "Enti").</p></div>
 </div>
 <br />
 <div class="text-center">

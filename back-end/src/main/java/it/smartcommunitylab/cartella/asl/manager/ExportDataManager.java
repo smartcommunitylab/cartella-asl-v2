@@ -170,8 +170,8 @@ public class ExportDataManager {
 	}
 	
 	public ExportCsv getDashboardEsperienze(String istitutoId, String annoScolastico, 
-			String text, boolean getErrors) throws Exception {
-		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, getErrors);
+			String text, String stato, boolean getErrors) throws Exception {
+		List<ReportDashboardEsperienza> list = dashboardManager.getReportEsperienze(istitutoId, annoScolastico, text, stato, getErrors);
 		String filename = "esperienze.csv";
 		DateTimeFormatter ldf = DateTimeFormatter.ofPattern("YYYY-MM-dd");
 		StringBuffer sb = new StringBuffer("esperienzaId;\"istituto\";\"annoScolastico\";\"studenteId\";\"nominativoStudente\";\"cf\";\"classe\";\"titolo\";\"tipologia\";\"dataInizio\";\"dataFine\";\"stato\";oreTotali;oreValidate;\"allineato\";\"errore\";\"invio\"\n");

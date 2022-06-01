@@ -32,6 +32,7 @@ export class DashboardEsperienzeComponent implements OnInit {
   istitutoId = '';
   annoScolastico = '';
   text = '';
+  stato = '';
   esperienze = [];
   findErrors: boolean = false;
   tipologieMap = {
@@ -103,7 +104,7 @@ export class DashboardEsperienzeComponent implements OnInit {
         return;
       }
     }
-    this.dataService.getReportEsperienze(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.findErrors)
+    this.dataService.getReportEsperienze(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.stato, this.findErrors)
       .subscribe(r => {
         if(r) {
           this.esperienze = r;
@@ -134,7 +135,7 @@ export class DashboardEsperienzeComponent implements OnInit {
         return;
       }
     }
-    this.dataService.getEsperienzeCsv(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.findErrors).subscribe((doc) => {
+    this.dataService.getEsperienzeCsv(this.istituto?this.istituto.id:null, this.annoScolastico, this.text, this.stato, this.findErrors).subscribe((doc) => {
       const downloadLink = document.createElement("a");
       downloadLink.href = doc.url;
       downloadLink.download = doc.filename;
