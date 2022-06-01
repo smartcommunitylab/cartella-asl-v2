@@ -199,7 +199,7 @@ public class DashboardManager extends DataEntityManager {
 	
 	@SuppressWarnings("unchecked")
 	public List<ReportDashboardEsperienza> getReportEsperienze(String istitutoId, String annoScolastico, 
-			String text, boolean getErrors) {
+			String text, String stato, boolean getErrors) {
 		String q = "SELECT es, aa, esa, i FROM EsperienzaSvolta es"
 				+ " LEFT JOIN AttivitaAlternanza aa ON es.attivitaAlternanzaId=aa.id"
 				+ " LEFT JOIN Istituzione i ON aa.istitutoId=i.id"
@@ -219,6 +219,11 @@ public class DashboardManager extends DataEntityManager {
 			q += " (UPPER(es.nominativoStudente) LIKE (:text) OR UPPER(es.classeStudente) LIKE (:text) OR UPPER(es.cfStudente) LIKE (:text) OR UPPER(aa.titolo) LIKE (:text))";
 			firstParam = false;
 		}
+		if(Utils.isNotEmpty(stato)) {
+			q += firstParam ? " WHERE" : " AND"; 
+			q += " es.stato=(:stato)";
+			firstParam = false;
+		}
 		if(getErrors) {
 			q += firstParam ? " WHERE" : " AND"; 
 			q += " esa.allineato = false AND esa.numeroTentativi > 0";
@@ -230,6 +235,9 @@ public class DashboardManager extends DataEntityManager {
 		}
 		if(Utils.isNotEmpty(annoScolastico)) {
 			query.setParameter("annoScolastico", annoScolastico);
+		}
+		if(Utils.isNotEmpty(stato)) {
+			query.setParameter("stato", EsperienzaSvolta.Stati.valueOf(stato));
 		}
 		if(Utils.isNotEmpty(text)) {
 			query.setParameter("text", "%" + text.trim().toUpperCase() + "%");

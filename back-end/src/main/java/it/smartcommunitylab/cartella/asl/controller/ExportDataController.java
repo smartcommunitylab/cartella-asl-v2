@@ -69,11 +69,12 @@ public class ExportDataController implements AslController {
 			@RequestParam(required=false) String istitutoId,
 			@RequestParam(required=false) String annoScolastico,
 			@RequestParam(required=false) String text,
+			@RequestParam(required=false) String stato,
 			@RequestParam(required=false) boolean getErrors,
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		usersValidator.checkRole(request, ASLRole.ADMIN);
-		ExportCsv reportCsv = exportDataManager.getDashboardEsperienze(istitutoId, annoScolastico, text, getErrors);
+		ExportCsv reportCsv = exportDataManager.getDashboardEsperienze(istitutoId, annoScolastico, text, stato, getErrors);
 		downloadCsv(reportCsv, response);
 		if(logger.isInfoEnabled()) {
 			logger.info(String.format("getDashboardReportEsperienze:%s / %s", istitutoId, annoScolastico));

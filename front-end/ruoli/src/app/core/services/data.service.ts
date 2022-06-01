@@ -20,7 +20,7 @@ export class DataService {
   userId = '';
   listStudentiIds = [];
 
-  timeout: number = 30000;
+  timeout: number = 180000;
 
   constructor(
     private http: HttpClient,
@@ -447,7 +447,7 @@ export class DataService {
       );    
   }
 
-  getReportEsperienze(istitutoId, annoScolastico, text, getErrors):  Observable<any> {
+  getReportEsperienze(istitutoId, annoScolastico, text, stato, getErrors):  Observable<any> {
     let params = new HttpParams();
     if(istitutoId) {
       params = params.append('istitutoId', istitutoId);
@@ -457,6 +457,9 @@ export class DataService {
     }
     if(text) {
       params = params.append('text', text);
+    }
+    if(stato) {
+      params = params.append('stato', stato);
     }
     if(getErrors) {
       params = params.append('getErrors', getErrors);
@@ -509,7 +512,7 @@ export class DataService {
       );    
   }
 
-  getEsperienzeCsv(istitutoId, annoScolastico, text, getErrors): Observable<any> {
+  getEsperienzeCsv(istitutoId, annoScolastico, text, stato, getErrors): Observable<any> {
     let params = new HttpParams();
     if(istitutoId) {
       params = params.append('istitutoId', istitutoId);
@@ -519,6 +522,9 @@ export class DataService {
     }
     if(text) {
       params = params.append('text', text);
+    }
+    if(stato) {
+      params = params.append('stato', stato);
     }
     if(getErrors) {
       params = params.append('getErrors', getErrors);

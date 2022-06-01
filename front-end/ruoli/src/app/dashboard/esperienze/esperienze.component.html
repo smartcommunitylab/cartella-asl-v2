@@ -2,7 +2,7 @@
     <h3 class="card-header">{{title}}</h3>
     <div class="card-body">
         <div class="row">
-            <div class="col col-6">
+            <div class="col col-5">
                 <div class="form-group">
                     <ng-template #rtIstituto let-r="result" let-t="term">
                         <div class="row">
@@ -26,11 +26,21 @@
                         [(ngModel)]="annoScolastico">
                 </div>
             </div>
-            <div class="col col-3">
+            <div class="col col-2">
                 <div class="form-group">
                     <label for="text">Cerca</label>
                     <input type="text" class="form-control" id="text" placeholder="studente o classe o cf o titolo" 
                         [(ngModel)]="text" (keyup.enter)="getReport()">
+                </div>
+            </div>
+            <div class="col col-2">
+                <div class="form-group">
+                    <label for="stato">Stato</label>
+                    <select class="form-control" id="stato" [(ngModel)]="stato">
+                        <option value="valida">valida</option>
+                        <option value="annullata">annullata</option>
+                        <option value="da_definire">da_definire</option>
+                    </select>
                 </div>
             </div>
             <div class="col col-1">

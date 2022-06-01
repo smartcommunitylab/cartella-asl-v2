@@ -264,9 +264,9 @@ export class EnteDettaglioComponent implements OnInit {
   }
 
   setStatoConvenzione(conv) {
-    let label = 'Scaduta';
+    let label = 'Non attiva';
     if (conv.stato == 'attiva') {
-      label = 'Valida';
+      label = 'Attiva';
     }
     return label;
   }

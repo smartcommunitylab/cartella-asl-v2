@@ -110,40 +110,43 @@ export class AttivitaDettaglioComponent implements OnInit {
         if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
           this.dataService.getAzienda(this.attivita.enteId).subscribe((res) => {
             this.ente = res;
-            this.dataService.getAttivaConvenzione(this.attivita.enteId).subscribe((convAttiva) => {
-              if (convAttiva) {
-                if (moment(convAttiva.dataFine) < moment(this.attivita.dataFine)) {
-                  const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
-                  modalRef.componentInstance.attivita = this.attivita;
-                  modalRef.componentInstance.convAttiva = convAttiva;
-                }
+            this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
+              this.convenzioni = res;
+              //check convenzione attiva per attività
+              var convAttiva = false;
+              for (const c of this.convenzioni) {
+                if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
+                  (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
+                    convAttiva = true;
+                  }
               }
-              this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
-                this.convenzioni = res;
-                if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
-                  this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
-                    this.valEsperienzaTiro = valutazione;
-                    this.initCounter();
-                    this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
-                      this.valCompetenzeTiro = res;
-                      res.valutazioni.forEach(d => {
-                        this.competenzeTotale++;
-                        if (d.punteggio > 0) {
-                          this.competenzeValutate++;
-                        }
-                        if (d.punteggio > 1) {
-                          this.competenzeAcquisite++;
-                        }
-                      })
+              if(!convAttiva && (this.attivita.stato!='archiviata')) {
+                const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
+                modalRef.componentInstance.attivita = this.attivita;
+                modalRef.componentInstance.convAttiva = null;
+                modalRef.componentInstance.ente = this.ente;
+              }
+              if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
+                this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
+                  this.valEsperienzaTiro = valutazione;
+                  this.initCounter();
+                  this.dataService.getValutazioneCompetenze(this.esperienze[0].esperienzaSvoltaId).subscribe((res) => {
+                    this.valCompetenzeTiro = res;
+                    res.valutazioni.forEach(d => {
+                      this.competenzeTotale++;
+                      if (d.punteggio > 0) {
+                        this.competenzeValutate++;
+                      }
+                      if (d.punteggio > 1) {
+                        this.competenzeAcquisite++;
+                      }
                     })
-                  });
-                }
-              },
-                (err: any) => console.log(err),
-                () => console.log('getEnteConvenzioni'));
+                  })
+                });
+              }
             },
               (err: any) => console.log(err),
-              () => console.log('getAttivaConvenzione'));
+              () => console.log('getEnteConvenzioni'));
           },
             (err: any) => console.log(err),
             () => console.log('getEnte'));

@@ -54,12 +54,13 @@ public class RegistrazioneEnteManager extends DataEntityManager {
 		Optional<RegistrazioneEnte> regOp = registrazioneEnteRepository.findOneByAziendaIdAndRole(enteId, ASLRole.LEGALE_RAPPRESENTANTE_AZIENDA);
 		if(regOp.isPresent()) {
 			RegistrazioneEnte reg = regOp.get();
-			if(Stato.confermato.equals(reg.getStato()) || Stato.inattivo.equals(reg.getStato())) {
+			if(Stato.confermato.equals(reg.getStato())) {
 				throw new BadRequestException("richiesta registrazione per questo ente già presente");
-			}
-			LocalDate today = LocalDate.now();
-			if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
-				throw new BadRequestException("richiesta registrazione per questo ente già presente");
+			} else if(Stato.inviato.equals(reg.getStato())) {
+				LocalDate today = LocalDate.now();
+				if(today.isBefore(reg.getDataInvito().plusDays(maxGiorni))) {
+					throw new BadRequestException("richiesta registrazione per questo ente già presente");
+				}				
 			}
 			registrazioneEnteRepository.delete(reg);				
 		}
