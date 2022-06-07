@@ -95,6 +95,9 @@ public class ConvenzioneManager extends DataEntityManager {
 				return c;
 			}
 		}
+		if(convenzioni.size() > 0) {
+			return convenzioni.get(0);
+		}
 		return null;
 	}
 	
