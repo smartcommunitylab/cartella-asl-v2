@@ -47,6 +47,7 @@ export class AttivitaDettaglioComponent implements OnInit {
   tipiDoc = [{ "name": "Piano formativo", "value": "piano_formativo" }, { "name": "Convenzione", "value": "convenzione" }, { "name": "Valutazione studente", "value": "valutazione_studente" }, { "name": "Valutazione esperienza", "value": "valutazione_esperienza" }, { "name": "Altro", "value": "doc_generico" }, { "name": "Pregresso", "Altro": "pregresso" }];
   zeroStudent: boolean;
   ente;
+  enteResponsabile;
   convenzioni = [];
   valEsperienzaTiro;
   valCompetenzeTiro;
@@ -110,22 +111,30 @@ export class AttivitaDettaglioComponent implements OnInit {
         if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
           this.dataService.getAzienda(this.attivita.enteId).subscribe((res) => {
             this.ente = res;
+
+            //check convenzione attiva per attività
             this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
               this.convenzioni = res;
-              //check convenzione attiva per attività
-              var convAttiva = false;
-              for (const c of this.convenzioni) {
-                if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
-                  (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
-                    convAttiva = true;
-                  }
-              }
-              if(!convAttiva && (this.attivita.stato!='archiviata')) {
-                const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
-                modalRef.componentInstance.attivita = this.attivita;
-                modalRef.componentInstance.convAttiva = null;
-                modalRef.componentInstance.ente = this.ente;
-              }
+              this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
+                var convAttiva = false;
+                this.enteResponsabile = res;
+                if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
+                  for (const c of this.convenzioni) {
+                    if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
+                      (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
+                        convAttiva = true;
+                      }
+                  }  
+                }
+                if(!convAttiva && (this.attivita.stato!='archiviata')) {
+                  const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
+                  modalRef.componentInstance.attivita = this.attivita;
+                  modalRef.componentInstance.convAttiva = null;
+                  modalRef.componentInstance.ente = this.ente;
+                }  
+              },
+                (err: any) => console.log(err),
+                () => console.log('getEnteRegistrazione'));
               if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
                 this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                   this.valEsperienzaTiro = valutazione;
