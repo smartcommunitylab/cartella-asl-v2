@@ -273,17 +273,18 @@ export class AttivitaDettaglioComponent implements OnInit {
         modalRef.componentInstance.esperienze = response;
         modalRef.componentInstance.titolo = this.attivita.titolo;
         modalRef.componentInstance.onArchivia.subscribe((res) => {
+          let esperienze = res.esperienze;
           if (res.nrStudenteNonCompletato > 0) {
             const modalRef = this.modalService.open(AvvisoArchiviaModal, { windowClass: "cancellaModalClass" });
             modalRef.componentInstance.nrStudentiNonCompletato = res.nrStudenteNonCompletato;
             modalRef.componentInstance.nrTotale = res.esperienze.length;
             modalRef.componentInstance.onArchivia.subscribe((res) => {
               if (res == 'ARCHIVIA') {
-                this.archiviaEsperienze(res.esperienze);
+                this.archiviaEsperienze(esperienze);
               }
             })
           } else {
-            this.archiviaEsperienze(res.esperienze);
+            this.archiviaEsperienze(esperienze);
           }
         }, (err: any) => console.log(err),
           () => console.log('archiviaAttivita'));
