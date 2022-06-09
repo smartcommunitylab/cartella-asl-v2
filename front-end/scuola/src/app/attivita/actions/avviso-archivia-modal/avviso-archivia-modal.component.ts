@@ -9,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class AvvisoArchiviaModal {
   closeResult: string;
 
-  @Input() nrStudenteNonCompletato;
+  @Input() nrStudentiNonCompletato;
   @Input() nrTotale;
   @Output() onArchivia = new EventEmitter<string>();
 
