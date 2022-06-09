@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <div class="row v-center">
+        <svg class="icon icon-white icon-lg">
+            <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-horn"></use>
+        </svg>&nbsp;&nbsp;
+        <h4 class="text-white">ATTENZIONE</h4>    
+    </div>    
+</div>
+<div class="modal-body text-center text-semibold">
+    <p>Hai scelto di annullare l'attività di {{ nrStudenteNonCompletato }} studenti su {{ nrTotale }}. Questa azione non è reversibile.</p>
+    <p>Le attività annullate NON saranno conteggiate nel totale ore dei relativi studenti, 
+        e NON sarà possibile recuperarle in nessun modo.</p> 
+    <p>Per confermare, usa il tasto "Archivi"</p>
+    <p>Se vuoi controllare prima di archiviare definitivamente l'attività, premi "Annulla"</p>
+</div>
+<br>
+<div class="text-center">
+    <button class="btn btn-primary btn-icon" (click)="activeModal.close('Close click')">
+        <span class="row">
+            <span class="btn-txt v-center">Annulla</span>&nbsp;
+            <span>
+                <svg class="icon icon-white icon-sm">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-close"></use>
+                </svg>
+            </span>
+        </span>        
+    </button>&nbsp;
+    <button class="btn btn-flat btn-warning" (click)="archivia()">
+        <span class="row">
+            <span class="btn-txt v-center">Archivia</span>&nbsp;&nbsp;
+            <span>
+                <svg class="icon icon-white icon-xs btnModificationIcon">
+                    <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-box"></use>
+                </svg>
+            </span>
+        </span>
+
+    </button>
+</div>
+<br>

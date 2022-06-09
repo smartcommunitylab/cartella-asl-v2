@@ -22,6 +22,7 @@ import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-mo
 import { ValutazioneEsperienzaTirocinioComponent } from './actions/valutazione-esperienza-tirocinio/valutazione-esperienza-tirocinio.component';
 import { ValutazioneCompetenzeTirocinioComponent } from './actions/valutazione-competenze-tirocinio/valutazione-competenze-tirocinio.component';
 import { AvvisoArchiviaTiroModal } from './actions/avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
+import { AvvisoArchiviaModal } from './actions/avviso-archivia-modal/avviso-archivia-modal.component';
 
 const routes: Routes = [
   {
@@ -70,7 +71,8 @@ export class AttivitaRoutingModule {
     AvvisoEnteConvenzioneModal,
     ValutazioneEsperienzaTirocinioComponent,
     ValutazioneCompetenzeTirocinioComponent,
-    AvvisoArchiviaTiroModal
+    AvvisoArchiviaTiroModal,
+    AvvisoArchiviaModal
   ];
 }
 

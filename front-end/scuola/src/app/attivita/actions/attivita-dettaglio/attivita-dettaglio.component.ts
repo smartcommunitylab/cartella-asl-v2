@@ -13,6 +13,7 @@ import { DocumentUploadModalComponent } from '../documento-upload-modal/document
 import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 import { AvvisoArchiviaTiroModal } from '../avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
+import { AvvisoArchiviaModal } from '../avviso-archivia-modal/avviso-archivia-modal.component';
 declare var moment: any;
 moment['locale']('it');
 registerLocaleData(localeIT);
@@ -271,15 +272,30 @@ export class AttivitaDettaglioComponent implements OnInit {
         const modalRef = this.modalService.open(ArchiaviazioneAttivitaModal, { windowClass: "archiviazioneModalClass" });
         modalRef.componentInstance.esperienze = response;
         modalRef.componentInstance.titolo = this.attivita.titolo;
-        modalRef.componentInstance.onArchivia.subscribe((esperienze) => {
-          this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
-            let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
-            this.growler.growl(message, GrowlerMessageType.Success);
-            this.ngOnInit();
-          })
-        })
-      }, (err: any) => console.log(err),
-        () => console.log('archiviaAttivita'));
+        modalRef.componentInstance.onArchivia.subscribe((res) => {
+          if (res.nrStudenteNonCompletato > 0) {
+            const modalRef = this.modalService.open(AvvisoArchiviaModal, { windowClass: "cancellaModalClass" });
+            modalRef.componentInstance.nrStudentiNonCompletato = res.nrStudenteNonCompletato;
+            modalRef.componentInstance.nrTotale = res.esperienze.length;
+            modalRef.componentInstance.onArchivia.subscribe((res) => {
+              if (res == 'ARCHIVIA') {
+                this.archiviaEsperienze(res.esperienze);
+              }
+            })
+          } else {
+            this.archiviaEsperienze(res.esperienze);
+          }
+        }, (err: any) => console.log(err),
+          () => console.log('archiviaAttivita'));
+      });
+  }
+
+  archiviaEsperienze(esperienze) {
+    this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
+      let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
+      this.growler.growl(message, GrowlerMessageType.Success);
+      this.ngOnInit();
+    })
   }
 
   showTip(ev, piano) {

@@ -20,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AvvisoEnteConvenzioneModal } from './actions/avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 import { AvvisoArchiviaTiroModal } from './actions/avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
 import { LocalizedDatePipe } from '../shared/pipes/localizedDatePipe';
+import { AvvisoArchiviaModal } from './actions/avviso-archivia-modal/avviso-archivia-modal.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { LocalizedDatePipe } from '../shared/pipes/localizedDatePipe';
     AttivitaCancellaModal,
     ArchiaviazioneAttivitaModal,
     AvvisoEnteConvenzioneModal,
-    AvvisoArchiviaTiroModal
+    AvvisoArchiviaTiroModal,
+    AvvisoArchiviaModal
   ],
 declarations: [AttivitaRoutingModule.components]
 })
