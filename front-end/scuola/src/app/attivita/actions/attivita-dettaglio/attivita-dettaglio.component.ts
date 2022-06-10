@@ -116,26 +116,34 @@ export class AttivitaDettaglioComponent implements OnInit {
             //check convenzione attiva per attività
             this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
               this.convenzioni = res;
-              this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
-                var convAttiva = false;
-                this.enteResponsabile = res;
-                if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
-                  for (const c of this.convenzioni) {
-                    if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
-                      (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
-                        convAttiva = true;
-                      }
-                  }  
+              //check if a convenzione cover the activity period
+              var activeConv = false;
+              for (const c of this.convenzioni) {
+                if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
+                  (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
+                    activeConv = true;
+                    break;
+                  }
+              }
+              if(!activeConv) {
+                var partiallyActiveConv = null;
+                for (const c of this.convenzioni) {
+                  if(
+                    ((moment(c.dataInizio) <= moment(this.attivita.dataInizio)) && (moment(c.dataFine) > moment(this.attivita.dataInizio)) && (moment(c.dataFine) < moment(this.attivita.dataFine))) 
+                    || 
+                    ((moment(c.dataInizio) > moment(this.attivita.dataInizio)) && (moment(c.dataInizio) < moment(this.attivita.dataFine)) && (moment(c.dataFine) >= moment(this.attivita.dataFine)))
+                  ) {
+                    partiallyActiveConv = c;
+                    break;
+                  }
                 }
-                if(!convAttiva && (this.attivita.stato!='archiviata')) {
+                if(partiallyActiveConv) {
                   const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
                   modalRef.componentInstance.attivita = this.attivita;
-                  modalRef.componentInstance.convAttiva = null;
-                  modalRef.componentInstance.ente = this.ente;
+                  modalRef.componentInstance.convAttiva = partiallyActiveConv;
                 }  
-              },
-                (err: any) => console.log(err),
-                () => console.log('getEnteRegistrazione'));
+              }
+
               if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
                 this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                   this.valEsperienzaTiro = valutazione;

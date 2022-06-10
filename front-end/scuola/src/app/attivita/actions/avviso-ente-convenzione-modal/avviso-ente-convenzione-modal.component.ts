@@ -10,8 +10,7 @@ export class AvvisoEnteConvenzioneModal {
   closeResult: string;
 
   @Input() attivita;
-  //@Input() convAttiva;
-  @Input() ente;
+  @Input() convAttiva;
 
   constructor(public activeModal: NgbActiveModal) { }
  
