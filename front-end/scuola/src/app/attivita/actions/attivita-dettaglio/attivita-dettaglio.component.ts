@@ -138,9 +138,24 @@ export class AttivitaDettaglioComponent implements OnInit {
                   }
                 }
                 if(partiallyActiveConv) {
-                  const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
-                  modalRef.componentInstance.attivita = this.attivita;
-                  modalRef.componentInstance.convAttiva = partiallyActiveConv;
+                  this.route.queryParams.subscribe(qParams => {
+                    let showConv = qParams['showConvPopup'];
+                    if (showConv == 'true') {
+                      const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
+                      modalRef.componentInstance.attivita = this.attivita;
+                      modalRef.componentInstance.convAttiva = partiallyActiveConv;
+                      modalRef.componentInstance.onClose.subscribe((res) => {
+                        console.log(res);
+                        // Remove query params
+                        this.router.navigate([], {
+                          queryParams: {
+                            'showConvPopup': null,
+                          }
+                        })
+                      });
+                    }
+                  })
+                  
                 }  
               }
 
@@ -588,6 +603,41 @@ export class AttivitaDettaglioComponent implements OnInit {
     this.competenzeTotale = 0;
     this.competenzeValutate = 0;
     this.competenzeAcquisite = 0;
+  }
+
+  styleOptionStatoEnte() {
+    var style = {
+      'color': '#FFB54C', //orange
+      'font-weight': 'bold'
+    };
+
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      style['color'] = '#7FB2E5'; // grey
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      style['color'] = '#00CF86'; // green
+    }
+
+    return style;
+  }
+
+  setStatoEnte() {
+    let stato = 'Disponibile all’attivazione';
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      stato = 'In attivazione';
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      stato = 'Con account';
+    }
+    return stato;
+  }
+
+  setTooltipStatoEnte() {
+    let tooltip = "Questo ente non può gestire tramite EDIT la presente attività.  Se vuoi invitarlo in EDIT, vai nella sezione 'Enti' e attiva questo ente";
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      tooltip = "Questo ente non può gestire tramite EDIT la presente attività. L'invito ad accedere ad EDIT è stato inviato ma la risposta non è ancora pervenuta.";
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      tooltip = "Questo ente può gestire tramite EDIT la presente attività, ma solo se è presente una convenzione attiva per la durata dell'attività.";
+    }
+    return tooltip;
   }
   
 }

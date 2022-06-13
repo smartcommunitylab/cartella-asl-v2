@@ -11,8 +11,14 @@ export class AvvisoEnteConvenzioneModal {
 
   @Input() attivita;
   @Input() convAttiva;
+  @Output() onClose = new EventEmitter<Object>();;
 
   constructor(public activeModal: NgbActiveModal) { }
+
+  close() {
+    this.activeModal.close();
+    this.onClose.emit('VIEWED');
+  }
  
 }
 
