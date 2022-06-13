@@ -102,7 +102,7 @@
                 <span class="row"><span
                         class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Ente:&nbsp;</span><a [routerLink]="" (click)="routeEntity()">{{ attivita.nomeEnte }}</a></span>
-                <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Stato account Ente:&nbsp;</span><span [ngStyle]="styleOptionStatoEnte()" ngbTooltip="{{setTooltipStatoEnte()}}" placement="right">{{ setStatoEnte() }}</span></span>
+                <span *ngIf="!tipoInterna && isTipologiaSevenTen()" class="row"><span class="text-semibold">Stato account Ente:&nbsp;</span><span [ngStyle]="styleOptionStatoEnte()" ngbTooltip="{{setTooltipStatoEnte()}}" placement="right">{{ setStatoEnte() }}</span></span>
                 <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
                 <span class="row"><span class="text-semibold">Tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>

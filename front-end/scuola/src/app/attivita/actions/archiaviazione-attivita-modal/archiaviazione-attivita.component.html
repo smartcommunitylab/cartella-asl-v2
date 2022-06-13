@@ -75,7 +75,7 @@
                         <th>Ore validate</th>
                         <th></th>
                         <th>Stato</th>
-                        <th>Ore valide</th>
+                        <th>Ore trasmesse</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,7 +104,7 @@
                             <span class="stato-text">{{esperienze[i].valida?'VALIDA':'ANNULLATA'}}</span>
                         </td>
                         <!-- Ore trasmesse -->
-                        <td>
+                        <td [ngStyle]="customColor(esperienze[i])">
                             <span *ngIf="esperienze[i].valida" placement="bottom"
                             ngbTooltip="Ore dell'attività comunicate al MIUR valide ai fini dell'esame di stato">
                                 {{esperienze[i].oreValidate}}

@@ -479,6 +479,13 @@ export class AttivitaDettaglioComponent implements OnInit {
     return false;
   }
 
+  isTipologiaSevenTen() {
+    if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
+      return true;
+    }
+    return false;
+  }  
+
   styleLabel(competenza) {
     var style = {};
     const punteggio = this.getValutazioneByUri(competenza.uri);
