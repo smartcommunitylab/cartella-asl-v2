@@ -26,7 +26,12 @@ export class ArchiaviazioneAttivitaModal implements OnInit {
 
     confirm() {
         this.activeModal.close();
-        this.onArchivia.emit(this.esperienze);
+        var updatedNrstudentiNonCompleto = 0;
+        this.esperienze.forEach(esp => {
+            if (!esp.valida)
+            updatedNrstudentiNonCompleto++;
+        });
+        this.onArchivia.emit({esperienze: this.esperienze, nrStudenteNonCompletato: updatedNrstudentiNonCompleto});
     }
 
     onFilterChange(esp) {
@@ -38,6 +43,16 @@ export class ArchiaviazioneAttivitaModal implements OnInit {
             esp.toolTipRiga = "Attività valida. Premi per ANNULLARE questa attività";
         } else {
             esp.toolTipRiga = "Attività annullata. Premi per rendere VALIDA questa attività";
+        }
+    }
+
+    customColor(esperienza) {
+        var style = {
+            'color': '#F83E5A',
+            'font-weight': 'bold'
+        };
+        if (!esperienza.valida) {
+            return style;
         }
     }
 

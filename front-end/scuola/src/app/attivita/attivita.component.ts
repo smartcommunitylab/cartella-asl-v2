@@ -135,7 +135,7 @@ export class AttivitaComponent implements OnInit {
             attivita.rendicontazioneCorpo = modalita;
             this.dataService.createAttivitaAlternanza(attivita).subscribe((response) => {
                 // this.router.navigate(['../detail', response.id], { relativeTo: this.route });
-                this.router.navigateByUrl('/attivita/detail/' + response.id); 
+                this.router.navigateByUrl('/attivita/detail/' + response.id + "?showConvPopup=true"); 
             },
                 (err: any) => console.log(err),
                 () => console.log('createAttivitaAlternanza'));

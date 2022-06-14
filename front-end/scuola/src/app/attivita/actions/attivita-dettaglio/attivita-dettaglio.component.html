@@ -102,6 +102,7 @@
                 <span class="row"><span
                         class="text-semibold">Tipologia:&nbsp;</span>{{ getTipologiaString(attivita.tipologia) }}</span>
                 <span *ngIf="!tipoInterna" class="row"><span class="text-semibold">Ente:&nbsp;</span><a [routerLink]="" (click)="routeEntity()">{{ attivita.nomeEnte }}</a></span>
+                <span *ngIf="!tipoInterna && isTipologiaSevenTen()" class="row"><span class="text-semibold">Stato account Ente:&nbsp;</span><span [ngStyle]="styleOptionStatoEnte()" ngbTooltip="{{setTooltipStatoEnte()}}" placement="right">{{ setStatoEnte() }}</span></span>
                 <span class="row"><span class="text-semibold">Formatore:&nbsp;</span>{{attivita.formatore}}</span>
                 <span class="row"><span class="text-semibold">Tutor
                         scolastico:&nbsp;</span>{{attivita.referenteScuola}}</span>
@@ -149,7 +150,7 @@
                 class="btn v-center-inline btnZeroStudent" placement="bottom"
                 ngbTooltip="Associa almeno uno studente all'attività!">
                 Gestisci presenze studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
-            <button *ngIf="attivita.rendicontazioneCorpo && !attivita.tutorClasse" class="btn btn-primary v-center-inline" placement="bottom"
+            <button *ngIf="attivita.stato!='archiviata' && attivita.rendicontazioneCorpo && !attivita.tutorClasse" class="btn btn-primary v-center-inline" placement="bottom"
                 ngbTooltip="Valida, inserisci o modifica le ore svolte" (click)="modificaOreStudenti()">
                 Modifica Ore Studenti&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>&nbsp;&nbsp;
             <button *ngIf="attivita.stato!='archiviata' && dataService.validateRoles(['FUNZIONE_STRUMENTALE','DIRIGENTE_SCOLASTICO'])"

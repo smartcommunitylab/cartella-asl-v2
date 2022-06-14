@@ -59,9 +59,9 @@
         <div class="row message-row" *ngIf="(esperienze.length > 1) && (nrStudentiNonCompletato > 0)">
             <span>
                 <span class="message-row-text">
-                    {{nrStudentiNonCompletato}} studenti
-                    non hanno completato al 75% l’attività: per ciascuno, scegli se archiviare l’attività come VALIDA,
-                    preservando le ore svolte, o ANNULLATA
+                    <span class="revisione">{{nrStudentiNonCompletato}} studenti </span>
+                    non hanno superato la soglia del 75% di presenze, e quindi ai termini di legge la loro attività viene annullata.
+                    Puoi usare l'interruttore per renderla ugualmente valida e preservare le ore che hanno svolto
                 </span>
             </span>
         </div>
@@ -89,7 +89,7 @@
                             {{esperienze[i].classeStudente}}
                         </td>
                         <!-- Ore validate -->
-                        <td>
+                        <td [ngStyle]="customColor(esperienze[i])">
                             {{esperienze[i].oreValidate}}/{{esperienze[i].oreAttivita}} ({{esperienze[i].percentage}} %)
                         </td>
                         <!-- checkbox -->
@@ -100,13 +100,13 @@
                             </div>
                         </td>
                         <!-- Stato -->
-                        <td>
+                        <td [ngStyle]="customColor(esperienze[i])">
                             <span class="stato-text">{{esperienze[i].valida?'VALIDA':'ANNULLATA'}}</span>
                         </td>
                         <!-- Ore trasmesse -->
-                        <td>
+                        <td [ngStyle]="customColor(esperienze[i])">
                             <span *ngIf="esperienze[i].valida" placement="bottom"
-                            ngbTooltip="Ore dell’attività comunicate al MIUR valide ai fini dell’esame di stato">
+                            ngbTooltip="Ore dell'attività comunicate al MIUR valide ai fini dell'esame di stato">
                                 {{esperienze[i].oreValidate}}
                             </span>
                             <span *ngIf="!esperienze[i].valida"> 0 </span>

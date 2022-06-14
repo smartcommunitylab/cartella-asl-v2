@@ -13,6 +13,7 @@ import { DocumentUploadModalComponent } from '../documento-upload-modal/document
 import { LocalizedDatePipe } from '../../../shared/pipes/localizedDatePipe';
 import { AvvisoEnteConvenzioneModal } from '../avviso-ente-convenzione-modal/avviso-ente-convenzione-modal.component';
 import { AvvisoArchiviaTiroModal } from '../avviso-archivia-tiro-modal/avviso-archivia-tiro-modal.component';
+import { AvvisoArchiviaModal } from '../avviso-archivia-modal/avviso-archivia-modal.component';
 declare var moment: any;
 moment['locale']('it');
 registerLocaleData(localeIT);
@@ -115,26 +116,49 @@ export class AttivitaDettaglioComponent implements OnInit {
             //check convenzione attiva per attività
             this.dataService.getEnteConvenzione(this.attivita.enteId).subscribe((res) => {
               this.convenzioni = res;
-              this.dataService.getEnteResponsabile(this.ente).subscribe((res) => {
-                var convAttiva = false;
-                this.enteResponsabile = res;
-                if (this.enteResponsabile && this.enteResponsabile.stato == 'confermato') {
-                  for (const c of this.convenzioni) {
-                    if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
-                      (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
-                        convAttiva = true;
-                      }
-                  }  
+              //check if a convenzione cover the activity period
+              var activeConv = false;
+              for (const c of this.convenzioni) {
+                if((moment(c.dataFine) >= moment(this.attivita.dataFine)) &&
+                  (moment(c.dataInizio) <= moment(this.attivita.dataInizio))) {
+                    activeConv = true;
+                    break;
+                  }
+              }
+              if(!activeConv) {
+                var partiallyActiveConv = null;
+                for (const c of this.convenzioni) {
+                  if(
+                    ((moment(c.dataInizio) <= moment(this.attivita.dataInizio)) && (moment(c.dataFine) > moment(this.attivita.dataInizio)) && (moment(c.dataFine) < moment(this.attivita.dataFine))) 
+                    || 
+                    ((moment(c.dataInizio) > moment(this.attivita.dataInizio)) && (moment(c.dataInizio) < moment(this.attivita.dataFine)) && (moment(c.dataFine) >= moment(this.attivita.dataFine)))
+                  ) {
+                    partiallyActiveConv = c;
+                    break;
+                  }
                 }
-                if(!convAttiva && (this.attivita.stato!='archiviata')) {
-                  const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
-                  modalRef.componentInstance.attivita = this.attivita;
-                  modalRef.componentInstance.convAttiva = null;
-                  modalRef.componentInstance.ente = this.ente;
+                if(partiallyActiveConv) {
+                  this.route.queryParams.subscribe(qParams => {
+                    let showConv = qParams['showConvPopup'];
+                    if (showConv == 'true') {
+                      const modalRef = this.modalService.open(AvvisoEnteConvenzioneModal, { windowClass: "abilitaEnteModalClass" });
+                      modalRef.componentInstance.attivita = this.attivita;
+                      modalRef.componentInstance.convAttiva = partiallyActiveConv;
+                      modalRef.componentInstance.onClose.subscribe((res) => {
+                        console.log(res);
+                        // Remove query params
+                        this.router.navigate([], {
+                          queryParams: {
+                            'showConvPopup': null,
+                          }
+                        })
+                      });
+                    }
+                  })
+                  
                 }  
-              },
-                (err: any) => console.log(err),
-                () => console.log('getEnteRegistrazione'));
+              }
+
               if (this.isValutazioneActive() && this.isTiro() && this.esperienze[0]) {
                 this.dataService.getAttivitaValutazione(this.esperienze[0].esperienzaSvoltaId).subscribe((valutazione) => {
                   this.valEsperienzaTiro = valutazione;
@@ -271,15 +295,31 @@ export class AttivitaDettaglioComponent implements OnInit {
         const modalRef = this.modalService.open(ArchiaviazioneAttivitaModal, { windowClass: "archiviazioneModalClass" });
         modalRef.componentInstance.esperienze = response;
         modalRef.componentInstance.titolo = this.attivita.titolo;
-        modalRef.componentInstance.onArchivia.subscribe((esperienze) => {
-          this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
-            let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
-            this.growler.growl(message, GrowlerMessageType.Success);
-            this.ngOnInit();
-          })
-        })
-      }, (err: any) => console.log(err),
-        () => console.log('archiviaAttivita'));
+        modalRef.componentInstance.onArchivia.subscribe((res) => {
+          let esperienze = res.esperienze;
+          if (res.nrStudenteNonCompletato > 0) {
+            const modalRef = this.modalService.open(AvvisoArchiviaModal, { windowClass: "cancellaModalClass" });
+            modalRef.componentInstance.nrStudentiNonCompletato = res.nrStudenteNonCompletato;
+            modalRef.componentInstance.nrTotale = res.esperienze.length;
+            modalRef.componentInstance.onArchivia.subscribe((res) => {
+              if (res == 'ARCHIVIA') {
+                this.archiviaEsperienze(esperienze);
+              }
+            })
+          } else {
+            this.archiviaEsperienze(esperienze);
+          }
+        }, (err: any) => console.log(err),
+          () => console.log('archiviaAttivita'));
+      });
+  }
+
+  archiviaEsperienze(esperienze) {
+    this.dataService.archiviaAttivita(this.attivita.id, esperienze).subscribe((res) => {
+      let message = "Attività " + this.attivita.titolo + " correttamente archiviata";
+      this.growler.growl(message, GrowlerMessageType.Success);
+      this.ngOnInit();
+    })
   }
 
   showTip(ev, piano) {
@@ -439,6 +479,13 @@ export class AttivitaDettaglioComponent implements OnInit {
     return false;
   }
 
+  isTipologiaSevenTen() {
+    if (this.attivita.tipologia == 7 || this.attivita.tipologia == 10) {
+      return true;
+    }
+    return false;
+  }  
+
   styleLabel(competenza) {
     var style = {};
     const punteggio = this.getValutazioneByUri(competenza.uri);
@@ -563,6 +610,41 @@ export class AttivitaDettaglioComponent implements OnInit {
     this.competenzeTotale = 0;
     this.competenzeValutate = 0;
     this.competenzeAcquisite = 0;
+  }
+
+  styleOptionStatoEnte() {
+    var style = {
+      'color': '#FFB54C', //orange
+      'font-weight': 'bold'
+    };
+
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      style['color'] = '#7FB2E5'; // grey
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      style['color'] = '#00CF86'; // green
+    }
+
+    return style;
+  }
+
+  setStatoEnte() {
+    let stato = 'Disponibile all’attivazione';
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      stato = 'In attivazione';
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      stato = 'Con account';
+    }
+    return stato;
+  }
+
+  setTooltipStatoEnte() {
+    let tooltip = "Questo ente non può gestire tramite EDIT la presente attività.  Se vuoi invitarlo in EDIT, vai nella sezione 'Enti' e attiva questo ente";
+    if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'inviato') {
+      tooltip = "Questo ente non può gestire tramite EDIT la presente attività. L'invito ad accedere ad EDIT è stato inviato ma la risposta non è ancora pervenuta.";
+    } else if (this.ente && this.ente.registrazioneEnte && this.ente.registrazioneEnte.stato == 'confermato') {
+      tooltip = "Questo ente può gestire tramite EDIT la presente attività, ma solo se è presente una convenzione attiva per la durata dell'attività.";
+    }
+    return tooltip;
   }
   
 }

@@ -65,6 +65,7 @@
     <div class="card-body m-16" *ngIf="ente">
         <div class="title">
             Dati ente <br/>
+            <span *ngIf="enteResponsabile && enteResponsabile.stato=='inviato'" class="days-alert" >Account dell'ente in attivazione. Questo ente è stato invitato da un istituto a creare un account EDIT. Sarà possibile modificare l'account se l'invito viene annullato. Trascorsi 5 giorni, in assenza di risposta dall'ente l'invito è annullato automaticamente.</span>
             <button *ngIf="isModificable(ente)" class="btn btn-primary v-center-inline" placement="bottom"  ngbTooltip="Modifica i dati di questo ente" (click)="modifica()">
                 Modifica dati ente&nbsp;&nbsp;&nbsp;<i class="material-icons">edit</i></button>
         </div>

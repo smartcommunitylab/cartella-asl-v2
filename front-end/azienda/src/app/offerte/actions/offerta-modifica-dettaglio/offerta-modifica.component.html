@@ -227,7 +227,7 @@
                 </div>
                 <div class="row v-center form-group">
                     <div class="col-5">
-                        <input type="text" class="form-control" [(ngModel)]="offerta.prerequisiti" id="prerequisiti"
+                        <input type="text" class="form-control" maxlength="250" [(ngModel)]="offerta.prerequisiti" id="prerequisiti"
                             (focusout)="trimValue($event, 'trim')">
                         <label for="prerequisiti" *ngIf="offerta.prerequisiti" class="active">Caratteristiche richieste/
                             preferenziali</label>
