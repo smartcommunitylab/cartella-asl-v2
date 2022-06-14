@@ -318,9 +318,16 @@ export class AttivitaDettaglioModificaComponent implements OnInit {
     }
 
     if (this.place) {
-      this.attivita.luogoSvolgimento = this.place.name;
-      this.attivita.latitude = this.place.location[0];
-      this.attivita.longitude = this.place.location[1];
+      if (this.place.location) {
+        this.attivita.luogoSvolgimento = this.place.name;
+        this.attivita.latitude = this.place.location[0];
+        this.attivita.longitude = this.place.location[1];
+      } else {
+        this.attivita.luogoSvolgimento = this.place;
+        this.attivita.latitude = null;
+        this.attivita.longitude = null;
+      }
+      
     }
 
     this.attivita.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
