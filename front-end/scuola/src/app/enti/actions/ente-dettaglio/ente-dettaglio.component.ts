@@ -273,10 +273,11 @@ export class EnteDettaglioComponent implements OnInit {
 
   styleOptionConvenzione(conv) {
     var style = {
-        'color': '#707070', //grey
+      'color': '#707070', //grey
     };
-
-    if (conv && conv.stato == 'attiva') {
+    if (conv.stato == 'non_attiva') {
+        style['color'] = '#F83E5A'; // red
+    } else if (conv.stato == 'attiva') {
         style['color'] = '#00CF86'; // green
     }
     return style;
