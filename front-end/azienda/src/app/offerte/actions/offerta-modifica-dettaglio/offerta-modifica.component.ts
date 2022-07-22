@@ -183,9 +183,15 @@ export class OffertaDettaglioModificaComponent implements OnInit {
       this.forceReferenteEsternoErrorDisplay = true;
     }
     if (this.place) {
-      this.offerta.luogoSvolgimento = this.place.name;
-      this.offerta.latitude = this.place.location[0];
-      this.offerta.longitude = this.place.location[1];
+      if (this.place.location) {
+        this.offerta.luogoSvolgimento = this.place.name;
+        this.offerta.latitude = this.place.location[0];
+        this.offerta.longitude = this.place.location[1];
+      } else {
+        this.offerta.luogoSvolgimento = this.place;
+        this.offerta.latitude = null;
+        this.offerta.longitude = null;
+      }
     }
 
     this.offerta.dataInizio = moment(this.date.dataInizio, 'YYYY-MM-DD').valueOf();
