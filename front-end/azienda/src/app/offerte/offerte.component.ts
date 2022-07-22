@@ -210,7 +210,7 @@ export class OfferteComponent implements OnInit {
             if (off.luogoSvolgimento.length > 10) {
                 label = off.luogoSvolgimento.substring(0, 10) + '...';
             } else {
-                label = off.off.luogoSvolgimento;
+                label = off.luogoSvolgimento;
             }
         }
         return label;
