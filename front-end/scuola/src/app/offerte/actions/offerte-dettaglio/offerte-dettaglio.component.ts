@@ -114,9 +114,9 @@ export class OfferteDettaglioComponent implements OnInit {
     // });
   }
 
-  updateCompetenzePiano() {
-    this.router.navigate(['modifica/competenze/'], { relativeTo: this.route });
-  }
+  // updateCompetenzePiano() {
+  //   this.router.navigate(['modifica/competenze/'], { relativeTo: this.route });
+  // }
 
   associaOfferta() {
     this.router.navigate(['associa/offerta'], { relativeTo: this.route });

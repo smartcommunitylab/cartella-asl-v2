@@ -254,9 +254,11 @@
                 <div class="row v-center form-group">
                     <div class="col-5"
                         [class.has-danger]="referenteEsternoInput.invalid && (referenteEsternoInput.dirty || referenteEsternoInput.touched)">
-                        <input disabled type="text" pattern="[0-9]*" minlength="12" maxlength="15" class="form-control"
+                        <input disabled type="text" pattern="[0-9]*" class="form-control"
                             [(ngModel)]="offerta.referenteScuolaTelefono" id="referenteScuolaTelefono"
-                            #referenteScuolaTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')">
+                            #referenteScuolaTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            onpaste="return false">
                         <label for="referenteScuolaTelefono" *ngIf="offerta.referenteScuolaTelefono"
                             class="active">Telefono tutor scolastico</label>
                         <label for="referenteScuolaTelefono" *ngIf="!offerta.referenteScuolaTelefono">Telefono tutor
@@ -264,7 +266,7 @@
                     </div>
                     <div class="col-2"></div>
                     <div class="col-5">
-                        <input type="text" pattern="[0-9]*" minlength="12" maxlength="15" class="form-control"
+                        <input type="text" pattern="[0-9]*" class="form-control"
                             [(ngModel)]="offerta.referenteEsternoTelefono" id="referenteEsternoTelefono"
                             #referenteEsternoTelefonoInput="ngModel" (focusout)="trimValue($event, 'trim')"
                             onkeypress="return (event.charCode == 8 || event.charCode == 0 ||  event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
