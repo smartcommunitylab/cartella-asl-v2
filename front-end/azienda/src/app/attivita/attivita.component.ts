@@ -125,7 +125,7 @@ export class AttivitaComponent implements OnInit {
             if (aa.stato == 'archiviata') {
                 this.setTipStatoRiga(aa);
             } else if (aa.stato == 'revisione') {
-                let labelRevisione = 'In questa attività ci sono ancora ore da validare!';
+                let labelRevisione = 'Questa attività si è conclusa. Attendi che la scuola la archivi.';
                 aa.toolTipoStatoRiga = labelRevisione;
             } else if (aa.stato == 'in_attesa') {
                 aa.toolTipoStatoRiga = 'L’attività non è ancora iniziata.';

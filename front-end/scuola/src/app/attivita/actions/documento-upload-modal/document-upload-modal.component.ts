@@ -7,6 +7,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./document-upload-modal.component.scss']
 })
 export class DocumentUploadModalComponent implements OnInit {
+  forceFileErrorDisplay: boolean = false;
   optionSelected: boolean = false;
   optionType;
   fileSelected: boolean = false;
@@ -46,15 +47,23 @@ export class DocumentUploadModalComponent implements OnInit {
 
   uploadDocument(fileInput) {
     if (fileInput.target.files && fileInput.target.files[0]) {
-      this.fileSelected = true;
-      this.selectedFileName = fileInput.target.files[0].name;
-      this.saveFileObj.file = fileInput.target.files[0];
+      if(fileInput.target.files[0].size > 10240000) {
+        this.forceFileErrorDisplay = true;
+        this.fileSelected = false;
+        this.selectedFileName = '';
+        this.saveFileObj.file = null;  
+      } else {
+        this.forceFileErrorDisplay = false;
+        this.fileSelected = true;
+        this.selectedFileName = fileInput.target.files[0].name;
+        this.saveFileObj.file = fileInput.target.files[0];  
+      }
     }
   }
 
   carica() {
     this.newDocumentListener.emit(this.saveFileObj);
-    this.activeModal.dismiss(this.saveFileObj);;
+    this.activeModal.dismiss(this.saveFileObj);
   }
 
   getDocumentTypes() {

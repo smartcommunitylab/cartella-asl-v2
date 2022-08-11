@@ -89,7 +89,7 @@
             <div class="col-2"></div>
             <div class="m-10">
                 <label class="btn btn-primary v-center-inline btn-icon" placement="right"
-                    ngbTooltip="Allega un nuovo documento all’attività">
+                    ngbTooltip="Allega un nuovo documento all’attività. Dimensione massima 10 MB">
                     Scegli file da dispositivo&nbsp;&nbsp;&nbsp;
                     <svg class="icon icon-white icon-sm">
                         <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
@@ -97,6 +97,9 @@
                     <input #fileInput type="file" hidden (click)="fileInput.value = null" value=""
                         (change)="uploadDocument($event)">
                 </label>
+                <div class="invalid-feedback" [class.d-block]="forceFileErrorDisplay">
+                    ATTENZIONE: il file caricato è di dimensioni superiori al limite massimo di 10 MB. Caricare un file di dimensioni inferiori.
+                </div>            
             </div>
         </div>
         <div *ngIf="fileSelected">
