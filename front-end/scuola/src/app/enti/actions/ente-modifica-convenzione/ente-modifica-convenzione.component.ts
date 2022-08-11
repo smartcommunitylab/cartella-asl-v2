@@ -27,6 +27,7 @@ export class EnteConvenzioneModificaComponent implements OnInit {
   forceTitoloErrorDisplay: boolean = false;
   forceAddressDisplay: boolean = false;;
   forceErrorDisplayMail: boolean = false;
+  forceFileErrorDisplay: boolean = false;
   showContent: boolean = false;
   menuContent = "In questa pagina trovi tutte le informazioni relative all’attività che stai visualizzando.";
  
@@ -163,16 +164,21 @@ export class EnteConvenzioneModificaComponent implements OnInit {
 
   uploadDocument(fileInput) {
     if (fileInput.target.files && fileInput.target.files[0]) {
-      this.saveFileObj.file = fileInput.target.files[0];
-      this.saveFileObj.type = 'convenzione';
-
-      this.dataService.uploadDocumentConvenzione(this.saveFileObj, this.convenzione.uuid + '').subscribe((doc) => {
-        this.dataService.getConvenzioneDettaglio(this.convId).subscribe((res) => {
-          this.convenzione = res;
-          this.date.dataInizio = moment(this.convenzione.dataInizio).startOf('day');
-          this.date.dataFine = moment(this.convenzione.dataFine).startOf('day');
-        })
-      });
+      if(fileInput.target.files[0].size > 10240000) {
+        this.forceFileErrorDisplay = true;
+      } else {
+        this.forceFileErrorDisplay = false;
+        this.saveFileObj.file = fileInput.target.files[0];
+        this.saveFileObj.type = 'convenzione';
+  
+        this.dataService.uploadDocumentConvenzione(this.saveFileObj, this.convenzione.uuid + '').subscribe((doc) => {
+          this.dataService.getConvenzioneDettaglio(this.convId).subscribe((res) => {
+            this.convenzione = res;
+            this.date.dataInizio = moment(this.convenzione.dataInizio).startOf('day');
+            this.date.dataFine = moment(this.convenzione.dataFine).startOf('day');
+          })
+        });  
+      }
     }
   }
 

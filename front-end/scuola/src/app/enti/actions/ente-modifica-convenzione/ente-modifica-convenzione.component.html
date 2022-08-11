@@ -96,14 +96,17 @@
         <br>
         <div>
             <label class="btn btn-primary v-center-inline btn-icon" placement="right"
-                        ngbTooltip="Carica un file convenzione">
+                        ngbTooltip="Carica un file convenzione. Dimensione massima 10 MB">
                         Carica file convenzione&nbsp;&nbsp;&nbsp;
                         <svg class="icon icon-white icon-sm">
                             <use xlink:href="assets/bootstrap-italia/svg/sprite.svg#it-upload"></use>
                         </svg>
                         <input #fileInput type="file" hidden (click)="fileInput.value = null" value=""
                             (change)="uploadDocument($event)">
-            </label>        
+            </label>
+            <div class="invalid-feedback" [class.d-block]="forceFileErrorDisplay">
+                ATTENZIONE: il file caricato è di dimensioni superiori al limite massimo di 10 MB. Caricare un file di dimensioni inferiori.
+            </div>        
         </div>
         <div class="table list-group" *ngIf="convenzione.uuid && convenzione.nomeFile">
             <table class="table table-striped table-hover">
