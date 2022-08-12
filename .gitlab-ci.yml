@@ -109,10 +109,14 @@ backend-deploy:
 
 frontend-deploy:
   stage: deploy
-  image: smartcommunitylab/kubectl-alpine:latest
+  image: 
+    name: bitnami/kubectl:latest
+    entrypoint: ['']
   environment:
     name: platform-new
   script:
+    - touch "kubeconfig"
+    - echo "$KUBECONFIGFILE" >> /tmp/kubeconfig
     - echo "deploy frontend"
     - kubectl -n cartella set image deployments/cartella-frontend-$CI_COMMIT_REF_NAME cartella-frontend-$CI_COMMIT_REF_NAME=$CONTAINER_IMAGE_FRONTEND --record=true
     - kubectl -n cartella rollout status deployment cartella-frontend-$CI_COMMIT_REF_NAME
